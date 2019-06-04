@@ -29,10 +29,10 @@ export const dashboardConfig: GeneralConfigs[] = [
       chartType: ChartTypes.pie,
       description: `
           All the available :${
-        icons.export
-        } to export this graphic, click on ICONS:${
+            icons.export
+          } to export this graphic, click on ICONS:${
         icons.arrowUp
-        } to collapse it.
+      } to collapse it.
       `
     } as ComponentDashboardConfigs,
     scroll: {
@@ -146,7 +146,29 @@ export const dashboardConfig: GeneralConfigs[] = [
       `
     } as ComponentDashboardConfigs,
     scroll: {
-      linkedWith:ComponentsIdsToScroll.map
+      linkedWith: ComponentsIdsToScroll.map
+    },
+    tour: true
+  },
+  {
+    show: true,
+    class: 'col-md-12 mt-3 no-side-padding',
+    component: 'BarComponent',
+    componentConfigs: {
+      id: ComponentsIdsToScroll.bar,
+      source: SourceSchema.country,
+      title: 'Info Products Analytics',
+      chartType: ChartTypes.bar,
+      description: `
+            All Information Products are represented here and can be further disaggregated by two variables at the same time
+            choosing from “Type", "Year", "Author", "CRP" and "Funder". The "Year" pre-selects the five most recent years. The
+            other filters automatically pre-select those options that have the most results, helping you to access your
+            information faster. Click on ICONS:${icons.export} to export
+            this graphic, click on ICONS:${icons.arrowUp} to collapse it.
+      `
+    } as ComponentDashboardConfigs,
+    scroll: {
+      icon: 'bar_chart'
     },
     tour: true
   },

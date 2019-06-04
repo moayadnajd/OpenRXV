@@ -41,7 +41,7 @@ import { InViewportModule } from '@thisissoon/angular-inviewport';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { ChartComponent } from './dashboard/components/chart/chart.component';
 import { ListComponent } from './dashboard/components/list/list.component';
-import { ScrollDispatchModule } from '@angular/cdk/scrolling';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { PaginatedListComponent } from './dashboard/components/list/paginated-list/paginated-list.component';
 import { PubImageComponent } from './dashboard/components/list/paginated-list/pub-image/pub-image.component';
 import { LinkTextComponent } from './dashboard/components/list/paginated-list/link-text/link-text.component';
@@ -64,6 +64,7 @@ import { MapComponent } from './dashboard/components/map/map.component';
 import { GetFirstImage } from './pipes/images.pipe';
 import { LineComponent } from './dashboard/components/line/line.component';
 import { SimiCircleComponent } from './dashboard/components/simi-circle/simi-circle.component';
+import { BarComponent } from './dashboard/components/bar/bar.component';
 
 @NgModule({
   declarations: [
@@ -95,7 +96,8 @@ import { SimiCircleComponent } from './dashboard/components/simi-circle/simi-cir
     MapComponent,
     GetFirstImage,
     LineComponent,
-    SimiCircleComponent
+    SimiCircleComponent,
+    BarComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -121,7 +123,7 @@ import { SimiCircleComponent } from './dashboard/components/simi-circle/simi-cir
     MatButtonModule,
     MatListModule,
     HighchartsChartModule,
-    ScrollDispatchModule,
+    ScrollingModule,
     MatPaginatorModule,
     NgxLoadingModule.forRoot({}),
     MatRippleModule,
@@ -147,7 +149,8 @@ import { SimiCircleComponent } from './dashboard/components/simi-circle/simi-cir
     WordcloudComponent,
     MapComponent,
     LineComponent,
-    SimiCircleComponent
+    SimiCircleComponent,
+    BarComponent
   ],
   bootstrap: [AppComponent]
 })

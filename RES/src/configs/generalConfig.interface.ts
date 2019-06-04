@@ -94,14 +94,15 @@ export enum ComponentsIdsToScroll {
   pie = 'pie',
   wordcloud = 'wordcloud',
   map = 'map',
-  mapTop='mapTop',
+  bar = 'bar',
+  mapTop = 'mapTop',
   topLists = 'topLists',
   topAffiliations = 'topAffiliations',
   CRP = 'CRP',
   funders = 'funders',
   paginatedList = 'paginatedList',
   lineChart = 'lineChart',
-  SimiCircle = 'SimiCircle',
+  SimiCircle = 'SimiCircle'
 }
 
 export enum icons {
@@ -117,6 +118,7 @@ export enum ChartTypes {
   pie = 'pie',
   wordcloud = 'wordcloud',
   map = 'map',
+  bar = 'bar',
   line = 'line',
-  spline = 'spline',
+  spline = 'spline'
 }
