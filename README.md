@@ -11,19 +11,10 @@ You can see an example of the project working on our [Agricultural Research e-Se
 - docker-compose 1.24+
 - [dspace-statistics-api](https://github.com/ilri/dspace-statistics-api) (optional, for item views and downloads)
 
-## Installation
+## Build and Run
 After you have satisfied the requirements you can clone this repository and build the project:
 
 ```console
-$ git clone https://github.com/ILRI/AReS.git
-$ cd AReS/frontend
-$ npm i
-$ npm install -g @angular/cli
-$ ng build --prod
-$ cd AReS/app
-$ npm i
-$ cd AReS
-$ sudo chmod 777 -R esConfig/
 $ docker-compose up -d
 ```
 
