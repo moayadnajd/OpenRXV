@@ -3,6 +3,7 @@ import * as Highcharts from 'highcharts';
 import { ChartTypes } from 'src/configs/generalConfig.interface';
 import { ChartMathodsService } from '../services/chartCommonMethods/chart-mathods.service';
 import { ParentChart } from '../parent-chart';
+import { Bucket } from 'src/app/filters/services/interfaces';
 
 @Component({
   selector: 'app-wordcloud',
@@ -17,10 +18,12 @@ export class WordcloudComponent extends ParentChart implements OnInit {
 
   ngOnInit(): void {
     this.init(ChartTypes.wordcloud);
-    this.buildOptions.subscribe(() => (this.chartOptions = this.setOptions()));
+    this.buildOptions.subscribe(
+      (buckets: Array<Bucket>) => (this.chartOptions = this.setOptions(buckets))
+    );
   }
 
-  private setOptions(): any {
+  private setOptions(buckets: Array<Bucket>): Highcharts.Options {
     return {
       chart: {
         type: 'wordcloud',
@@ -37,7 +40,15 @@ export class WordcloudComponent extends ParentChart implements OnInit {
           allowPointSelect: false
         } as Highcharts.PlotWordcloudOptions
       },
-      series: this.chartOptions.series,
+      series: [
+        {
+          type: 'wordcloud',
+          data: buckets.map((b: Bucket) => ({
+            name: b.key,
+            weight: b.doc_count
+          }))
+        }
+      ],
       ...this.cms.commonProperties()
     };
   }

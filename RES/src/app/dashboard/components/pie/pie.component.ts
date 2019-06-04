@@ -3,6 +3,7 @@ import { ChartTypes } from 'src/configs/generalConfig.interface';
 import { ChartMathodsService } from '../services/chartCommonMethods/chart-mathods.service';
 import * as Highcharts from 'highcharts';
 import { ParentChart } from '../parent-chart';
+import { Bucket } from 'src/app/filters/services/interfaces';
 
 @Component({
   selector: 'app-pie',
@@ -17,10 +18,12 @@ export class PieComponent extends ParentChart implements OnInit {
 
   ngOnInit(): void {
     this.init(ChartTypes.pie);
-    this.buildOptions.subscribe(() => (this.chartOptions = this.setOptions()));
+    this.buildOptions.subscribe(
+      (buckets: Array<Bucket>) => (this.chartOptions = this.setOptions(buckets))
+    );
   }
 
-  private setOptions(): Highcharts.Options {
+  private setOptions(buckets: Array<Bucket>): Highcharts.Options {
     return {
       chart: {
         type: ChartTypes.pie,
@@ -39,7 +42,12 @@ export class PieComponent extends ParentChart implements OnInit {
           }
         }
       },
-      series: this.chartOptions.series,
+      series: [
+        {
+          type: 'pie',
+          data: buckets.map((b: Bucket) => ({ name: b.key, y: b.doc_count }))
+        }
+      ],
       ...this.cms.commonProperties()
     };
   }

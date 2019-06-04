@@ -5,6 +5,8 @@ const mapWorld = require('@highcharts/map-collection/custom/world-robinson-highr
 import * as Highcharts from 'highcharts';
 import { axisColorForMap, selectMapColors } from 'src/configs/chartColors';
 import { ParentChart } from '../parent-chart';
+import { Bucket } from 'src/app/filters/services/interfaces';
+import { getCountryCode } from '../services/countryList.helper';
 
 @Component({
   selector: 'app-map',
@@ -19,11 +21,12 @@ export class MapComponent extends ParentChart implements OnInit {
 
   ngOnInit(): void {
     this.init(ChartTypes.map);
-    this.buildOptions.subscribe(() => (this.chartOptions = this.setOptions()));
+    this.buildOptions.subscribe(
+      (buckets: Array<Bucket>) => (this.chartOptions = this.setOptions(buckets))
+    );
   }
 
-  private setOptions(): Highcharts.Options {
-    const { data } = this.chartOptions.series[0] as Highcharts.SeriesMapOptions;
+  private setOptions(buckets: Array<Bucket>): Highcharts.Options {
     return {
       chart: {
         map: mapWorld,
@@ -50,7 +53,11 @@ export class MapComponent extends ParentChart implements OnInit {
       },
       series: [
         {
-          data,
+          type: 'map',
+          data: buckets.map((b: Bucket) => [
+            getCountryCode(b.key),
+            b.doc_count
+          ]),
           mapData: mapWorld,
           showInLegend: true,
           showInNavigator: true,
