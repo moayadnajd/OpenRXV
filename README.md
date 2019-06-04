@@ -18,6 +18,8 @@ After you have satisfied the requirements you can clone this repository and buil
 $ docker-compose up -d
 ```
 
+*Note: you will most likely need to increase the host system's memory map limits by setting `vm.max_map_count = 262144` in /etc/sysctl.conf*
+
 ## Todo
 
 - Improve documentation
