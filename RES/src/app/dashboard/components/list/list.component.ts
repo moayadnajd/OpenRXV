@@ -70,7 +70,7 @@ export class ListComponent extends ParentComponent implements OnInit {
   private seeIfThisCompInView(): void {
     const { id, source } = this.componentConfigs as ComponentDashboardConfigs;
     this.scrollHelperService.seeIfThisCompInView(
-      this.shouldWePaginate(source)
+      this.shouldWePaginate(source as string)
         ? ComponentsIdsToScroll.paginatedList
         : ComponentsIdsToScroll[id]
     );
@@ -78,9 +78,9 @@ export class ListComponent extends ParentComponent implements OnInit {
 
   private subToDataFromStore(): void {
     const { source } = this.componentConfigs as ComponentDashboardConfigs;
-    this.shouldWePaginate(source)
+    this.shouldWePaginate(source as string)
       ? this.store.select(fromStore.getHits).subscribe((h: Hits) => {
-          this.initPagination(source, h);
+          this.initPagination(source as string, h);
           this.expandOrStay(this.safeCheckLength(h && h.hits));
         })
       : this.store

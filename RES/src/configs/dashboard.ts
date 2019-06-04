@@ -5,7 +5,7 @@ import {
   icons,
   ChartTypes
 } from './generalConfig.interface';
-import { SourceSchema, ListSchema } from './schema';
+import { SourceSchema, ListSchema, FilterSchema } from './schema';
 
 /**
  * * componentConfigs.source determine where
@@ -156,7 +156,7 @@ export const dashboardConfig: GeneralConfigs[] = [
     component: 'BarComponent',
     componentConfigs: {
       id: ComponentsIdsToScroll.bar,
-      source: SourceSchema.country,
+      source: [SourceSchema.type, FilterSchema.year],
       title: 'Info Products Analytics',
       chartType: ChartTypes.bar,
       description: `

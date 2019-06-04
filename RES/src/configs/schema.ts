@@ -61,5 +61,5 @@ export const ListSchema = {
   crp: SourceSchema.crp,
   bitstreams: 'bitstreams', // needed for the images
   handle: 'handle', // needed for the altmetric
-  thumbnail:'thumbnail'
+  thumbnail: 'thumbnail'
 };

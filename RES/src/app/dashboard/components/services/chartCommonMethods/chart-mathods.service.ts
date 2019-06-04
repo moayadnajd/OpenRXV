@@ -1,6 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { ComponentDashboardConfigs } from 'src/configs/generalConfig.interface';
-import { Observable } from 'rxjs';
+import { Observable, merge } from 'rxjs';
 import * as fromStore from '../../../../../store';
 import { Store } from '@ngrx/store';
 import { ChartHelper } from '../chart/chart-helper.class';
@@ -57,9 +57,17 @@ export class ChartMathodsService extends ChartHelper {
   }
 
   private subToDataFromStore(): void {
-    this.store
-      .select(fromStore.getBuckets, this.cc.source)
-      .subscribe((b: Bucket[]) => this.goBuildDataSeries.emit(b));
+    if (Array.isArray(this.cc.source)) {
+      const observableArr: Array<Observable<Array<Bucket>>> = [];
+      (this.cc.source as Array<string>).forEach((s: string) => {
+        observableArr.push(this.store.select(fromStore.getBuckets, s));
+      });
+      merge(...observableArr).subscribe(console.log);
+    } else {
+      this.store
+        .select(fromStore.getBuckets, this.cc.source)
+        .subscribe((b: Bucket[]) => this.goBuildDataSeries.emit(b));
+    }
     this.loadingHits$ = this.store.select(fromStore.getLoadingOnlyHits);
   }
 }

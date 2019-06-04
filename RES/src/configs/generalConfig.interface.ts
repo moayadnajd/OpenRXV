@@ -32,7 +32,7 @@ export interface ComponentDashboardConfigs {
   title: string;
   chartType: ChartTypes;
   description: string;
-  source: string; // SourceSchema
+  source: string | Array<string>; // SourceSchema
   content?: PaginatedListConfigs;
 }
 
