@@ -15,11 +15,12 @@ You can see an example of the project working on our [Agricultural Research e-Se
 After you have satisfied the requirements you can clone this repository and build the project:
 
 ```console
-$ cd docker
+$ git clone https://github.com/ilri/AReS.git
+$ cd AReS/docker
 $ sudo docker-compose up -d
 ```
 
-*Note: it is recommended to increase the host system's memory map limits by setting `vm.max_map_count = 262144` in /etc/sysctl.conf. See the [Elasticsearch docs for more information](https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html).*
+*Note: the Elasticsearch component requires more virtual memory. You will most likely need to increase the host system's memory map limits by setting `vm.max_map_count = 262144` in /etc/sysctl.conf. See the [Elasticsearch docs for more information](https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html).*
 
 ## Todo
 
