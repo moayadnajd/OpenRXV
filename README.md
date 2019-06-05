@@ -12,14 +12,13 @@ You can see an example of the project working on our [Agricultural Research e-Se
 - [dspace-statistics-api](https://github.com/ilri/dspace-statistics-api) (optional, for item views and downloads)
 
 ## Configuration
-Configuration of repositories and metadata to harvest is in `backend/config/index.json`. Mappings of equivalent metadata values — for example "Kenya" and "KENYA" — is in `backend/config/mapping.json`.
+Configuration of repositories and metadata to harvest is in `backend/config/index.json`. Mappings of equivalent metadata values — for example "Kenya" and "KENYA" — are in `backend/config/mapping.json`.
 
 ## Build and Run
-After you have satisfied the requirements you can clone this repository and build the project:
+After you have satisfied the requirements and cloned the repository and configured the settings you can build the project:
 
 ```console
-$ git clone https://github.com/ilri/AReS.git
-$ cd AReS/docker
+$ cd docker
 $ sudo docker-compose up -d
 ```
 
