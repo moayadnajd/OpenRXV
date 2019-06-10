@@ -12,7 +12,7 @@ import { getCountryCode } from '../services/countryList.helper';
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
-  providers: [ChartMathodsService]
+  providers: [ChartMathodsService],
 })
 export class MapComponent extends ParentChart implements OnInit {
   constructor(cms: ChartMathodsService) {
@@ -30,15 +30,15 @@ export class MapComponent extends ParentChart implements OnInit {
     return {
       chart: {
         map: mapWorld,
-        animation: true
+        animation: true,
       },
       mapNavigation: {
         enabled: true,
         enableMouseWheelZoom: true,
         buttonOptions: {
           alignTo: 'spacingBox',
-          verticalAlign: 'bottom'
-        }
+          verticalAlign: 'bottom',
+        },
       },
       colorAxis: {
         min: 1,
@@ -48,15 +48,15 @@ export class MapComponent extends ParentChart implements OnInit {
         stops: [
           [0, axisColorForMap.minColor],
           [0.67, axisColorForMap.midColor],
-          [1, axisColorForMap.maxColor]
-        ]
+          [1, axisColorForMap.maxColor],
+        ],
       },
       series: [
         {
           type: 'map',
           data: buckets.map((b: Bucket) => [
             getCountryCode(b.key),
-            b.doc_count
+            b.doc_count,
           ]),
           mapData: mapWorld,
           showInLegend: true,
@@ -65,23 +65,24 @@ export class MapComponent extends ParentChart implements OnInit {
           enableMouseTracking: true,
           allowPointSelect: true,
           tooltip: {
-            pointFormat: '{point.name}: <b>{point.value} Publications</b><br/>'
+            pointFormat: '{point.name}: <b>{point.value} Publications</b><br/>',
+            headerFormat: undefined,
           },
           animation: {
-            duration: 1000
+            duration: 1000,
           },
           states: {
             hover: {
-              color: selectMapColors.hover
+              color: selectMapColors.hover,
             },
             select: {
               color: selectMapColors.select.color,
-              borderColor: selectMapColors.select.borderColor
-            }
-          }
-        }
+              borderColor: selectMapColors.select.borderColor,
+            },
+          },
+        },
       ],
-      ...this.cms.commonProperties()
+      ...this.cms.commonProperties(),
     } as Highcharts.Options;
   }
 }
