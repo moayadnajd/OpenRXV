@@ -3,7 +3,7 @@ import {
   ComponentDashboardConfigs,
   ComponentsIdsToScroll,
   icons,
-  ChartTypes
+  ChartTypes,
 } from './generalConfig.interface';
 import { SourceSchema, ListSchema, FilterSchema } from './schema';
 
@@ -33,12 +33,12 @@ export const dashboardConfig: GeneralConfigs[] = [
           } to export this graphic, click on ICONS:${
         icons.arrowUp
       } to collapse it.
-      `
+      `,
     } as ComponentDashboardConfigs,
     scroll: {
-      linkedWith: ComponentsIdsToScroll.topLists
+      linkedWith: ComponentsIdsToScroll.topLists,
     },
-    tour: true
+    tour: true,
   },
   {
     show: false,
@@ -55,12 +55,12 @@ export const dashboardConfig: GeneralConfigs[] = [
           } to export this graphic, click on ICONS:${
         icons.arrowUp
       } to collapse it.
-      `
+      `,
     } as ComponentDashboardConfigs,
     scroll: {
-      linkedWith: ComponentsIdsToScroll.topLists
+      linkedWith: ComponentsIdsToScroll.topLists,
     },
-    tour: true
+    tour: true,
   },
   {
     show: true,
@@ -78,12 +78,12 @@ export const dashboardConfig: GeneralConfigs[] = [
           } to export this graphic, click on ICONS:${
         icons.arrowUp
       } to collapse it.
-      `
+      `,
     } as ComponentDashboardConfigs,
     scroll: {
-      icon: 'pie_chart'
+      icon: 'pie_chart',
     },
-    tour: true
+    tour: true,
   },
   {
     class: 'col-md-6 no-side-padding',
@@ -102,12 +102,12 @@ export const dashboardConfig: GeneralConfigs[] = [
           to export this graphic, click on ICONS:${
             icons.arrowUp
           } to collapse it.
-      `
+      `,
     } as ComponentDashboardConfigs,
     scroll: {
-      linkedWith: ComponentsIdsToScroll.pie
+      linkedWith: ComponentsIdsToScroll.pie,
     },
-    tour: true
+    tour: true,
   },
   {
     show: true,
@@ -125,12 +125,12 @@ export const dashboardConfig: GeneralConfigs[] = [
           information products. Click on ICONS:${icons.export}
           to export this graphic, click on ICONS:${icons.arrowUp}
           to collapse it.
-      `
+      `,
     } as ComponentDashboardConfigs,
     scroll: {
-      icon: 'map'
+      icon: 'map',
     },
-    tour: true
+    tour: true,
   },
   {
     class: 'col-md-3 mt-3 no-side-padding shorter',
@@ -143,12 +143,12 @@ export const dashboardConfig: GeneralConfigs[] = [
       description: `
           The top Countries by number of information products.
           Click on ICONS:${icons.arrowUp} to collapse the list.
-      `
+      `,
     } as ComponentDashboardConfigs,
     scroll: {
-      linkedWith: ComponentsIdsToScroll.map
+      linkedWith: ComponentsIdsToScroll.map,
     },
-    tour: true
+    tour: true,
   },
   {
     show: true,
@@ -156,7 +156,7 @@ export const dashboardConfig: GeneralConfigs[] = [
     component: 'BarComponent',
     componentConfigs: {
       id: ComponentsIdsToScroll.bar,
-      source: [SourceSchema.type, FilterSchema.year],
+      source: [SourceSchema.type, `${FilterSchema.year}.keyword`],
       title: 'Info Products Analytics',
       chartType: ChartTypes.bar,
       description: `
@@ -165,12 +165,12 @@ export const dashboardConfig: GeneralConfigs[] = [
             other filters automatically pre-select those options that have the most results, helping you to access your
             information faster. Click on ICONS:${icons.export} to export
             this graphic, click on ICONS:${icons.arrowUp} to collapse it.
-      `
+      `,
     } as ComponentDashboardConfigs,
     scroll: {
-      icon: 'bar_chart'
+      icon: 'bar_chart',
     },
-    tour: true
+    tour: true,
   },
   {
     class: 'col-md-6 mt-3 no-side-padding',
@@ -183,12 +183,12 @@ export const dashboardConfig: GeneralConfigs[] = [
       description: `
           The top twenty Authors by number of information products.
           Click on ICONS:${icons.arrowUp} to collapse the list.
-      `
+      `,
     } as ComponentDashboardConfigs,
     scroll: {
-      icon: 'list_alt'
+      icon: 'list_alt',
     },
-    tour: true
+    tour: true,
   },
   {
     class: 'col-md-6 mt-3 no-side-padding',
@@ -201,12 +201,12 @@ export const dashboardConfig: GeneralConfigs[] = [
       description: `
           Top twenty affiliations by number of information products.
           Click on ICONS:${icons.arrowUp} to collapse the list.
-      `
+      `,
     } as ComponentDashboardConfigs,
     scroll: {
-      linkedWith: ComponentsIdsToScroll.topLists
+      linkedWith: ComponentsIdsToScroll.topLists,
     },
-    tour: true
+    tour: true,
   },
   {
     class: 'col-md-6 mt-3 no-side-padding',
@@ -221,12 +221,12 @@ export const dashboardConfig: GeneralConfigs[] = [
           are represented here and ordered by quantity of tags for
           each CRP or platform. Scroll down to see more results.
           Click on ICONS:${icons.arrowUp} to collapse the list.
-      `
+      `,
     } as ComponentDashboardConfigs,
     scroll: {
-      icon: 'star_rate'
+      icon: 'star_rate',
     },
-    tour: true
+    tour: true,
   },
   {
     class: 'col-md-6 mt-3 no-side-padding',
@@ -240,12 +240,12 @@ export const dashboardConfig: GeneralConfigs[] = [
           All funders tagged across all information products are represented here and
           orderd by quantity of tags for each funder. Scroll down to see more results.
           Click on ICONS:${icons.arrowUp} to collapse the list.
-      `
+      `,
     } as ComponentDashboardConfigs,
     scroll: {
-      linkedWith: ComponentsIdsToScroll.CRP
+      linkedWith: ComponentsIdsToScroll.CRP,
     },
-    tour: true
+    tour: true,
   },
   {
     class: 'col-md-12 mt-3 no-side-padding',
@@ -273,7 +273,7 @@ export const dashboardConfig: GeneralConfigs[] = [
           'Date issued': ListSchema.date,
           'Reporting CRP(s) and Platform(s)': ListSchema.crp,
           'Attention Score': ListSchema.altmetric,
-          numbers: ListSchema.numbers
+          numbers: ListSchema.numbers,
         },
         filterOptions: [
           { display: 'Date', value: 'date', sort: 'desc' },
@@ -281,20 +281,24 @@ export const dashboardConfig: GeneralConfigs[] = [
           {
             display: 'Authors',
             value: 'citation.keyword',
-            sort: 'desc'
+            sort: 'desc',
           },
           {
             display: 'Altmetric: Attention Score',
             value: 'altmetric.score',
-            sort: 'desc'
+            sort: 'desc',
           },
-          { display: 'Views & Downloads', value: 'numbers.score', sort: 'desc' }
-        ]
-      }
+          {
+            display: 'Views & Downloads',
+            value: 'numbers.score',
+            sort: 'desc',
+          },
+        ],
+      },
     } as ComponentDashboardConfigs,
     scroll: {
-      icon: 'view_list'
+      icon: 'view_list',
     },
-    tour: true
-  }
+    tour: true,
+  },
 ];

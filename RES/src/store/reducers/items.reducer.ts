@@ -39,7 +39,7 @@ const initialState: ItemsState = {
   loaded: false,
   loading: true,
   loadingOnlyHits: false,
-  error: null
+  error: null,
 };
 
 export function reducer(
@@ -48,29 +48,35 @@ export function reducer(
 ): ItemsState {
   switch (action.type) {
     case actions.ActionTypes.getDataSuccess: {
-      const data = action.payload;
+      const { payload, addHits } = action;
       return {
         ...state,
         data: {
-          hits: data.hits,
-          aggregations: data.aggregations || state.data.aggregations
+          hits: {
+            ...state.data.hits,
+            ...(addHits ? payload.hits : {}),
+          },
+          aggregations: {
+            ...state.data.aggregations,
+            ...payload.aggregations,
+          },
         },
         loadingOnlyHits: false,
         loading: false,
-        loaded: true
+        loaded: true,
       };
     }
     case actions.ActionTypes.GetCounters: {
       const counters = action.payload;
       return {
         ...state,
-        counters
+        counters,
       };
     }
     case actions.ActionTypes.SetInView: {
       const {
         id,
-        viewState: { collapsed, linkedWith, userSeesMe }
+        viewState: { collapsed, linkedWith, userSeesMe },
       } = action.payload;
       const comp: ViewState = state.inView[id];
       const origianlCollapsed = comp && comp.collapsed;
@@ -81,9 +87,9 @@ export function reducer(
           [id]: {
             userSeesMe,
             collapsed: collapsed === undefined ? origianlCollapsed : collapsed,
-            linkedWith
-          }
-        }
+            linkedWith,
+          },
+        },
       };
     }
     case actions.ActionTypes.getDataError: {
@@ -93,7 +99,7 @@ export function reducer(
         error,
         loading: false,
         loaded: true,
-        loadingOnlyHits: false
+        loadingOnlyHits: false,
       };
     }
     case actions.ActionTypes.getData: {
@@ -101,7 +107,7 @@ export function reducer(
         ...state,
         loadingOnlyHits: !action.payload.aggs,
         loading: true,
-        loaded: false
+        loaded: false,
       };
     }
     default: {
@@ -131,7 +137,7 @@ export const inViewFirstOne = (state: ItemsState) =>
     mapObjIndexed(
       (viewState: ViewState, id: string, obj: object): InView => ({
         id,
-        viewState
+        viewState,
       }),
       state.inView
     )

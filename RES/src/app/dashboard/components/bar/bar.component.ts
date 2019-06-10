@@ -1,8 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { ParentChart } from '../parent-chart';
 import { ChartMathodsService } from '../services/chartCommonMethods/chart-mathods.service';
-import { ChartTypes } from 'src/configs/generalConfig.interface';
-import { Bucket } from 'src/app/filters/services/interfaces';
+import {
+  ChartTypes,
+  ComponentDashboardConfigs,
+} from 'src/configs/generalConfig.interface';
+import {
+  Bucket,
+  ResetCaller,
+  BuildQueryObj,
+  ElasticsearchQuery,
+} from 'src/app/filters/services/interfaces';
+import { RangeService } from 'src/app/filters/services/range/range.service';
+import { Store } from '@ngrx/store';
+import * as fromStore from '../../../../store';
 
 // Notes
 /**
@@ -15,17 +26,33 @@ import { Bucket } from 'src/app/filters/services/interfaces';
   selector: 'app-bar',
   templateUrl: './bar.component.html',
   styleUrls: ['./bar.component.scss'],
-  providers: [ChartMathodsService]
+  providers: [ChartMathodsService, RangeService],
 })
 export class BarComponent extends ParentChart implements OnInit {
-  constructor(cms: ChartMathodsService) {
+  constructor(
+    cms: ChartMathodsService,
+    private readonly rangeService: RangeService,
+    private readonly store: Store<fromStore.AppState>
+  ) {
     super(cms);
+    this.rangeService.storeVal = this.store;
   }
 
   ngOnInit() {
-    this.init(ChartTypes.bar);
-    this.buildOptions.subscribe((buckets: Array<Bucket>) => {
-      console.log(buckets);
-    });
+    const { source } = this.componentConfigs as ComponentDashboardConfigs;
+    this.rangeService.sourceVal = (source as Array<string>).reduce(
+      (prev: string, curr: string) => (curr.includes('year') ? curr : undefined)
+    );
+    this.init(ChartTypes.bar, this.getYears.bind(this));
+    this.buildOptions.subscribe((buckets: Array<Bucket>) => {});
+  }
+
+  private getYears(caller?: ResetCaller): void {
+    const qb: BuildQueryObj = {
+      size: 100000,
+    };
+    this.rangeService
+      .getYears(this.rangeService.buildquery(qb).build() as ElasticsearchQuery)
+      .subscribe();
   }
 }

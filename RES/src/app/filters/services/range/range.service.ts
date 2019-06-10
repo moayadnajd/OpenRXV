@@ -7,16 +7,19 @@ import {
   BuildQueryObj,
   ResetOptions,
   QuerySearchAttribute,
-  QueryFilterAttribute
+  QueryFilterAttribute,
 } from '../interfaces';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Observable, Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, Subject, of } from 'rxjs';
+import { map, tap, switchMap } from 'rxjs/operators';
 import { BodyBuilderService } from '../bodyBuilder/body-builder.service';
+import { Store } from '@ngrx/store';
+import * as fromStore from '../../../../store';
 
 @Injectable()
 export class RangeService {
+  private store: Store<fromStore.ItemsState>;
   private source: string;
   private readonly api_end_point: string = environment.endPoint;
   constructor(
@@ -26,6 +29,10 @@ export class RangeService {
 
   set sourceVal(s: string) {
     this.source = s;
+  }
+
+  set storeVal(s: Store<fromStore.ItemsState>) {
+    this.store = s;
   }
 
   get shouldReset(): Subject<ResetOptions> {
@@ -49,13 +56,13 @@ export class RangeService {
   }
 
   getYears(query: ElasticsearchQuery): Observable<number[]> {
-    return this.http
-      .post(this.api_end_point, query)
-      .pipe(
-        map((d: ElasticsearchResponse) =>
-          d.aggregations[this.source].buckets.map((year: Bucket) => +year.key)
-        )
-      );
+    return this.getYearsFromStore().pipe(
+      switchMap((buckets: Array<Bucket>) =>
+        buckets && buckets.length
+          ? of(buckets.map(({ key }) => +key))
+          : this.httpGetYears(query)
+      )
+    );
   }
 
   buildquery(bq: BuildQueryObj): bodybuilder.Bodybuilder {
@@ -67,5 +74,20 @@ export class RangeService {
   addAttributeToMainQuery(range: QueryYearAttribute): bodybuilder.Bodybuilder {
     this.bodyBuilderService.setAggAttributes = range;
     return this.bodyBuilderService.buildMainQuery();
+  }
+
+  private getYearsFromStore(): Observable<Bucket[]> {
+    return this.store.select(fromStore.getBuckets, this.source);
+  }
+
+  private httpGetYears(query: ElasticsearchQuery): Observable<number[]> {
+    return this.http.post(this.api_end_point, query).pipe(
+      tap((res: ElasticsearchResponse) =>
+        this.store.dispatch(new fromStore.GetDataSuccess(res, false))
+      ),
+      map((d: ElasticsearchResponse) =>
+        d.aggregations[this.source].buckets.map((year: Bucket) => +year.key)
+      )
+    );
   }
 }

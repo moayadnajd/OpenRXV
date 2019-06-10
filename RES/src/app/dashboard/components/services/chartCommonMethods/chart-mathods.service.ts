@@ -42,14 +42,17 @@ export class ChartMathodsService extends ChartHelper {
     this.goBuildDataSeries = new EventEmitter();
   }
 
-  init(chartType: string, cc: ComponentDashboardConfigs): void {
+  init(chartType: string, cc: ComponentDashboardConfigs, cb?: () => any): void {
     this.chartType = chartType;
     this.cc = cc;
     this.shs.storeVal = this.store;
     this.shs.seeIfThisCompInView(this.cc.id);
-    this.shs.dataIsReadyArrived
-      .pipe(first())
-      .subscribe(() => this.subToDataFromStore());
+    this.shs.dataIsReadyArrived.pipe(first()).subscribe(() => {
+      if (cb) {
+        cb();
+      }
+      this.subToDataFromStore();
+    });
   }
 
   disPatchSetInView(collapsed: boolean): void {

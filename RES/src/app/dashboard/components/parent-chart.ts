@@ -13,10 +13,12 @@ export class ParentChart extends ParentComponent {
     this.chartOptions = {};
   }
 
-  protected init(type: string) {
-    this.cms.init(type, this.componentConfigs as ComponentDashboardConfigs);
+  protected init(type: string, cb?: () => any) {
+    this.cms.init(type, this.componentConfigs as ComponentDashboardConfigs, cb);
     this.cms.goBuildDataSeries.subscribe((bu: Bucket[]) => {
-      this.cms.setExpanded = bu.length >= 1;
+      if (bu) {
+        this.cms.setExpanded = bu.length >= 1;
+      }
       this.buildOptions.emit(bu);
     });
   }

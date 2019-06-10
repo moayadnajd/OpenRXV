@@ -3,7 +3,7 @@ import * as fromQueries from './query.reducer';
 import {
   ActionReducerMap,
   createSelector,
-  createFeatureSelector
+  createFeatureSelector,
 } from '@ngrx/store';
 import { ElasticsearchResponse } from 'src/app/filters/services/interfaces';
 
@@ -18,7 +18,7 @@ export interface ItemsState {
 
 export const reducers: ActionReducerMap<AppState> = {
   items: fromItems.reducer,
-  query: fromQueries.reducer
+  query: fromQueries.reducer,
 };
 
 // FeatureSelectors
@@ -83,7 +83,8 @@ export const getBuckets = createSelector(
   getItems,
   (items: ElasticsearchResponse, key: string) => {
     if (items.aggregations !== undefined) {
-      return items.aggregations[key].buckets;
+      const aggs = items.aggregations;
+      return aggs[key] && aggs[key].buckets;
     }
   }
 );
