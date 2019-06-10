@@ -196,7 +196,7 @@ export interface QueryBlock {
 export interface BuildQueryObj {
   size: number;
   term?: string;
-  source?: string;
+  source?: any;
 }
 
 /**

@@ -10,10 +10,13 @@ import {
   ResetCaller,
   BuildQueryObj,
   ElasticsearchQuery,
+  ElasticsearchResponse,
 } from 'src/app/filters/services/interfaces';
 import { RangeService } from 'src/app/filters/services/range/range.service';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../../../store';
+import { BarService } from './services/bar/bar.service';
+import { ItemsService } from 'src/services/itemsService/items.service';
 
 // Notes
 /**
@@ -26,13 +29,15 @@ import * as fromStore from '../../../../store';
   selector: 'app-bar',
   templateUrl: './bar.component.html',
   styleUrls: ['./bar.component.scss'],
-  providers: [ChartMathodsService, RangeService],
+  providers: [ChartMathodsService, RangeService, BarService],
 })
 export class BarComponent extends ParentChart implements OnInit {
   constructor(
     cms: ChartMathodsService,
     private readonly rangeService: RangeService,
-    private readonly store: Store<fromStore.AppState>
+    private readonly store: Store<fromStore.AppState>,
+    private readonly barService: BarService,
+    private readonly itemsService: ItemsService
   ) {
     super(cms);
     this.rangeService.storeVal = this.store;
@@ -44,7 +49,20 @@ export class BarComponent extends ParentChart implements OnInit {
       (prev: string, curr: string) => (curr.includes('year') ? curr : undefined)
     );
     this.init(ChartTypes.bar, this.getYears.bind(this));
-    this.buildOptions.subscribe((buckets: Array<Bucket>) => {});
+    this.buildOptions.subscribe(
+      (() => {
+        let flag = true;
+        return (b: Bucket[]) => {
+          console.log(b);
+          if (flag) {
+            this.itemsService
+              .getItems(this.barService.buildQuery())
+              .subscribe((res: ElasticsearchResponse) => console.log(res));
+          }
+          flag = false;
+        };
+      })()
+    );
   }
 
   private getYears(caller?: ResetCaller): void {

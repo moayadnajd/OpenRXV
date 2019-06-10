@@ -18,50 +18,50 @@ import { SourceSchema, ListSchema, FilterSchema } from './schema';
  */
 
 export const dashboardConfig: GeneralConfigs[] = [
-  {
-    show: false,
-    class: 'col-md-3 no-side-padding',
-    component: 'SimiCircleComponent',
-    componentConfigs: {
-      id: ComponentsIdsToScroll.SimiCircle,
-      title: 'Info Products by Type',
-      source: SourceSchema.status,
-      chartType: ChartTypes.pie,
-      description: `
-          All the available :${
-            icons.export
-          } to export this graphic, click on ICONS:${
-        icons.arrowUp
-      } to collapse it.
-      `,
-    } as ComponentDashboardConfigs,
-    scroll: {
-      linkedWith: ComponentsIdsToScroll.topLists,
-    },
-    tour: true,
-  },
-  {
-    show: false,
-    class: 'col-md-9 no-side-padding',
-    component: 'LineComponent',
-    componentConfigs: {
-      id: ComponentsIdsToScroll.lineChart,
-      title: 'Info Products by Type',
-      source: SourceSchema.status,
-      chartType: ChartTypes.line,
-      description: `
-          All the available :${
-            icons.export
-          } to export this graphic, click on ICONS:${
-        icons.arrowUp
-      } to collapse it.
-      `,
-    } as ComponentDashboardConfigs,
-    scroll: {
-      linkedWith: ComponentsIdsToScroll.topLists,
-    },
-    tour: true,
-  },
+  // {
+  //   show: false,
+  //   class: 'col-md-3 no-side-padding',
+  //   component: 'SimiCircleComponent',
+  //   componentConfigs: {
+  //     id: ComponentsIdsToScroll.SimiCircle,
+  //     title: 'Info Products by Type',
+  //     source: SourceSchema.status,
+  //     chartType: ChartTypes.pie,
+  //     description: `
+  //         All the available :${
+  //           icons.export
+  //         } to export this graphic, click on ICONS:${
+  //       icons.arrowUp
+  //     } to collapse it.
+  //     `,
+  //   } as ComponentDashboardConfigs,
+  //   scroll: {
+  //     linkedWith: ComponentsIdsToScroll.topLists,
+  //   },
+  //   tour: true,
+  // },
+  // {
+  //   show: false,
+  //   class: 'col-md-9 no-side-padding',
+  //   component: 'LineComponent',
+  //   componentConfigs: {
+  //     id: ComponentsIdsToScroll.lineChart,
+  //     title: 'Info Products by Type',
+  //     source: SourceSchema.status,
+  //     chartType: ChartTypes.line,
+  //     description: `
+  //         All the available :${
+  //           icons.export
+  //         } to export this graphic, click on ICONS:${
+  //       icons.arrowUp
+  //     } to collapse it.
+  //     `,
+  //   } as ComponentDashboardConfigs,
+  //   scroll: {
+  //     linkedWith: ComponentsIdsToScroll.topLists,
+  //   },
+  //   tour: true,
+  // },
   {
     show: true,
     class: 'col-md-6 no-side-padding',

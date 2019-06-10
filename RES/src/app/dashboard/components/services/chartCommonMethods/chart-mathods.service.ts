@@ -65,7 +65,11 @@ export class ChartMathodsService extends ChartHelper {
       (this.cc.source as Array<string>).forEach((s: string) => {
         observableArr.push(this.store.select(fromStore.getBuckets, s));
       });
-      merge(...observableArr).subscribe(console.log);
+      merge(...observableArr).subscribe((b: Bucket[]) => {
+        if (b) {
+          this.goBuildDataSeries.emit(b);
+        }
+      });
     } else {
       this.store
         .select(fromStore.getBuckets, this.cc.source)
