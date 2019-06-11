@@ -12,7 +12,7 @@ import {
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable, Subject, of } from 'rxjs';
-import { map, tap, switchMap } from 'rxjs/operators';
+import { map, tap, switchMap, first } from 'rxjs/operators';
 import { BodyBuilderService } from '../bodyBuilder/body-builder.service';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../../../store';
@@ -55,10 +55,13 @@ export class RangeService {
     this.bodyBuilderService.resetOtherComponent('range');
   }
 
-  getYears(query: ElasticsearchQuery): Observable<number[]> {
+  getYears(
+    query: ElasticsearchQuery,
+    force: boolean = false
+  ): Observable<number[]> {
     return this.getYearsFromStore().pipe(
       switchMap((buckets: Array<Bucket>) =>
-        buckets && buckets.length
+        buckets && buckets.length && !force
           ? of(buckets.map(({ key }) => +key))
           : this.httpGetYears(query)
       )
@@ -77,7 +80,11 @@ export class RangeService {
   }
 
   private getYearsFromStore(): Observable<Bucket[]> {
-    return this.store.select(fromStore.getBuckets, this.source);
+    // the reason I added the first pipe because we only need to check
+    // for the years in the store not subscribe to the years
+    // which might create side effect like sending the request multiple times
+    // on force === true, in the `this.getYears()`
+    return this.store.select(fromStore.getBuckets, this.source).pipe(first());
   }
 
   private httpGetYears(query: ElasticsearchQuery): Observable<number[]> {

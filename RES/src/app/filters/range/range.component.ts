@@ -86,18 +86,21 @@ export class RangeComponent extends ParentComponent implements OnInit {
           this.min = this.firstMin;
           this.max = this.firstMax;
         } else {
-          this.getYears(ro.caller);
+          this.getYears(ro.caller, true);
         }
       }
     });
   }
 
-  private getYears(caller?: ResetCaller): void {
+  private getYears(caller?: ResetCaller, force: boolean = false): void {
     const qb: BuildQueryObj = {
       size: 100000,
     };
     this.rangeService
-      .getYears(this.rangeService.buildquery(qb).build() as ElasticsearchQuery)
+      .getYears(
+        this.rangeService.buildquery(qb).build() as ElasticsearchQuery,
+        force
+      )
       .subscribe(
         (n: number[]) =>
           n.length

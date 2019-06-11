@@ -13,6 +13,7 @@ import {
   ElasticsearchResponse,
   BucketWithInnerBuckts,
   Bucket,
+  ResetOptions,
 } from 'src/app/filters/services/interfaces';
 import { RangeService } from 'src/app/filters/services/range/range.service';
 import { Store } from '@ngrx/store';
@@ -54,8 +55,10 @@ export class BarComponent extends ParentChart implements OnInit {
         let flag = true;
         return (b: MergedSelect) => {
           this.sources = { ...this.sources, ...b };
+          console.log(this.sources);
           if (flag) {
             this.getData();
+            this.rangeService.shouldReset.subscribe(this.getData.bind(this));
           }
           flag = false;
         };
@@ -72,6 +75,7 @@ export class BarComponent extends ParentChart implements OnInit {
       .subscribe();
   }
 
+  // TODO BUILD THE QUERY WITH THE OTHER ATT .....
   private getData(): void {
     this.itemsService
       .getItems(this.barService.buildQuery())
@@ -99,6 +103,7 @@ export class BarComponent extends ParentChart implements OnInit {
           })),
         } as Highcharts.SeriesColumnOptions)
     );
+    console.log(series);
     this.selectDefaultOptions(series);
     return series;
   }
@@ -115,6 +120,7 @@ export class BarComponent extends ParentChart implements OnInit {
           doc_count: y,
         } as Bucket)
     );
+    console.log(this.selectedCategories);
     this.selectedYears = series.map(
       ({ name, value }: Highcharts.SeriesColumnOptions & { value: any }) =>
         ({
@@ -122,6 +128,7 @@ export class BarComponent extends ParentChart implements OnInit {
           doc_count: value,
         } as Bucket)
     );
+    console.log(this.selectedYears);
   }
 
   private setOptions(
