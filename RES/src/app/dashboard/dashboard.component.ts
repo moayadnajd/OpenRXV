@@ -14,20 +14,23 @@ import { SnackComponent } from './representationalComponents/snack/snack.compone
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
   dashboardConfig = dashboardConfig;
   countersConfig = countersConfig;
   tourConfig = tourConfig;
-  compsIds: Set<string>;
+  oldViewState: Map<string, boolean>;
 
   constructor(
     private readonly store: Store<fromStore.AppState>,
     private readonly bodyBuilderService: BodyBuilderService,
     private readonly snackBar: MatSnackBar
   ) {
-    this.compsIds = new Set(Object.values(ComponentsIdsToScroll));
+    this.oldViewState = new Map<string, boolean>();
+    Object.keys(ComponentsIdsToScroll).forEach((key: string) =>
+      this.oldViewState.set(key, false)
+    );
   }
 
   ngOnInit(): void {
@@ -46,14 +49,18 @@ export class DashboardComponent implements OnInit {
 
   onInViewportChange(inViewport: boolean, id: string): void {
     const [realId, linkedWith] = id.split('.');
-    if (this.compsIds.has(realId)) {
+    if (
+      this.oldViewState.has(realId) &&
+      this.oldViewState.get(realId) !== inViewport
+    ) {
+      this.oldViewState.set(realId, inViewport);
       this.store.dispatch(
         new fromStore.SetInView({
           viewState: {
             userSeesMe: inViewport,
-            linkedWith: linkedWith === 'undefined' ? realId : linkedWith
+            linkedWith: linkedWith === 'undefined' ? realId : linkedWith,
           },
-          id: realId
+          id: realId,
         })
       );
     }

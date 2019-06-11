@@ -1,5 +1,8 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { ComponentDashboardConfigs } from 'src/configs/generalConfig.interface';
+import {
+  ComponentDashboardConfigs,
+  MergedSelect,
+} from 'src/configs/generalConfig.interface';
 import { Observable, merge } from 'rxjs';
 import * as fromStore from '../../../../../store';
 import { Store } from '@ngrx/store';
@@ -8,7 +11,6 @@ import { ScrollHelperService } from '../scrollTo/scroll-helper.service';
 import { first, map } from 'rxjs/operators';
 import { Bucket } from 'src/app/filters/services/interfaces';
 import { ViewState } from 'src/store/reducers/items.reducer';
-import { MergedSelect } from '../../list/paginated-list/filter-paginated-list/types.interface';
 
 @Injectable()
 export class ChartMathodsService extends ChartHelper {

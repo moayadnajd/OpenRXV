@@ -1,3 +1,5 @@
+import { Bucket } from 'src/app/filters/services/interfaces';
+
 export type ComponentConfigs =
   | ComponentDashboardConfigs
   | ComponentCounterConfigs
@@ -121,4 +123,8 @@ export enum ChartTypes {
   column = 'column',
   line = 'line',
   spline = 'spline',
+}
+
+export interface MergedSelect {
+  [key: string]: Array<Bucket>;
 }

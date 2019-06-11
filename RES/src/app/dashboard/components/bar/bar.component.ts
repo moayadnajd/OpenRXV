@@ -4,6 +4,7 @@ import { ChartMathodsService } from '../services/chartCommonMethods/chart-mathod
 import {
   ChartTypes,
   ComponentDashboardConfigs,
+  MergedSelect,
 } from 'src/configs/generalConfig.interface';
 import {
   ResetCaller,
@@ -18,9 +19,7 @@ import { Store } from '@ngrx/store';
 import * as fromStore from '../../../../store';
 import { BarService } from './services/bar/bar.service';
 import { ItemsService } from 'src/services/itemsService/items.service';
-import { MergedSelect } from '../list/paginated-list/filter-paginated-list/types.interface';
 import { map } from 'rxjs/operators';
-import { SeriesColumnOptions } from 'highcharts';
 
 @Component({
   selector: 'app-bar',
