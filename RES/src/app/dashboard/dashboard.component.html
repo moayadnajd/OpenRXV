@@ -19,7 +19,8 @@
               [id]="conf.componentConfigs.id"
               snInViewport
               [inViewportOptions]="{
-                rootMargin: '0px 0px 0px 0px'
+                rootMargin: '0px 0px 0px 0px',
+                threshold: 0.75
               }"
               (inViewportChange)="
                 onInViewportChange($event, conf.componentConfigs.id)
@@ -42,7 +43,8 @@
             *ngIf="conf.show"
             snInViewport
             [inViewportOptions]="{
-              rootMargin: '0px 0px 0px 0px'
+              rootMargin: '0px 0px 0px 0px',
+              threshold: 0.75
             }"
             (inViewportChange)="
               onInViewportChange(
