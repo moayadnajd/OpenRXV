@@ -5,7 +5,7 @@ import {
   ElementRef,
   HostListener,
   Output,
-  EventEmitter
+  EventEmitter,
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import * as Highcharts from 'highcharts';
@@ -18,7 +18,7 @@ MapModule(Highcharts);
 @Component({
   selector: 'app-chart',
   templateUrl: './chart.component.html',
-  styleUrls: ['./chart.component.scss']
+  styleUrls: ['./chart.component.scss'],
 })
 export class ChartComponent {
   @Input() isMap = false;
@@ -29,11 +29,13 @@ export class ChartComponent {
   @Input() loading: boolean;
   @Input() loadingHits$: Observable<boolean>;
   @Input() chartOptions: Highcharts.Options;
-  @Output() expanded: EventEmitter<true | false>;
+  @Output() expanded: EventEmitter<boolean>;
+  @Output() chartInstance: EventEmitter<Highcharts.Chart>;
   @ViewChild('clickToEnable') clickToEnable: ElementRef;
   Highcharts = Highcharts;
   constructor() {
-    this.expanded = new EventEmitter();
+    this.expanded = new EventEmitter<boolean>();
+    this.chartInstance = new EventEmitter<Highcharts.Chart>();
   }
 
   notifyExpanded(b: boolean): void {
@@ -50,5 +52,9 @@ export class ChartComponent {
       // pie and worldcould do not have this
       this.clickToEnable.nativeElement.hidden = false;
     }
+  }
+
+  logChartInstance(e: Highcharts.Chart): void {
+    this.chartInstance.emit(e);
   }
 }

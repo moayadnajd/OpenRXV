@@ -13,14 +13,13 @@ import {
   ElasticsearchResponse,
   BucketWithInnerBuckts,
   Bucket,
-  ResetOptions,
 } from 'src/app/filters/services/interfaces';
 import { RangeService } from 'src/app/filters/services/range/range.service';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../../../store';
 import { BarService } from './services/bar/bar.service';
 import { ItemsService } from 'src/services/itemsService/items.service';
-import { map } from 'rxjs/operators';
+import { map, first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-bar',
@@ -32,6 +31,7 @@ export class BarComponent extends ParentChart implements OnInit {
   sources: MergedSelect;
   selectedCategories: Array<Bucket>;
   selectedYears: Array<Bucket>;
+  chart: Highcharts.Chart;
 
   constructor(
     cms: ChartMathodsService,
@@ -55,7 +55,6 @@ export class BarComponent extends ParentChart implements OnInit {
         let flag = true;
         return (b: MergedSelect) => {
           this.sources = { ...this.sources, ...b };
-          console.log(this.sources);
           if (flag) {
             this.getData();
             this.rangeService.shouldReset.subscribe(this.getData.bind(this));
@@ -64,6 +63,10 @@ export class BarComponent extends ParentChart implements OnInit {
         };
       })()
     );
+  }
+
+  handleChartInstance(e: Highcharts.Chart): void {
+    this.chart = e;
   }
 
   private getYears(caller?: ResetCaller): void {
@@ -75,15 +78,31 @@ export class BarComponent extends ParentChart implements OnInit {
       .subscribe();
   }
 
-  // TODO BUILD THE QUERY WITH THE OTHER ATT .....
   private getData(): void {
     this.itemsService
-      .getItems(this.barService.buildQuery())
-      .pipe(map(this.mapDataToColmns.bind(this)))
-      .subscribe(
-        (series: Array<Highcharts.SeriesColumnOptions>) =>
-          (this.chartOptions = this.setOptions(series))
-      );
+      .getItems(
+        this.barService.buildQuery(this.rangeService
+          .buildquery({ size: 12 })
+          .build() as ElasticsearchQuery)
+      )
+      .pipe(
+        map(this.mapDataToColmns.bind(this)),
+        first()
+      )
+      .subscribe((series: Array<Highcharts.SeriesColumnOptions>) => {
+        this.chartOptions = this.setOptions(series);
+        if (this.chart) {
+          this.chart.update(
+            {
+              ...this.chartOptions,
+              series: [...this.chartOptions.series],
+            },
+            true,
+            true,
+            true
+          );
+        }
+      });
   }
 
   private mapDataToColmns(
@@ -120,7 +139,6 @@ export class BarComponent extends ParentChart implements OnInit {
           doc_count: y,
         } as Bucket)
     );
-    console.log(this.selectedCategories);
     this.selectedYears = series.map(
       ({ name, value }: Highcharts.SeriesColumnOptions & { value: any }) =>
         ({
@@ -128,7 +146,6 @@ export class BarComponent extends ParentChart implements OnInit {
           doc_count: value,
         } as Bucket)
     );
-    console.log(this.selectedYears);
   }
 
   private setOptions(

@@ -28,6 +28,7 @@
       [Highcharts]="Highcharts"
       [options]="chartOptions"
       [constructorType]="isMap ? 'mapChart' : 'chart'"
+      (chartInstance)="logChartInstance($event)"
     ></highcharts-chart>
     <div
       class="prevent-scroll"

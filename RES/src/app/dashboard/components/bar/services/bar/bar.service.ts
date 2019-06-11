@@ -6,20 +6,27 @@ import { ElasticsearchQuery } from 'src/app/filters/services/interfaces';
 export class BarService {
   constructor(private readonly bodyBuilderService: BodyBuilderService) {}
 
-  buildQuery(): ElasticsearchQuery {
-    return bodybuilder()
-      .size(0)
-      .aggregation('terms', 'year.keyword', { size: 5 }, 'y', query =>
-        query.aggregation(
-          'terms',
-          '',
-          {
-            field: 'type.keyword',
-            size: 5,
-          },
-          'x'
+  buildQuery(queryToMerge?: ElasticsearchQuery): ElasticsearchQuery {
+    const finalQuery: ElasticsearchQuery = {
+      ...(bodybuilder()
+        .size(0)
+        .aggregation('terms', 'year.keyword', { size: 5 }, 'y', query =>
+          query.aggregation(
+            'terms',
+            '',
+            {
+              field: 'type.keyword',
+              size: 5,
+            },
+            'x'
+          )
         )
-      )
-      .build() as ElasticsearchQuery;
+        .build() as ElasticsearchQuery),
+      query: { ...queryToMerge.query },
+    };
+    if (!Object.keys(finalQuery.query).length) {
+      delete finalQuery.query;
+    }
+    return finalQuery;
   }
 }
