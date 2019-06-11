@@ -5,16 +5,17 @@ import * as fromStore from '../../../../../store';
 import { Store } from '@ngrx/store';
 import { ChartHelper } from '../chart/chart-helper.class';
 import { ScrollHelperService } from '../scrollTo/scroll-helper.service';
-import { first } from 'rxjs/operators';
+import { first, map } from 'rxjs/operators';
 import { Bucket } from 'src/app/filters/services/interfaces';
 import { ViewState } from 'src/store/reducers/items.reducer';
+import { MergedSelect } from '../../list/paginated-list/filter-paginated-list/types.interface';
 
 @Injectable()
 export class ChartMathodsService extends ChartHelper {
   private loadingHits$: Observable<boolean>;
   private cc: ComponentDashboardConfigs;
   private readonly shs: ScrollHelperService;
-  goBuildDataSeries: EventEmitter<Bucket[]>;
+  goBuildDataSeries: EventEmitter<Bucket[] | MergedSelect>;
 
   get getExpanded(): boolean {
     return this.shs.expandedStatus;
@@ -61,13 +62,18 @@ export class ChartMathodsService extends ChartHelper {
 
   private subToDataFromStore(): void {
     if (Array.isArray(this.cc.source)) {
-      const observableArr: Array<Observable<Array<Bucket>>> = [];
+      const observableArr: Array<Observable<MergedSelect>> = [];
       (this.cc.source as Array<string>).forEach((s: string) => {
-        observableArr.push(this.store.select(fromStore.getBuckets, s));
+        observableArr.push(
+          this.store
+            .select(fromStore.getBuckets, s)
+            .pipe(map((buckets: Bucket[]) => ({ [s]: buckets })))
+        );
       });
-      merge(...observableArr).subscribe((b: Bucket[]) => {
-        if (b) {
-          this.goBuildDataSeries.emit(b);
+      merge(...observableArr).subscribe((ms: MergedSelect) => {
+        const [key] = Object.keys(ms);
+        if (ms[key]) {
+          this.goBuildDataSeries.emit(ms);
         }
       });
     } else {

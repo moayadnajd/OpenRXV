@@ -6,24 +6,20 @@ import {
   ComponentDashboardConfigs,
 } from 'src/configs/generalConfig.interface';
 import {
-  Bucket,
   ResetCaller,
   BuildQueryObj,
   ElasticsearchQuery,
   ElasticsearchResponse,
+  BucketWithInnerBuckts,
+  Bucket,
 } from 'src/app/filters/services/interfaces';
 import { RangeService } from 'src/app/filters/services/range/range.service';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../../../store';
 import { BarService } from './services/bar/bar.service';
 import { ItemsService } from 'src/services/itemsService/items.service';
-
-// Notes
-/**
- * 1 - The keys are: [`crps_by_count`, `funders_by_count`, `top_authors`, `top_affiliations`, `types_sorted_by_count`]
- * 2 - we need to modify the general configs to allow us to get multiple sources
- * 3 - THE YEARS SHOULD BE STORED IN THE STORE AND WE NEED TO GET THEM ONLY ONE TIME (FOR THE RANGE COMP & THIS).
- */
+import { MergedSelect } from '../list/paginated-list/filter-paginated-list/types.interface';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-bar',
@@ -32,6 +28,10 @@ import { ItemsService } from 'src/services/itemsService/items.service';
   providers: [ChartMathodsService, RangeService, BarService],
 })
 export class BarComponent extends ParentChart implements OnInit {
+  sources: MergedSelect;
+  selectedCategories: Array<Bucket>;
+  selectedYears: Array<number>;
+
   constructor(
     cms: ChartMathodsService,
     private readonly rangeService: RangeService,
@@ -48,16 +48,14 @@ export class BarComponent extends ParentChart implements OnInit {
     this.rangeService.sourceVal = (source as Array<string>).reduce(
       (prev: string, curr: string) => (curr.includes('year') ? curr : undefined)
     );
-    this.init(ChartTypes.bar, this.getYears.bind(this));
+    this.init(ChartTypes.column, this.getYears.bind(this));
     this.buildOptions.subscribe(
       (() => {
         let flag = true;
-        return (b: Bucket[]) => {
-          console.log(b);
+        return (b: MergedSelect) => {
+          this.sources = { ...this.sources, ...b };
           if (flag) {
-            this.itemsService
-              .getItems(this.barService.buildQuery())
-              .subscribe((res: ElasticsearchResponse) => console.log(res));
+            this.getData();
           }
           flag = false;
         };
@@ -72,5 +70,79 @@ export class BarComponent extends ParentChart implements OnInit {
     this.rangeService
       .getYears(this.rangeService.buildquery(qb).build() as ElasticsearchQuery)
       .subscribe();
+  }
+
+  private getData(): void {
+    this.itemsService
+      .getItems(this.barService.buildQuery())
+      .pipe(map(this.mapDataToColmns.bind(this)))
+      .subscribe(
+        (series: Array<Highcharts.SeriesColumnOptions>) =>
+          (this.chartOptions = this.setOptions(series))
+      );
+  }
+
+  private mapDataToColmns(
+    res: ElasticsearchResponse
+  ): Array<Highcharts.SeriesColumnOptions> {
+    const series: Array<
+      Highcharts.SeriesColumnOptions
+    > = res.aggregations.y.buckets.map(
+      (yBucket: BucketWithInnerBuckts) =>
+        ({
+          type: 'column',
+          name: yBucket.key,
+          value: yBucket.doc_count,
+          data: yBucket.x.buckets.map(xBucket => ({
+            name: xBucket.key,
+            y: xBucket.doc_count,
+          })),
+        } as Highcharts.SeriesColumnOptions)
+    );
+    this.selectDefaultOptions(series);
+    return series;
+  }
+
+  private selectDefaultOptions(
+    series: Array<Highcharts.SeriesColumnOptions>
+  ): void {
+    const [{ data }] = series;
+    console.log(series);
+
+    this.selectedCategories = data.map(
+      ({ y, name }: { y: number; name: string }) =>
+        ({
+          key: name,
+          doc_count: y,
+        } as Bucket)
+    );
+    this.selectedYears = series.map(d => +d.name);
+  }
+
+  private setOptions(
+    series: Array<Highcharts.SeriesColumnOptions>
+  ): Highcharts.Options {
+    return {
+      chart: { type: ChartTypes.column },
+      xAxis: { type: 'category', crosshair: true },
+      yAxis: { min: 0, title: { text: 'Publications' } },
+      plotOptions: {
+        column: {
+          pointPadding: 0.2,
+          borderWidth: 0,
+          borderRadius: 2.5,
+        },
+      },
+      tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat:
+          '<tr><td style="color:{series.color};padding:0">{series.name}: </td><td style="padding:0"><b>{point.y}</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true,
+      },
+      series: [...series],
+      ...this.cms.commonProperties(),
+    };
   }
 }

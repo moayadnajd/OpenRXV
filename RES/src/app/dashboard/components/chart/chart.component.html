@@ -9,7 +9,7 @@
         {{ title }}
       </span>
       <mat-icon
-        aria-label="Button that displays 
+        aria-label="Button that displays
         a tooltip when focused or hovered over"
         [mdePopoverTriggerFor]="appPopover"
         mdePopoverTriggerOn="hover"
@@ -38,6 +38,8 @@
       <span>Click to enable</span>
     </div>
   </div>
+
+  <ng-content></ng-content>
 
   <ngx-loading [show]="!(loadingHits$ | async) && loading"></ngx-loading>
 </mat-expansion-panel>

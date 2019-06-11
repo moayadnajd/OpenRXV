@@ -155,10 +155,10 @@ export const dashboardConfig: GeneralConfigs[] = [
     class: 'col-md-12 mt-3 no-side-padding',
     component: 'BarComponent',
     componentConfigs: {
-      id: ComponentsIdsToScroll.bar,
+      id: ComponentsIdsToScroll.column,
       source: [SourceSchema.type, `${FilterSchema.year}.keyword`],
       title: 'Info Products Analytics',
-      chartType: ChartTypes.bar,
+      chartType: ChartTypes.column,
       description: `
             All Information Products are represented here and can be further disaggregated by two variables at the same time
             choosing from “Type", "Year", "Author", "CRP" and "Funder". The "Year" pre-selects the five most recent years. The

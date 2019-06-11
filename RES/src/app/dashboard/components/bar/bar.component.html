@@ -1,3 +1,35 @@
-<p>
-  bar works!
-</p>
+<app-chart
+  [title]="componentConfigs.title"
+  [description]="componentConfigs.description"
+  [expandedStatus]="cms.getExpanded"
+  [userSeesMe]="cms.getViewState?.userSeesMe"
+  [loading]="cms.getLoading"
+  [loadingHits$]="cms.getLoadingHits$"
+  [chartOptions]="chartOptions"
+  (expanded)="cms.disPatchSetInView($event)"
+>
+  <ng-container *ngIf="sources">
+    <div class="col-12">
+      <ng-select
+        [items]="sources.type"
+        bindLabel="key"
+        [multiple]="true"
+        appendTo="body"
+        placeholder="categories"
+        [(ngModel)]="selectedCategories"
+      >
+      </ng-select>
+    </div>
+
+    <div class="col-12">
+      <ng-select
+        [items]="sources['year.keyword']"
+        [multiple]="true"
+        appendTo="body"
+        placeholder="years"
+        [(ngModel)]="selectedYears"
+      >
+      </ng-select>
+    </div>
+  </ng-container>
+</app-chart>

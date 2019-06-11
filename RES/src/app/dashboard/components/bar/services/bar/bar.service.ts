@@ -9,24 +9,16 @@ export class BarService {
   buildQuery(): ElasticsearchQuery {
     return bodybuilder()
       .size(0)
-      .aggregation(
-        'terms',
-        'year.keyword',
-        { size: 2147483647, order: { _term: 'asc' } },
-        'y',
-        query =>
-          query.aggregation(
-            'terms',
-            '',
-            {
-              field: 'dc_type.keyword',
-              size: 2147483647,
-              order: {
-                _count: 'desc',
-              },
-            },
-            'x'
-          )
+      .aggregation('terms', 'year.keyword', { size: 5 }, 'y', query =>
+        query.aggregation(
+          'terms',
+          '',
+          {
+            field: 'type.keyword',
+            size: 5,
+          },
+          'x'
+        )
       )
       .build() as ElasticsearchQuery;
   }

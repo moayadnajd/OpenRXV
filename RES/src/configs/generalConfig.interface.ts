@@ -86,7 +86,7 @@ export interface PaginatedListConfigs {
 
 export enum searchOptions {
   titleSearch,
-  allSearch
+  allSearch,
 }
 
 export enum ComponentsIdsToScroll {
@@ -94,7 +94,7 @@ export enum ComponentsIdsToScroll {
   pie = 'pie',
   wordcloud = 'wordcloud',
   map = 'map',
-  bar = 'bar',
+  column = 'column',
   mapTop = 'mapTop',
   topLists = 'topLists',
   topAffiliations = 'topAffiliations',
@@ -102,7 +102,7 @@ export enum ComponentsIdsToScroll {
   funders = 'funders',
   paginatedList = 'paginatedList',
   lineChart = 'lineChart',
-  SimiCircle = 'SimiCircle'
+  SimiCircle = 'SimiCircle',
 }
 
 export enum icons {
@@ -111,14 +111,14 @@ export enum icons {
   pdf = 'picture_as_pdf',
   xls = 'view_array',
   word = 'dock',
-  loop = 'loop'
+  loop = 'loop',
 }
 
 export enum ChartTypes {
   pie = 'pie',
   wordcloud = 'wordcloud',
   map = 'map',
-  bar = 'bar',
+  column = 'column',
   line = 'line',
-  spline = 'spline'
+  spline = 'spline',
 }

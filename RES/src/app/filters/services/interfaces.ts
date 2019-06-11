@@ -106,6 +106,10 @@ export interface Bucket {
   doc_count: number;
 }
 
+export type BucketWithInnerBuckts = Bucket & {
+  [key: string]: AggregationsValue;
+};
+
 export interface AggsRules {
   field: string;
   size: number;
