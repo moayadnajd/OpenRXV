@@ -14,7 +14,7 @@
         [items]="sources.type"
         bindLabel="key"
         [multiple]="true"
-        appendTo="body"
+        [dropdownPosition]="'top'"
         placeholder="categories"
         [(ngModel)]="selectedCategories"
       >
@@ -24,8 +24,9 @@
     <div class="col-12">
       <ng-select
         [items]="sources['year.keyword']"
+        bindLabel="key"
         [multiple]="true"
-        appendTo="body"
+        [dropdownPosition]="'top'"
         placeholder="years"
         [(ngModel)]="selectedYears"
       >

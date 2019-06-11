@@ -20,6 +20,7 @@ import { BarService } from './services/bar/bar.service';
 import { ItemsService } from 'src/services/itemsService/items.service';
 import { MergedSelect } from '../list/paginated-list/filter-paginated-list/types.interface';
 import { map } from 'rxjs/operators';
+import { SeriesColumnOptions } from 'highcharts';
 
 @Component({
   selector: 'app-bar',
@@ -30,7 +31,7 @@ import { map } from 'rxjs/operators';
 export class BarComponent extends ParentChart implements OnInit {
   sources: MergedSelect;
   selectedCategories: Array<Bucket>;
-  selectedYears: Array<number>;
+  selectedYears: Array<Bucket>;
 
   constructor(
     cms: ChartMathodsService,
@@ -107,7 +108,6 @@ export class BarComponent extends ParentChart implements OnInit {
     series: Array<Highcharts.SeriesColumnOptions>
   ): void {
     const [{ data }] = series;
-    console.log(series);
 
     this.selectedCategories = data.map(
       ({ y, name }: { y: number; name: string }) =>
@@ -116,7 +116,13 @@ export class BarComponent extends ParentChart implements OnInit {
           doc_count: y,
         } as Bucket)
     );
-    this.selectedYears = series.map(d => +d.name);
+    this.selectedYears = series.map(
+      ({ name, value }: Highcharts.SeriesColumnOptions & { value: any }) =>
+        ({
+          key: name,
+          doc_count: value,
+        } as Bucket)
+    );
   }
 
   private setOptions(
