@@ -1,7 +1,6 @@
 import {
   GeneralConfigs,
   ComponentDashboardConfigs,
-  ComponentsIdsToScroll,
   icons,
   ChartTypes,
 } from './generalConfig.interface';
@@ -23,7 +22,7 @@ export const dashboardConfig: GeneralConfigs[] = [
   //   class: 'col-md-3 no-side-padding',
   //   component: 'SimiCircleComponent',
   //   componentConfigs: {
-  //     id: ComponentsIdsToScroll.SimiCircle,
+  //     id: 'SimiCircle',
   //     title: 'Info Products by Type',
   //     source: SourceSchema.status,
   //     chartType: ChartTypes.pie,
@@ -36,7 +35,7 @@ export const dashboardConfig: GeneralConfigs[] = [
   //     `,
   //   } as ComponentDashboardConfigs,
   //   scroll: {
-  //     linkedWith: ComponentsIdsToScroll.topLists,
+  //     linkedWith: 'topLists',
   //   },
   //   tour: true,
   // },
@@ -45,7 +44,7 @@ export const dashboardConfig: GeneralConfigs[] = [
   //   class: 'col-md-9 no-side-padding',
   //   component: 'LineComponent',
   //   componentConfigs: {
-  //     id: ComponentsIdsToScroll.lineChart,
+  //     id: 'lineChart',
   //     title: 'Info Products by Type',
   //     source: SourceSchema.status,
   //     chartType: ChartTypes.line,
@@ -58,7 +57,7 @@ export const dashboardConfig: GeneralConfigs[] = [
   //     `,
   //   } as ComponentDashboardConfigs,
   //   scroll: {
-  //     linkedWith: ComponentsIdsToScroll.topLists,
+  //     linkedWith: 'topLists',
   //   },
   //   tour: true,
   // },
@@ -67,7 +66,7 @@ export const dashboardConfig: GeneralConfigs[] = [
     class: 'col-md-6 no-side-padding',
     component: 'PieComponent',
     componentConfigs: {
-      id: ComponentsIdsToScroll.pie,
+      id: 'pie',
       title: 'Info Products by Type',
       source: SourceSchema.type,
       description: `
@@ -90,7 +89,7 @@ export const dashboardConfig: GeneralConfigs[] = [
     show: true,
     component: 'WordcloudComponent',
     componentConfigs: {
-      id: ComponentsIdsToScroll.wordcloud,
+      id: 'wordcloud',
       title: 'Info Products by Subject',
       source: SourceSchema.subject,
       chartType: ChartTypes.wordcloud,
@@ -105,7 +104,7 @@ export const dashboardConfig: GeneralConfigs[] = [
       `,
     } as ComponentDashboardConfigs,
     scroll: {
-      linkedWith: ComponentsIdsToScroll.pie,
+      linkedWith: 'pie',
     },
     tour: true,
   },
@@ -114,7 +113,7 @@ export const dashboardConfig: GeneralConfigs[] = [
     class: 'col-md-9 mt-3 no-side-padding',
     component: 'MapComponent',
     componentConfigs: {
-      id: ComponentsIdsToScroll.map,
+      id: 'map',
       source: SourceSchema.country,
       title: 'Info Products Overview',
       chartType: ChartTypes.map,
@@ -137,7 +136,7 @@ export const dashboardConfig: GeneralConfigs[] = [
     show: true,
     component: 'ListComponent',
     componentConfigs: {
-      id: ComponentsIdsToScroll.mapTop,
+      id: 'mapTop',
       title: 'Top Countries',
       source: SourceSchema.country,
       description: `
@@ -146,7 +145,7 @@ export const dashboardConfig: GeneralConfigs[] = [
       `,
     } as ComponentDashboardConfigs,
     scroll: {
-      linkedWith: ComponentsIdsToScroll.map,
+      linkedWith: 'map',
     },
     tour: true,
   },
@@ -155,7 +154,7 @@ export const dashboardConfig: GeneralConfigs[] = [
     class: 'col-md-12 mt-3 no-side-padding',
     component: 'BarComponent',
     componentConfigs: {
-      id: ComponentsIdsToScroll.column,
+      id: 'column',
       source: [SourceSchema.type, `${FilterSchema.year}.keyword`],
       title: 'Info Products Analytics',
       chartType: ChartTypes.column,
@@ -177,7 +176,7 @@ export const dashboardConfig: GeneralConfigs[] = [
     show: true,
     component: 'ListComponent',
     componentConfigs: {
-      id: ComponentsIdsToScroll.topLists,
+      id: 'topLists',
       title: 'Top Contributors',
       source: SourceSchema.author,
       description: `
@@ -195,7 +194,7 @@ export const dashboardConfig: GeneralConfigs[] = [
     show: true,
     component: 'ListComponent',
     componentConfigs: {
-      id: ComponentsIdsToScroll.topAffiliations,
+      id: 'topAffiliations',
       title: 'Top Affiliations',
       source: SourceSchema.affiliation,
       description: `
@@ -204,7 +203,7 @@ export const dashboardConfig: GeneralConfigs[] = [
       `,
     } as ComponentDashboardConfigs,
     scroll: {
-      linkedWith: ComponentsIdsToScroll.topLists,
+      linkedWith: 'topLists',
     },
     tour: true,
   },
@@ -213,7 +212,7 @@ export const dashboardConfig: GeneralConfigs[] = [
     show: true,
     component: 'ListComponent',
     componentConfigs: {
-      id: ComponentsIdsToScroll.CRP,
+      id: 'CRP',
       title: 'CRPs and Platforms',
       source: SourceSchema.crp,
       description: `
@@ -233,7 +232,7 @@ export const dashboardConfig: GeneralConfigs[] = [
     show: true,
     component: 'ListComponent',
     componentConfigs: {
-      id: ComponentsIdsToScroll.funders,
+      id: 'funders',
       title: 'Funders',
       source: SourceSchema.sponsorship,
       description: `
@@ -243,7 +242,7 @@ export const dashboardConfig: GeneralConfigs[] = [
       `,
     } as ComponentDashboardConfigs,
     scroll: {
-      linkedWith: ComponentsIdsToScroll.CRP,
+      linkedWith: 'CRP',
     },
     tour: true,
   },
@@ -252,7 +251,7 @@ export const dashboardConfig: GeneralConfigs[] = [
     show: true,
     component: 'ListComponent',
     componentConfigs: {
-      id: ComponentsIdsToScroll.paginatedList,
+      id: 'paginatedList',
       title: 'Info Producs List of Results',
       description: `
           All information products found are represented here, You can sort this list by "Date",

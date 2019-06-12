@@ -6,10 +6,13 @@ import * as fromStore from '../../store';
 import { SetQuery } from '../../store';
 import { BodyBuilderService } from '../filters/services/bodyBuilder/body-builder.service';
 import { tourConfig } from 'src/configs/tour';
-import { ComponentsIdsToScroll } from 'src/configs/generalConfig.interface';
 import { ESHttpError } from 'src/store/actions/actions.interfaces';
 import { MatSnackBar } from '@angular/material';
 import { SnackComponent } from './representationalComponents/snack/snack.component';
+import {
+  GeneralConfigs,
+  ComponentDashboardConfigs,
+} from 'src/configs/generalConfig.interface';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,8 +20,8 @@ import { SnackComponent } from './representationalComponents/snack/snack.compone
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-  dashboardConfig = dashboardConfig;
-  countersConfig = countersConfig;
+  dashboardConfig: Array<GeneralConfigs> = dashboardConfig;
+  countersConfig: Array<GeneralConfigs> = countersConfig;
   tourConfig = tourConfig;
   oldViewState: Map<string, boolean>;
 
@@ -28,8 +31,12 @@ export class DashboardComponent implements OnInit {
     private readonly snackBar: MatSnackBar
   ) {
     this.oldViewState = new Map<string, boolean>();
-    Object.keys(ComponentsIdsToScroll).forEach((key: string) =>
-      this.oldViewState.set(key, false)
+    [this.countersConfig[0], ...this.dashboardConfig].forEach(
+      ({ componentConfigs }: GeneralConfigs) =>
+        this.oldViewState.set(
+          (componentConfigs as ComponentDashboardConfigs).id,
+          false
+        )
     );
   }
 

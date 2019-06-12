@@ -3,14 +3,11 @@ import {
   OnInit,
   ViewChild,
   ElementRef,
-  HostListener
+  HostListener,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../../../store';
-import {
-  ComponentDashboardConfigs,
-  ComponentsIdsToScroll
-} from 'src/configs/generalConfig.interface';
+import { ComponentDashboardConfigs } from 'src/configs/generalConfig.interface';
 import { Bucket, Hits, hits } from 'src/app/filters/services/interfaces';
 import { PageEvent } from '@angular/material';
 import { ScrollHelperService } from '../services/scrollTo/scroll-helper.service';
@@ -27,7 +24,7 @@ declare function _altmetric_embed_init(): any;
   selector: 'app-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss'],
-  providers: [ScrollHelperService]
+  providers: [ScrollHelperService],
 })
 export class ListComponent extends ParentComponent implements OnInit {
   @ViewChild('clickToEnable') clickToEnable: ElementRef;
@@ -68,12 +65,8 @@ export class ListComponent extends ParentComponent implements OnInit {
   }
 
   private seeIfThisCompInView(): void {
-    const { id, source } = this.componentConfigs as ComponentDashboardConfigs;
-    this.scrollHelperService.seeIfThisCompInView(
-      this.shouldWePaginate(source as string)
-        ? ComponentsIdsToScroll.paginatedList
-        : ComponentsIdsToScroll[id]
-    );
+    const { id } = this.componentConfigs as ComponentDashboardConfigs;
+    this.scrollHelperService.seeIfThisCompInView(id);
   }
 
   private subToDataFromStore(): void {

@@ -1,8 +1,13 @@
 import * as actions from 'src/store/actions/items.actions';
 import { mapObjIndexed } from 'ramda';
 import { ElasticsearchResponse } from 'src/app/filters/services/interfaces';
-import { ComponentsIdsToScroll } from 'src/configs/generalConfig.interface';
 import { InView } from '../actions/actions.interfaces';
+import { dashboardConfig } from 'src/configs/dashboard';
+import {
+  GeneralConfigs,
+  ComponentDashboardConfigs,
+} from 'src/configs/generalConfig.interface';
+import { countersConfig } from 'src/configs/counters';
 
 export interface ViewState {
   userSeesMe: boolean;
@@ -11,7 +16,6 @@ export interface ViewState {
 }
 
 export interface InViewState {
-  // key is  is one of `ComponentsIdsToScroll`
   [key: string]: ViewState;
 }
 
@@ -25,14 +29,22 @@ export interface ItemsState {
   error: any;
 }
 
+console.log([countersConfig[0], ...dashboardConfig]);
+
 const initialState: ItemsState = {
   data: {},
   counters: {},
   inView: (() => {
     // creating the state dynamically
     const obj = Object.create(null);
-    Object.values(ComponentsIdsToScroll).forEach(
-      (s: string) => (obj[s] = { collapsed: false, userSeesMe: false })
+    Object.values([countersConfig[0], ...dashboardConfig]).forEach(
+      ({ componentConfigs }: GeneralConfigs) => {
+        console.log(componentConfigs);
+        return (obj[(componentConfigs as ComponentDashboardConfigs).id] = {
+          collapsed: false,
+          userSeesMe: false,
+        });
+      }
     );
     return obj;
   })() as InViewState,

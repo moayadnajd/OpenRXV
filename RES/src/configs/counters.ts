@@ -1,7 +1,6 @@
 import {
   GeneralConfigs,
   ComponentCounterConfigs,
-  ComponentsIdsToScroll
 } from './generalConfig.interface';
 import { SourceSchema } from './schema';
 
@@ -9,18 +8,18 @@ export const countersConfig: GeneralConfigs[] = [
   {
     show: true,
     componentConfigs: {
-      id: ComponentsIdsToScroll.counters,
+      id: 'counters',
       title: 'Total Items',
       source: 'total',
       description: `
         Total number of information product found
       `,
-      percentageFromTotal: false
+      percentageFromTotal: false,
     } as ComponentCounterConfigs,
     scroll: {
-      icon: 'dashboard'
+      icon: 'dashboard',
     },
-    tour: true
+    tour: true,
   },
   {
     show: true,
@@ -33,9 +32,9 @@ export const countersConfig: GeneralConfigs[] = [
         Total number of information products freely
         accessible and usable as by license applied.
       `,
-      percentageFromTotal: true
+      percentageFromTotal: true,
     } as ComponentCounterConfigs,
-    tour: true
+    tour: true,
   },
   {
     show: true,
@@ -48,9 +47,9 @@ export const countersConfig: GeneralConfigs[] = [
         Total number of information products only
         accesible as by publisher's specifications.
       `,
-      percentageFromTotal: true
+      percentageFromTotal: true,
     } as ComponentCounterConfigs,
-    tour: true
+    tour: true,
   },
   {
     show: true,
@@ -62,9 +61,9 @@ export const countersConfig: GeneralConfigs[] = [
         Total number of information products only accessible
         as by publisher's specifications.
       `,
-      percentageFromTotal: false
+      percentageFromTotal: false,
     } as ComponentCounterConfigs,
-    tour: true
+    tour: true,
   },
   {
     show: true,
@@ -76,9 +75,9 @@ export const countersConfig: GeneralConfigs[] = [
         Total number of Authors involved with he information
         product found
       `,
-      percentageFromTotal: false
+      percentageFromTotal: false,
     } as ComponentCounterConfigs,
-    tour: true
+    tour: true,
   },
   {
     show: true,
@@ -90,9 +89,9 @@ export const countersConfig: GeneralConfigs[] = [
         Total number of information products only accessible
         as by Subject's specifications.
       `,
-      percentageFromTotal: false
+      percentageFromTotal: false,
     } as ComponentCounterConfigs,
-    tour: true
+    tour: true,
   },
   {
     show: true,
@@ -104,9 +103,9 @@ export const countersConfig: GeneralConfigs[] = [
         Total number of Authors involved with he information
         product found
       `,
-      percentageFromTotal: false
+      percentageFromTotal: false,
     } as ComponentCounterConfigs,
-    tour: true
+    tour: true,
   },
   {
     show: true,
@@ -118,9 +117,8 @@ export const countersConfig: GeneralConfigs[] = [
         Total number of information products only accessible
         as by rights specifications.
       `,
-      percentageFromTotal: false
+      percentageFromTotal: false,
     } as ComponentCounterConfigs,
-    tour: true
-  }
-
+    tour: true,
+  },
 ];

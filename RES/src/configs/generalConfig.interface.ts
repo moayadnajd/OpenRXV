@@ -26,7 +26,7 @@ export interface GeneralConfigs {
 
 export interface Scroll {
   icon?: string;
-  linkedWith?: ComponentsIdsToScroll;
+  linkedWith?: string;
 }
 
 export interface ComponentDashboardConfigs {
@@ -91,21 +91,21 @@ export enum searchOptions {
   allSearch,
 }
 
-export enum ComponentsIdsToScroll {
-  counters = 'counters',
-  pie = 'pie',
-  wordcloud = 'wordcloud',
-  map = 'map',
-  column = 'column',
-  mapTop = 'mapTop',
-  topLists = 'topLists',
-  topAffiliations = 'topAffiliations',
-  CRP = 'CRP',
-  funders = 'funders',
-  paginatedList = 'paginatedList',
-  lineChart = 'lineChart',
-  SimiCircle = 'SimiCircle',
-}
+// export enum ComponentsIdsToScroll {
+//   counters = 'counters',
+//   pie = 'pie',
+//   wordcloud = 'wordcloud',
+//   map = 'map',
+//   column = 'column',
+//   mapTop = 'mapTop',
+//   topLists = 'topLists',
+//   topAffiliations = 'topAffiliations',
+//   CRP = 'CRP',
+//   funders = 'funders',
+//   paginatedList = 'paginatedList',
+//   lineChart = 'lineChart',
+//   SimiCircle = 'SimiCircle',
+// }
 
 export enum icons {
   export = 'view_headline',
