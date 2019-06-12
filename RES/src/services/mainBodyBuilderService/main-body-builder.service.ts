@@ -3,21 +3,57 @@ import * as bodybuilder from 'bodybuilder';
 import {
   QuerySearchAttribute,
   QueryYearAttribute,
-  QueryFilterAttribute
+  QueryFilterAttribute,
 } from 'src/app/filters/services/interfaces';
 import { BuilderUtilities } from './builderUtilities.class';
 import { Subject } from 'rxjs';
-import { SortOption } from 'src/configs/generalConfig.interface';
-import { ListSchema } from 'src/configs/schema';
+import {
+  SortOption,
+  GeneralConfigs,
+  ComponentDashboardConfigs,
+} from 'src/configs/generalConfig.interface';
+import { dashboardConfig } from 'src/configs/dashboard';
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MainBodyBuilderService extends BuilderUtilities {
   private rawOptions: string[];
 
   constructor() {
     super();
-    this.rawOptions = Object.values(ListSchema);
+    this.rawOptions = (() => {
+      let rows: Array<string> = [];
+      const { content } = dashboardConfig.reduce(
+        (prev: GeneralConfigs, curr: GeneralConfigs) => {
+          return (curr.componentConfigs as ComponentDashboardConfigs).content
+            ? curr
+            : undefined;
+        },
+        undefined
+      ).componentConfigs as ComponentDashboardConfigs;
+      for (const key in content) {
+        if (content.hasOwnProperty(key)) {
+          if (typeof content[key] === 'string') {
+            rows = [...rows, content[key]];
+          } else if (
+            typeof content[key] === 'object' &&
+            !Array.isArray(content[key])
+          ) {
+            rows = [...rows, ...(Object.values(content[key]) as Array<string>)];
+          } else if (Array.isArray(content[key])) {
+            (content[key] as Array<SortOption>).forEach(
+              ({ value }: SortOption) =>
+                rows.push(value.replace('.keyword', '').replace('.score', ''))
+            );
+          }
+          // else is boolean
+        }
+      }
+      // bitstreams needed for the images
+      // handle needed for the altmetric
+      rows.push('thumbnail', 'handle', 'bitstreams');
+      return rows;
+    })();
     this.orOperator.next(false);
   }
 
@@ -121,7 +157,7 @@ export class MainBodyBuilderService extends BuilderUtilities {
     const { sort, value } = this.hitsAttributes;
     b.sort(value ? value : 'date', {
       mode: 'max',
-      order: sort ? sort : 'desc'
+      order: sort ? sort : 'desc',
     }).from(from);
 
     this.addRawOptions(b);

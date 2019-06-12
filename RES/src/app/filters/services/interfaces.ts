@@ -12,7 +12,7 @@ export interface ElasticsearchResponse {
 /**
  * **Elasticsearch** Aggregations
  * * the key is one of the
- * `FilterSchema` and `SourceSchema`
+ * `sources` in configs
  */
 export interface Aggregations {
   [key: string]: AggregationsValue;
@@ -53,8 +53,8 @@ export interface hits {
 /**
  * **Elasticsearch** _source.
  * These could change based on the value
- * of `SourceSchema`, `FilterSchema`, and
- * `ListSchema`, this is why i deleted them.
+ * of `source` in the configs,
+ * this is why i deleted them.
  * The values from these enums are the
  * keys to this interface
  */
@@ -139,7 +139,7 @@ export interface SortOptions {
  * The select components will provide data
  * hinted with this interface.
  * * the key is the source which can be found
- *   in `FilterSchema` and `SourceSchema`
+ *   in `source` in the configs
  * * string[] is the selected options values
  *   and they are hinted as `(key in the Bucket interface)`
  * > this is one of the interfaces that is used

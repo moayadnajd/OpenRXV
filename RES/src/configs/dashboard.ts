@@ -4,7 +4,6 @@ import {
   icons,
   ChartTypes,
 } from './generalConfig.interface';
-import { SourceSchema, ListSchema, FilterSchema } from './schema';
 
 /**
  * * componentConfigs.source determine where
@@ -24,7 +23,7 @@ export const dashboardConfig: GeneralConfigs[] = [
   //   componentConfigs: {
   //     id: 'SimiCircle',
   //     title: 'Info Products by Type',
-  //     source: SourceSchema.status,
+  //     source: 'status',
   //     chartType: ChartTypes.pie,
   //     description: `
   //         All the available :${
@@ -46,7 +45,7 @@ export const dashboardConfig: GeneralConfigs[] = [
   //   componentConfigs: {
   //     id: 'lineChart',
   //     title: 'Info Products by Type',
-  //     source: SourceSchema.status,
+  //     source: 'status',
   //     chartType: ChartTypes.line,
   //     description: `
   //         All the available :${
@@ -68,7 +67,7 @@ export const dashboardConfig: GeneralConfigs[] = [
     componentConfigs: {
       id: 'pie',
       title: 'Info Products by Type',
-      source: SourceSchema.type,
+      source: 'type',
       description: `
           All the available information products are represented here and disaggregated by Type.
           You can toggle on/off individual type of visualization in the list at the right side of
@@ -91,7 +90,7 @@ export const dashboardConfig: GeneralConfigs[] = [
     componentConfigs: {
       id: 'wordcloud',
       title: 'Info Products by Subject',
-      source: SourceSchema.subject,
+      source: 'subject',
       chartType: ChartTypes.wordcloud,
       description: `
           Top Subjects tags for all the information products are represented here, the greater the word,
@@ -114,7 +113,7 @@ export const dashboardConfig: GeneralConfigs[] = [
     component: 'MapComponent',
     componentConfigs: {
       id: 'map',
-      source: SourceSchema.country,
+      source: 'country',
       title: 'Info Products Overview',
       chartType: ChartTypes.map,
       description: `
@@ -138,7 +137,7 @@ export const dashboardConfig: GeneralConfigs[] = [
     componentConfigs: {
       id: 'mapTop',
       title: 'Top Countries',
-      source: SourceSchema.country,
+      source: 'country',
       description: `
           The top Countries by number of information products.
           Click on ICONS:${icons.arrowUp} to collapse the list.
@@ -155,7 +154,7 @@ export const dashboardConfig: GeneralConfigs[] = [
     component: 'BarComponent',
     componentConfigs: {
       id: 'column',
-      source: [SourceSchema.type, `${FilterSchema.year}.keyword`],
+      source: ['type', `year.keyword`],
       title: 'Info Products Analytics',
       chartType: ChartTypes.column,
       description: `
@@ -178,7 +177,7 @@ export const dashboardConfig: GeneralConfigs[] = [
     componentConfigs: {
       id: 'topLists',
       title: 'Top Contributors',
-      source: SourceSchema.author,
+      source: 'author',
       description: `
           The top twenty Authors by number of information products.
           Click on ICONS:${icons.arrowUp} to collapse the list.
@@ -196,7 +195,7 @@ export const dashboardConfig: GeneralConfigs[] = [
     componentConfigs: {
       id: 'topAffiliations',
       title: 'Top Affiliations',
-      source: SourceSchema.affiliation,
+      source: 'affiliation',
       description: `
           Top twenty affiliations by number of information products.
           Click on ICONS:${icons.arrowUp} to collapse the list.
@@ -214,7 +213,7 @@ export const dashboardConfig: GeneralConfigs[] = [
     componentConfigs: {
       id: 'CRP',
       title: 'CRPs and Platforms',
-      source: SourceSchema.crp,
+      source: 'crp',
       description: `
           All CRPs and platforms tagged across all information products
           are represented here and ordered by quantity of tags for
@@ -234,7 +233,7 @@ export const dashboardConfig: GeneralConfigs[] = [
     componentConfigs: {
       id: 'funders',
       title: 'Funders',
-      source: SourceSchema.sponsorship,
+      source: 'sponsorship',
       description: `
           All funders tagged across all information products are represented here and
           orderd by quantity of tags for each funder. Scroll down to see more results.
@@ -259,20 +258,20 @@ export const dashboardConfig: GeneralConfigs[] = [
           Click on ICONS:${icons.arrowUp} to collapse the list.
       `,
       content: {
-        title: ListSchema.title,
-        icon: ListSchema.icon,
-        identifierUri: ListSchema.identifierUri,
+        title: 'title',
+        icon: 'repo',
+        identifierUri: 'uri',
         altmetric: true,
-        description: ListSchema.description,
+        description: 'citation',
         tags: {
-          Publisher: ListSchema.publisher,
-          Subject: ListSchema.subject,
-          Type: ListSchema.type,
-          Status: ListSchema.status,
-          'Date issued': ListSchema.date,
-          'Reporting CRP(s) and Platform(s)': ListSchema.crp,
-          'Attention Score': ListSchema.altmetric,
-          numbers: ListSchema.numbers,
+          Publisher: 'publisher',
+          Subject: 'subject',
+          Type: 'type',
+          Status: 'status',
+          'Date issued': 'date',
+          'Reporting CRP(s) and Platform(s)': 'crp',
+          'Attention Score': 'altmetric',
+          numbers: 'numbers',
         },
         filterOptions: [
           { display: 'Date', value: 'date', sort: 'desc' },

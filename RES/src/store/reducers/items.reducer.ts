@@ -29,8 +29,6 @@ export interface ItemsState {
   error: any;
 }
 
-console.log([countersConfig[0], ...dashboardConfig]);
-
 const initialState: ItemsState = {
   data: {},
   counters: {},
@@ -38,13 +36,11 @@ const initialState: ItemsState = {
     // creating the state dynamically
     const obj = Object.create(null);
     Object.values([countersConfig[0], ...dashboardConfig]).forEach(
-      ({ componentConfigs }: GeneralConfigs) => {
-        console.log(componentConfigs);
-        return (obj[(componentConfigs as ComponentDashboardConfigs).id] = {
+      ({ componentConfigs }: GeneralConfigs) =>
+        (obj[(componentConfigs as ComponentDashboardConfigs).id] = {
           collapsed: false,
           userSeesMe: false,
-        });
-      }
+        })
     );
     return obj;
   })() as InViewState,

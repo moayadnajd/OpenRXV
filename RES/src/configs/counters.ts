@@ -2,7 +2,6 @@ import {
   GeneralConfigs,
   ComponentCounterConfigs,
 } from './generalConfig.interface';
-import { SourceSchema } from './schema';
 
 export const countersConfig: GeneralConfigs[] = [
   {
@@ -26,7 +25,7 @@ export const countersConfig: GeneralConfigs[] = [
     componentConfigs: {
       id: 'openAccess',
       title: 'Open Access',
-      source: `${SourceSchema.status}.keyword`,
+      source: 'status.keyword',
       filter: 'Open Access',
       description: `
         Total number of information products freely
@@ -41,7 +40,7 @@ export const countersConfig: GeneralConfigs[] = [
     componentConfigs: {
       id: 'limitedAcess',
       title: 'Limited Access',
-      source: `${SourceSchema.status}.keyword`,
+      source: 'status.keyword',
       filter: 'Limited Access',
       description: `
         Total number of information products only
@@ -56,7 +55,7 @@ export const countersConfig: GeneralConfigs[] = [
     componentConfigs: {
       id: 'languages',
       title: 'Languages',
-      source: `${SourceSchema.language}.keyword`,
+      source: 'language.keyword',
       description: `
         Total number of information products only accessible
         as by publisher's specifications.
@@ -70,7 +69,7 @@ export const countersConfig: GeneralConfigs[] = [
     componentConfigs: {
       id: 'authors',
       title: 'Authors',
-      source: `${SourceSchema.author}.keyword`,
+      source: 'author.keyword',
       description: `
         Total number of Authors involved with he information
         product found
@@ -84,7 +83,7 @@ export const countersConfig: GeneralConfigs[] = [
     componentConfigs: {
       id: 'authorsAffiliations',
       title: 'Authors Affiliations',
-      source: `${SourceSchema.affiliation}.keyword`,
+      source: 'affiliation.keyword',
       description: `
         Total number of information products only accessible
         as by Subject's specifications.
@@ -98,7 +97,7 @@ export const countersConfig: GeneralConfigs[] = [
     componentConfigs: {
       id: 'CRPs&Platforms',
       title: 'CRPs & Platforms',
-      source: `${SourceSchema.crp}.keyword`,
+      source: 'crp.keyword',
       description: `
         Total number of Authors involved with he information
         product found
@@ -112,7 +111,7 @@ export const countersConfig: GeneralConfigs[] = [
     componentConfigs: {
       id: 'countries',
       title: 'Countries',
-      source: `${SourceSchema.country}.keyword`,
+      source: 'country.keyword',
       description: `
         Total number of information products only accessible
         as by rights specifications.

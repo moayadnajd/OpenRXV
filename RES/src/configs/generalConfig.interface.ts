@@ -34,7 +34,7 @@ export interface ComponentDashboardConfigs {
   title: string;
   chartType: ChartTypes;
   description: string;
-  source: string | Array<string>; // SourceSchema
+  source: string | Array<string>;
   content?: PaginatedListConfigs;
 }
 
@@ -59,9 +59,10 @@ export interface ComponentSearchConfigs {
 }
 
 export interface ComponentFilterConfigs {
-  source: string; // FilterSchema | SourceSchema
+  source: string;
   placeholder?: string;
   expandPosition?: 'top' | 'bottom';
+  addInMainQuery?: boolean;
 }
 
 export interface SortOption {
@@ -77,11 +78,11 @@ export interface SortOption {
  *    * string => is the value e.g: <label> : 92
  */
 export interface PaginatedListConfigs {
-  icon: string; // ListSchema
-  title: string; // ListSchema
-  description: string; // ListSchema
-  tags: object; // [string, ListSchema];
-  identifierUri: string; // ListSchema
+  icon: string;
+  title: string;
+  description: string;
+  tags: object;
+  identifierUri: string;
   altmetric: boolean;
   filterOptions: SortOption[];
 }
