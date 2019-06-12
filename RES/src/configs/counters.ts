@@ -13,7 +13,6 @@ export const countersConfig: GeneralConfigs[] = [
       description: `
         Total number of information product found
       `,
-      percentageFromTotal: false,
     } as ComponentCounterConfigs,
     scroll: {
       icon: 'dashboard',
@@ -60,7 +59,6 @@ export const countersConfig: GeneralConfigs[] = [
         Total number of information products only accessible
         as by publisher's specifications.
       `,
-      percentageFromTotal: false,
     } as ComponentCounterConfigs,
     tour: true,
   },
@@ -74,7 +72,6 @@ export const countersConfig: GeneralConfigs[] = [
         Total number of Authors involved with he information
         product found
       `,
-      percentageFromTotal: false,
     } as ComponentCounterConfigs,
     tour: true,
   },
@@ -88,7 +85,6 @@ export const countersConfig: GeneralConfigs[] = [
         Total number of information products only accessible
         as by Subject's specifications.
       `,
-      percentageFromTotal: false,
     } as ComponentCounterConfigs,
     tour: true,
   },
@@ -102,7 +98,6 @@ export const countersConfig: GeneralConfigs[] = [
         Total number of Authors involved with he information
         product found
       `,
-      percentageFromTotal: false,
     } as ComponentCounterConfigs,
     tour: true,
   },
@@ -116,7 +111,6 @@ export const countersConfig: GeneralConfigs[] = [
         Total number of information products only accessible
         as by rights specifications.
       `,
-      percentageFromTotal: false,
     } as ComponentCounterConfigs,
     tour: true,
   },
