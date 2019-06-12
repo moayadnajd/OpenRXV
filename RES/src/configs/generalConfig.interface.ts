@@ -1,13 +1,5 @@
 import { Bucket } from 'src/app/filters/services/interfaces';
 
-export type ComponentConfigs =
-  | ComponentDashboardConfigs
-  | ComponentCounterConfigs
-  | ComponentLabelConfigs
-  | ComponentSearchConfigs
-  | ComponentFilterConfigs
-  | Tour;
-
 export interface Tour {
   id: string;
   description: string;
@@ -19,7 +11,7 @@ export interface GeneralConfigs {
   tour?: boolean;
   component?: string;
   title?: string;
-  componentConfigs: ComponentConfigs;
+  componentConfigs: any;
   class?: string;
   scroll?: Scroll;
 }
