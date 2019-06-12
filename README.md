@@ -53,7 +53,7 @@ And to change these attributes you need to modify some TypeScript and SCSS files
 - `/tooltips.ts`
 	- Currently, this file only holds the text for the tooltip that will be shown when the user hovers over the icon in the ‘or/and’ button inside the filters area.
 - `/chartColors.ts`
-	- Holds the **colors of the charts** in hexidecimal.
+	- Holds the **colors of the charts** in hexidecimal format.
 	- click [here](https://color.adobe.com/explore) to choose nice colors.
 - `/colorsMap.scss`
 	- Includes a *sass* map that holds the **main colors of the whole app**.
