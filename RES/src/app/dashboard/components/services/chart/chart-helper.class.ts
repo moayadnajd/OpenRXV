@@ -4,7 +4,6 @@ import {
   legendTextColorForPie,
   chartValuesColors,
 } from 'src/configs/chartColors';
-import { ChartTypes } from 'src/configs/generalConfig.interface';
 
 export class ChartHelper {
   protected chartType: any;
@@ -32,11 +31,10 @@ export class ChartHelper {
       },
       enabled: true,
       layout: 'horizontal',
-      floating: this.chartType === ChartTypes.map,
-      align: this.chartType === ChartTypes.pie ? 'right' : 'center',
+      floating: this.chartType === 'map',
+      align: this.chartType === 'pie' ? 'right' : 'center',
       verticalAlign:
-        this.chartType === ChartTypes.map ||
-        this.chartType === ChartTypes.column
+        this.chartType === 'map' || this.chartType === 'column'
           ? 'bottom'
           : 'middle',
       navigation: {

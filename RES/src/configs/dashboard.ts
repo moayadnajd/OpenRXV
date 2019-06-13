@@ -1,7 +1,6 @@
 import {
   GeneralConfigs,
   ComponentDashboardConfigs,
-  ChartTypes,
 } from './generalConfig.interface';
 
 /**
@@ -23,7 +22,7 @@ export const dashboardConfig: GeneralConfigs[] = [
   //     id: 'SimiCircle',
   //     title: 'Info Products by Type',
   //     source: 'status',
-  //     chartType: ChartTypes.pie,
+  //     chartType: 'pie',
   //     description: `
   //         All the available :${
   //           icons.export
@@ -45,7 +44,7 @@ export const dashboardConfig: GeneralConfigs[] = [
   //     id: 'lineChart',
   //     title: 'Info Products by Type',
   //     source: 'status',
-  //     chartType: ChartTypes.line,
+  //     chartType: 'line',
   //     description: `
   //         All the available :${
   //           icons.export
@@ -86,7 +85,7 @@ export const dashboardConfig: GeneralConfigs[] = [
       id: 'wordcloud',
       title: 'Info Products by Subject',
       source: 'subject',
-      chartType: ChartTypes.wordcloud,
+      chartType: 'wordcloud',
       description: `
           Top Subjects tags for all the information products are represented here, the greater the word,
           the higher the number of information. Products tagged to that specific Subject. Click on ICONS:view_headline
@@ -106,7 +105,7 @@ export const dashboardConfig: GeneralConfigs[] = [
       id: 'map',
       source: 'country',
       title: 'Info Products Overview',
-      chartType: ChartTypes.map,
+      chartType: 'map',
       description: `
           Geographic tags for all the information products found are represented here and disaggregated by
           country. The darker the color the higher the number of information products tagged to that specific
@@ -147,7 +146,7 @@ export const dashboardConfig: GeneralConfigs[] = [
       id: 'column',
       source: ['type', `year.keyword`],
       title: 'Info Products Analytics',
-      chartType: ChartTypes.column,
+      chartType: 'column',
       description: `
             All Information Products are represented here and can be further disaggregated by two variables at the same time
             choosing from “Type", "Year", "Author", "CRP" and "Funder". The "Year" pre-selects the five most recent years. The

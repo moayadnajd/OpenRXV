@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
-import { ChartTypes } from 'src/configs/generalConfig.interface';
 import { ChartMathodsService } from '../services/chartCommonMethods/chart-mathods.service';
 import { ParentChart } from '../parent-chart';
 import { Bucket } from 'src/app/filters/services/interfaces';
@@ -9,7 +8,7 @@ import { Bucket } from 'src/app/filters/services/interfaces';
   selector: 'app-wordcloud',
   templateUrl: './wordcloud.component.html',
   styleUrls: ['./wordcloud.component.scss'],
-  providers: [ChartMathodsService]
+  providers: [ChartMathodsService],
 })
 export class WordcloudComponent extends ParentChart implements OnInit {
   constructor(cms: ChartMathodsService) {
@@ -17,7 +16,7 @@ export class WordcloudComponent extends ParentChart implements OnInit {
   }
 
   ngOnInit(): void {
-    this.init(ChartTypes.wordcloud);
+    this.init('wordcloud');
     this.buildOptions.subscribe(
       (buckets: Array<Bucket>) => (this.chartOptions = this.setOptions(buckets))
     );
@@ -27,29 +26,29 @@ export class WordcloudComponent extends ParentChart implements OnInit {
     return {
       chart: {
         type: 'wordcloud',
-        animation: true
+        animation: true,
       },
       plotOptions: {
         wordcloud: {
           tooltip: {
             pointFormat: ' <b>{point.weight}</b>',
-            headerFormat: '{point.key}:'
+            headerFormat: '{point.key}:',
           } as Highcharts.TooltipOptions,
           rotation: 90,
           cursor: 'pointer',
-          allowPointSelect: false
-        } as Highcharts.PlotWordcloudOptions
+          allowPointSelect: false,
+        } as Highcharts.PlotWordcloudOptions,
       },
       series: [
         {
           type: 'wordcloud',
           data: buckets.map((b: Bucket) => ({
             name: b.key,
-            weight: b.doc_count
-          }))
-        }
+            weight: b.doc_count,
+          })),
+        },
       ],
-      ...this.cms.commonProperties()
+      ...this.cms.commonProperties(),
     };
   }
 }

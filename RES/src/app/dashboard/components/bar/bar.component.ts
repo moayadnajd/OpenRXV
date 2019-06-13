@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ParentChart } from '../parent-chart';
 import { ChartMathodsService } from '../services/chartCommonMethods/chart-mathods.service';
 import {
-  ChartTypes,
   ComponentDashboardConfigs,
   MergedSelect,
 } from 'src/configs/generalConfig.interface';
@@ -49,7 +48,7 @@ export class BarComponent extends ParentChart implements OnInit {
     this.rangeService.sourceVal = (source as Array<string>).reduce(
       (prev: string, curr: string) => (curr.includes('year') ? curr : undefined)
     );
-    this.init(ChartTypes.column, this.getYears.bind(this));
+    this.init('column', this.getYears.bind(this));
     this.buildOptions.subscribe(
       (() => {
         let flag = true;
@@ -152,7 +151,7 @@ export class BarComponent extends ParentChart implements OnInit {
     series: Array<Highcharts.SeriesColumnOptions>
   ): Highcharts.Options {
     return {
-      chart: { type: ChartTypes.column },
+      chart: { type: 'column' },
       xAxis: { type: 'category', crosshair: true },
       yAxis: { min: 0, title: { text: 'Publications' } },
       plotOptions: {

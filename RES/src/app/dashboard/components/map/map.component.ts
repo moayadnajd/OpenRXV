@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ChartTypes } from 'src/configs/generalConfig.interface';
 import { ChartMathodsService } from '../services/chartCommonMethods/chart-mathods.service';
 const mapWorld = require('@highcharts/map-collection/custom/world-robinson-highres.geo.json');
 import * as Highcharts from 'highcharts';
@@ -20,7 +19,7 @@ export class MapComponent extends ParentChart implements OnInit {
   }
 
   ngOnInit(): void {
-    this.init(ChartTypes.map);
+    this.init('map');
     this.buildOptions.subscribe(
       (buckets: Array<Bucket>) => (this.chartOptions = this.setOptions(buckets))
     );

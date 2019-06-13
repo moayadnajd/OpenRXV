@@ -24,7 +24,7 @@ export interface Scroll {
 export interface ComponentDashboardConfigs {
   id: string;
   title: string;
-  chartType: ChartTypes;
+  chartType: string;
   description: string;
   source: string | Array<string>;
   content?: PaginatedListConfigs;
@@ -82,15 +82,6 @@ export interface PaginatedListConfigs {
 export enum searchOptions {
   titleSearch,
   allSearch,
-}
-
-export enum ChartTypes {
-  pie = 'pie',
-  wordcloud = 'wordcloud',
-  map = 'map',
-  column = 'column',
-  line = 'line',
-  spline = 'spline',
 }
 
 export interface MergedSelect {

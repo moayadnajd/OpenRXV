@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ChartTypes } from 'src/configs/generalConfig.interface';
 import { ChartMathodsService } from '../services/chartCommonMethods/chart-mathods.service';
 import * as Highcharts from 'highcharts';
 import { ParentChart } from '../parent-chart';
@@ -8,7 +7,7 @@ import { ParentChart } from '../parent-chart';
   selector: 'app-simi-circle',
   templateUrl: './simi-circle.component.html',
   styleUrls: ['./simi-circle.component.scss'],
-  providers: [ChartMathodsService]
+  providers: [ChartMathodsService],
 })
 export class SimiCircleComponent extends ParentChart implements OnInit {
   constructor(cms: ChartMathodsService) {
@@ -16,34 +15,34 @@ export class SimiCircleComponent extends ParentChart implements OnInit {
   }
 
   ngOnInit(): void {
-    this.init(ChartTypes.pie);
+    this.init('pie');
     this.buildOptions.subscribe(() => (this.chartOptions = this.setOptions()));
   }
 
   private setOptions(): any {
     return {
       chart: {
-        type: ChartTypes.pie,
-        animation: true
+        type: 'pie',
+        animation: true,
       },
       title: {
         text: 'Items status',
         align: 'center',
-        verticalAlign: 'middle'
+        verticalAlign: 'middle',
       },
       tooltip: {
-        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
       },
       plotOptions: {
         pie: {
           dataLabels: {
             enabled: true,
-            distance: -50
-          }
-        }
+            distance: -50,
+          },
+        },
       },
-      series: [{innerSize: '70%', ...this.chartOptions.series[0]}],
-      ...this.cms.commonProperties()
+      series: [{ innerSize: '70%', ...this.chartOptions.series[0] }],
+      ...this.cms.commonProperties(),
     };
   }
 }
