@@ -4,7 +4,6 @@ import {
   ComponentLabelConfigs,
   ComponentSearchConfigs,
   ComponentFilterConfigs,
-  icons,
 } from './generalConfig.interface';
 
 export const filtersConfig: GeneralConfigs[] = [
@@ -13,7 +12,7 @@ export const filtersConfig: GeneralConfigs[] = [
     component: 'LabelComponent',
     componentConfigs: {
       text: `Create your query by entering choices in one of
-        more filters below, click on ICONS:${icons.loop} to clear your query.`,
+        more filters below, click on ICONS:loop to clear your query.`,
     } as ComponentLabelConfigs,
   },
   {

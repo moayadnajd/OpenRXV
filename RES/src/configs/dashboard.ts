@@ -1,7 +1,6 @@
 import {
   GeneralConfigs,
   ComponentDashboardConfigs,
-  icons,
   ChartTypes,
 } from './generalConfig.interface';
 
@@ -71,11 +70,7 @@ export const dashboardConfig: GeneralConfigs[] = [
       description: `
           All the available information products are represented here and disaggregated by Type.
           You can toggle on/off individual type of visualization in the list at the right side of
-          the graphic. Click on ICONS:${
-            icons.export
-          } to export this graphic, click on ICONS:${
-        icons.arrowUp
-      } to collapse it.
+          the graphic. Click on ICONS:view_headline to export this graphic, click on ICONS:expand_less to collapse it.
       `,
     } as ComponentDashboardConfigs,
     scroll: {
@@ -94,12 +89,8 @@ export const dashboardConfig: GeneralConfigs[] = [
       chartType: ChartTypes.wordcloud,
       description: `
           Top Subjects tags for all the information products are represented here, the greater the word,
-          the higher the number of information. Products tagged to that specific Subject. Click on ICONS:${
-            icons.export
-          }
-          to export this graphic, click on ICONS:${
-            icons.arrowUp
-          } to collapse it.
+          the higher the number of information. Products tagged to that specific Subject. Click on ICONS:view_headline
+          to export this graphic, click on ICONS:expand_less to collapse it.
       `,
     } as ComponentDashboardConfigs,
     scroll: {
@@ -120,8 +111,8 @@ export const dashboardConfig: GeneralConfigs[] = [
           Geographic tags for all the information products found are represented here and disaggregated by
           country. The darker the color the higher the number of information products tagged to that specific
           country. Overall, the graphic shows the world areas targeted by research activities that produced
-          information products. Click on ICONS:${icons.export}
-          to export this graphic, click on ICONS:${icons.arrowUp}
+          information products. Click on ICONS:view_headline
+          to export this graphic, click on ICONS:expand_less
           to collapse it.
       `,
     } as ComponentDashboardConfigs,
@@ -140,7 +131,7 @@ export const dashboardConfig: GeneralConfigs[] = [
       source: 'country',
       description: `
           The top Countries by number of information products.
-          Click on ICONS:${icons.arrowUp} to collapse the list.
+          Click on ICONS:expand_less to collapse the list.
       `,
     } as ComponentDashboardConfigs,
     scroll: {
@@ -161,8 +152,8 @@ export const dashboardConfig: GeneralConfigs[] = [
             All Information Products are represented here and can be further disaggregated by two variables at the same time
             choosing from “Type", "Year", "Author", "CRP" and "Funder". The "Year" pre-selects the five most recent years. The
             other filters automatically pre-select those options that have the most results, helping you to access your
-            information faster. Click on ICONS:${icons.export} to export
-            this graphic, click on ICONS:${icons.arrowUp} to collapse it.
+            information faster. Click on ICONS:view_headline to export
+            this graphic, click on ICONS:expand_less to collapse it.
       `,
     } as ComponentDashboardConfigs,
     scroll: {
@@ -180,7 +171,7 @@ export const dashboardConfig: GeneralConfigs[] = [
       source: 'author',
       description: `
           The top twenty Authors by number of information products.
-          Click on ICONS:${icons.arrowUp} to collapse the list.
+          Click on ICONS:expand_less to collapse the list.
       `,
     } as ComponentDashboardConfigs,
     scroll: {
@@ -198,7 +189,7 @@ export const dashboardConfig: GeneralConfigs[] = [
       source: 'affiliation',
       description: `
           Top twenty affiliations by number of information products.
-          Click on ICONS:${icons.arrowUp} to collapse the list.
+          Click on ICONS:expand_less to collapse the list.
       `,
     } as ComponentDashboardConfigs,
     scroll: {
@@ -218,7 +209,7 @@ export const dashboardConfig: GeneralConfigs[] = [
           All CRPs and platforms tagged across all information products
           are represented here and ordered by quantity of tags for
           each CRP or platform. Scroll down to see more results.
-          Click on ICONS:${icons.arrowUp} to collapse the list.
+          Click on ICONS:expand_less to collapse the list.
       `,
     } as ComponentDashboardConfigs,
     scroll: {
@@ -237,7 +228,7 @@ export const dashboardConfig: GeneralConfigs[] = [
       description: `
           All funders tagged across all information products are represented here and
           orderd by quantity of tags for each funder. Scroll down to see more results.
-          Click on ICONS:${icons.arrowUp} to collapse the list.
+          Click on ICONS:expand_less to collapse the list.
       `,
     } as ComponentDashboardConfigs,
     scroll: {
@@ -255,7 +246,7 @@ export const dashboardConfig: GeneralConfigs[] = [
       description: `
           All information products found are represented here, You can sort this list by "Date",
           "Type", "Authors", "Altmetric: Attention Score" and "Views & Downloads" info.
-          Click on ICONS:${icons.arrowUp} to collapse the list.
+          Click on ICONS:expand_less to collapse the list.
       `,
       content: {
         title: 'title',
