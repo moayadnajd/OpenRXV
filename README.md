@@ -50,7 +50,7 @@ The application is divided into 3 sections
 
 > **each one of them is denoted with an icon**
 
-- The side navigation buttons ( red color ): these buttons navigate you to the corresponding components with the same icon(s).
+3 - The side navigation buttons ( red color ): these buttons navigate the user to the corresponding components with the same icon(s).
 
 ![App structure image](docs/images/app-struct.png)
 
