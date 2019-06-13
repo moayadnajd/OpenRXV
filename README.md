@@ -39,6 +39,21 @@ $ docker-compose up -d
 - Add reporting functionality
 
 ## Documentation
+The application is divided into 3 sections
+
+1 - The navbar ( yellow ) : which holds the logo on the right, the search icon which will open the side filters, a loop icon that clears the query, and an icon that opens the tutorial ( which is a bunch of popups over the elements in the dashboard).
+
+2 - The components ( gray ):  holds the charts and lists: 
+- pie, worldcould, and map chart.
+- top counties, top contributors, Top Affiliations, CRPs and Platforms, and Funders lists.
+- paginated list.
+
+> **each one of them is denoted with an icon**
+
+- The side navigation buttons ( red color ): these buttons navigate you to the corresponding components with the same icon(s).
+
+![App structure image](docs/images/app-struct.png)
+
 Almost everything is configurable, colors, the position of charts, tooltips text, and the data being displayed in the charts.
 And to change these attributes you need to modify some TypeScript and SCSS files, which you can find in
 `/RES/src/configs`
@@ -62,6 +77,23 @@ And to change these attributes you need to modify some TypeScript and SCSS files
 - `/tour.ts`
 	- Currently, this file only holds the configuration of a single card that will be displayed as the first part of the **tutorial**, you can modify its text here.
 	- The rest of the tutorial will be built from the configuration of `counters.ts` & `dashboard.ts`.
+
+
+### Counters `/RES/src/configs/counters.ts`: 
+
+This file exports a `countersConfig` array which holde objects( `GeneralConfigs` type ), and each object delegates an element in the web page through a set of properties you need to configure.
+
+The properties that you can add to each object :
+
+- show ( optional ): which determine if we should hide or show the element that this object delegate, this is useful when you write some code for testing and you do not want to remove it.
+
+- tour ( optional ): which if you set it to `true`, the app will take the `description` & `title` from this object to build the dashboard tutorial. And if you set it to `false` or didn’t even put it, the element that this object delegate won’t be used the tutorial.
+
+- component ( optional ): in the case of the counters you don’t need to add it since each object from this file will delegate a counter component by default.
+
+- title ( optional ): if you are willing to add the component that this object delegate you need to add a title, which will be displayed in the header of each popup used in the tutorial.
+
+- class ( optional ): any `css` or bootstrap classes that you want the app to use for the current component. we usually use the grid system classes here to organize each component placement.
 
 
 ## License
