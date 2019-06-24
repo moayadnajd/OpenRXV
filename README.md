@@ -166,7 +166,8 @@ The properties that you can add to each object :
 
 -  tour (*optional*): which if you set it to `true`, the app will take the `description` & `title` from this object and adds them to a popover that shows on top of the element that this object delegates. And if you set it to `false` or didn’t even put it, the element that this object delegate won’t be used the tutorial.
 
--  component (*optional* in `counter.ts` ): in the case of the counters you don’t need to add it since each object from this file will delegate a counter component by default, but in the `filters.ts` & `dashboard.ts` you need to add a string of the name of the component.
+-  component (*optional* in `counter.ts` ): in the case of the counters you don’t need to add it since each object from this file will delegate a counter component by default, but in the `filters.ts` & `dashboard.ts` you need to add a string of the name of the component. 
+Available components [`SelectComponent`, `LabelComponent`, `CounterComponent`, `SearchComponent`, `RangeComponent`,  `ListComponent`, `WelcomeComponent`, `PieComponent`, `WordcloudComponent`, `MapComponent`]
 
 -  title (*optional*): The text you will add here will be shown as the header for the counters (this will only affect only the counter).
 
