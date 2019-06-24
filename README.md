@@ -171,7 +171,7 @@ Available components [`SelectComponent`, `LabelComponent`, `CounterComponent`, `
 
 -  title (*optional*): The text you will add here will be shown as the header for the counters (this will only affect only the counter).
 
--  class (*optional*): bootstrap classes that you want the app to use for the current component. we usually use the grid system classes here to organize each component placement ( bootstrap gird wont effect the counters ).
+-  class (*optional*): bootstrap classes that you want the app to use for the current component. we usually use the grid system classes here to organize each component placement ( bootstrap gird wont effect the counters ), *if you added class in the style.scss and add its name here it will work*.
 
 - scroll (*optional*): this property is responsible for the side navigation buttons (red), and should be added to the `dashboard.ts` & `counter.ts` objects, and there is a rule you need to keep in mind, in the `counters.ts` you only need to add this property to the first element in the array.
     -   icon (*optional*): the icon will be added to the side navigation buttons, [all icon names](https://material.io/tools/icons/).
