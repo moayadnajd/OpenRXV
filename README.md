@@ -213,7 +213,7 @@ Available components [`SelectComponent`, `LabelComponent`, `CounterComponent`, `
         - source (*required*): string, the elasticsearch key that this filter will get its data from.
         - placeholder (*required*) : the placeholder in the input.
         - expandPosition (*optional*) : the position that the select options will expand to might be `top` or `bottom`, if you do not provide a position the app will expand the select based on the user view.
-    - addInMainQuery (*optional*) : (boolean), the main query that gets called when you first load the page and when you change any filter values takes the `source` property from the configs and build the main query, but there are some `sources` that only needed for the filters. So if this was set to true this source will be used in the main query else it won't. this makes the app faster, hence it dose not load data, unless it needs it.
+        - addInMainQuery (*optional*) : (boolean), the main query that gets called when you first load the page and when you change any filter values takes the `source` property from the configs and build the main query, but there are some `sources` that only needed for the filters. So if this was set to true this source will be used in the main query else it won't. this makes the app faster, hence it dose not load data, unless it needs it.
 
 ##  License
 
