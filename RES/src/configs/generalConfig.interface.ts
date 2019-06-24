@@ -24,7 +24,6 @@ export interface Scroll {
 export interface ComponentDashboardConfigs {
   id: string;
   title: string;
-  chartType: string;
   description: string;
   source: string | Array<string>;
   content?: PaginatedListConfigs;
@@ -34,14 +33,14 @@ export interface ComponentCounterConfigs {
   id: string;
   title: string;
   source: string;
-  percentageFromTotal: boolean;
+  percentageFromTotal?: boolean;
   filter?: string;
   description?: string;
 }
 
 export interface ComponentLabelConfigs {
   text: string;
-  border: boolean;
+  border?: boolean;
   description?: string;
 }
 
@@ -52,7 +51,7 @@ export interface ComponentSearchConfigs {
 
 export interface ComponentFilterConfigs {
   source: string;
-  placeholder?: string;
+  placeholder: string;
   expandPosition?: 'top' | 'bottom';
   addInMainQuery?: boolean;
 }

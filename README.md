@@ -181,9 +181,39 @@ The properties that you can add to each object :
          - Three elements next to each other, linked with one side navigation button.
         ![Three elements next to each other](docs/images/examples/scroll_linked_with_3_el.png)
         - One element, with single side navigation button.
-        ![two element next to each other](docs/images/examples/scroll_linked_with_one_el.png)
+        ![One element](docs/images/examples/scroll_linked_with_one_el.png)
 
-- **componentConfigs (*required*)** : 
+- **componentConfigs (*required*)** : this property may be `ComponentDashboardConfigs`, `ComponentCounterConfigs`, `ComponentLabelConfigs`, `ComponentSearchConfigs`, or`ComponentFilterConfigs`
+    - ComponentDashboardConfigs
+         - id (*required*): any string you want, but this must be unique.
+         - title (*required*): the title of the popover if this element is used in the tour.
+         - description (*required*): the body of the popover, if this element is used in the tour.
+         - source (*required*): string, the elasticsearch key that this component will get its data from, this might be an array of strings in the case of the chart bar.
+         - content (*optional*): `PaginatedListConfigs` object which contains the following properties: 
+            - TODO .... :(
+    - ComponentCounterConfigs: 
+         - id (*required*): any string you want, but this must be unique.
+         - title (*required*): the title of the popover if this element is used in the tour.
+         - description (*required*): the body of the popover, if this element is used in the tour.
+         - source (*required*): string, the elasticsearch key that this component will get its data from, this might be an array of strings in the case of the chart bar.
+         - percentageFromTotal (*optional*) : (boolean) should this counter displays a percentage from the total items.
+         ![One element](docs/images/examples/percentage.jpg)
+         - filter (*optional*): (string) the filter for `open access` or `limited access`.
+    - ComponentLabelConfigs (this object is used in the side filters ( `filters.ts` ) and delegates a label that separate each section of a filters): 
+        - text (*required*): what should be displayed
+        - border (*optional*): (boolean) should the app put a bottom border under the text?
+        - description (*optional*): if you added text here an icon ( <img  src="docs/images/icons/tooltip.png"  width="20"  height="20"  alt="tooltip icon"> ) will show next to the text, and when the user hover over it a popover will show and show the description.
+        - example: 
+            ![code that generates labels with popover](docs/images/examples/label_code_exam.jpg)
+    - ComponentSearchConfigs (this object is used in the side filters ( `filters.ts` ) and delegates a search text box that is used to search in a specific key in elasticsearch))
+        - placeholder (*required*) : the placeholder in the input.
+        - type (*required*) : which is `searchOptions` and could be `titleSearch` or `allSearch`.
+    - ComponentFilterConfigs (delegates a multiple select filter): 
+        - source (*required*): string, the elasticsearch key that this filter will get its data from.
+        - placeholder (*required*) : the placeholder in the input.
+        - expandPosition (*optional*) : the position that the select options will expand to might be `top` or `bottom`, if you do not provide a position the app will expand the select based on the user view.
+    - addInMainQuery (*optional*) : (boolean), the main query that gets called when you first load the page and when you change any filter values takes the `source` property from the configs and build the main query, but there are some `sources` that only needed for the filters. So if this was set to true this source will be used in the main query else it won't. this makes the app faster, hence it dose not load data, unless it needs it.
+
 ##  License
 
 This work is licensed under the [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html). The license allows you to use and modify the work for personal and commercial purposes, but if you distribute the work you must provide users with a means to access the source code for the version you are distributing. Read more about the [GPLv3 at TL;DR Legal](<https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)>).
