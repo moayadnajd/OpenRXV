@@ -60,7 +60,7 @@ export const dashboardConfig: GeneralConfigs[] = [
   // },
   {
     show: true,
-    class: 'col-md-4 no-side-padding',
+    class: 'col-md-6 no-side-padding',
     component: 'PieComponent',
     componentConfigs: {
       id: 'pie',
@@ -78,7 +78,7 @@ export const dashboardConfig: GeneralConfigs[] = [
     tour: true,
   },
   {
-    class: 'col-md-4 no-side-padding',
+    class: 'col-md-6 no-side-padding',
     show: true,
     component: 'WordcloudComponent',
     componentConfigs: {
@@ -89,25 +89,6 @@ export const dashboardConfig: GeneralConfigs[] = [
           Top Subjects tags for all the information products are represented here, the greater the word,
           the higher the number of information. Products tagged to that specific Subject. Click on ICONS:view_headline
           to export this graphic, click on ICONS:expand_less to collapse it.
-      `,
-    } as ComponentDashboardConfigs,
-    scroll: {
-      linkedWith: 'pie',
-    },
-    tour: true,
-  },
-  {
-    show: true,
-    class: 'col-md-4 no-side-padding',
-    component: 'PieComponent',
-    componentConfigs: {
-      id: 'pie2',
-      title: 'Info Products by Type',
-      source: 'subject',
-      description: `
-          All the available information products are represented here and disaggregated by Type.
-          You can toggle on/off individual type of visualization in the list at the right side of
-          the graphic. Click on ICONS:view_headline to export this graphic, click on ICONS:expand_less to collapse it.
       `,
     } as ComponentDashboardConfigs,
     scroll: {
