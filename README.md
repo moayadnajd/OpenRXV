@@ -158,7 +158,7 @@ And to change these attributes you need to modify some TypeScript and SCSS files
   
   
 
-###  Counters `/RES/src/configs/counters.ts`:
+### <img  src="docs/images/icons/counters.png"  width="20"  height="20"  alt="counters icon"> Counters  `/RES/src/configs/counters.ts`:
 
   
 
