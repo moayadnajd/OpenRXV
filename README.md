@@ -206,7 +206,7 @@ Available components [`SelectComponent`, `LabelComponent`, `CounterComponent`, `
         - description (*optional*): if you added text here an icon ( <img  src="docs/images/icons/tooltip.png"  width="20"  height="20"  alt="tooltip icon"> ) will show next to the text, and when the user hover over it a popover will the description.
         - example: 
             ![code that generates labels with popover](docs/images/examples/label_code_exam.jpg)
-    - ComponentSearchConfigs (this object is used in the side filters ( `filters.ts` ) and delegates a search text box that is used to search in a specific key in elasticsearch))
+    - ComponentSearchConfigs (this object is used in the side filters ( `filters.ts` ) and delegates a search text box that is used to search in a specific key in elasticsearch)
         - placeholder (*required*) : the placeholder in the input.
         - type (*required*) : which is `searchOptions` and could be `titleSearch` or `allSearch`.
     - ComponentFilterConfigs (delegates a multiple select filter): 
