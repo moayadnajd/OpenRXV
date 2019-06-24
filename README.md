@@ -158,7 +158,7 @@ And to change these attributes you need to modify some TypeScript and SCSS files
 
 ### Generic Configurations
 
-- `counters.ts`, `dashbaord.ts`, & `filter.ts` all exports an array of objects ( *type hinted via `./generalConfig.interface.ts/GeneralConfigs`* ), and each object delegates an element in the web page through a set of properties you might to configure.
+- `counters.ts`, `dashbaord.ts`, & `filter.ts` all exports an array of objects ( *type hinted via `./generalConfig.interface.ts/GeneralConfigs`* ), and each object delegates an element in the web page through a set of properties you might configure.
 
 The properties that you can add to each object :
 
