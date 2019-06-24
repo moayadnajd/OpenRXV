@@ -2,14 +2,14 @@ const selectMapColors = {
   hover: '#5dbcd2',
   select: {
     color: '#005353',
-    borderColor: '#000000'
-  }
+    borderColor: '#000000',
+  },
 };
 
 const axisColorForMap = {
   minColor: '#5dbcd2',
   midColor: '#199696',
-  maxColor: '#005353'
+  maxColor: '#005353',
 };
 
 const legendTextColorForPie = '#000000';
@@ -22,8 +22,8 @@ const LegendNavigationColors = {
   activeColor: '#006f6f',
   inactiveColor: '#CCCCCC',
   style: {
-    color: '#005353'
-  }
+    color: '#005353',
+  },
 };
 
 /**
@@ -85,7 +85,7 @@ const chartValuesColors: string[] = [
   '#4DB380',
   '#FF4D4D',
   '#99E6E6',
-  '#6666FF'
+  '#6666FF',
 ];
 
 // const chartThemeName:
@@ -104,5 +104,5 @@ export {
   LegendNavigationColors,
   axisColorForMap,
   selectMapColors,
-  legendTextColorForPie
+  legendTextColorForPie,
 };

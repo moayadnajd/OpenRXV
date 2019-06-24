@@ -218,6 +218,28 @@ Available components [`SelectComponent`, `LabelComponent`, `CounterComponent`, `
 Note about the generic configurations: 
 - If you changed the order of the objects in any of the arrays in `dashboard.ts`, `counters.ts`, & `filters.ts` the order of the element that this object delegates will change according to the new order you gave it
 
+### About Colors
+If you go to `/RES/src/configs/colorsMap.scss` you will find a [scss map](https://sass-lang.com/documentation/values/maps), which contains the pirmary custom color of the app, and follows the [angular materia theming convection](https://material.angular.io/guide/theming), the key `500` is the color that we see often on the page. 
+
+Change the map with the colors you want (if you commented the original one and uncommented the map under it you will see how the page changes).
+
+Changing this map will not change the colors of the charts, to change them go to `/RES/src/configs/chartColors.ts` and you will see multiple exported variables.
+-   selectMapColors (object) 
+    - hover(string): the color that the app will fill the country that the user hove over it. 
+    - select(object): when the user clickes on a country 
+        - color(string): the color of the country after the user clicks on it.
+        - borderColor(string): the color of the country borders after the user clicks on it.
+- axisColorForMap(object): the color of the axis of the map
+    - minColor, midColor, maxColor
+- legendTextColorForPie(string): the color of the text legends in the pie chart.
+- LegendNavigationColors(object): these are the colors for the arrows in the pie chart
+    - activeColor(string): the color that the arrow will be filled if the user can click on it.
+    - inactiveColor(string): the color that the arrow will be filled if the user can't click on it
+    - style(object): 
+        - color(string): the color of how many pages of legends we have (this might not show on big screens). 
+
+- chartValuesColors:(array of strings): the colors of the charts, starts from the highest value
+
 ##  License
 
 This work is licensed under the [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html). The license allows you to use and modify the work for personal and commercial purposes, but if you distribute the work you must provide users with a means to access the source code for the version you are distributing. Read more about the [GPLv3 at TL;DR Legal](<https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)>).
