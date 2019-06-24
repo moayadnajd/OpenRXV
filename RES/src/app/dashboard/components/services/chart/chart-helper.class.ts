@@ -3,7 +3,7 @@ import {
   LegendNavigationColors,
   legendTextColorForPie,
   chartValuesColors,
-} from 'src/configs/chartColors';
+} from 'src/configs/codeobia.colors';
 
 export class ChartHelper {
   protected chartType: any;

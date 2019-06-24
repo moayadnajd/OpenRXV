@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ChartMathodsService } from '../services/chartCommonMethods/chart-mathods.service';
 const mapWorld = require('@highcharts/map-collection/custom/world-robinson-highres.geo.json');
 import * as Highcharts from 'highcharts';
-import { axisColorForMap, selectMapColors } from 'src/configs/chartColors';
+import { axisColorForMap, selectMapColors } from 'src/configs/codeobia.colors';
 import { ParentChart } from '../parent-chart';
 import { Bucket } from 'src/app/filters/services/interfaces';
 import { getCountryCode } from '../services/countryList.helper';
