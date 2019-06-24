@@ -175,7 +175,7 @@ The properties that you can add to each object :
 
   
 
--  tour ( optional ): which if you set it to `true`, the app will take the `description` & `title` from this object to build the dashboard tutorial. And if you set it to `false` or didn’t even put it, the element that this object delegate won’t be used the tutorial.
+-  tour ( optional ): which if you set it to `true`, the app will take the `description` & `title` from this object and adds them to a popover that shows on top of the element that this object delegates. And if you set it to `false` or didn’t even put it, the element that this object delegate won’t be used the tutorial.
 
   
 
@@ -187,7 +187,7 @@ The properties that you can add to each object :
 
   
 
--  class ( optional ): any `css` or bootstrap classes that you want the app to use for the current component. we usually use the grid system classes here to organize each component placement.
+-  class ( optional ): bootstrap classes that you want the app to use for the current component. we usually use the grid system classes here to organize each component placement.
 
   
   
