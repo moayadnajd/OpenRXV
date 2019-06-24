@@ -238,7 +238,8 @@ Changing this map will not change the colors of the charts, to change them go to
     - style(object): 
         - color(string): the color of how many pages of legends we have (this might not show on big screens). 
 
-- chartValuesColors:(array of strings): the colors of the charts, starts from the highest value
+- chartValuesColors (array of strings): the colors of the charts, starts from the highest value
+
 
 
 we included a file `/RES/src/configs/codeobia.colors.ts` which includes colors that match with the commented scss map, active them both and see how much change happens.
