@@ -173,9 +173,17 @@ The properties that you can add to each object :
 -  class (*optional*): bootstrap classes that you want the app to use for the current component. we usually use the grid system classes here to organize each component placement ( bootstrap gird wont effect the counters ).
 
 - scroll (*optional*): this property is responsible for the side navigation buttons (red), and should be added to the `dashboard.ts` & `counter.ts` objects, and there is a rule you need to keep in mind, in the `counters.ts` you only need to add this property to the first element in the array.
-    -   icon (*optional*): the name of the icon the app will add to the red side navigation, [all icon names](https://material.io/tools/icons/).
+    -   icon (*optional*): the icon will be added to the side navigation buttons, [all icon names](https://material.io/tools/icons/).
     - linkedWith (*optional*): if the element has another one next to it(like the map & top countries), we need to add the id of that element here, to tell the app that these two are linked.
+    - examples : 
+         - Two elements next to each other, linked with one side navigation button.
+         ![two element next to each other](docs/images/examples/scroll_linked_with.png)
+         - Three elements next to each other, linked with one side navigation button.
+        ![Three elements next to each other](docs/images/examples/scroll_linked_with_3_el.png)
+        - One element, with single side navigation button.
+        ![two element next to each other](docs/images/examples/scroll_linked_with_one_el.png)
 
+- **componentConfigs (*required*)** : 
 ##  License
 
 This work is licensed under the [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html). The license allows you to use and modify the work for personal and commercial purposes, but if you distribute the work you must provide users with a means to access the source code for the version you are distributing. Read more about the [GPLv3 at TL;DR Legal](<https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)>).
