@@ -155,49 +155,29 @@ And to change these attributes you need to modify some TypeScript and SCSS files
 
     -  The rest of the tutorial will be built from the configuration of `counters.ts` & `dashboard.ts`.
         -  We will take the title and description from each object and use them in the popover on top of the element:
-    
-  
-  
 
-### <img  src="docs/images/icons/counters.png"  width="20"  height="20"  alt="counters icon"> Counters  `/RES/src/configs/counters.ts`:
+### Generic Configurations
 
-  
-
-This file exports a `countersConfig` array which holde objects( `GeneralConfigs` type ), and each object delegates an element in the web page through a set of properties you need to configure.
-
-  
+- `counters.ts`, `dashbaord.ts`, & `filter.ts` all exports an array of objects ( *type hinted via `./generalConfig.interface.ts/GeneralConfigs`* ), and each object delegates an element in the web page through a set of properties you might to configure.
 
 The properties that you can add to each object :
 
-  
+-  show (*optional*): which determine if we should hide or show the element that this object delegate, this is useful when you write some code for testing and you do not want to remove it.
 
--  show ( optional ): which determine if we should hide or show the element that this object delegate, this is useful when you write some code for testing and you do not want to remove it.
+-  tour (*optional*): which if you set it to `true`, the app will take the `description` & `title` from this object and adds them to a popover that shows on top of the element that this object delegates. And if you set it to `false` or didn’t even put it, the element that this object delegate won’t be used the tutorial.
 
-  
+-  component (*optional* in `counter.ts` ): in the case of the counters you don’t need to add it since each object from this file will delegate a counter component by default, but in the `filters.ts` & `dashboard.ts` you need to add a string of the name of the component.
 
--  tour ( optional ): which if you set it to `true`, the app will take the `description` & `title` from this object and adds them to a popover that shows on top of the element that this object delegates. And if you set it to `false` or didn’t even put it, the element that this object delegate won’t be used the tutorial.
+-  title (*optional*): The text you will add here will be shown as the header for the counters (this will only affect only the counter).
 
-  
+-  class (*optional*): bootstrap classes that you want the app to use for the current component. we usually use the grid system classes here to organize each component placement ( bootstrap gird wont effect the counters ).
 
--  component ( optional ): in the case of the counters you don’t need to add it since each object from this file will delegate a counter component by default.
-
-  
-
--  title ( optional ): if you are willing to add the component that this object delegate you need to add a title, which will be displayed in the header of each popup used in the tutorial.
-
-  
-
--  class ( optional ): bootstrap classes that you want the app to use for the current component. we usually use the grid system classes here to organize each component placement.
-
-  
-  
+- scroll (*optional*): this property is responsible for the side navigation buttons (red), and should be added to the `dashboard.ts` & `counter.ts` objects, and there is a rule you need to keep in mind, in the `counters.ts` you only need to add this property to the first element in the array.
+    -   icon (*optional*): the name of the icon the app will add to the red side navigation, [all icon names](https://material.io/tools/icons/).
+    - linkedWith (*optional*): if the element has another one next to it(like the map & top countries), we need to add the id of that element here, to tell the app that these two are linked.
 
 ##  License
 
-  
-
 This work is licensed under the [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html). The license allows you to use and modify the work for personal and commercial purposes, but if you distribute the work you must provide users with a means to access the source code for the version you are distributing. Read more about the [GPLv3 at TL;DR Legal](<https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)>).
-
-  
 
 Read more about ILRI's commitment to openness click [here](https://www.ilri.org/open).

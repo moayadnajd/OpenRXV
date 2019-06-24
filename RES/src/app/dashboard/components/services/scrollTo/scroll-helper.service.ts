@@ -45,7 +45,7 @@ export class ScrollHelperService {
     this.changeCollapsed(collapsed);
     return {
       id,
-      viewState: this.viewState
+      viewState: this.viewState,
     };
   }
 
@@ -62,7 +62,7 @@ export class ScrollHelperService {
       countersConfig[0],
       ...dashboardConfig.filter(
         (gc: GeneralConfigs) => gc.scroll.icon && gc.show
-      )
+      ),
     ];
   }
 
