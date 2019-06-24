@@ -107,8 +107,6 @@ The application is divided into 3 sections
 
 
 ![App structure image](docs/images/app-struct.png)
-*You can reorder the component and the lists, and it will reflect the side navigation buttons*
-  
 <hr />
 
 Almost everything is configurable, colors, the position of charts, tooltips text, and the data being displayed in the charts.
