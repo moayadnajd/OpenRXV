@@ -117,45 +117,45 @@ And to change these attributes you need to modify some TypeScript and SCSS files
 
 -  `/counters.ts`  {  <img  src="docs/images/icons/counters.png"  width="20"  height="20"  alt="counters icon"> }
 
--  Includes the configuration of the **upper section** that display the ‘*number of total items’*, ‘*number of open access documents’*, ‘*number of authors*’, etc.…
+    -  Includes the configuration of the **upper section** that display the ‘*number of total items’*, ‘*number of open access documents’*, ‘*number of authors*’, etc.…
 
 -  `/dashboard.ts`  { <img  src="docs/images/icons/pie.png"  width="20"  height="20"  alt="Pie Chart icon">, <img  src="docs/images/icons/worldcloud.png"  width="20"  height="20"  alt="worldcloud Chart icon">, <img  src="docs/images/icons/map.png"  width="20"  height="20"  alt="map icon">, <img  src="docs/images/icons/list.png"  width="20"  height="20"  alt="List icon">, <img  src="docs/images/icons/list_alt.png"  width="20"  height="20"  alt="list_alt icon">, <img  src="docs/images/icons/star.png"  width="20"  height="20"  alt="star icon">, <img  src="docs/images/icons/view_list.png"  width="20"  height="20"  alt="view_list icon"> }
 
--  Includes the configuration of the **Charts & lists section**, here you can add more charts, rearrange, & delete any chart or list.
+    -  Includes the configuration of the **Charts & lists section**, here you can add more charts, rearrange, & delete any chart or list.
 
 -  `/filters.ts`
 
--  Includes the configuration of the **Side Filters**, which you can modify to remove the filter or change the values each filter displays to modify the query.
+    -  Includes the configuration of the **Side Filters**, which you can modify to remove the filter or change the values each filter displays to modify the query.
 
 -  `/generalConfig.interface.ts`
 
--  Just a simple file that **holds types** that will help your *IDE/text editor* or *you* to know the options that you can add in the configurations.
+    -  Just a simple file that **holds types** that will help your *IDE/text editor* or *you* to know the options that you can add in the configurations.
 
 -  `/tooltips.ts`
 
--  Currently, this file only holds the text for the tooltip that will be shown when the user hovers over the icon ( <img  src="docs/images/icons/tooltip.png"  width="20"  height="20"  alt="tooltip icon"> ) in the ‘or/and’ button inside the filters area.
+    -  Currently, this file only holds the text for the tooltip that will be shown when the user hovers over the icon ( <img  src="docs/images/icons/tooltip.png"  width="20"  height="20"  alt="tooltip icon"> ) in the ‘or/and’ button inside the filters area.
 
 -  `/chartColors.ts`
 
--  Holds the **colors of the charts** in hexidecimal format.
+    -  Holds the **colors of the charts** in hexidecimal format.
 
--  [Good website](https://color.adobe.com/explore) to choose nice colors.
+    -  [Good website](https://color.adobe.com/explore) to choose nice colors.
 
 -  `/colorsMap.scss`
 
--  Includes a *sass* map that holds the **main colors of the whole app**.
+    -  Includes a *sass* map that holds the **main colors of the whole app**.
 
 -  `/customTheme.scss`
 
--  In this file, we make sure that the main color gets applied to all third-party libraries and custom *css* classes
+    -  In this file, we make sure that the main color gets applied to all third-party libraries and custom *css* classes
 
 -  `/tour.ts`
 
--  Currently, this file only holds the configuration of a single card that will be displayed as the first part of the **tutorial**, you can modify its text here.
+    -  Currently, this file only holds the configuration of a single card that will be displayed as the first part of the **tutorial**, you can modify its text here.
 
--  The rest of the tutorial will be built from the configuration of `counters.ts` & `dashboard.ts`.
--  We will take the title and description of each object and use them in the popover on top of the element, example :
-![Tour Example](docs/images/tour_example.png)
+    -  The rest of the tutorial will be built from the configuration of `counters.ts` & `dashboard.ts`.
+    -  We will take the title and description of each object and use them in the popover on top of the element, example :
+    ![Tour Example](docs/images/tour_example.png)
   
   
 
