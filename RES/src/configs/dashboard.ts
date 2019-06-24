@@ -60,12 +60,12 @@ export const dashboardConfig: GeneralConfigs[] = [
   // },
   {
     show: true,
-    class: 'col-md-6 no-side-padding',
+    class: 'col-md-4 no-side-padding',
     component: 'PieComponent',
     componentConfigs: {
       id: 'pie',
       title: 'Info Products by Type',
-      source: 'type',
+      source: 'subject',
       description: `
           All the available information products are represented here and disaggregated by Type.
           You can toggle on/off individual type of visualization in the list at the right side of
@@ -78,13 +78,13 @@ export const dashboardConfig: GeneralConfigs[] = [
     tour: true,
   },
   {
-    class: 'col-md-6 no-side-padding',
+    class: 'col-md-4 no-side-padding',
     show: true,
     component: 'WordcloudComponent',
     componentConfigs: {
       id: 'wordcloud',
       title: 'Info Products by Subject',
-      source: 'subject',
+      source: 'type',
       description: `
           Top Subjects tags for all the information products are represented here, the greater the word,
           the higher the number of information. Products tagged to that specific Subject. Click on ICONS:view_headline
@@ -93,6 +93,36 @@ export const dashboardConfig: GeneralConfigs[] = [
     } as ComponentDashboardConfigs,
     scroll: {
       linkedWith: 'pie',
+    },
+    tour: true,
+  },
+  {
+    class: 'col-md-4 no-side-padding',
+    show: true,
+    component: 'WordcloudComponent',
+    componentConfigs: {
+      id: 'pie2',
+      title: 'Countries',
+      source: 'country',
+      description: ``,
+    } as ComponentDashboardConfigs,
+    scroll: {
+      linkedWith: 'pie',
+    },
+    tour: true,
+  },
+  {
+    class: 'col-12 no-side-padding',
+    show: true,
+    component: 'PieComponent',
+    componentConfigs: {
+      id: 'pie3',
+      title: 'Authors',
+      source: 'author',
+      description: ``,
+    } as ComponentDashboardConfigs,
+    scroll: {
+      icon: 'bubble_chart',
     },
     tour: true,
   },

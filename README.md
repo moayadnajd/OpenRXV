@@ -187,7 +187,7 @@ Available components [`SelectComponent`, `LabelComponent`, `CounterComponent`, `
 - **componentConfigs (*required*)** : this property may be `ComponentDashboardConfigs`, `ComponentCounterConfigs`, `ComponentLabelConfigs`, `ComponentSearchConfigs`, or`ComponentFilterConfigs`
     - ComponentDashboardConfigs
          - id (*required*): any string you want, but this must be unique.
-         - title (*required*): the title of the popover if this element is used in the tour.
+         - title (*required*): the title of the popover if this element is used in the tour, also used in the top of the panel that holds the chart .
          - description (*required*): the body of the popover, if this element is used in the tour.
          - source (*required*): string, the elasticsearch key that this component will get its data from, this might be an array of strings in the case of the chart bar.
          - content (*optional*): `PaginatedListConfigs` object which contains the following properties: 
@@ -239,6 +239,135 @@ Changing this map will not change the colors of the charts, to change them go to
         - color(string): the color of how many pages of legends we have (this might not show on big screens). 
 
 - chartValuesColors (array of strings): the colors of the charts, starts from the highest value
+
+
+### Changing the configurations Examples
+
+#### Example 1
+ - swapping the source of the pie and worldcloud charts, and adding a third chart next to them (source country) and making them all linked with the same side navigation button.
+ - adding full width chart with custom icon on the side navigation buttons (with source 'author').
+
+<details>
+  <summary>Old `image` ( Click to expand )</summary>
+   
+  <img src="docs/images/changing_conf_examples/1/b4_changing.png" alt="Search icon">
+</details>
+
+<details>
+  <summary>Old `/RES/src/configs/dashoards.ts` ( Click to expand )</summary>
+   
+  ```ts
+    export const dashboardConfig: GeneralConfigs[] = [
+    {
+        show: true,
+        class: 'col-md-6 no-side-padding',
+        component: 'PieComponent',
+        componentConfigs: {
+            id: 'pie',
+            title: 'Info Products by Type',
+            source: 'type',
+            description: `....`,
+        } as ComponentDashboardConfigs,
+        scroll: {
+            icon: 'pie_chart',
+        },
+        tour: true,
+  },
+  {
+        class: 'col-md-6 no-side-padding',
+        show: true,
+        component: 'WordcloudComponent',
+        componentConfigs: {
+            id: 'wordcloud',
+            title: 'Info Products by Subject',
+            source: 'subject',
+            description: `...`,
+        } as ComponentDashboardConfigs,
+        scroll: {
+            linkedWith: 'pie',
+        },
+        tour: true,
+  },
+    ....
+  ]
+  ```
+</details>
+
+<details>
+  <summary>New `image` ( Click to expand )</summary>
+   
+  <img src="docs/images/changing_conf_examples/1/after_changing.gif" alt="Search icon">
+</details>
+
+<details>
+  <summary>New `/RES/src/configs/dashoards.ts` ( Click to expand )</summary>
+   
+  ```ts
+    export const dashboardConfig: GeneralConfigs[] = [
+      {
+        show: true,
+        class: 'col-md-4 no-side-padding',
+        component: 'PieComponent',
+        componentConfigs: {
+            id: 'pie',
+            title: 'Info Products by Type',
+            source: 'subject',
+            description: `...`,
+        } as ComponentDashboardConfigs,
+        scroll: {
+            icon: 'pie_chart',
+        },
+        tour: true,
+    },
+    {
+        class: 'col-md-4 no-side-padding',
+        show: true,
+        component: 'WordcloudComponent',
+        componentConfigs: {
+            id: 'wordcloud',
+            title: 'Info Products by Subject',
+            source: 'type',
+            description: `...`,
+        } as ComponentDashboardConfigs,
+        scroll: {
+            linkedWith: 'pie',
+        },
+        tour: true,
+    },
+    {
+        class: 'col-md-4 no-side-padding',
+        show: true,
+            component: 'WordcloudComponent',
+            componentConfigs: {
+            id: 'pie2',
+            title: 'Countries',
+            source: 'country',
+            description: ``,
+        } as ComponentDashboardConfigs,
+        scroll: {
+            linkedWith: 'pie',
+        },
+        tour: true,
+    },
+    {
+        class: 'col-12 no-side-padding',
+        show: true,
+            component: 'PieComponent',
+            componentConfigs: {
+            id: 'pie3',
+            title: 'Authors',
+            source: 'author',
+            description: ``,
+        } as ComponentDashboardConfigs,
+        scroll: {
+            icon: 'bubble_chart',
+        },
+        tour: true,
+    },
+    ....
+  ]
+  ```
+</details>
 
 
 
