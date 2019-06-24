@@ -150,12 +150,12 @@ And to change these attributes you need to modify some TypeScript and SCSS files
     -  In this file, we make sure that the main color gets applied to all third-party libraries and custom *css* classes
 
 -  `/tour.ts`
-
+    ![Tour Example](docs/images/tour_example_gif.gif)
     -  Currently, this file only holds the configuration of a single card that will be displayed as the first part of the **tutorial**, you can modify its text here.
 
     -  The rest of the tutorial will be built from the configuration of `counters.ts` & `dashboard.ts`.
-    -  We will take the title and description of each object and use them in the popover on top of the element, example :
-    ![Tour Example](docs/images/tour_example.png)
+        -  We will take the title and description from each object and use them in the popover on top of the element:
+    
   
   
 
