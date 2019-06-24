@@ -93,6 +93,7 @@ The application is divided into 3 sections
 
 2 - The components ( gray ): holds the charts and lists:
 
+- counters ( <img  src="docs/images/icons/counters.png"  width="20"  height="20"  alt="counters icon"> ).
 - pie ( <img  src="docs/images/icons/pie.png"  width="20"  height="20"  alt="Pie Chart icon"> ) , worldcould ( <img  src="docs/images/icons/worldcloud.png"  width="20"  height="20"  alt="worldcloud Chart icon"> ), and map ( <img  src="docs/images/icons/map.png"  width="20"  height="20"  alt="map icon">  ) charts.
 
 -  top counties ( <img  src="docs/images/icons/list.png"  width="20"  height="20"  alt="List icon">  ), top contributors ( <img  src="docs/images/icons/list_alt.png"  width="20"  height="20"  alt="list_alt icon">  ), Top Affiliations ( <img  src="docs/images/icons/list_alt.png"  width="20"  height="20"  alt="list_alt icon">  ), CRPs and Platforms ( <img  src="docs/images/icons/star.png"  width="20"  height="20"  alt="star icon">  ), and Funders lists ( <img  src="docs/images/icons/star.png"  width="20"  height="20"  alt="Star icon">  ).
