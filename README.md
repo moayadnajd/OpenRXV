@@ -115,11 +115,11 @@ And to change these attributes you need to modify some TypeScript and SCSS files
 
 `/RES/src/configs`
 
--  `/counters.ts`
+-  `/counters.ts`  {  <img  src="docs/images/icons/counters.png"  width="20"  height="20"  alt="counters icon"> }
 
 -  Includes the configuration of the **upper section** that display the ‘*number of total items’*, ‘*number of open access documents’*, ‘*number of authors*’, etc.…
 
--  `/dashboard.ts`
+-  `/dashboard.ts`  { <img  src="docs/images/icons/pie.png"  width="20"  height="20"  alt="Pie Chart icon">, <img  src="docs/images/icons/worldcloud.png"  width="20"  height="20"  alt="worldcloud Chart icon">, <img  src="docs/images/icons/map.png"  width="20"  height="20"  alt="map icon">, <img  src="docs/images/icons/list.png"  width="20"  height="20"  alt="List icon">, <img  src="docs/images/icons/list_alt.png"  width="20"  height="20"  alt="list_alt icon">, <img  src="docs/images/icons/star.png"  width="20"  height="20"  alt="star icon">, <img  src="docs/images/icons/view_list.png"  width="20"  height="20"  alt="view_list icon"> }
 
 -  Includes the configuration of the **Charts & lists section**, here you can add more charts, rearrange, & delete any chart or list.
 
@@ -133,13 +133,13 @@ And to change these attributes you need to modify some TypeScript and SCSS files
 
 -  `/tooltips.ts`
 
--  Currently, this file only holds the text for the tooltip that will be shown when the user hovers over the icon in the ‘or/and’ button inside the filters area.
+-  Currently, this file only holds the text for the tooltip that will be shown when the user hovers over the icon ( <img  src="docs/images/icons/tooltip.png"  width="20"  height="20"  alt="tooltip icon"> ) in the ‘or/and’ button inside the filters area.
 
 -  `/chartColors.ts`
 
 -  Holds the **colors of the charts** in hexidecimal format.
 
--  click [here](https://color.adobe.com/explore) to choose nice colors.
+-  [Good website](https://color.adobe.com/explore) to choose nice colors.
 
 -  `/colorsMap.scss`
 
