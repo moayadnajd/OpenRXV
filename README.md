@@ -203,7 +203,7 @@ Available components [`SelectComponent`, `LabelComponent`, `CounterComponent`, `
     - ComponentLabelConfigs (this object is used in the side filters ( `filters.ts` ) and delegates a label that separate each section of a filters): 
         - text (*required*): what should be displayed
         - border (*optional*): (boolean) should the app put a bottom border under the text?
-        - description (*optional*): if you added text here an icon ( <img  src="docs/images/icons/tooltip.png"  width="20"  height="20"  alt="tooltip icon"> ) will show next to the text, and when the user hover over it a popover will show and show the description.
+        - description (*optional*): if you added text here an icon ( <img  src="docs/images/icons/tooltip.png"  width="20"  height="20"  alt="tooltip icon"> ) will show next to the text, and when the user hover over it a popover will the description.
         - example: 
             ![code that generates labels with popover](docs/images/examples/label_code_exam.jpg)
     - ComponentSearchConfigs (this object is used in the side filters ( `filters.ts` ) and delegates a search text box that is used to search in a specific key in elasticsearch))
