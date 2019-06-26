@@ -11,10 +11,13 @@ import { Observable } from 'rxjs';
 import * as Highcharts from 'highcharts';
 import wordCloudModule from 'highcharts/modules/wordcloud';
 import ExportingModule from 'highcharts/modules/exporting';
+import BoostModule from 'highcharts/modules/boost';
 import MapModule from 'highcharts/modules/map';
 wordCloudModule(Highcharts);
 ExportingModule(Highcharts);
 MapModule(Highcharts);
+BoostModule(Highcharts);
+
 @Component({
   selector: 'app-chart',
   templateUrl: './chart.component.html',
