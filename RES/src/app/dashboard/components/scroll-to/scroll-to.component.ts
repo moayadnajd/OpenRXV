@@ -28,9 +28,9 @@ export class ScrollToComponent implements OnInit {
     private readonly scrollHelperService: ScrollHelperService
   ) {
     this.dashboardConfig = this.scrollHelperService.getNotSiblings();
-    this.idsToHide = new Set();
-    this.linking = new Map(); // <'pie' => ['pie', 'chart2', ...]>
-    this.btnStatus = new Map(); // <'pie' => show me or hide me>
+    this.idsToHide = new Set<string>();
+    this.linking = new Map<string, string[]>(); // <'pie' => ['pie', 'chart2', ...]>
+    this.btnStatus = new Map<string, boolean>(); // <'pie' => show me or hide me>
   }
 
   ngOnInit(): void {
@@ -118,11 +118,8 @@ export class ScrollToComponent implements OnInit {
           }
         }
       );
-    this.linking.forEach((value, key) => {
-      if (!value.length) {
-        this.linking.set(key, [key]);
-      }
-    });
-    console.log(this.linking);
+    this.linking.forEach(
+      (value, key) => !value.length && this.linking.set(key, [key])
+    );
   }
 }
