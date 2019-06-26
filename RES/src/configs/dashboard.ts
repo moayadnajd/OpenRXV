@@ -287,4 +287,4 @@ export const dashboardConfig: GeneralConfigs[] = [
     },
     tour: true,
   },
-].reverse();
+];

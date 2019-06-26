@@ -386,21 +386,19 @@ Changing this map will not change the colors of the charts, to change them go to
 
 #### Example 2
  - Changing the order of the components and lists in the website.
- - You can manually change the order of the objects, and their placement in the app will change accordingly.
- - In this example, I will call the [reverse](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reverse) method on the array that the `dashboard.ts` exports and this will reverse the array, so all the charts and lists will be reversed (**the website will start from the counters then the paginated list and end by the pie chart, and the side navigation buttons will be reversed as well**).
+ - You can change the order of the objects, and their placement in the app will change accordingly.
+ - But keep in mind the parent object  which is the one with `scroll : {icon: 'name'}` should appear as the first one to its children in the array. ( the child has `scroll: {linkedWith: 'parent_id'}` ).
 
 <details>
   <summary>Code ( Click to expand )</summary>
 
   ```ts
     export const dashboardConfig: GeneralConfigs[] = [
-        ....configs
-    ].reverse();
+        ....
+    ];
   ```
 
 </details>
-
-
 
 
 we included a file `/RES/src/configs/codeobia.colors.ts` which includes colors that match with the commented scss map, active them both and see how much change happens.
