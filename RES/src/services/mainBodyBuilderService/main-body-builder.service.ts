@@ -23,14 +23,9 @@ export class MainBodyBuilderService extends BuilderUtilities {
     super();
     this.rawOptions = (() => {
       let rows: Array<string> = [];
-      const { content } = dashboardConfig.reduce(
-        (prev: GeneralConfigs, curr: GeneralConfigs) => {
-          return (curr.componentConfigs as ComponentDashboardConfigs).content
-            ? curr
-            : undefined;
-        },
-        undefined
-      ).componentConfigs as ComponentDashboardConfigs;
+      const { content } = dashboardConfig.find((curr: GeneralConfigs) => {
+        return (curr.componentConfigs as ComponentDashboardConfigs).content;
+      }).componentConfigs as ComponentDashboardConfigs;
       for (const key in content) {
         if (content.hasOwnProperty(key)) {
           if (typeof content[key] === 'string') {
