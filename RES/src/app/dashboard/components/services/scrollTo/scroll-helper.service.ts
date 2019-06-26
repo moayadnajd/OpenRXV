@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ChangeDetectorRef } from '@angular/core';
 import { ViewState } from 'src/store/reducers/items.reducer';
 import { InView } from 'src/store/actions/actions.interfaces';
 import { GeneralConfigs } from 'src/configs/generalConfig.interface';
@@ -38,7 +38,7 @@ export class ScrollHelperService {
     return this.loading;
   }
 
-  constructor() {
+  constructor(private readonly cdr: ChangeDetectorRef) {
     this.expanded = true;
     this.dataIsReadyArrived = new Subject();
   }
@@ -104,6 +104,7 @@ export class ScrollHelperService {
     }
     this.store.select(fromStore.getLoadingStatus).subscribe((b: boolean) => {
       this.loading = b;
+      this.cdr.detectChanges();
       if (!b) {
         this.dataIsReadyArrived.next();
       }

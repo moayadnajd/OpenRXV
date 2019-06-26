@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { ChartMathodsService } from '../services/chartCommonMethods/chart-mathods.service';
 const mapWorld = require('@highcharts/map-collection/custom/world-robinson-highres.geo.json');
 import * as Highcharts from 'highcharts';
@@ -12,17 +17,22 @@ import { getCountryCode } from '../services/countryList.helper';
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
   providers: [ChartMathodsService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MapComponent extends ParentChart implements OnInit {
-  constructor(cms: ChartMathodsService) {
+  constructor(
+    cms: ChartMathodsService,
+    private readonly cdr: ChangeDetectorRef
+  ) {
     super(cms);
   }
 
   ngOnInit(): void {
     this.init('map');
-    this.buildOptions.subscribe(
-      (buckets: Array<Bucket>) => (this.chartOptions = this.setOptions(buckets))
-    );
+    this.buildOptions.subscribe((buckets: Array<Bucket>) => {
+      this.chartOptions = this.setOptions(buckets);
+      this.cdr.detectChanges();
+    });
   }
 
   private setOptions(buckets: Array<Bucket>): Highcharts.Options {

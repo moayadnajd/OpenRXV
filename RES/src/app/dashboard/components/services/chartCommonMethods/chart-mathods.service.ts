@@ -1,4 +1,4 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import {
   ComponentDashboardConfigs,
   MergedSelect,
@@ -39,9 +39,12 @@ export class ChartMathodsService extends ChartHelper {
     return this.shs.getLoading;
   }
 
-  constructor(private readonly store: Store<fromStore.ItemsState>) {
+  constructor(
+    private readonly store: Store<fromStore.ItemsState>,
+    private readonly cdr: ChangeDetectorRef
+  ) {
     super();
-    this.shs = new ScrollHelperService();
+    this.shs = new ScrollHelperService(cdr);
     this.goBuildDataSeries = new EventEmitter();
   }
 

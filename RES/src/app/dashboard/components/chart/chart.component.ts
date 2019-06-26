@@ -6,6 +6,7 @@ import {
   HostListener,
   Output,
   EventEmitter,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import * as Highcharts from 'highcharts';
@@ -22,6 +23,7 @@ BoostModule(Highcharts);
   selector: 'app-chart',
   templateUrl: './chart.component.html',
   styleUrls: ['./chart.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChartComponent {
   @Input() isMap = false;

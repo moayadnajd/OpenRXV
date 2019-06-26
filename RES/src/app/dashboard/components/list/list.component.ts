@@ -4,6 +4,8 @@ import {
   ViewChild,
   ElementRef,
   HostListener,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../../../store';
@@ -25,6 +27,7 @@ declare function _altmetric_embed_init(): any;
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss'],
   providers: [ScrollHelperService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListComponent extends ParentComponent implements OnInit {
   @ViewChild('clickToEnable') clickToEnable: ElementRef;
@@ -35,7 +38,8 @@ export class ListComponent extends ParentComponent implements OnInit {
 
   constructor(
     private readonly store: Store<fromStore.AppState>,
-    public readonly scrollHelperService: ScrollHelperService
+    public readonly scrollHelperService: ScrollHelperService,
+    private readonly cdr: ChangeDetectorRef
   ) {
     super();
   }
@@ -80,11 +84,13 @@ export class ListComponent extends ParentComponent implements OnInit {
           .select(fromStore.getBuckets, source)
           .subscribe((b: Bucket[]) => {
             this.listData = b;
+            this.cdr.detectChanges();
             this.expandOrStay(this.safeCheckLength(b));
           });
-    this.store
-      .select(fromStore.getLoadingOnlyHits)
-      .subscribe((b: boolean) => (this.loadingHits = b));
+    this.store.select(fromStore.getLoadingOnlyHits).subscribe((b: boolean) => {
+      this.loadingHits = b;
+      this.cdr.detectChanges();
+    });
   }
 
   private initPagination(source: string, h: Hits): void {

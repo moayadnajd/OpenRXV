@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import * as Highcharts from 'highcharts';
 import { ChartMathodsService } from '../services/chartCommonMethods/chart-mathods.service';
 import { ParentChart } from '../parent-chart';
@@ -9,17 +14,22 @@ import { Bucket } from 'src/app/filters/services/interfaces';
   templateUrl: './wordcloud.component.html',
   styleUrls: ['./wordcloud.component.scss'],
   providers: [ChartMathodsService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WordcloudComponent extends ParentChart implements OnInit {
-  constructor(cms: ChartMathodsService) {
+  constructor(
+    cms: ChartMathodsService,
+    private readonly cdr: ChangeDetectorRef
+  ) {
     super(cms);
   }
 
   ngOnInit(): void {
     this.init('wordcloud');
-    this.buildOptions.subscribe(
-      (buckets: Array<Bucket>) => (this.chartOptions = this.setOptions(buckets))
-    );
+    this.buildOptions.subscribe((buckets: Array<Bucket>) => {
+      this.chartOptions = this.setOptions(buckets);
+      this.cdr.detectChanges();
+    });
   }
 
   private setOptions(buckets: Array<Bucket>): Highcharts.Options {
