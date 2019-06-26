@@ -7,12 +7,14 @@ import { dashboardConfig } from 'src/configs/dashboard';
 import { Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../../../../store';
+import { ViewChild } from '../../list/paginated-list/filter-paginated-list/types.interface';
 
 @Injectable()
 export class ScrollHelperService {
   private viewState: ViewState;
   private expanded: boolean;
   private store: Store<fromStore.ItemsState>;
+  private children: Array<ViewChild>;
   dataIsReadyArrived: Subject<void>;
   loading: boolean;
 
@@ -51,6 +53,24 @@ export class ScrollHelperService {
 
   getScrollToCompConf(): GeneralConfigs[] {
     return [countersConfig[0], ...dashboardConfig];
+  }
+
+  getChildren(): Array<ViewChild> {
+    if (this.children) {
+      return this.children;
+    } else {
+      const children: Array<ViewChild> = [];
+      dashboardConfig.forEach(
+        d =>
+          d.scroll.linkedWith &&
+          children.push({
+            linkedId: d.scroll.linkedWith,
+            compId: d.componentConfigs.id,
+          })
+      );
+      this.children = [...children];
+      return children;
+    }
   }
 
   /**

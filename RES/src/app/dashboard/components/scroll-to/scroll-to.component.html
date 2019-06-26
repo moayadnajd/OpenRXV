@@ -4,7 +4,9 @@
       *ngIf="btnStatus.get(conf.componentConfigs.id)"
       matRipple
       [ngClass]="
-        id === conf.componentConfigs.id || id === conf.scroll.linkedWith
+        id === conf.componentConfigs.id ||
+        id === conf.scroll.linkedWith ||
+        linking.get(conf.componentConfigs.id)?.includes(id)
           ? 'active bg-primary white-text'
           : 'bg-light muted-text'
       "

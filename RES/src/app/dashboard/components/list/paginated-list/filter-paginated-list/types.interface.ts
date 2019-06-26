@@ -5,3 +5,8 @@ export interface SortPaginationOptions {
   pageEvent: PageEvent;
   sortOption: SortOption;
 }
+
+export interface ViewChild {
+  linkedId: string;
+  compId: string;
+}
