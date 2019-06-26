@@ -150,11 +150,15 @@ And to change these attributes you need to modify some TypeScript and SCSS files
     -  In this file, we make sure that the main color gets applied to all third-party libraries and custom *css* classes
 
 -  `/tour.ts`
-    ![Tour Example](docs/images/tour_example_gif.gif)
     -  Currently, this file only holds the configuration of a single card that will be displayed as the first part of the **tutorial**, you can modify its text here.
 
     -  The rest of the tutorial will be built from the configuration of `counters.ts` & `dashboard.ts`.
         -  We will take the title and description from each object and use them in the popover on top of the element:
+
+    - <details>
+      <summary>Tour example ( Click to expand )</summary>
+      <img src="docs/images/tour_example_gif.gif" alt="Tour Example">
+    </details>
 
 ### Generic Configurations
 
@@ -177,12 +181,18 @@ Available components [`SelectComponent`, `LabelComponent`, `CounterComponent`, `
     -   icon (*optional*): the icon will be added to the side navigation buttons, [all icon names](https://material.io/tools/icons/).
     - linkedWith (*optional*): if the element has another one next to it(like the map & top countries), we need to add the id of that element here, to tell the app that these two are linked.
     - examples : 
-         - Two elements next to each other, linked with one side navigation button.
-         ![two element next to each other](docs/images/examples/scroll_linked_with.png)
-         - Three elements next to each other, linked with one side navigation button.
-        ![Three elements next to each other](docs/images/examples/scroll_linked_with_3_el.png)
-        - One element, with single side navigation button.
-        ![One element](docs/images/examples/scroll_linked_with_one_el.png)
+         -  <details>
+              <summary>Two elements next to each other, linked with one side navigation button. ( Click to expand )</summary>
+              <img src="docs/images/examples/scroll_linked_with.png" alt="two element next to each other">
+            </details>
+         -  <details>
+              <summary>Three elements next to each other, linked with one side navigation button. ( Click to expand )</summary>
+              <img src="docs/images/examples/scroll_linked_with_3_el.png" alt="Three elements next to each other">
+            </details>
+         -  <details>
+              <summary>One element, with single side navigation button. ( Click to expand )</summary>
+              <img src="docs/images/examples/scroll_linked_with_one_el.png" alt="One element">
+            </details>
 
 - **componentConfigs (*required*)** : this property may be `ComponentDashboardConfigs`, `ComponentCounterConfigs`, `ComponentLabelConfigs`, `ComponentSearchConfigs`, or`ComponentFilterConfigs`
     - ComponentDashboardConfigs
@@ -198,14 +208,19 @@ Available components [`SelectComponent`, `LabelComponent`, `CounterComponent`, `
          - description (*required*): the body of the popover, if this element is used in the tour.
          - source (*required*): string, the elasticsearch key that this component will get its data from, this might be an array of strings in the case of the chart bar.
          - percentageFromTotal (*optional*) : (boolean) should this counter displays a percentage from the total items.
-         ![One element](docs/images/examples/percentage.jpg)
+            - <details>
+                <summary>percentage example. ( Click to expand )</summary>
+                <img src="docs/images/examples/percentage.jpg" alt="percentage example">
+              </details>
          - filter (*optional*): (string) the filter for `open access` or `limited access`.
     - ComponentLabelConfigs (this object is used in the side filters ( `filters.ts` ) and delegates a label that separate each section of a filters): 
         - text (*required*): what should be displayed
         - border (*optional*): (boolean) should the app put a bottom border under the text?
         - description (*optional*): if you added text here an icon ( <img  src="docs/images/icons/tooltip.png"  width="20"  height="20"  alt="tooltip icon"> ) will show next to the text, and when the user hover over it a popover will the description.
-        - example: 
-            ![code that generates labels with popover](docs/images/examples/label_code_exam.jpg)
+            - <details>
+                <summary>example. ( Click to expand )</summary>
+                <img src="docs/images/examples/label_code_exam.jpg" alt="code that generates labels with popover">
+              </details>
     - ComponentSearchConfigs (this object is used in the side filters ( `filters.ts` ) and delegates a search text box that is used to search in a specific key in elasticsearch)
         - placeholder (*required*) : the placeholder in the input.
         - type (*required*) : which is `searchOptions` and could be `titleSearch` or `allSearch`.
