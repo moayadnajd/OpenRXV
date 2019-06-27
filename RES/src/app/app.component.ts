@@ -21,6 +21,7 @@ import {
 import { dashboardConfig } from 'src/configs/dashboard';
 import { tourConfig } from 'src/configs/tour';
 import { orAndToolTip } from 'src/configs/tooltips';
+import { ScreenSizeService } from 'src/services/screenSize/screen-size.service';
 
 @Component({
   selector: 'app-root',
@@ -41,10 +42,15 @@ export class AppComponent implements OnInit {
     top: 0,
   };
 
+  get isSmall(): boolean {
+    return this.screenSizeService.isSmallScreen;
+  }
+
   constructor(
     private readonly store: Store<fromStore.AppState>,
     private readonly mainBodyBuilderService: MainBodyBuilderService,
-    private readonly tourService: TourService
+    private readonly tourService: TourService,
+    private readonly screenSizeService: ScreenSizeService
   ) {
     this.orOperator = false;
     this.orAndToolTip = orAndToolTip;
@@ -91,7 +97,7 @@ export class AppComponent implements OnInit {
   }
 
   private openAndRender(mode: 'over' | 'push' | 'side'): void {
-    this.sidenav.mode = mode;
+    this.sidenav.mode = this.isSmall ? 'over' : mode;
     this.sidenav.opened ? this.sidenav.close() : this.sidenav.open();
     this.renderSideNav();
   }

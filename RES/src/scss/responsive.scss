@@ -24,3 +24,9 @@ $breakpointsMax: (
     @content;
   }
 }
+
+@include small {
+  .sm-text-center {
+    text-align: center !important;
+  }
+}

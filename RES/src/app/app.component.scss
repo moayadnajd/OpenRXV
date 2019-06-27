@@ -1,3 +1,5 @@
+@import '../scss/responsive.scss';
+
 .mat-toolbar-row {
   // height: 80px !important;
   display: flex !important;
@@ -33,9 +35,18 @@ button {
   min-width: 25% !important;
 }
 
-@media only screen and (max-width: 600px) {
+@include small {
+  $minMax: 100%;
   #drawer {
-    max-width: 50% !important;
-    min-width: 50% !important;
+    max-width: $minMax !important;
+    min-width: $minMax !important;
+  }
+}
+
+@include large {
+  $minMax: 50%;
+  #drawer {
+    max-width: $minMax !important;
+    min-width: $minMax !important;
   }
 }
