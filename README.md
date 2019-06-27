@@ -105,7 +105,11 @@ The application is divided into four sections
 
 4 - The Filters ( blue color ): which are multiple inputs that allow you to search and filter the data, which reflects on the charts & lists.
 
-![App structure image](docs/images/app-struct-2.png)
+<details>
+  <summary>App structure image ( Click to expand )</summary>
+  <img src="docs/images/app-struct-2.png" alt="App structure">
+</details>
+
 <hr />
 
 Almost everything is configurable, colors, the position of charts, tooltips text, and the data being displayed in the charts.
