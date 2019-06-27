@@ -38,6 +38,10 @@ export class WordcloudComponent extends ParentChart implements OnInit {
         type: 'wordcloud',
         animation: true,
       },
+      boost: {
+        enabled: true,
+        useGPUTranslations: true,
+      },
       plotOptions: {
         wordcloud: {
           tooltip: {

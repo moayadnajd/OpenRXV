@@ -38,6 +38,10 @@ export class PieComponent extends ParentChart implements OnInit {
         type: 'pie',
         animation: true,
       },
+      boost: {
+        enabled: true,
+        useGPUTranslations: true,
+      },
       plotOptions: {
         pie: {
           cursor: 'pointer',

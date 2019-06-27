@@ -41,6 +41,10 @@ export class MapComponent extends ParentChart implements OnInit {
         map: mapWorld,
         animation: false,
       },
+      boost: {
+        enabled: true,
+        useGPUTranslations: true,
+      },
       mapNavigation: {
         enabled: true,
         enableMouseWheelZoom: true,

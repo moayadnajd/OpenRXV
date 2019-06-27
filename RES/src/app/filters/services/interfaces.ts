@@ -48,6 +48,7 @@ export interface hits {
   _score: number;
   _source: ESSource;
   _type: string;
+  showMe?: boolean;
 }
 
 /**
