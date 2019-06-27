@@ -56,6 +56,9 @@ export class WordcloudComponent extends ParentChart implements OnInit {
             name: b.key,
             weight: b.doc_count,
           })),
+          animation: {
+            duration: 200,
+          },
         },
       ],
       ...this.cms.commonProperties(),

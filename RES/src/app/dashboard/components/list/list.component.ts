@@ -78,6 +78,7 @@ export class ListComponent extends ParentComponent implements OnInit {
     this.shouldWePaginate(source as string)
       ? this.store.select(fromStore.getHits).subscribe((h: Hits) => {
           this.initPagination(source as string, h);
+          this.cdr.detectChanges();
           this.expandOrStay(this.safeCheckLength(h && h.hits));
         })
       : this.store

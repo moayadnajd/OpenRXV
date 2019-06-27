@@ -1,4 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { MatDrawer } from '@angular/material';
 import * as fromStore from '../store';
 import 'hammerjs';
@@ -11,7 +16,7 @@ import {
   GeneralConfigs,
   ComponentCounterConfigs,
   ComponentDashboardConfigs,
-  Tour
+  Tour,
 } from 'src/configs/generalConfig.interface';
 import { dashboardConfig } from 'src/configs/dashboard';
 import { tourConfig } from 'src/configs/tour';
@@ -20,7 +25,8 @@ import { orAndToolTip } from 'src/configs/tooltips';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit {
   @ViewChild('drawer') sidenav: MatDrawer;
@@ -29,10 +35,10 @@ export class AppComponent implements OnInit {
   orOperator: boolean;
   readonly orAndToolTip: string;
   private prevenetMouseOnNav: boolean;
-  options: any ={
+  options: any = {
     bottom: 0,
     fixed: true,
-    top: 0
+    top: 0,
   };
 
   constructor(
@@ -45,8 +51,8 @@ export class AppComponent implements OnInit {
     this.options = {
       bottom: 0,
       fixed: true,
-      top: 0
-    }
+      top: 0,
+    };
   }
 
   ngOnInit(): void {
@@ -104,7 +110,7 @@ export class AppComponent implements OnInit {
             anchorId: id,
             content: description,
             title,
-            enableBackdrop: true
+            enableBackdrop: true,
           } as IStepOption)
         );
       })

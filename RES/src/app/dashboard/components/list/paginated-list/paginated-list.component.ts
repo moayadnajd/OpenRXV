@@ -1,4 +1,10 @@
-import { Component, Input, ViewChild, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  ViewChild,
+  OnInit,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { hits } from 'src/app/filters/services/interfaces';
 import { PageEvent, MatPaginator } from '@angular/material';
 import { Store } from '@ngrx/store';
@@ -8,14 +14,15 @@ import { SortPaginationOptions } from './filter-paginated-list/types.interface';
 import { QueryState } from 'src/store/reducers/query.reducer';
 import {
   SortOption,
-  PaginatedListConfigs
+  PaginatedListConfigs,
 } from 'src/configs/generalConfig.interface';
 import { skip } from 'rxjs/operators';
 
 @Component({
   selector: 'app-paginated-list',
   templateUrl: './paginated-list.component.html',
-  styleUrls: ['./paginated-list.component.scss']
+  styleUrls: ['./paginated-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PaginatedListComponent implements OnInit {
   @Input() hits: hits[];
@@ -53,7 +60,7 @@ export class PaginatedListComponent implements OnInit {
       this.dispatchAction({
         reset: false,
         pageEvent: e,
-        sortOption: this.sortOption
+        sortOption: this.sortOption,
       });
     } else {
       this.flag = true;
@@ -66,7 +73,7 @@ export class PaginatedListComponent implements OnInit {
     this.dispatchAction({
       reset: true,
       pageEvent: this.paginationAtt,
-      sortOption: e
+      sortOption: e,
     });
   }
 

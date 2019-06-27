@@ -39,7 +39,7 @@ export class MapComponent extends ParentChart implements OnInit {
     return {
       chart: {
         map: mapWorld,
-        animation: true,
+        animation: false,
       },
       mapNavigation: {
         enabled: true,
@@ -78,7 +78,7 @@ export class MapComponent extends ParentChart implements OnInit {
             headerFormat: undefined,
           },
           animation: {
-            duration: 1000,
+            duration: 0,
           },
           states: {
             hover: {
