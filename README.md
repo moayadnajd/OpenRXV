@@ -256,9 +256,9 @@ Changing this map will not change the colors of the charts, to change them go to
 - chartValuesColors (array of strings): the colors of the charts, starts from the highest value
 
 
-### Changing the configurations Examples
+### Changing the configurations notes & examples
 
-#### Example 1
+#### Example
  - swapping the source of the pie and worldcloud charts, and adding a third chart next to them (source country) and making them all linked with the same side navigation button.
  - adding full width chart with custom icon on the side navigation buttons (with source 'author').
 
@@ -384,21 +384,11 @@ Changing this map will not change the colors of the charts, to change them go to
   ```
 </details>
 
-#### Example 2
- - Changing the order of the components and lists in the website.
+#### Note
+ - To change the order of the components and lists in the website.
  - You can change the order of the objects, and their placement in the app will change accordingly.
- - But keep in mind the parent object  which is the one with `scroll : {icon: 'name'}` should appear as the first one to its children in the array. ( the child has `scroll: {linkedWith: 'parent_id'}` ).
-
-<details>
-  <summary>Code ( Click to expand )</summary>
-
-  ```ts
-    export const dashboardConfig: GeneralConfigs[] = [
-        ....
-    ];
-  ```
-
-</details>
+ - **BUT** keep in mind the parent object  which is the one with `scroll : {icon: 'name'}` should appear as the first one to its children in the array. ( the child has `scroll: {linkedWith: 'parent_id'}` ).
+    - for example in the previous example the pie chart is the parent of the two world cloud components and if you want to change the order of the component you need to keep the pie as the first one ( **but of course you can change the parent to a different chart type or even a list** ).
 
 
 we included a file `/RES/src/configs/codeobia.colors.ts` which includes colors that match with the commented scss map, active them both and see how much change happens.
