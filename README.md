@@ -80,13 +80,13 @@ $ docker-compose up -d
 
 ##  Documentation
 
-The application is divided into 3 sections
+The application is divided into four sections
 
   
 
 1 - The navbar ( yellow ) : which holds the logo on the left, and three buttons with icons on the right, 
     
-- <img src="docs/images/icons/search.png" width="20" height="20" alt="Search icon"> opens the side filters. 
+- <img src="docs/images/icons/search.png" width="20" height="20" alt="Search icon"> opens the side filters (the fourth section). 
 - <img src="docs/images/icons/loop.png" width="20" height="20" alt="Loop icons"> clears the query.
 - <img src="docs/images/icons/support.png" width="20" height="20" alt="Support icon"> opens a tutorial ( which is a bunch of popups over the elements in the dashboard ).
 
@@ -103,10 +103,9 @@ The application is divided into 3 sections
 
 3 - The side navigation buttons ( red color ): these buttons navigate the user to the corresponding components with the same icon(s).
 
-  
+4 - The Filters ( blue color ): which are multiple inputs that allow you to search and filter the data, which reflects on the charts & lists.
 
-
-![App structure image](docs/images/app-struct.png)
+![App structure image](docs/images/app-struct-2.png)
 <hr />
 
 Almost everything is configurable, colors, the position of charts, tooltips text, and the data being displayed in the charts.
