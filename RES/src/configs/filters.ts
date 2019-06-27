@@ -13,13 +13,6 @@ export const filtersConfig: GeneralConfigs[] = [
     componentConfigs: {
       text: `Create your query by entering choices in one of
         more filters below, click on ICONS:loop to clear your query.`,
-      description: `
-        Select specific repositories to look up, leave it blank to
-        loop up in all available repositories. Select specific
-        CGSpace communities and MELSpace collecions to look up,
-        leave it blank to look up in all available communities
-        and collections.
-      `,
     } as ComponentLabelConfigs,
   },
   {
