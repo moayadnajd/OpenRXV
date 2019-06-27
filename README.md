@@ -144,6 +144,8 @@ And to change these attributes you need to modify some TypeScript and SCSS files
 
     -  [Good website](https://color.adobe.com/explore) to choose nice colors.
 
+    -  [Good website for generating color shades](http://mcg.mbitson.com/).
+
 -  `/colorsMap.scss`
 
     -  Includes a *sass* map that holds the **main colors of the whole app**.
@@ -256,8 +258,9 @@ Changing this map will not change the colors of the charts, to change them go to
     - style(object): 
         - color(string): the color of how many pages of legends we have (this might not show on big screens). 
 
-- chartValuesColors (array of strings): the colors of the charts, starts from the highest value
+- chartValuesColors (array of strings): the colors of the charts (excluding the map), starts from the highest value.
 
+we included a file `/RES/src/configs/codeobia.colors.ts` which includes colors that match with the commented scss map, active them both and see how much change happens. ( copy the content of the `codeobia.colors.ts` into `charts.colors.ts` after you deleted every thing in it).
 
 ### Changing the configurations notes & examples
 
@@ -393,8 +396,6 @@ Changing this map will not change the colors of the charts, to change them go to
  - **BUT** keep in mind the parent object  which is the one with `scroll : {icon: 'name'}` should appear as the first one to its children in the array. ( the child has `scroll: {linkedWith: 'parent_id'}` ).
     - for example in the previous example the pie chart is the parent of the two world cloud components and if you want to change the order of the component you need to keep the pie as the first one ( **but of course you can change the parent to a different chart type or even a list** ).
 
-
-we included a file `/RES/src/configs/codeobia.colors.ts` which includes colors that match with the commented scss map, active them both and see how much change happens.
 ##  License
 
 This work is licensed under the [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html). The license allows you to use and modify the work for personal and commercial purposes, but if you distribute the work you must provide users with a means to access the source code for the version you are distributing. Read more about the [GPLv3 at TL;DR Legal](<https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)>).
