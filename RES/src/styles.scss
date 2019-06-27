@@ -6,6 +6,8 @@
 @import '~nouislider/distribute/nouislider.min.css';
 // @import '~highcharts/css/themes/dark-unica.scss';
 
+@import './scss/responsive.scss';
+
 html,
 body {
   font-family: 'HelveticaNeue', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -177,4 +179,12 @@ app-paginated-list app-tags {
 }
 .shorter .viewport {
   height: 412px !important;
+}
+
+@include small {
+  #main-content {
+    padding-top: 0 !important;
+    padding-right: 40px !important;
+    padding-left: 0 !important;
+  }
 }

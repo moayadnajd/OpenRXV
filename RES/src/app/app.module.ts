@@ -21,7 +21,7 @@ import {
   MatPaginatorModule,
   MatRippleModule,
   MatSnackBarModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
 } from '@angular/material';
 import { FiltersComponent } from './filters/filters.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -65,6 +65,7 @@ import { GetFirstImage } from './pipes/images.pipe';
 import { LineComponent } from './dashboard/components/line/line.component';
 import { SimiCircleComponent } from './dashboard/components/simi-circle/simi-circle.component';
 import { BarComponent } from './dashboard/components/bar/bar.component';
+import { LayoutModule } from '@angular/cdk/layout';
 
 @NgModule({
   declarations: [
@@ -97,7 +98,7 @@ import { BarComponent } from './dashboard/components/bar/bar.component';
     GetFirstImage,
     LineComponent,
     SimiCircleComponent,
-    BarComponent
+    BarComponent,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -117,7 +118,7 @@ import { BarComponent } from './dashboard/components/bar/bar.component';
     EffectsModule.forRoot(efficts),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
-      logOnly: environment.production // Restrict extension to log-only mode,
+      logOnly: environment.production, // Restrict extension to log-only mode,
     }),
     MatInputModule,
     MatButtonModule,
@@ -133,7 +134,8 @@ import { BarComponent } from './dashboard/components/bar/bar.component';
     RouterModule.forRoot([{ path: '', component: AppComponent }]), // for TourMatMenuModule,
     MdePopoverModule, // https://github.com/angular/material2/issues/2691
     MatSnackBarModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    LayoutModule,
   ],
   entryComponents: [
     ChartComponent,
@@ -150,8 +152,8 @@ import { BarComponent } from './dashboard/components/bar/bar.component';
     MapComponent,
     LineComponent,
     SimiCircleComponent,
-    BarComponent
+    BarComponent,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}
