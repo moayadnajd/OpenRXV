@@ -200,7 +200,7 @@ Available components [`SelectComponent`, `LabelComponent`, `CounterComponent`, `
          - description (*required*): the body of the popover, if this element is used in the tour.
          - source (*required*): string, the elasticsearch key that this component will get its data from, this might be an array of strings in the case of the chart bar.
          - content (*optional*): `PaginatedListConfigs` object which contains the following properties: 
-            - TODO .... :(
+            - TODO .... 
     - ComponentCounterConfigs: 
          - id (*required*): any string you want, but this must be unique.
          - title (*required*): the title of the popover if this element is used in the tour.
