@@ -98,13 +98,14 @@ export class AppComponent implements OnInit {
 
   private mapConfigsToTour(): IStepOption[] {
     return [...tourConfig, ...countersConfig, ...dashboardConfig]
-      .map((gc: GeneralConfigs) => {
-        const { description, title, id } = gc.componentConfigs as
+      .filter(({ show }: GeneralConfigs) => show)
+      .map(({ componentConfigs, tour }: GeneralConfigs) => {
+        const { description, title, id } = componentConfigs as
           | ComponentCounterConfigs
           | ComponentDashboardConfigs
           | Tour;
         return (
-          gc.tour &&
+          tour &&
           this.checkIfApplicableForTour(id, description, title) &&
           ({
             anchorId: id,

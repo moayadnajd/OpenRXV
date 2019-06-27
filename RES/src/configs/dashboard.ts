@@ -137,7 +137,7 @@ export const dashboardConfig: GeneralConfigs[] = [
     tour: true,
   },
   {
-    show: true,
+    show: false,
     class: 'col-md-12 mt-3 no-side-padding',
     component: 'BarComponent',
     componentConfigs: {
