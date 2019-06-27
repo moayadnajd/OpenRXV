@@ -1,10 +1,11 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-snack',
   templateUrl: './snack.component.html',
-  styleUrls: ['./snack.component.scss']
+  styleUrls: ['./snack.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SnackComponent {
   @Input() set error(e: HttpErrorResponse) {

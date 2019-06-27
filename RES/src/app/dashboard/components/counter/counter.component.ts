@@ -8,7 +8,7 @@ import { AggregationsValue } from 'src/app/filters/services/interfaces';
 @Component({
   selector: 'app-counter',
   templateUrl: './counter.component.html',
-  styleUrls: ['./counter.component.scss']
+  styleUrls: ['./counter.component.scss'],
 })
 export class CounterComponent implements OnInit {
   @Input() componentConfigs: ComponentCounterConfigs;
@@ -57,7 +57,7 @@ export class CounterComponent implements OnInit {
       this.store
         .select(fromStore.getAggregation, {
           source,
-          filter
+          filter,
         })
         .pipe(
           map((ag: AggregationsValue) =>

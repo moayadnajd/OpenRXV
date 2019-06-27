@@ -1,10 +1,18 @@
-import { Component, EventEmitter, Output, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Output,
+  Input,
+  OnInit,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { SortOption } from 'src/configs/generalConfig.interface';
 
 @Component({
   selector: 'app-filter-paginated-list',
   templateUrl: './filter-paginated-list.component.html',
-  styleUrls: ['./filter-paginated-list.component.scss']
+  styleUrls: ['./filter-paginated-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterPaginatedListComponent implements OnInit {
   @Output() filterChanged: EventEmitter<SortOption>;
@@ -21,12 +29,12 @@ export class FilterPaginatedListComponent implements OnInit {
     this.ascDesc = [
       {
         display: 'Descending',
-        value: 'desc'
+        value: 'desc',
       },
       {
         display: 'Ascending',
-        value: 'asc'
-      }
+        value: 'asc',
+      },
     ];
     this.reverseOption = this.ascDesc[0].value;
     this.selectedFilter = this.filterOptions[0];

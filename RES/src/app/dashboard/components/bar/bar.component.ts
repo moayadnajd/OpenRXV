@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ParentChart } from '../parent-chart';
 import { ChartMathodsService } from '../services/chartCommonMethods/chart-mathods.service';
 import {
@@ -25,6 +25,7 @@ import { map, first } from 'rxjs/operators';
   templateUrl: './bar.component.html',
   styleUrls: ['./bar.component.scss'],
   providers: [ChartMathodsService, RangeService, BarService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BarComponent extends ParentChart implements OnInit {
   sources: MergedSelect;

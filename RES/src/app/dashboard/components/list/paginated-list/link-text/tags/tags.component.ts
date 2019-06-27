@@ -1,10 +1,11 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { Numbers, Altmetric } from 'src/app/filters/services/interfaces';
 
 @Component({
   selector: 'app-tags',
   templateUrl: './tags.component.html',
-  styleUrls: ['./tags.component.scss']
+  styleUrls: ['./tags.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TagsComponent {
   @Input() set key(key: string) {
