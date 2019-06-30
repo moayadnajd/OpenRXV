@@ -41,7 +41,7 @@ export class ChartMathodsService extends ChartHelper {
 
   constructor(
     private readonly store: Store<fromStore.ItemsState>,
-    private readonly cdr: ChangeDetectorRef
+    cdr: ChangeDetectorRef
   ) {
     super();
     this.shs = new ScrollHelperService(cdr);
