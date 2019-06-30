@@ -18,6 +18,7 @@
         <mat-icon>loop</mat-icon>
       </button>
       <button
+        *ngIf="!isSmall"
         mat-icon-button
         (click)="startTour()"
         aria-label="refresh page button"

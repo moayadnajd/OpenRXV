@@ -44,7 +44,7 @@ button {
 }
 
 @include large {
-  $minMax: 50%;
+  $minMax: 25%;
   #drawer {
     max-width: $minMax !important;
     min-width: $minMax !important;
