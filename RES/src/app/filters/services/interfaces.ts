@@ -211,6 +211,7 @@ export interface BuildQueryObj {
  */
 export interface ResetOptions {
   caller: ResetCaller;
+  data?: any;
 }
 
 export type ResetCaller = 'range' | 'search' | 'select';

@@ -31,6 +31,10 @@ export class RangeService {
     this.source = s;
   }
 
+  get sourceVal(): string {
+    return this.source;
+  }
+
   set storeVal(s: Store<fromStore.ItemsState>) {
     this.store = s;
   }
@@ -51,8 +55,8 @@ export class RangeService {
     return this.bodyBuilderService.getAggAttributes;
   }
 
-  resetNotification(): void {
-    this.bodyBuilderService.resetOtherComponent('range');
+  resetNotification(data?: any): void {
+    this.bodyBuilderService.resetOtherComponent({ data, caller: 'range' });
   }
 
   /**

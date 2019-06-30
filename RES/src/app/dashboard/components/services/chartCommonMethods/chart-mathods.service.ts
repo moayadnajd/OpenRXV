@@ -3,7 +3,7 @@ import {
   ComponentDashboardConfigs,
   MergedSelect,
 } from 'src/configs/generalConfig.interface';
-import { Observable, zip } from 'rxjs';
+import { Observable, zip, combineLatest } from 'rxjs';
 import * as fromStore from '../../../../../store';
 import { Store } from '@ngrx/store';
 import { ChartHelper } from '../chart/chart-helper.class';
@@ -91,7 +91,7 @@ export class ChartMathodsService extends ChartHelper {
   private zipObservablesAndOmit(
     observableArr: Array<Observable<MergedSelect>>
   ) {
-    zip(...observableArr)
+    combineLatest(...observableArr)
       .pipe(
         map((msArr: Array<MergedSelect>) => {
           const obj: MergedSelect = {};

@@ -17,6 +17,7 @@ import {
   ElasticsearchResponse,
   BucketWithInnerBuckts,
   Bucket,
+  ResetOptions,
 } from 'src/app/filters/services/interfaces';
 import { RangeService } from 'src/app/filters/services/range/range.service';
 import { Store } from '@ngrx/store';
@@ -60,13 +61,33 @@ export class BarComponent extends ParentChart implements OnInit {
     this.buildOptions.subscribe(
       (() => {
         let flag = true;
+        let forgetYearsFromStore = false;
         return (b: MergedSelect) => {
-          this.buckets = b;
           if (flag) {
             this.getData();
-            this.rangeService.shouldReset.subscribe(this.getData.bind(this));
+            this.rangeService.shouldReset.subscribe(
+              ({ caller, data }: ResetOptions) => {
+                if (caller === 'range' && data) {
+                  const { min, max } = data;
+                  const filterdYearsRange = [];
+                  for (let i = min; i < max; i++) {
+                    filterdYearsRange.push(i);
+                  }
+                  this.buckets = {
+                    ...this.buckets,
+                    [this.rangeService.sourceVal]: filterdYearsRange,
+                  };
+                  forgetYearsFromStore = true;
+                }
+                this.getData.bind(this);
+              }
+            );
+          }
+          if (!forgetYearsFromStore) {
+            this.buckets = { ...b };
           }
           flag = false;
+          forgetYearsFromStore = false;
         };
       })()
     );
@@ -168,6 +189,10 @@ export class BarComponent extends ParentChart implements OnInit {
     return {
       chart: { type: 'column' },
       xAxis: { type: 'category', crosshair: true },
+      boost: {
+        enabled: true,
+        useGPUTranslations: true,
+      },
       yAxis: { min: 0, title: { text: 'Publications' } },
       plotOptions: {
         column: {
