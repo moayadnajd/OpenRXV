@@ -100,20 +100,24 @@ export class BarComponent extends ParentChart implements OnInit {
         (series: Array<Highcharts.SeriesColumnOptions>) => {
           this.chartOptions = this.setOptions(series);
           if (this.chart) {
-            this.chart.update(
-              {
-                ...this.chartOptions,
-                series: [...this.chartOptions.series],
-              },
-              true,
-              true,
-              true
-            );
+            this.updateChart();
           }
           this.cdr.detectChanges();
         },
         (error: ESHttpError) => this.cdr.detectChanges()
       );
+  }
+
+  private updateChart(): void {
+    this.chart.update(
+      {
+        ...this.chartOptions,
+        series: [...this.chartOptions.series],
+      },
+      true,
+      true,
+      true
+    );
   }
 
   private mapDataToColmns(
@@ -133,7 +137,6 @@ export class BarComponent extends ParentChart implements OnInit {
           })),
         } as Highcharts.SeriesColumnOptions)
     );
-    console.log(series);
     this.selectDefaultOptions(series);
     return series;
   }
