@@ -63,27 +63,23 @@ export class BarService {
     queryToMerge?: ElasticsearchQuery,
     addTermsQueryToQuery?: boolean
   ): ElasticsearchQuery {
+    const [yearsLen, typeLen] = this.yearAndLenSize();
     const q = bodybuilder()
       .size(0)
-      .aggregation('terms', 'year.keyword', { size: 12 }, 'y', query =>
+      .aggregation('terms', 'year.keyword', { size: yearsLen }, 'y', query =>
         query.aggregation(
           'terms',
           '',
           {
             field: 'type.keyword',
-            size: 12,
+            size: typeLen,
           },
           'x'
         )
       );
 
     if (addTermsQueryToQuery) {
-      queryToMerge.query = {
-        ...queryToMerge.query,
-        terms: {
-          'year.keyword': this.selectedYears.map(({ key }) => +key),
-        },
-      };
+      this.addYearsToQuery(queryToMerge);
     }
 
     const finalQuery: ElasticsearchQuery = {
@@ -112,6 +108,32 @@ export class BarService {
       composer.subFlag = false;
       composer.forgetYearsFromStore = false;
     };
+  }
+
+  private yearAndLenSize(): [number, number] {
+    return [
+      this.selectedYears
+        ? this.selectedYears.length === 0
+          ? 2147483647
+          : this.selectedYears.length
+        : 5,
+      this.selectedCategories
+        ? this.selectedCategories.length === 0
+          ? 2147483647
+          : this.selectedCategories.length
+        : 5,
+    ];
+  }
+
+  private addYearsToQuery(queryToMerge: ElasticsearchQuery): void {
+    if (this.selectedYears.length) {
+      queryToMerge.query = {
+        ...queryToMerge.query,
+        terms: {
+          'year.keyword': this.selectedYears.map(({ key }) => +key),
+        },
+      };
+    }
   }
 
   private subToShouldReset(composer: ComposerHelper, source: string) {

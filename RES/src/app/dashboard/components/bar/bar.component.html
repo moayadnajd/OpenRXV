@@ -17,6 +17,7 @@
         [multiple]="true"
         [dropdownPosition]="'top'"
         placeholder="categories"
+        (change)="onChange($event)"
         [(ngModel)]="barService.selectedCategories"
       >
       </ng-select>
