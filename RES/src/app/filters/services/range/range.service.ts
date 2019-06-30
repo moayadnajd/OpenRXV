@@ -55,6 +55,14 @@ export class RangeService {
     this.bodyBuilderService.resetOtherComponent('range');
   }
 
+  /**
+   *
+   * @param query is the query that gets the array of years
+   * @param force when true we will get the years another time, even if had them !
+   * * we are checking if we have the years, by getting them from the store
+   * * if we do we simply retutn an observable of the years
+   * * else we get them from the server.
+   */
   getYears(
     query: ElasticsearchQuery,
     force: boolean = false

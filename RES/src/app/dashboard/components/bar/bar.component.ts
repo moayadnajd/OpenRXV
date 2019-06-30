@@ -1,4 +1,9 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { ParentChart } from '../parent-chart';
 import { ChartMathodsService } from '../services/chartCommonMethods/chart-mathods.service';
 import {
@@ -19,6 +24,7 @@ import * as fromStore from '../../../../store';
 import { BarService } from './services/bar/bar.service';
 import { ItemsService } from 'src/services/itemsService/items.service';
 import { map, first } from 'rxjs/operators';
+import { ESHttpError } from 'src/store/actions/actions.interfaces';
 
 @Component({
   selector: 'app-bar',
@@ -28,7 +34,7 @@ import { map, first } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BarComponent extends ParentChart implements OnInit {
-  sources: MergedSelect;
+  buckets: MergedSelect;
   selectedCategories: Array<Bucket>;
   selectedYears: Array<Bucket>;
   chart: Highcharts.Chart;
@@ -38,7 +44,8 @@ export class BarComponent extends ParentChart implements OnInit {
     private readonly rangeService: RangeService,
     private readonly store: Store<fromStore.AppState>,
     private readonly barService: BarService,
-    private readonly itemsService: ItemsService
+    private readonly itemsService: ItemsService,
+    private readonly cdr: ChangeDetectorRef
   ) {
     super(cms);
     this.rangeService.storeVal = this.store;
@@ -54,7 +61,7 @@ export class BarComponent extends ParentChart implements OnInit {
       (() => {
         let flag = true;
         return (b: MergedSelect) => {
-          this.sources = { ...this.sources, ...b };
+          this.buckets = b;
           if (flag) {
             this.getData();
             this.rangeService.shouldReset.subscribe(this.getData.bind(this));
@@ -89,20 +96,24 @@ export class BarComponent extends ParentChart implements OnInit {
         map(this.mapDataToColmns.bind(this)),
         first()
       )
-      .subscribe((series: Array<Highcharts.SeriesColumnOptions>) => {
-        this.chartOptions = this.setOptions(series);
-        if (this.chart) {
-          this.chart.update(
-            {
-              ...this.chartOptions,
-              series: [...this.chartOptions.series],
-            },
-            true,
-            true,
-            true
-          );
-        }
-      });
+      .subscribe(
+        (series: Array<Highcharts.SeriesColumnOptions>) => {
+          this.chartOptions = this.setOptions(series);
+          if (this.chart) {
+            this.chart.update(
+              {
+                ...this.chartOptions,
+                series: [...this.chartOptions.series],
+              },
+              true,
+              true,
+              true
+            );
+          }
+          this.cdr.detectChanges();
+        },
+        (error: ESHttpError) => this.cdr.detectChanges()
+      );
   }
 
   private mapDataToColmns(

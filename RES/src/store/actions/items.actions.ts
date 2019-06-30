@@ -19,6 +19,12 @@ export class GetData implements Action {
   constructor(public payload: ElasticsearchQuery = null) {}
 }
 
+/**
+ * In the case of getting the years for the filters and the bar chart
+ * we don't want to replace the hists we have in the store with undefined
+ * which comes when getting the years for these two components.
+ * this is why the `addHits` exists
+ */
 export class GetDataSuccess implements Action {
   readonly type = ActionTypes.getDataSuccess;
   constructor(
