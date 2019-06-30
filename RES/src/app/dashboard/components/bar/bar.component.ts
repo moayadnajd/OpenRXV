@@ -11,6 +11,7 @@ import {
   ResetCaller,
   BuildQueryObj,
   ElasticsearchQuery,
+  Bucket,
 } from 'src/app/filters/services/interfaces';
 import { RangeService } from 'src/app/filters/services/range/range.service';
 import { Store } from '@ngrx/store';
@@ -55,7 +56,6 @@ export class BarComponent extends ParentChart implements OnInit {
           if (this.chart) {
             this.updateChart();
           }
-          this.cdr.detectChanges();
         }
         this.cdr.detectChanges();
       }
@@ -64,6 +64,10 @@ export class BarComponent extends ParentChart implements OnInit {
 
   handleChartInstance(e: Highcharts.Chart): void {
     this.chart = e;
+  }
+
+  onChange(val: Array<Bucket>) {
+    this.barService.getData(true);
   }
 
   private getYears(caller?: ResetCaller): void {

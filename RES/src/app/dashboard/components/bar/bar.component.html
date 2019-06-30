@@ -30,6 +30,7 @@
         [dropdownPosition]="'top'"
         placeholder="years"
         [(ngModel)]="barService.selectedYears"
+        (change)="onChange($event)"
       >
       </ng-select>
     </div>

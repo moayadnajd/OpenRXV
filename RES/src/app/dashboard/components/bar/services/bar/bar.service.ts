@@ -37,22 +37,57 @@ export class BarService {
     this.rangeService = rangeService;
   }
 
-  buildQuery(queryToMerge?: ElasticsearchQuery): ElasticsearchQuery {
-    const finalQuery: ElasticsearchQuery = {
-      ...(bodybuilder()
-        .size(0)
-        .aggregation('terms', 'year.keyword', { size: 5 }, 'y', query =>
-          query.aggregation(
-            'terms',
-            '',
-            {
-              field: 'type.keyword',
-              size: 5,
-            },
-            'x'
-          )
+  getData(addTermsQueryToQuery: boolean = false): void {
+    this.itemsService
+      .getItems(
+        this.buildQuery(
+          this.rangeService
+            .buildquery({ size: 12 })
+            .build() as ElasticsearchQuery,
+          addTermsQueryToQuery
         )
-        .build() as ElasticsearchQuery),
+      )
+      .pipe(
+        map(this.mapDataToColmns.bind(this)),
+        first()
+      )
+      .subscribe(
+        (series: Array<Highcharts.SeriesColumnOptions>) => {
+          this.setChartOptinos.emit(series);
+        },
+        (error: ESHttpError) => this.setChartOptinos.emit()
+      );
+  }
+
+  private buildQuery(
+    queryToMerge?: ElasticsearchQuery,
+    addTermsQueryToQuery?: boolean
+  ): ElasticsearchQuery {
+    const q = bodybuilder()
+      .size(0)
+      .aggregation('terms', 'year.keyword', { size: 12 }, 'y', query =>
+        query.aggregation(
+          'terms',
+          '',
+          {
+            field: 'type.keyword',
+            size: 12,
+          },
+          'x'
+        )
+      );
+
+    if (addTermsQueryToQuery) {
+      queryToMerge.query = {
+        ...queryToMerge.query,
+        terms: {
+          'year.keyword': this.selectedYears.map(({ key }) => +key),
+        },
+      };
+    }
+
+    const finalQuery: ElasticsearchQuery = {
+      ...(q.build() as ElasticsearchQuery),
       query: { ...queryToMerge.query },
     };
     if (!Object.keys(finalQuery.query).length) {
@@ -99,24 +134,6 @@ export class BarService {
     );
   }
 
-  private getData(): void {
-    this.itemsService
-      .getItems(
-        this.buildQuery(this.rangeService
-          .buildquery({ size: 12 })
-          .build() as ElasticsearchQuery)
-      )
-      .pipe(
-        map(this.mapDataToColmns.bind(this)),
-        first()
-      )
-      .subscribe(
-        (series: Array<Highcharts.SeriesColumnOptions>) => {
-          this.setChartOptinos.emit(series);
-        },
-        (error: ESHttpError) => this.setChartOptinos.emit()
-      );
-  }
   private mapDataToColmns(
     res: ElasticsearchResponse
   ): Array<Highcharts.SeriesColumnOptions> {
