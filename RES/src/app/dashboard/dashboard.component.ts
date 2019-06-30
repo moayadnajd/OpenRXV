@@ -44,14 +44,12 @@ export class DashboardComponent implements OnInit {
     this.store.dispatch(
       new SetQuery(this.bodyBuilderService.buildMainQuery().build())
     );
-    this.store
-      .select(fromStore.getErrors)
-      .subscribe(
-        (e: ESHttpError) =>
-          e &&
-          (this.snackBar.openFromComponent(SnackComponent).instance.error =
-            e.error)
-      );
+    this.store.select(fromStore.getErrors).subscribe((e: ESHttpError) => {
+      if (e) {
+        this.snackBar.openFromComponent(SnackComponent).instance.error =
+          e.error;
+      }
+    });
   }
 
   onInViewportChange(inViewport: boolean, id: string): void {

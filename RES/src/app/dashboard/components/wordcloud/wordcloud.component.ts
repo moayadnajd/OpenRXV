@@ -27,7 +27,9 @@ export class WordcloudComponent extends ParentChart implements OnInit {
   ngOnInit(): void {
     this.init('wordcloud');
     this.buildOptions.subscribe((buckets: Array<Bucket>) => {
-      this.chartOptions = this.setOptions(buckets);
+      if (buckets) {
+        this.chartOptions = this.setOptions(buckets);
+      }
       this.cdr.detectChanges();
     });
   }

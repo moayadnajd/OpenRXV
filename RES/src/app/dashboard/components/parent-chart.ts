@@ -9,7 +9,7 @@ export class ParentChart extends ParentComponent {
   protected buildOptions: EventEmitter<Array<Bucket>>;
   constructor(public readonly cms: ChartMathodsService) {
     super();
-    this.buildOptions = new EventEmitter();
+    this.buildOptions = new EventEmitter<Array<Bucket>>();
     this.chartOptions = {};
   }
 
@@ -18,6 +18,8 @@ export class ParentChart extends ParentComponent {
     this.cms.goBuildDataSeries.subscribe((bu: Bucket[]) => {
       if (bu) {
         this.cms.setExpanded = bu.length >= 1;
+      } else {
+        this.cms.setExpanded = false;
       }
       this.buildOptions.emit(bu);
     });
