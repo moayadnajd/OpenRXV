@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import {
   searchOptions,
-  ComponentSearchConfigs
+  ComponentSearchConfigs,
 } from 'src/configs/generalConfig.interface';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../../store';
@@ -14,7 +14,7 @@ import { ParentComponent } from 'src/app/parent-component.class';
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
-  styleUrls: ['./search.component.scss']
+  styleUrls: ['./search.component.scss'],
 })
 export class SearchComponent extends ParentComponent implements OnInit {
   @ViewChild('search') searchInput: ElementRef;
@@ -50,7 +50,7 @@ export class SearchComponent extends ParentComponent implements OnInit {
       this.bodyBuilderService.setAggAttributes = {
         fuzziness: 'AUTO',
         operator: 'and',
-        query: this.searchTerm
+        query: this.searchTerm,
       } as QuerySearchAttribute;
     } else {
       this.bodyBuilderService.setAggAttributes = this.searchTerm;
@@ -73,7 +73,7 @@ export class SearchComponent extends ParentComponent implements OnInit {
   }
 
   private dispatchActions() {
-    this.bodyBuilderService.resetOtherComponent('search');
+    this.bodyBuilderService.resetOtherComponent({ caller: 'search' });
     this.store.dispatch(
       new fromStore.SetQuery(this.bodyBuilderService.buildMainQuery().build())
     );

@@ -6,26 +6,16 @@ import {
 } from '@angular/core';
 import { ParentChart } from '../parent-chart';
 import { ChartMathodsService } from '../services/chartCommonMethods/chart-mathods.service';
-import {
-  ComponentDashboardConfigs,
-  MergedSelect,
-} from 'src/configs/generalConfig.interface';
+import { ComponentDashboardConfigs } from 'src/configs/generalConfig.interface';
 import {
   ResetCaller,
   BuildQueryObj,
   ElasticsearchQuery,
-  ElasticsearchResponse,
-  BucketWithInnerBuckts,
-  Bucket,
-  ResetOptions,
 } from 'src/app/filters/services/interfaces';
 import { RangeService } from 'src/app/filters/services/range/range.service';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../../../store';
 import { BarService } from './services/bar/bar.service';
-import { ItemsService } from 'src/services/itemsService/items.service';
-import { map, first } from 'rxjs/operators';
-import { ESHttpError } from 'src/store/actions/actions.interfaces';
 
 @Component({
   selector: 'app-bar',
@@ -35,17 +25,13 @@ import { ESHttpError } from 'src/store/actions/actions.interfaces';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BarComponent extends ParentChart implements OnInit {
-  buckets: MergedSelect;
-  selectedCategories: Array<Bucket>;
-  selectedYears: Array<Bucket>;
   chart: Highcharts.Chart;
 
   constructor(
     cms: ChartMathodsService,
     private readonly rangeService: RangeService,
     private readonly store: Store<fromStore.AppState>,
-    private readonly barService: BarService,
-    private readonly itemsService: ItemsService,
+    public readonly barService: BarService,
     private readonly cdr: ChangeDetectorRef
   ) {
     super(cms);
@@ -58,38 +44,21 @@ export class BarComponent extends ParentChart implements OnInit {
       (prev: string, curr: string) => (curr.includes('year') ? curr : undefined)
     );
     this.init('column', this.getYears.bind(this));
+    this.barService.init(this.rangeService);
     this.buildOptions.subscribe(
-      (() => {
-        let flag = true;
-        let forgetYearsFromStore = false;
-        return (b: MergedSelect) => {
-          if (flag) {
-            this.getData();
-            this.rangeService.shouldReset.subscribe(
-              ({ caller, data }: ResetOptions) => {
-                if (caller === 'range' && data) {
-                  const { min, max } = data;
-                  const filterdYearsRange = [];
-                  for (let i = min; i < max; i++) {
-                    filterdYearsRange.push(i);
-                  }
-                  this.buckets = {
-                    ...this.buckets,
-                    [this.rangeService.sourceVal]: filterdYearsRange,
-                  };
-                  forgetYearsFromStore = true;
-                }
-                this.getData.bind(this);
-              }
-            );
+      this.barService.yearsComposer(this.rangeService.sourceVal)
+    );
+    this.barService.setChartOptinos.subscribe(
+      (series: Array<Highcharts.SeriesColumnOptions>) => {
+        if (series) {
+          this.chartOptions = this.setOptions(series);
+          if (this.chart) {
+            this.updateChart();
           }
-          if (!forgetYearsFromStore) {
-            this.buckets = { ...b };
-          }
-          flag = false;
-          forgetYearsFromStore = false;
-        };
-      })()
+          this.cdr.detectChanges();
+        }
+        this.cdr.detectChanges();
+      }
     );
   }
 
@@ -106,29 +75,6 @@ export class BarComponent extends ParentChart implements OnInit {
       .subscribe();
   }
 
-  private getData(): void {
-    this.itemsService
-      .getItems(
-        this.barService.buildQuery(this.rangeService
-          .buildquery({ size: 12 })
-          .build() as ElasticsearchQuery)
-      )
-      .pipe(
-        map(this.mapDataToColmns.bind(this)),
-        first()
-      )
-      .subscribe(
-        (series: Array<Highcharts.SeriesColumnOptions>) => {
-          this.chartOptions = this.setOptions(series);
-          if (this.chart) {
-            this.updateChart();
-          }
-          this.cdr.detectChanges();
-        },
-        (error: ESHttpError) => this.cdr.detectChanges()
-      );
-  }
-
   private updateChart(): void {
     this.chart.update(
       {
@@ -138,48 +84,6 @@ export class BarComponent extends ParentChart implements OnInit {
       true,
       true,
       true
-    );
-  }
-
-  private mapDataToColmns(
-    res: ElasticsearchResponse
-  ): Array<Highcharts.SeriesColumnOptions> {
-    const series: Array<
-      Highcharts.SeriesColumnOptions
-    > = res.aggregations.y.buckets.map(
-      (yBucket: BucketWithInnerBuckts) =>
-        ({
-          type: 'column',
-          name: yBucket.key,
-          value: yBucket.doc_count,
-          data: yBucket.x.buckets.map(xBucket => ({
-            name: xBucket.key,
-            y: xBucket.doc_count,
-          })),
-        } as Highcharts.SeriesColumnOptions)
-    );
-    this.selectDefaultOptions(series);
-    return series;
-  }
-
-  private selectDefaultOptions(
-    series: Array<Highcharts.SeriesColumnOptions>
-  ): void {
-    const [{ data }] = series;
-
-    this.selectedCategories = data.map(
-      ({ y, name }: { y: number; name: string }) =>
-        ({
-          key: name,
-          doc_count: y,
-        } as Bucket)
-    );
-    this.selectedYears = series.map(
-      ({ name, value }: Highcharts.SeriesColumnOptions & { value: any }) =>
-        ({
-          key: name,
-          doc_count: value,
-        } as Bucket)
     );
   }
 
