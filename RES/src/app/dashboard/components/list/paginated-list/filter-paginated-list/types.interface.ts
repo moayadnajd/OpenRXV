@@ -10,3 +10,8 @@ export interface ViewChild {
   linkedId: string;
   compId: string;
 }
+
+export enum UpdateCallerBarChart {
+  BarChartNgSelect,
+  SideFilters,
+}

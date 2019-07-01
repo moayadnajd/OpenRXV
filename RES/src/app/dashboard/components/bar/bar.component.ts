@@ -17,6 +17,7 @@ import { RangeService } from 'src/app/filters/services/range/range.service';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../../../store';
 import { BarService } from './services/bar/bar.service';
+import { UpdateCallerBarChart } from '../list/paginated-list/filter-paginated-list/types.interface';
 
 @Component({
   selector: 'app-bar',
@@ -66,8 +67,8 @@ export class BarComponent extends ParentChart implements OnInit {
     this.chart = e;
   }
 
-  onChange(val: Array<Bucket>) {
-    this.barService.getData(true);
+  onChange(val: Array<string | number>) {
+    this.barService.getData(UpdateCallerBarChart.BarChartNgSelect);
   }
 
   private getYears(caller?: ResetCaller): void {

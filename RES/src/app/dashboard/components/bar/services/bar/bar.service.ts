@@ -1,5 +1,4 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { BodyBuilderService } from 'src/app/filters/services/bodyBuilder/body-builder.service';
 import * as bodybuilder from 'bodybuilder';
 import {
   ElasticsearchQuery,
@@ -9,11 +8,11 @@ import {
   Bucket,
 } from 'src/app/filters/services/interfaces';
 import { MergedSelect } from 'src/configs/generalConfig.interface';
-import { Subject } from 'rxjs';
 import { ItemsService } from 'src/services/itemsService/items.service';
 import { RangeService } from 'src/app/filters/services/range/range.service';
 import { map, first } from 'rxjs/operators';
 import { ESHttpError } from 'src/store/actions/actions.interfaces';
+import { UpdateCallerBarChart } from '../../../list/paginated-list/filter-paginated-list/types.interface';
 
 interface ComposerHelper {
   subFlag: boolean;
@@ -23,45 +22,55 @@ interface ComposerHelper {
 export class BarService {
   buckets: MergedSelect;
   setChartOptinos: EventEmitter<Array<Highcharts.SeriesColumnOptions>>;
-  selectedCategories: Array<Bucket>;
-  selectedYears: Array<Bucket>;
+  selectedCategories: Array<string>;
+  selectedYears: Array<number>;
+  barTypes: Array<string>;
+  barYears: Array<number>;
+  barLoading: boolean;
   private rangeService: RangeService;
 
   constructor(private readonly itemsService: ItemsService) {
     this.setChartOptinos = new EventEmitter<
       Array<Highcharts.SeriesColumnOptions>
     >();
+    this.barLoading = false;
   }
 
-  init(rangeService: RangeService) {
+  init(rangeService: RangeService): void {
     this.rangeService = rangeService;
   }
 
-  getData(addTermsQueryToQuery: boolean = false): void {
+  getData(changeBy?: UpdateCallerBarChart): void {
+    this.barLoading = true;
     this.itemsService
       .getItems(
-        this.buildQuery(
-          this.rangeService
-            .buildquery({ size: 12 })
-            .build() as ElasticsearchQuery,
-          addTermsQueryToQuery
-        )
+        this.buildQuery(this.rangeService.buildquery({ size: 12 }), changeBy)
       )
       .pipe(
-        map(this.mapDataToColmns.bind(this)),
-        first()
+        map<ElasticsearchResponse, Array<Highcharts.SeriesColumnOptions>>(
+          (value: ElasticsearchResponse) =>
+            this.mapDataToColmns(value, changeBy)
+        ),
+        first<
+          Array<Highcharts.SeriesColumnOptions>,
+          Array<Highcharts.SeriesColumnOptions>
+        >()
       )
       .subscribe(
         (series: Array<Highcharts.SeriesColumnOptions>) => {
+          this.barLoading = false;
           this.setChartOptinos.emit(series);
         },
-        (error: ESHttpError) => this.setChartOptinos.emit()
+        (error: ESHttpError) => {
+          this.barLoading = false;
+          this.setChartOptinos.emit();
+        }
       );
   }
 
   private buildQuery(
-    queryToMerge?: ElasticsearchQuery,
-    addTermsQueryToQuery?: boolean
+    queryToMerge?: bodybuilder.Bodybuilder,
+    changeBy?: UpdateCallerBarChart
   ): ElasticsearchQuery {
     const [yearsLen, typeLen] = this.yearAndLenSize();
     const q = bodybuilder()
@@ -78,13 +87,13 @@ export class BarService {
         )
       );
 
-    if (addTermsQueryToQuery) {
-      this.addYearsToQuery(queryToMerge);
+    if (changeBy === UpdateCallerBarChart.SideFilters) {
+      this.addYearsAndTypesToQuery(queryToMerge, changeBy);
     }
 
     const finalQuery: ElasticsearchQuery = {
       ...(q.build() as ElasticsearchQuery),
-      query: { ...queryToMerge.query },
+      query: { ...(queryToMerge.build() as ElasticsearchQuery).query },
     };
     if (!Object.keys(finalQuery.query).length) {
       delete finalQuery.query;
@@ -107,7 +116,19 @@ export class BarService {
       }
       composer.subFlag = false;
       composer.forgetYearsFromStore = false;
+      this.updateNgSelectOptions();
     };
+  }
+
+  private updateNgSelectOptions(): void {
+    if (this.buckets.type) {
+      this.barTypes = this.buckets.type.map(({ key }: Bucket) => key);
+    }
+    if (this.buckets['year.keyword']) {
+      this.barYears = this.buckets['year.keyword'].map(
+        ({ key }: Bucket) => +key
+      );
+    }
   }
 
   private yearAndLenSize(): [number, number] {
@@ -125,14 +146,17 @@ export class BarService {
     ];
   }
 
-  private addYearsToQuery(queryToMerge: ElasticsearchQuery): void {
-    if (this.selectedYears.length) {
-      queryToMerge.query = {
-        ...queryToMerge.query,
-        terms: {
-          'year.keyword': this.selectedYears.map(({ key }) => +key),
-        },
-      };
+  private addYearsAndTypesToQuery(
+    queryToMerge: bodybuilder.Bodybuilder,
+    changeBy: UpdateCallerBarChart
+  ): void {
+    if (changeBy === UpdateCallerBarChart.BarChartNgSelect) {
+      if (this.selectedYears.length) {
+        queryToMerge.query('terms', 'year.keyword', this.selectedYears);
+      }
+      if (this.selectedCategories.length) {
+        queryToMerge.query('terms', 'type.keyword', this.selectedCategories);
+      }
     }
   }
 
@@ -151,13 +175,14 @@ export class BarService {
           };
           composer.forgetYearsFromStore = true;
         }
-        this.getData();
+        this.getData(UpdateCallerBarChart.SideFilters);
       }
     );
   }
 
   private mapDataToColmns(
-    res: ElasticsearchResponse
+    res: ElasticsearchResponse,
+    changeBy: UpdateCallerBarChart
   ): Array<Highcharts.SeriesColumnOptions> {
     const series: Array<
       Highcharts.SeriesColumnOptions
@@ -171,30 +196,34 @@ export class BarService {
             name: xBucket.key,
             y: xBucket.doc_count,
           })),
+          animation: true,
         } as Highcharts.SeriesColumnOptions)
     );
-    this.selectDefaultOptions(series);
+    this.selectDefaultOptions(series, changeBy);
     return series;
   }
 
   private selectDefaultOptions(
-    series: Array<Highcharts.SeriesColumnOptions>
+    series: Array<Highcharts.SeriesColumnOptions>,
+    changeBy: UpdateCallerBarChart
   ): void {
-    const [{ data }] = series;
-
-    this.selectedCategories = data.map(
-      ({ y, name }: { y: number; name: string }) =>
-        ({
-          key: name,
-          doc_count: y,
-        } as Bucket)
-    );
+    // binding the default selected values only the first time first two conditions.
+    // replace the selected options when the SideFilters update the data.
+    if (
+      this.selectedCategories &&
+      this.selectedYears &&
+      changeBy === UpdateCallerBarChart.BarChartNgSelect
+    ) {
+      return;
+    }
+    const catSet: Set<string> = new Set<string>();
+    series
+      .flatMap(({ data }) => data)
+      .forEach(({ name }: { y: number; name: string }) => catSet.add(name));
+    this.selectedCategories = Array.from(catSet);
     this.selectedYears = series.map(
       ({ name, value }: Highcharts.SeriesColumnOptions & { value: any }) =>
-        ({
-          key: name,
-          doc_count: value,
-        } as Bucket)
+        +name
     );
   }
 }

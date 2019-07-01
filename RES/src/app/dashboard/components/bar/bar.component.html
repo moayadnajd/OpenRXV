@@ -12,8 +12,7 @@
   <ng-container *ngIf="barService.buckets">
     <div class="col-12">
       <ng-select
-        [items]="barService.buckets.type"
-        bindLabel="key"
+        [items]="barService.barTypes"
         [multiple]="true"
         [dropdownPosition]="'top'"
         placeholder="categories"
@@ -25,8 +24,7 @@
 
     <div class="col-12">
       <ng-select
-        [items]="barService.buckets['year.keyword']"
-        bindLabel="key"
+        [items]="barService.barYears"
         [multiple]="true"
         [dropdownPosition]="'top'"
         placeholder="years"
@@ -36,4 +34,5 @@
       </ng-select>
     </div>
   </ng-container>
+  <ngx-loading [show]="barService.barLoading"></ngx-loading>
 </app-chart>
