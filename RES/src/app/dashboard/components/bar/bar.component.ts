@@ -11,7 +11,6 @@ import {
   ResetCaller,
   BuildQueryObj,
   ElasticsearchQuery,
-  Bucket,
 } from 'src/app/filters/services/interfaces';
 import { RangeService } from 'src/app/filters/services/range/range.service';
 import { Store } from '@ngrx/store';
@@ -42,16 +41,20 @@ export class BarComponent extends ParentChart implements OnInit {
   }
 
   ngOnInit() {
-    const { source } = this.componentConfigs as ComponentDashboardConfigs;
+    const { source, firstBarFilterSource, secondBarFilterSource } = this
+      .componentConfigs as ComponentDashboardConfigs;
     this.rangeService.sourceVal = (source as Array<string>).reduce(
-      (prev: string, curr: string) => (curr.includes('year') ? curr : undefined)
+      (prev: string, curr: string) =>
+        curr.includes('year') ? `${curr}.keyword` : undefined
     );
     this.init('column', this.getYears.bind(this));
     this.barService.init(
       this.rangeService,
       this.store
         .select(fromStore.getQueryFromBody)
-        .pipe(map((query: object) => !!query))
+        .pipe(map((query: object) => !!query)),
+      firstBarFilterSource,
+      secondBarFilterSource
     );
     this.buildOptions.subscribe(
       this.barService.yearsComposer(this.rangeService.sourceVal)

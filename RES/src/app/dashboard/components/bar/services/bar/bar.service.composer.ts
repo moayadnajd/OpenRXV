@@ -15,8 +15,8 @@ import { EventEmitter } from '@angular/core';
 import * as bodybuilder from 'bodybuilder';
 /**
  * right now `buckets` will contain
- *   - `type`: `Array<Bucket>`
- *   - `'year.keyword'`: `Array<Bucket>`
+ *   - `index[0] from the source confs`: `Array<Bucket>`
+ *   - `index[1] from the source confs`: `Array<Bucket>`
  * `selectedCategories` & `selectedYears` is the selected options which get set for the first time when
  * the user loads the page, when the user select a filter from the side filters, and when the bar
  * filters changes the selected values stays the same.
@@ -32,6 +32,8 @@ export class BarServiceComposer {
   protected doWeHaveQueryInTheMainQuery: boolean;
   protected rangeService: RangeService;
   protected getDataNow: EventEmitter<UpdateCallerBarChart>;
+  protected firstSourceKey: string;
+  protected secondSourceKey: string;
 
   constructor() {
     this.getDataNow = new EventEmitter<UpdateCallerBarChart>();
@@ -44,16 +46,21 @@ export class BarServiceComposer {
     const [yearsLen, typeLen] = this.yearAndLenSize();
     const q = bodybuilder()
       .size(0)
-      .aggregation('terms', 'year.keyword', { size: yearsLen }, 'y', query =>
-        query.aggregation(
-          'terms',
-          '',
-          {
-            field: 'type.keyword',
-            size: typeLen,
-          },
-          'x'
-        )
+      .aggregation(
+        'terms',
+        `${this.secondSourceKey}.keyword`,
+        { size: yearsLen },
+        'y',
+        query =>
+          query.aggregation(
+            'terms',
+            '',
+            {
+              field: `${this.firstSourceKey}.keyword`,
+              size: typeLen,
+            },
+            'x'
+          )
       );
 
     if (changeBy === UpdateCallerBarChart.BarChartNgSelect) {
@@ -95,10 +102,18 @@ export class BarServiceComposer {
   ): void {
     if (changeBy === UpdateCallerBarChart.BarChartNgSelect) {
       if (this.selectedYears.length) {
-        queryToMerge.query('terms', 'year.keyword', this.selectedYears);
+        queryToMerge.query(
+          'terms',
+          `${this.secondSourceKey}.keyword`,
+          this.selectedYears
+        );
       }
       if (this.selectedCategories.length) {
-        queryToMerge.query('terms', 'type.keyword', this.selectedCategories);
+        queryToMerge.query(
+          'terms',
+          `${this.firstSourceKey}.keyword`,
+          this.selectedCategories
+        );
       }
     }
   }
@@ -107,8 +122,8 @@ export class BarServiceComposer {
     if (this.buckets.type) {
       this.barTypes = this.buckets.type.map(({ key }: Bucket) => key);
     }
-    if (this.buckets['year.keyword']) {
-      this.barYears = this.buckets['year.keyword'].map(
+    if (this.buckets[`${this.secondSourceKey}.keyword`]) {
+      this.barYears = this.buckets[`${this.secondSourceKey}.keyword`].map(
         ({ key }: Bucket) => +key
       );
     }

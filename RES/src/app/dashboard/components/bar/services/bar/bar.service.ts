@@ -32,8 +32,12 @@ export class BarService extends BarServiceComposer {
 
   init(
     rangeService: RangeService,
-    isThereIsQueryInTheMainQuery$: Observable<boolean>
+    isThereIsQueryInTheMainQuery$: Observable<boolean>,
+    firstSourceKey: string,
+    secondSourceKey: string
   ): void {
+    this.firstSourceKey = firstSourceKey;
+    this.secondSourceKey = secondSourceKey;
     this.rangeService = rangeService;
     // the delay is just to allow `doWeHaveQueryInTheMainQuery` to change the query behavior
     // before changing ~ in `yearAndLenSize` method.

@@ -142,7 +142,7 @@ export const dashboardConfig: GeneralConfigs[] = [
     component: 'BarComponent',
     componentConfigs: {
       id: 'column',
-      source: ['type', `year.keyword`],
+      source: ['type', 'year'],
       title: 'Info Products Analytics',
       chartType: 'column',
       description: `
@@ -152,6 +152,8 @@ export const dashboardConfig: GeneralConfigs[] = [
             information faster. Click on ICONS:view_headline to export
             this graphic, click on ICONS:expand_less to collapse it.
       `,
+      firstBarFilterSource: 'type',
+      secondBarFilterSource: 'year',
     } as ComponentDashboardConfigs,
     scroll: {
       icon: 'bar_chart',
