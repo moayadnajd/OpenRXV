@@ -18,6 +18,7 @@ import { Store } from '@ngrx/store';
 import * as fromStore from '../../../../store';
 import { BarService } from './services/bar/bar.service';
 import { UpdateCallerBarChart } from '../list/paginated-list/filter-paginated-list/types.interface';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-bar',
@@ -46,7 +47,12 @@ export class BarComponent extends ParentChart implements OnInit {
       (prev: string, curr: string) => (curr.includes('year') ? curr : undefined)
     );
     this.init('column', this.getYears.bind(this));
-    this.barService.init(this.rangeService);
+    this.barService.init(
+      this.rangeService,
+      this.store
+        .select(fromStore.getQueryFromBody)
+        .pipe(map((query: object) => !!query))
+    );
     this.buildOptions.subscribe(
       this.barService.yearsComposer(this.rangeService.sourceVal)
     );

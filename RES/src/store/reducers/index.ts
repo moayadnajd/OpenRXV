@@ -123,3 +123,8 @@ export const getQuery = createSelector(
   getQueryState,
   fromQueries.getQueryBody
 );
+
+export const getQueryFromBody = createSelector(
+  getQuery,
+  fromQueries.getQueryFromBody
+);
