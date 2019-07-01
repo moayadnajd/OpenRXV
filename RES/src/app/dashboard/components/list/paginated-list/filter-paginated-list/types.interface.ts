@@ -15,3 +15,8 @@ export enum UpdateCallerBarChart {
   BarChartNgSelect,
   SideFilters,
 }
+
+export interface BarComposerHelper {
+  subFlag: boolean;
+  forgetYearsFromStore: boolean;
+}
