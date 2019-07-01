@@ -75,7 +75,7 @@ export class BarComponent extends ParentChart implements OnInit {
     this.chart = e;
   }
 
-  onChange(val: Array<string | number>) {
+  onChange(val: Array<string | number>): void {
     this.barService.getData(UpdateCallerBarChart.BarChartNgSelect);
   }
 

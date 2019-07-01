@@ -86,5 +86,5 @@ export enum searchOptions {
 }
 
 export interface MergedSelect {
-  [key: string]: Array<Bucket | number>;
+  [key: string]: Array<Bucket>;
 }

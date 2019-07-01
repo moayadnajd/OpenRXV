@@ -23,16 +23,22 @@ export class ParentChart extends ParentComponent {
         if (Array.isArray(bu)) {
           this.cms.setExpanded = bu.length >= 1;
         } else {
-          //   TODO :::::
-          console.group('buckting');
-          console.log(bu);
-          console.groupEnd();
-          this.cms.setExpanded = true;
+          this.cms.setExpanded = this.checkExpandedForObject(bu);
         }
       } else {
         this.cms.setExpanded = false;
       }
       this.buildOptions.emit(bu);
     });
+  }
+
+  private checkExpandedForObject(bu: MergedSelect): boolean {
+    const arr: Array<Bucket> = [];
+    for (const key in bu) {
+      if (bu.hasOwnProperty(key)) {
+        arr.push(...bu[key]);
+      }
+    }
+    return arr.length >= 1;
   }
 }
