@@ -44,8 +44,7 @@ export class BarComponent extends ParentChart implements OnInit {
     const { source, firstBarFilterSource, secondBarFilterSource } = this
       .componentConfigs as ComponentDashboardConfigs;
     this.rangeService.sourceVal = (source as Array<string>).reduce(
-      (prev: string, curr: string) =>
-        curr.includes('year') ? `${curr}.keyword` : undefined
+      (prev: string, curr: string) => (curr.includes('year') ? curr : undefined)
     );
     this.init('column', this.getYears.bind(this));
     this.barService.init(

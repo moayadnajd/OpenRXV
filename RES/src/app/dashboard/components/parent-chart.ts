@@ -24,6 +24,9 @@ export class ParentChart extends ParentComponent {
           this.cms.setExpanded = bu.length >= 1;
         } else {
           //   TODO :::::
+          console.group('buckting');
+          console.log(bu);
+          console.groupEnd();
           this.cms.setExpanded = true;
         }
       } else {
