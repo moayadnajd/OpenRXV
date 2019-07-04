@@ -142,7 +142,7 @@ export const dashboardConfig: GeneralConfigs[] = [
     component: 'BarComponent',
     componentConfigs: {
       id: 'column',
-      source: ['affiliation', 'year.keyword'],
+      source: ['type', 'year.keyword'],
       title: 'Info Products Analytics',
       chartType: 'column',
       description: `
