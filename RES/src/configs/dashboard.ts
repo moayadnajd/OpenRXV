@@ -1,6 +1,6 @@
 import {
   GeneralConfigs,
-  ComponentDashboardConfigs,
+  ComponentDashboardConfigs
 } from './generalConfig.interface';
 
 /**
@@ -70,12 +70,12 @@ export const dashboardConfig: GeneralConfigs[] = [
           All the available information products are represented here and disaggregated by Type.
           You can toggle on/off individual type of visualization in the list at the right side of
           the graphic. Click on ICONS:view_headline to export this graphic, click on ICONS:expand_less to collapse it.
-      `,
+      `
     } as ComponentDashboardConfigs,
     scroll: {
-      icon: 'pie_chart',
+      icon: 'pie_chart'
     },
-    tour: true,
+    tour: true
   },
   {
     class: 'col-md-6 no-side-padding',
@@ -89,12 +89,12 @@ export const dashboardConfig: GeneralConfigs[] = [
           Top Subjects tags for all the information products are represented here, the greater the word,
           the higher the number of information. Products tagged to that specific Subject. Click on ICONS:view_headline
           to export this graphic, click on ICONS:expand_less to collapse it.
-      `,
+      `
     } as ComponentDashboardConfigs,
     scroll: {
-      linkedWith: 'pie',
+      linkedWith: 'pie'
     },
-    tour: true,
+    tour: true
   },
   {
     show: true,
@@ -111,12 +111,12 @@ export const dashboardConfig: GeneralConfigs[] = [
           information products. Click on ICONS:view_headline
           to export this graphic, click on ICONS:expand_less
           to collapse it.
-      `,
+      `
     } as ComponentDashboardConfigs,
     scroll: {
-      icon: 'map',
+      icon: 'map'
     },
-    tour: true,
+    tour: true
   },
   {
     class: 'col-md-3 mt-3 no-side-padding shorter',
@@ -129,12 +129,12 @@ export const dashboardConfig: GeneralConfigs[] = [
       description: `
           The top Countries by number of information products.
           Click on ICONS:expand_less to collapse the list.
-      `,
+      `
     } as ComponentDashboardConfigs,
     scroll: {
-      linkedWith: 'map',
+      linkedWith: 'map'
     },
-    tour: true,
+    tour: true
   },
   {
     show: true,
@@ -142,7 +142,7 @@ export const dashboardConfig: GeneralConfigs[] = [
     component: 'BarComponent',
     componentConfigs: {
       id: 'column',
-      source: ['type', 'year.keyword'],
+      source: ['affiliation', 'year.keyword'],
       title: 'Info Products Analytics',
       chartType: 'column',
       description: `
@@ -151,14 +151,12 @@ export const dashboardConfig: GeneralConfigs[] = [
             other filters automatically pre-select those options that have the most results, helping you to access your
             information faster. Click on ICONS:view_headline to export
             this graphic, click on ICONS:expand_less to collapse it.
-      `,
-      firstBarFilterSource: 'type',
-      secondBarFilterSource: 'year',
+      `
     } as ComponentDashboardConfigs,
     scroll: {
-      icon: 'bar_chart',
+      icon: 'bar_chart'
     },
-    tour: true,
+    tour: true
   },
   {
     class: 'col-md-6 mt-3 no-side-padding',
@@ -171,12 +169,12 @@ export const dashboardConfig: GeneralConfigs[] = [
       description: `
           The top twenty Authors by number of information products.
           Click on ICONS:expand_less to collapse the list.
-      `,
+      `
     } as ComponentDashboardConfigs,
     scroll: {
-      icon: 'list_alt',
+      icon: 'list_alt'
     },
-    tour: true,
+    tour: true
   },
   {
     class: 'col-md-6 mt-3 no-side-padding',
@@ -189,12 +187,12 @@ export const dashboardConfig: GeneralConfigs[] = [
       description: `
           Top twenty affiliations by number of information products.
           Click on ICONS:expand_less to collapse the list.
-      `,
+      `
     } as ComponentDashboardConfigs,
     scroll: {
-      linkedWith: 'topLists',
+      linkedWith: 'topLists'
     },
-    tour: true,
+    tour: true
   },
   {
     class: 'col-md-6 mt-3 no-side-padding',
@@ -209,12 +207,12 @@ export const dashboardConfig: GeneralConfigs[] = [
           are represented here and ordered by quantity of tags for
           each CRP or platform. Scroll down to see more results.
           Click on ICONS:expand_less to collapse the list.
-      `,
+      `
     } as ComponentDashboardConfigs,
     scroll: {
-      icon: 'star_rate',
+      icon: 'star_rate'
     },
-    tour: true,
+    tour: true
   },
   {
     class: 'col-md-6 mt-3 no-side-padding',
@@ -228,12 +226,12 @@ export const dashboardConfig: GeneralConfigs[] = [
           All funders tagged across all information products are represented here and
           orderd by quantity of tags for each funder. Scroll down to see more results.
           Click on ICONS:expand_less to collapse the list.
-      `,
+      `
     } as ComponentDashboardConfigs,
     scroll: {
-      linkedWith: 'CRP',
+      linkedWith: 'CRP'
     },
-    tour: true,
+    tour: true
   },
   {
     class: 'col-md-12 mt-3 no-side-padding',
@@ -261,7 +259,7 @@ export const dashboardConfig: GeneralConfigs[] = [
           'Date issued': 'date',
           'Reporting CRP(s) and Platform(s)': 'crp',
           'Attention Score': 'altmetric',
-          numbers: 'numbers',
+          numbers: 'numbers'
         },
         filterOptions: [
           { display: 'Date', value: 'date', sort: 'desc' },
@@ -269,24 +267,24 @@ export const dashboardConfig: GeneralConfigs[] = [
           {
             display: 'Authors',
             value: 'citation.keyword',
-            sort: 'desc',
+            sort: 'desc'
           },
           {
             display: 'Altmetric: Attention Score',
             value: 'altmetric.score',
-            sort: 'desc',
+            sort: 'desc'
           },
           {
             display: 'Views & Downloads',
             value: 'numbers.score',
-            sort: 'desc',
-          },
-        ],
-      },
+            sort: 'desc'
+          }
+        ]
+      }
     } as ComponentDashboardConfigs,
     scroll: {
-      icon: 'view_list',
+      icon: 'view_list'
     },
-    tour: true,
-  },
+    tour: true
+  }
 ];

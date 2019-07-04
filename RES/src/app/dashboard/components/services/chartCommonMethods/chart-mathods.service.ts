@@ -1,9 +1,9 @@
 import { Injectable, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import {
   ComponentDashboardConfigs,
-  MergedSelect,
+  MergedSelect
 } from 'src/configs/generalConfig.interface';
-import { Observable, zip, combineLatest } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import * as fromStore from '../../../../../store';
 import { Store } from '@ngrx/store';
 import { ChartHelper } from '../chart/chart-helper.class';
@@ -96,7 +96,7 @@ export class ChartMathodsService extends ChartHelper {
         map((msArr: Array<MergedSelect>) => {
           const obj: MergedSelect = {};
           msArr.forEach((ms: MergedSelect) => {
-            const key = Object.keys(ms)[0];
+            const [key] = Object.keys(ms);
             obj[key] = ms[key];
           });
           return obj;

@@ -1,18 +1,19 @@
 import {
   UpdateCallerBarChart,
-  BarComposerHelper,
+  BarComposerHelper
 } from '../../../list/paginated-list/filter-paginated-list/types.interface';
 import {
   ElasticsearchQuery,
   BucketWithInnerBuckts,
   ElasticsearchResponse,
   Bucket,
-  ResetOptions,
+  ResetOptions
 } from 'src/app/filters/services/interfaces';
 import { MergedSelect } from 'src/configs/generalConfig.interface';
 import { RangeService } from 'src/app/filters/services/range/range.service';
 import { EventEmitter } from '@angular/core';
 import * as bodybuilder from 'bodybuilder';
+import { logGroup } from 'src/debug/debug.functions';
 /**
  * right now `buckets` will contain
  *   - `index[0] from the source confs`: `Array<Bucket>`
@@ -24,16 +25,28 @@ import * as bodybuilder from 'bodybuilder';
  * the bar select options.
  */
 export class BarServiceComposer {
-  selectedYears: Array<number>;
+  selectedYears: Array<string>;
   selectedCategories: Array<string>;
   buckets: MergedSelect;
   barTypes: Array<string>;
-  barYears: Array<number>;
+  barYears: Array<string>;
   protected doWeHaveQueryInTheMainQuery: boolean;
   protected rangeService: RangeService;
   protected getDataNow: EventEmitter<UpdateCallerBarChart>;
   protected firstSourceKey: string;
   protected secondSourceKey: string;
+
+  get firstFilterKeyWord(): string {
+    return this.firstSourceKey.includes('keyword')
+      ? this.firstSourceKey
+      : `${this.firstSourceKey}.keyword`;
+  }
+
+  get secondFilterKeyWord(): string {
+    return this.secondSourceKey.includes('keyword')
+      ? this.secondSourceKey
+      : `${this.secondSourceKey}.keyword`;
+  }
 
   constructor() {
     this.getDataNow = new EventEmitter<UpdateCallerBarChart>();
@@ -48,7 +61,7 @@ export class BarServiceComposer {
       .size(0)
       .aggregation(
         'terms',
-        `${this.secondSourceKey}.keyword`,
+        this.secondFilterKeyWord,
         { size: yearsLen },
         'y',
         query =>
@@ -56,8 +69,8 @@ export class BarServiceComposer {
             'terms',
             '',
             {
-              field: `${this.firstSourceKey}.keyword`,
-              size: typeLen,
+              field: this.firstFilterKeyWord,
+              size: typeLen
             },
             'x'
           )
@@ -69,8 +82,9 @@ export class BarServiceComposer {
 
     const finalQuery: ElasticsearchQuery = {
       ...(q.build() as ElasticsearchQuery),
-      query: { ...(queryToMerge.build() as ElasticsearchQuery).query },
+      query: { ...(queryToMerge.build() as ElasticsearchQuery).query }
     };
+    logGroup('finalQuery', () => console.log(finalQuery));
     if (!Object.keys(finalQuery.query).length) {
       delete finalQuery.query;
     }
@@ -92,7 +106,7 @@ export class BarServiceComposer {
           : this.doWeHaveQueryInTheMainQuery
           ? 5
           : this.selectedCategories.length
-        : 5,
+        : 5
     ];
   }
 
@@ -104,14 +118,14 @@ export class BarServiceComposer {
       if (this.selectedYears.length) {
         queryToMerge.query(
           'terms',
-          `${this.secondSourceKey}.keyword`,
+          this.secondFilterKeyWord,
           this.selectedYears
         );
       }
       if (this.selectedCategories.length) {
         queryToMerge.query(
           'terms',
-          `${this.firstSourceKey}.keyword`,
+          this.firstFilterKeyWord,
           this.selectedCategories
         );
       }
@@ -119,12 +133,14 @@ export class BarServiceComposer {
   }
 
   protected updateNgSelectOptions(): void {
-    if (this.buckets.type) {
-      this.barTypes = this.buckets.type.map(({ key }: Bucket) => key);
+    if (this.buckets[this.firstSourceKey]) {
+      this.barTypes = this.buckets[this.firstSourceKey].map(
+        ({ key }: Bucket) => key
+      );
     }
-    if (this.buckets[`${this.secondSourceKey}.keyword`]) {
-      this.barYears = this.buckets[`${this.secondSourceKey}.keyword`].map(
-        ({ key }: Bucket) => +key
+    if (this.buckets[this.secondSourceKey]) {
+      this.barYears = this.buckets[this.secondSourceKey].map(
+        ({ key }: Bucket) => key
       );
     }
   }
@@ -140,7 +156,7 @@ export class BarServiceComposer {
           }
           this.buckets = {
             ...this.buckets,
-            [source]: filterdYearsRange,
+            [source]: filterdYearsRange
           };
           composer.forgetYearsFromStore = true;
         }
@@ -163,9 +179,9 @@ export class BarServiceComposer {
           value: yBucket.doc_count,
           data: yBucket.x.buckets.map(xBucket => ({
             name: xBucket.key,
-            y: xBucket.doc_count,
+            y: xBucket.doc_count
           })),
-          animation: true,
+          animation: true
         } as Highcharts.SeriesColumnOptions)
     );
     this.selectDefaultOptions(series, changeBy);
@@ -191,7 +207,12 @@ export class BarServiceComposer {
       .forEach(({ name }: { y: number; name: string }) => catSet.add(name));
     this.selectedCategories = Array.from(catSet);
     this.selectedYears = series.map(
-      ({ name }: Highcharts.SeriesColumnOptions) => +name
+      ({ name }: Highcharts.SeriesColumnOptions) => name
     );
+    logGroup('selectDefaultOptions', () => {
+      console.log('#1 ng-select', this.selectedCategories);
+      console.log('#2 ng-select', this.selectedYears);
+      console.log('series => ', series);
+    });
   }
 }

@@ -15,7 +15,7 @@
         [items]="barService.barTypes"
         [multiple]="true"
         [dropdownPosition]="'top'"
-        placeholder="categories"
+        placeholder="Categories"
         (change)="onChange($event)"
         [(ngModel)]="barService.selectedCategories"
       >
@@ -27,7 +27,7 @@
         [items]="barService.barYears"
         [multiple]="true"
         [dropdownPosition]="'top'"
-        placeholder="years"
+        placeholder="Columns"
         [(ngModel)]="barService.selectedYears"
         (change)="onChange($event)"
       >

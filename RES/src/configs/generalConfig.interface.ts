@@ -27,8 +27,6 @@ export interface ComponentDashboardConfigs {
   description: string;
   source: string | Array<string>;
   content?: PaginatedListConfigs;
-  firstBarFilterSource?: string;
-  secondBarFilterSource?: string;
 }
 
 export interface ComponentCounterConfigs {
@@ -82,7 +80,7 @@ export interface PaginatedListConfigs {
 
 export enum searchOptions {
   titleSearch,
-  allSearch,
+  allSearch
 }
 
 export interface MergedSelect {

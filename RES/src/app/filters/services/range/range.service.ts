@@ -7,7 +7,7 @@ import {
   BuildQueryObj,
   ResetOptions,
   QuerySearchAttribute,
-  QueryFilterAttribute,
+  QueryFilterAttribute
 } from '../interfaces';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';

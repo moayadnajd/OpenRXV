@@ -1,7 +1,7 @@
 import { EventEmitter } from '@angular/core';
 import {
   ComponentDashboardConfigs,
-  MergedSelect,
+  MergedSelect
 } from 'src/configs/generalConfig.interface';
 import { ChartMathodsService } from './services/chartCommonMethods/chart-mathods.service';
 import { Bucket } from 'src/app/filters/services/interfaces';
@@ -24,6 +24,7 @@ export class ParentChart extends ParentComponent {
           this.cms.setExpanded = bu.length >= 1;
         } else {
           this.cms.setExpanded = this.checkExpandedForObject(bu);
+          console.log(bu);
         }
       } else {
         this.cms.setExpanded = false;

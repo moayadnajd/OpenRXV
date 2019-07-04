@@ -2,15 +2,14 @@ import {
   Component,
   OnInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
+  ChangeDetectorRef
 } from '@angular/core';
 import { ParentChart } from '../parent-chart';
 import { ChartMathodsService } from '../services/chartCommonMethods/chart-mathods.service';
-import { ComponentDashboardConfigs } from 'src/configs/generalConfig.interface';
 import {
   ResetCaller,
   BuildQueryObj,
-  ElasticsearchQuery,
+  ElasticsearchQuery
 } from 'src/app/filters/services/interfaces';
 import { RangeService } from 'src/app/filters/services/range/range.service';
 import { Store } from '@ngrx/store';
@@ -18,13 +17,14 @@ import * as fromStore from '../../../../store';
 import { BarService } from './services/bar/bar.service';
 import { UpdateCallerBarChart } from '../list/paginated-list/filter-paginated-list/types.interface';
 import { map } from 'rxjs/operators';
+import { logGroup } from 'src/debug/debug.functions';
 
 @Component({
   selector: 'app-bar',
   templateUrl: './bar.component.html',
   styleUrls: ['./bar.component.scss'],
   providers: [ChartMathodsService, RangeService, BarService],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BarComponent extends ParentChart implements OnInit {
   chart: Highcharts.Chart;
@@ -41,8 +41,10 @@ export class BarComponent extends ParentChart implements OnInit {
   }
 
   ngOnInit() {
-    const { source, firstBarFilterSource, secondBarFilterSource } = this
-      .componentConfigs as ComponentDashboardConfigs;
+    const {
+      source: [firstBarFilterSource, secondBarFilterSource],
+      source
+    } = this.componentConfigs;
     this.rangeService.sourceVal = (source as Array<string>).reduce(
       (prev: string, curr: string) => (curr.includes('year') ? curr : undefined)
     );
@@ -69,6 +71,11 @@ export class BarComponent extends ParentChart implements OnInit {
         this.cdr.detectChanges();
       }
     );
+    logGroup('ngOnInit', () => {
+      console.log(
+        `source value in range service ${this.rangeService.sourceVal}`
+      );
+    });
   }
 
   handleChartInstance(e: Highcharts.Chart): void {
@@ -81,7 +88,7 @@ export class BarComponent extends ParentChart implements OnInit {
 
   private getYears(caller?: ResetCaller): void {
     const qb: BuildQueryObj = {
-      size: 100000,
+      size: 100000
     };
     this.rangeService
       .getYears(this.rangeService.buildquery(qb).build() as ElasticsearchQuery)
@@ -92,7 +99,7 @@ export class BarComponent extends ParentChart implements OnInit {
     this.chart.update(
       {
         ...this.chartOptions,
-        series: [...this.chartOptions.series],
+        series: [...this.chartOptions.series]
       },
       true,
       true,
@@ -108,15 +115,15 @@ export class BarComponent extends ParentChart implements OnInit {
       xAxis: { type: 'category', crosshair: true },
       boost: {
         enabled: true,
-        useGPUTranslations: true,
+        useGPUTranslations: true
       },
       yAxis: { min: 0, title: { text: 'Publications' } },
       plotOptions: {
         column: {
           pointPadding: 0.2,
           borderWidth: 0,
-          borderRadius: 2.5,
-        },
+          borderRadius: 2.5
+        }
       },
       tooltip: {
         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
@@ -124,10 +131,10 @@ export class BarComponent extends ParentChart implements OnInit {
           '<tr><td style="color:{series.color};padding:0">{series.name}: </td><td style="padding:0"><b>{point.y}</b></td></tr>',
         footerFormat: '</table>',
         shared: true,
-        useHTML: true,
+        useHTML: true
       },
       series: [...series],
-      ...this.cms.commonProperties(),
+      ...this.cms.commonProperties()
     };
   }
 }
