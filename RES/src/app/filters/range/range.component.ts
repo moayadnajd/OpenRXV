@@ -6,7 +6,7 @@ import {
   QueryYearAttribute,
   BuildQueryObj,
   ResetOptions,
-  ResetCaller,
+  ResetCaller
 } from '../services/interfaces';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../../store';
@@ -17,7 +17,7 @@ import { ParentComponent } from 'src/app/parent-component.class';
   selector: 'app-range',
   templateUrl: './range.component.html',
   styleUrls: ['./range.component.scss'],
-  providers: [RangeService],
+  providers: [RangeService]
 })
 export class RangeComponent extends ParentComponent implements OnInit {
   range: number[];
@@ -52,7 +52,7 @@ export class RangeComponent extends ParentComponent implements OnInit {
     const query: bodybuilder.Bodybuilder = this.rangeService.addAttributeToMainQuery(
       {
         gte: min,
-        lte: max,
+        lte: max
       } as QueryYearAttribute
     );
     this.rangeService.resetNotification({ min, max });
@@ -84,8 +84,18 @@ export class RangeComponent extends ParentComponent implements OnInit {
           Object.keys(this.rangeService.getAggAttributes).length === 1 &&
           this.rangeService.getAggAttributes['year.keyword']
         ) {
+          this.disabled = false;
           this.min = this.firstMin;
           this.max = this.firstMax;
+          this.range = [this.min, this.max];
+          this.store.dispatch(
+            new fromStore.UpdateYears(
+              Array.from(
+                { length: this.max + 1 - this.min },
+                (_, i) => this.min + i
+              )
+            )
+          );
         } else {
           this.getYears(ro.caller, true);
         }
@@ -95,7 +105,7 @@ export class RangeComponent extends ParentComponent implements OnInit {
 
   private getYears(caller?: ResetCaller, force: boolean = false): void {
     const qb: BuildQueryObj = {
-      size: 100000,
+      size: 100000
     };
     this.rangeService
       .getYears(

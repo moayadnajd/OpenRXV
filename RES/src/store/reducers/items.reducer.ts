@@ -1,11 +1,14 @@
 import * as actions from 'src/store/actions/items.actions';
 import { mapObjIndexed } from 'ramda';
-import { ElasticsearchResponse } from 'src/app/filters/services/interfaces';
+import {
+  ElasticsearchResponse,
+  Bucket
+} from 'src/app/filters/services/interfaces';
 import { InView } from '../actions/actions.interfaces';
 import { dashboardConfig } from 'src/configs/dashboard';
 import {
   GeneralConfigs,
-  ComponentDashboardConfigs,
+  ComponentDashboardConfigs
 } from 'src/configs/generalConfig.interface';
 import { countersConfig } from 'src/configs/counters';
 
@@ -39,7 +42,7 @@ const initialState: ItemsState = {
       ({ componentConfigs }: GeneralConfigs) =>
         (obj[(componentConfigs as ComponentDashboardConfigs).id] = {
           collapsed: false,
-          userSeesMe: false,
+          userSeesMe: false
         })
     );
     return obj;
@@ -47,7 +50,7 @@ const initialState: ItemsState = {
   loaded: false,
   loading: true,
   loadingOnlyHits: false,
-  error: null,
+  error: null
 };
 
 export function reducer(
@@ -62,29 +65,29 @@ export function reducer(
         data: {
           hits: {
             ...state.data.hits,
-            ...(addHits ? payload.hits : {}),
+            ...(addHits ? payload.hits : {})
           },
           aggregations: {
             ...state.data.aggregations,
-            ...payload.aggregations,
-          },
+            ...payload.aggregations
+          }
         },
         loadingOnlyHits: false,
         loading: false,
-        loaded: true,
+        loaded: true
       };
     }
     case actions.ActionTypes.GetCounters: {
       const counters = action.payload;
       return {
         ...state,
-        counters,
+        counters
       };
     }
     case actions.ActionTypes.SetInView: {
       const {
         id,
-        viewState: { collapsed, linkedWith, userSeesMe },
+        viewState: { collapsed, linkedWith, userSeesMe }
       } = action.payload;
       const comp: ViewState = state.inView[id];
       const origianlCollapsed = comp && comp.collapsed;
@@ -95,9 +98,9 @@ export function reducer(
           [id]: {
             userSeesMe,
             collapsed: collapsed === undefined ? origianlCollapsed : collapsed,
-            linkedWith,
-          },
-        },
+            linkedWith
+          }
+        }
       };
     }
     case actions.ActionTypes.getDataError: {
@@ -107,7 +110,7 @@ export function reducer(
         error,
         loading: false,
         loaded: true,
-        loadingOnlyHits: false,
+        loadingOnlyHits: false
       };
     }
     case actions.ActionTypes.getData: {
@@ -115,7 +118,24 @@ export function reducer(
         ...state,
         loadingOnlyHits: !action.payload.aggs,
         loading: true,
-        loaded: false,
+        loaded: false
+      };
+    }
+    case actions.ActionTypes.updateYears: {
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          aggregations: {
+            ...state.data.aggregations,
+            'year.keyword': {
+              ...state.data.aggregations['year.keyword'],
+              buckets: action.payload.map(
+                (n: number) => ({ doc_count: null, key: `${n}` } as Bucket)
+              )
+            }
+          }
+        }
       };
     }
     default: {
@@ -145,7 +165,7 @@ export const inViewFirstOne = (state: ItemsState) =>
     mapObjIndexed(
       (viewState: ViewState, id: string, obj: object): InView => ({
         id,
-        viewState,
+        viewState
       }),
       state.inView
     )
