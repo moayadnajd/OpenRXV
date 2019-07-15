@@ -17,7 +17,6 @@ import * as fromStore from '../../../../store';
 import { BarService } from './services/bar/bar.service';
 import { UpdateCallerBarChart } from '../list/paginated-list/filter-paginated-list/types.interface';
 import { map } from 'rxjs/operators';
-import { logGroup } from 'src/debug/debug.functions';
 
 @Component({
   selector: 'app-bar',
@@ -71,11 +70,6 @@ export class BarComponent extends ParentChart implements OnInit {
         this.cdr.detectChanges();
       }
     );
-    logGroup('ngOnInit', () => {
-      console.log(
-        `source value in range service ${this.rangeService.sourceVal}`
-      );
-    });
   }
 
   handleChartInstance(e: Highcharts.Chart): void {

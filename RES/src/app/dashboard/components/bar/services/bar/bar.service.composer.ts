@@ -13,7 +13,6 @@ import { MergedSelect } from 'src/configs/generalConfig.interface';
 import { RangeService } from 'src/app/filters/services/range/range.service';
 import { EventEmitter } from '@angular/core';
 import * as bodybuilder from 'bodybuilder';
-import { logGroup } from 'src/debug/debug.functions';
 /**
  * right now `buckets` will contain
  *   - `index[0] from the source confs`: `Array<Bucket>`
@@ -84,7 +83,6 @@ export class BarServiceComposer {
       ...(q.build() as ElasticsearchQuery),
       query: { ...(queryToMerge.build() as ElasticsearchQuery).query }
     };
-    logGroup('finalQuery', () => console.log(finalQuery));
     if (!Object.keys(finalQuery.query).length) {
       delete finalQuery.query;
     }
@@ -139,9 +137,6 @@ export class BarServiceComposer {
       );
     }
     if (this.buckets[this.secondSourceKey]) {
-      logGroup('this.buckets[this.secondSourceKey]', () =>
-        console.log(this.buckets[this.secondSourceKey])
-      );
       // number when the year range filter changes !
       this.barYears = this.buckets[this.secondSourceKey].map(
         (b: Bucket | number) => (typeof b !== 'number' ? b.key : `${b}`)
@@ -213,10 +208,5 @@ export class BarServiceComposer {
     this.selectedYears = series.map(
       ({ name }: Highcharts.SeriesColumnOptions) => name
     );
-    logGroup('selectDefaultOptions', () => {
-      console.log('#1 ng-select', this.selectedCategories);
-      console.log('#2 ng-select', this.selectedYears);
-      console.log('series => ', series);
-    });
   }
 }
