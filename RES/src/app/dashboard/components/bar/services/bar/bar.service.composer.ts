@@ -155,7 +155,7 @@ export class BarServiceComposer {
         if (caller === 'range' && data) {
           const { min, max } = data;
           const filterdYearsRange = [];
-          for (let i = min; i < max; i++) {
+          for (let i = min; i <= max; i++) {
             filterdYearsRange.push(i);
           }
           this.buckets = {
