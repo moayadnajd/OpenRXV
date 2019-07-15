@@ -11,6 +11,7 @@
 >
   <ng-container *ngIf="barService.buckets">
     <div class="col-12">
+      {{ barService.barTypes | json }}
       <ng-select
         [items]="barService.barTypes"
         [multiple]="true"
@@ -23,6 +24,7 @@
     </div>
 
     <div class="col-12">
+      {{ barService.barYears | json }}
       <ng-select
         [items]="barService.barYears"
         [multiple]="true"

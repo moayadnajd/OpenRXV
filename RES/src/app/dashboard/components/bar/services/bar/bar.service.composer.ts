@@ -139,8 +139,12 @@ export class BarServiceComposer {
       );
     }
     if (this.buckets[this.secondSourceKey]) {
+      logGroup('this.buckets[this.secondSourceKey]', () =>
+        console.log(this.buckets[this.secondSourceKey])
+      );
+      // number when the year range filter changes !
       this.barYears = this.buckets[this.secondSourceKey].map(
-        ({ key }: Bucket) => key
+        (b: Bucket | number) => (typeof b !== 'number' ? b.key : `${b}`)
       );
     }
   }
