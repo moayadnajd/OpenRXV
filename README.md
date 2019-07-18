@@ -1,7 +1,14 @@
 # Open Repository Explorer and Visualizer
 
-The Open Repository Explorer and Visualizer (OpenRXV) is a dashboard-like tool that was created to help people find and understand the content in open access repositories like [DSpace](https://duraspace.org/dspace). It began as a proof of concept developed by [the Monitoring, Evaluation and Learning (MEL)](https://mel.cgiar.org) team at the [International Center for Agricultural Research in the Dry Areas (ICARDA)](https://www.icarda.org) to enable exploring and reporting on content in two key institutional repositories. Later, in partnership with the [International Livestock Research Institute (ILRI)](https://www.ilri.org), the scope was expanded with the idea of supporting more repository types and larger amounts of items. In the future, we hope to be able to support any repository that uses Dublin Core metadata and has an API for harvesting.
+# <<<<<<< HEAD
 
+The Open Repository Explorer and Visualizer (OpenRXV) is a dashboard-like tool that was created to help people find and understand content in open access repositories like [DSpace](https://duraspace.org/dspace). It began as a proof of concept developed by [CodeObia](http://codeobia.com/) and [the Monitoring, Evaluation and Learning (MEL)](https://mel.cgiar.org) team at the [International Center for Agricultural Research in the Dry Areas (ICARDA)](https://www.icarda.org) to enable exploring and reporting on content in two key institutional repositories. Later, in partnership with the [International Livestock Research Institute (ILRI)](https://www.ilri.org), the scope was expanded with the idea of supporting more repository types and larger amounts of items. In the future we hope to be able to support any repository that uses Dublin Core metadata and has an API for harvesting.
+
+> > > > > > > eb2f5dff29b41e34957daaa37414e3cd20d02973
+
+This project contains a backend indexer powered by [Node.js](https://nodejs.org/) and [Elasticsearch](https://www.elastic.co), and a dynamic frontend built with [Angular](https://angular.io), [Bootstrap](https://getbootstrap.com), [Highcharts](https://www.highcharts.com/), [Angular Material](https://material.angular.io/), and [Ngrx](https://ngrx.io/). The application is wrapped up and deployed via [Docker](https://www.docker.com/). This product includes GeoLite2 data created by MaxMind, available from [https://www.maxmind.com](https://www.maxmind.com).
+
+<<<<<<< HEAD
 This project contains a backend indexer powered by [Node.js](https://nodejs.org/) and [Elasticsearch](https://www.elastic.co), and a dynamic frontend built with [Angular](https://angular.io), [Bootstrap](https://getbootstrap.com), [Highcharts](https://www.highcharts.com/), [Angular Material](https://material.angular.io/), and [Ngrx](https://ngrx.io/). The application is wrapped up and deployed via [Docker](https://www.docker.com/).
 
 You can see an example of the project working on our [Agricultural Research e-Seeker (AReS)](https://cgspace.cgiar.org/explorer/).
@@ -20,9 +27,49 @@ You can see an example of the project working on our [Agricultural Research e-Se
 
 ## Installation
 
-After you have satisfied the requirements you can clone this repository and build the project:
+=======
+You can see an example of the project working on our [Agricultural Research e-Seeker (AReS)](https://cgspace.cgiar.org/explorer/).
+
+## Requirements
+
+- Node.js v8+
+
+- npm 5.6.0+
+
+- Docker 17.12.0+
+
+- docker-compose 1.18.0+
+
+- [dspace-statistics-api](https://github.com/ilri/dspace-statistics-api) (optional, for item views and downloads)
+
+<<<<<<< HEAD
+
+## Installation
+
+# After you have satisfied the requirements you can clone this repository and build the project:
+
+- Docker 18.09+
+- docker-compose 1.24+
+- [dspace-statistics-api](https://github.com/ilri/dspace-statistics-api) (optional, for item views and downloads)
+
+## Configuration
+
+Configuration of repositories and metadata to harvest is in `backend/config/index.json`. Mappings of equivalent metadata values — for example "Kenya" and "KENYA" — are in `backend/config/mapping.json`.
+
+## Build and Run
+
+> > > > > > > eb2f5dff29b41e34957daaa37414e3cd20d02973
+
+After you have satisfied the requirements and cloned the repository and configured the settings you can build the project:
+
+# <<<<<<< HEAD
+
+> > > > > > > 56f8c929e7fcee95125f3bdc6b7068598ef36d7c
+
+> > > > > > > eb2f5dff29b41e34957daaa37414e3cd20d02973
 
 ```console
+<<<<<<< HEAD
 
 $ git clone https://github.com/ILRI/AReS.git
 
@@ -52,9 +99,19 @@ $ docker-compose up -d
 
 ## Todo
 
+<<<<<<< HEAD
+
 - Improve documentation (in progress...)
 
 - Add reporting functionality
+
+=======
+
+- Improve documentation (in progress...)
+
+- Add reporting functionality
+
+> > > > > > > eb2f5dff29b41e34957daaa37414e3cd20d02973
 
 ## Documentation
 
@@ -176,15 +233,17 @@ The properties that you can add to each object :
         <img src="docs/images/examples/scroll_linked_with_one_el.png" alt="One element">
       </details>
 
-- **componentConfigs (_required_)** : this property may be `ComponentDashboardConfigs`, `ComponentCounterConfigs`, `ComponentLabelConfigs`, `ComponentSearchConfigs`, or `ComponentFilterConfigs`
-  - ComponentDashboardConfigs
-    - id (_required_): any string you want, but this must be unique.
-    - title (_required_): the title of the popover if this element is used in the tour, also used in the top of the panel that holds the chart .
-    - description (_required_): the body of the popover, if this element is used in the tour.
-    - source (_required_): string, the elasticsearch key that this component will get its data from, this might be an array of strings in the case of the bar chart.
-      - In case of the bar chart the source is an array of two strings, which if you put `['author', 'year']` the app will produce a bar chart of authors by year and two filters the first one is filter by author and the second is filter by year, as same as their order in the array.
-    - content (_optional_): `PaginatedListConfigs` object which contains the following properties:
-      - TODO ....
+<<<<<<< HEAD
+
+- # **componentConfigs (_required_)** : this property may be `ComponentDashboardConfigs`, `ComponentCounterConfigs`, `ComponentLabelConfigs`, `ComponentSearchConfigs`, or `ComponentFilterConfigs`
+- **componentConfigs (_required_)** : this property may be `ComponentDashboardConfigs`, `ComponentCounterConfigs`, `ComponentLabelConfigs`, `ComponentSearchConfigs`, or`ComponentFilterConfigs`
+  > > > > > > > eb2f5dff29b41e34957daaa37414e3cd20d02973
+  - ComponentDashboardConfigs - id (_required_): any string you want, but this must be unique. - title (_required_): the title of the popover if this element is used in the tour, also used in the top of the panel that holds the chart . - description (_required_): the body of the popover, if this element is used in the tour.
+    <<<<<<< HEAD - source (_required_): string, the elasticsearch key that this component will get its data from, this might be an array of strings in the case of the bar chart. - In case of the bar chart the source is an array of two strings, which if you put `['author', 'year']` the app will produce a bar chart of authors by year and two filters the first one is filter by author and the second is filter by year, as same as their order in the array.
+    ======= - source (_required_): string, the elasticsearch key that this component will get its data from, this might be an array of strings in the case of the chart bar.
+    > > > > > > > eb2f5dff29b41e34957daaa37414e3cd20d02973
+        - content (_optional_): `PaginatedListConfigs` object which contains the following properties:
+          - TODO ....
   - ComponentCounterConfigs:
     - id (_required_): any string you want, but this must be unique.
     - title (_required_): the title of the popover if this element is used in the tour.
@@ -375,6 +434,23 @@ we included a file `/RES/src/configs/codeobia.colors.ts` which includes colors t
 
 #### Note
 
+# <<<<<<< HEAD
+
+- To change the order of the components and lists in the website.
+- You can change the order of the objects, and their placement in the app will change accordingly.
+- **BUT** keep in mind the parent object which is the one with `scroll : {icon: 'name'}` should appear as the first one to its children in the array. ( the child has `scroll: {linkedWith: 'parent_id'}` ). - for example in the previous example the pie chart is the parent of the two world cloud components and if you want to change the order of the component you need to keep the pie as the first one ( **but of course you can change the parent to a different chart type or even a list** ).
+  =======
+  $ cd docker
+$ sudo docker-compose up -d
+
+```
+
+*Note: the Elasticsearch component requires more virtual memory. You will most likely need to increase the host system's memory map limits by setting `vm.max_map_count = 262144` in /etc/sysctl.conf. See the [Elasticsearch docs for more information](https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html).*
+
+## Todo
+>>>>>>> 56f8c929e7fcee95125f3bdc6b7068598ef36d7c
+>>>>>>> eb2f5dff29b41e34957daaa37414e3cd20d02973
+
 - To change the order of the components and lists in the website.
 - You can change the order of the objects, and their placement in the app will change accordingly.
 - **BUT** keep in mind the parent object which is the one with `scroll : {icon: 'name'}` should appear as the first one to its children in the array. ( the child has `scroll: {linkedWith: 'parent_id'}` ).
@@ -385,3 +461,8 @@ we included a file `/RES/src/configs/codeobia.colors.ts` which includes colors t
 This work is licensed under the [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html). The license allows you to use and modify the work for personal and commercial purposes, but if you distribute the work you must provide users with a means to access the source code for the version you are distributing. Read more about the [GPLv3 at TL;DR Legal](<https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)>).
 
 Read more about ILRI's commitment to openness click [here](https://www.ilri.org/open).
+<<<<<<< HEAD
+=======
+```
+
+> > > > > > > eb2f5dff29b41e34957daaa37414e3cd20d02973
