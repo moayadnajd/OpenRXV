@@ -4,17 +4,16 @@ import {
   OnInit,
   Input,
   ComponentFactoryResolver,
-  ViewContainerRef
+  ViewContainerRef,
 } from '@angular/core';
-import { ComponentConfigs } from 'src/configs/generalConfig.interface';
 
 @Component({
   selector: 'app-dynamic',
-  template: ''
+  template: '',
 })
 export class DynamicComponent implements OnInit {
   @Input() comp: string;
-  @Input() componentConfigs: ComponentConfigs;
+  @Input() componentConfigs: any;
   constructor(
     private resolver: ComponentFactoryResolver,
     private vcRef: ViewContainerRef

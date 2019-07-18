@@ -11,16 +11,17 @@ import {
   GeneralConfigs,
   ComponentCounterConfigs,
   ComponentDashboardConfigs,
-  Tour
+  Tour,
 } from 'src/configs/generalConfig.interface';
 import { dashboardConfig } from 'src/configs/dashboard';
 import { tourConfig } from 'src/configs/tour';
 import { orAndToolTip } from 'src/configs/tooltips';
+import { ScreenSizeService } from 'src/services/screenSize/screen-size.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
   @ViewChild('drawer') sidenav: MatDrawer;
@@ -29,24 +30,29 @@ export class AppComponent implements OnInit {
   orOperator: boolean;
   readonly orAndToolTip: string;
   private prevenetMouseOnNav: boolean;
-  options: any ={
+  options: any = {
     bottom: 0,
     fixed: true,
-    top: 0
+    top: 0,
   };
+
+  get isSmall(): boolean {
+    return this.screenSizeService.isSmallScreen;
+  }
 
   constructor(
     private readonly store: Store<fromStore.AppState>,
     private readonly mainBodyBuilderService: MainBodyBuilderService,
-    private readonly tourService: TourService
+    private readonly tourService: TourService,
+    private readonly screenSizeService: ScreenSizeService
   ) {
     this.orOperator = false;
     this.orAndToolTip = orAndToolTip;
     this.options = {
       bottom: 0,
       fixed: true,
-      top: 0
-    }
+      top: 0,
+    };
   }
 
   ngOnInit(): void {
@@ -85,26 +91,27 @@ export class AppComponent implements OnInit {
   }
 
   private openAndRender(mode: 'over' | 'push' | 'side'): void {
-    this.sidenav.mode = mode;
+    this.sidenav.mode = this.isSmall ? 'over' : mode;
     this.sidenav.opened ? this.sidenav.close() : this.sidenav.open();
     this.renderSideNav();
   }
 
   private mapConfigsToTour(): IStepOption[] {
     return [...tourConfig, ...countersConfig, ...dashboardConfig]
-      .map((gc: GeneralConfigs) => {
-        const { description, title, id } = gc.componentConfigs as
+      .filter(({ show }: GeneralConfigs) => show)
+      .map(({ componentConfigs, tour }: GeneralConfigs) => {
+        const { description, title, id } = componentConfigs as
           | ComponentCounterConfigs
           | ComponentDashboardConfigs
           | Tour;
         return (
-          gc.tour &&
+          tour &&
           this.checkIfApplicableForTour(id, description, title) &&
           ({
             anchorId: id,
             content: description,
             title,
-            enableBackdrop: true
+            enableBackdrop: true,
           } as IStepOption)
         );
       })

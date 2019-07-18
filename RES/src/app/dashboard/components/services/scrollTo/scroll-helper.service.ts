@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ChangeDetectorRef } from '@angular/core';
 import { ViewState } from 'src/store/reducers/items.reducer';
 import { InView } from 'src/store/actions/actions.interfaces';
 import { GeneralConfigs } from 'src/configs/generalConfig.interface';
@@ -7,12 +7,14 @@ import { dashboardConfig } from 'src/configs/dashboard';
 import { Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../../../../store';
+import { ViewChild } from '../../list/paginated-list/filter-paginated-list/types.interface';
 
 @Injectable()
 export class ScrollHelperService {
   private viewState: ViewState;
   private expanded: boolean;
   private store: Store<fromStore.ItemsState>;
+  private children: Array<ViewChild>;
   dataIsReadyArrived: Subject<void>;
   loading: boolean;
 
@@ -36,7 +38,7 @@ export class ScrollHelperService {
     return this.loading;
   }
 
-  constructor() {
+  constructor(private readonly cdr: ChangeDetectorRef) {
     this.expanded = true;
     this.dataIsReadyArrived = new Subject();
   }
@@ -45,12 +47,30 @@ export class ScrollHelperService {
     this.changeCollapsed(collapsed);
     return {
       id,
-      viewState: this.viewState
+      viewState: this.viewState,
     };
   }
 
   getScrollToCompConf(): GeneralConfigs[] {
     return [countersConfig[0], ...dashboardConfig];
+  }
+
+  getChildren(): Array<ViewChild> {
+    if (this.children) {
+      return this.children;
+    } else {
+      const children: Array<ViewChild> = [];
+      dashboardConfig.forEach(
+        d =>
+          d.scroll.linkedWith &&
+          children.push({
+            linkedId: d.scroll.linkedWith,
+            compId: d.componentConfigs.id,
+          })
+      );
+      this.children = [...children];
+      return children;
+    }
   }
 
   /**
@@ -62,7 +82,7 @@ export class ScrollHelperService {
       countersConfig[0],
       ...dashboardConfig.filter(
         (gc: GeneralConfigs) => gc.scroll.icon && gc.show
-      )
+      ),
     ];
   }
 
@@ -84,6 +104,7 @@ export class ScrollHelperService {
     }
     this.store.select(fromStore.getLoadingStatus).subscribe((b: boolean) => {
       this.loading = b;
+      this.cdr.detectChanges();
       if (!b) {
         this.dataIsReadyArrived.next();
       }

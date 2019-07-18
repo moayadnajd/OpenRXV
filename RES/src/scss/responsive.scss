@@ -1,0 +1,32 @@
+$breakpointsMin: (
+  extraSmall: 576px,
+  small: 540px,
+  medium: 720px,
+  large: 960px,
+  extraLarge: 1140px,
+);
+
+$breakpointsMax: (
+  small: 576px,
+  medium: 991px,
+  large: 1199px,
+  extraLarge: 1200px,
+);
+
+@mixin large {
+  @media only screen and  (min-width: #{map-get($breakpointsMin, large)}) {
+    @content;
+  }
+}
+
+@mixin small {
+  @media only screen and (min-width: 0px) and(max-width: #{map-get($breakpointsMax, medium) - 1px}) {
+    @content;
+  }
+}
+
+@include small {
+  .sm-text-center {
+    text-align: center !important;
+  }
+}

@@ -1,11 +1,14 @@
-import { Injectable, EventEmitter } from '@angular/core';
-import { ComponentDashboardConfigs } from 'src/configs/generalConfig.interface';
-import { Observable } from 'rxjs';
+import { Injectable, EventEmitter, ChangeDetectorRef } from '@angular/core';
+import {
+  ComponentDashboardConfigs,
+  MergedSelect,
+} from 'src/configs/generalConfig.interface';
+import { Observable, merge } from 'rxjs';
 import * as fromStore from '../../../../../store';
 import { Store } from '@ngrx/store';
 import { ChartHelper } from '../chart/chart-helper.class';
 import { ScrollHelperService } from '../scrollTo/scroll-helper.service';
-import { first } from 'rxjs/operators';
+import { first, map } from 'rxjs/operators';
 import { Bucket } from 'src/app/filters/services/interfaces';
 import { ViewState } from 'src/store/reducers/items.reducer';
 
@@ -14,7 +17,7 @@ export class ChartMathodsService extends ChartHelper {
   private loadingHits$: Observable<boolean>;
   private cc: ComponentDashboardConfigs;
   private readonly shs: ScrollHelperService;
-  goBuildDataSeries: EventEmitter<Bucket[]>;
+  goBuildDataSeries: EventEmitter<Bucket[] | MergedSelect>;
 
   get getExpanded(): boolean {
     return this.shs.expandedStatus;
@@ -36,20 +39,26 @@ export class ChartMathodsService extends ChartHelper {
     return this.shs.getLoading;
   }
 
-  constructor(private readonly store: Store<fromStore.ItemsState>) {
+  constructor(
+    private readonly store: Store<fromStore.ItemsState>,
+    private readonly cdr: ChangeDetectorRef
+  ) {
     super();
-    this.shs = new ScrollHelperService();
+    this.shs = new ScrollHelperService(cdr);
     this.goBuildDataSeries = new EventEmitter();
   }
 
-  init(chartType: string, cc: ComponentDashboardConfigs): void {
+  init(chartType: string, cc: ComponentDashboardConfigs, cb?: () => any): void {
     this.chartType = chartType;
     this.cc = cc;
     this.shs.storeVal = this.store;
     this.shs.seeIfThisCompInView(this.cc.id);
-    this.shs.dataIsReadyArrived
-      .pipe(first())
-      .subscribe(() => this.subToDataFromStore());
+    this.shs.dataIsReadyArrived.pipe(first()).subscribe(() => {
+      if (cb) {
+        cb();
+      }
+      this.subToDataFromStore();
+    });
   }
 
   disPatchSetInView(collapsed: boolean): void {
@@ -57,9 +66,26 @@ export class ChartMathodsService extends ChartHelper {
   }
 
   private subToDataFromStore(): void {
-    this.store
-      .select(fromStore.getBuckets, this.cc.source)
-      .subscribe((b: Bucket[]) => this.goBuildDataSeries.emit(b));
+    if (Array.isArray(this.cc.source)) {
+      const observableArr: Array<Observable<MergedSelect>> = [];
+      (this.cc.source as Array<string>).forEach((s: string) => {
+        observableArr.push(
+          this.store
+            .select(fromStore.getBuckets, s)
+            .pipe(map((buckets: Bucket[]) => ({ [s]: buckets })))
+        );
+      });
+      merge(...observableArr).subscribe((ms: MergedSelect) => {
+        const [key] = Object.keys(ms);
+        if (ms[key]) {
+          this.goBuildDataSeries.emit(ms);
+        }
+      });
+    } else {
+      this.store
+        .select(fromStore.getBuckets, this.cc.source)
+        .subscribe((b: Bucket[]) => this.goBuildDataSeries.emit(b));
+    }
     this.loadingHits$ = this.store.select(fromStore.getLoadingOnlyHits);
   }
 }

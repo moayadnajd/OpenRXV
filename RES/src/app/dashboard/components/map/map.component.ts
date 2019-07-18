@@ -1,41 +1,59 @@
-import { Component, OnInit } from '@angular/core';
-import { ChartTypes } from 'src/configs/generalConfig.interface';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { ChartMathodsService } from '../services/chartCommonMethods/chart-mathods.service';
 const mapWorld = require('@highcharts/map-collection/custom/world-robinson-highres.geo.json');
 import * as Highcharts from 'highcharts';
-import { axisColorForMap, selectMapColors } from 'src/configs/chartColors';
+import { axisColorForMap, selectMapColors } from 'src/configs/codeobia.colors';
 import { ParentChart } from '../parent-chart';
+import { Bucket } from 'src/app/filters/services/interfaces';
+import { getCountryCode } from '../services/countryList.helper';
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
-  providers: [ChartMathodsService]
+  providers: [ChartMathodsService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MapComponent extends ParentChart implements OnInit {
-  constructor(cms: ChartMathodsService) {
+  constructor(
+    cms: ChartMathodsService,
+    private readonly cdr: ChangeDetectorRef
+  ) {
     super(cms);
   }
 
   ngOnInit(): void {
-    this.init(ChartTypes.map);
-    this.buildOptions.subscribe(() => (this.chartOptions = this.setOptions()));
+    this.init('map');
+    this.buildOptions.subscribe((buckets: Array<Bucket>) => {
+      if (buckets) {
+        this.chartOptions = this.setOptions(buckets);
+      }
+      this.cdr.detectChanges();
+    });
   }
 
-  private setOptions(): Highcharts.Options {
-    const { data } = this.chartOptions.series[0] as Highcharts.SeriesMapOptions;
+  private setOptions(buckets: Array<Bucket>): Highcharts.Options {
     return {
       chart: {
         map: mapWorld,
-        animation: true
+        animation: false,
+      },
+      boost: {
+        enabled: true,
+        useGPUTranslations: true,
       },
       mapNavigation: {
         enabled: true,
         enableMouseWheelZoom: true,
         buttonOptions: {
           alignTo: 'spacingBox',
-          verticalAlign: 'bottom'
-        }
+          verticalAlign: 'bottom',
+        },
       },
       colorAxis: {
         min: 1,
@@ -45,12 +63,16 @@ export class MapComponent extends ParentChart implements OnInit {
         stops: [
           [0, axisColorForMap.minColor],
           [0.67, axisColorForMap.midColor],
-          [1, axisColorForMap.maxColor]
-        ]
+          [1, axisColorForMap.maxColor],
+        ],
       },
       series: [
         {
-          data,
+          type: 'map',
+          data: buckets.map((b: Bucket) => [
+            getCountryCode(b.key),
+            b.doc_count,
+          ]),
           mapData: mapWorld,
           showInLegend: true,
           showInNavigator: true,
@@ -58,23 +80,24 @@ export class MapComponent extends ParentChart implements OnInit {
           enableMouseTracking: true,
           allowPointSelect: true,
           tooltip: {
-            pointFormat: '{point.name}: <b>{point.value} Publications</b><br/>'
+            pointFormat: '{point.name}: <b>{point.value} Publications</b><br/>',
+            headerFormat: undefined,
           },
           animation: {
-            duration: 1000
+            duration: 0,
           },
           states: {
             hover: {
-              color: selectMapColors.hover
+              color: selectMapColors.hover,
             },
             select: {
               color: selectMapColors.select.color,
-              borderColor: selectMapColors.select.borderColor
-            }
-          }
-        }
+              borderColor: selectMapColors.select.borderColor,
+            },
+          },
+        },
       ],
-      ...this.cms.commonProperties()
+      ...this.cms.commonProperties(),
     } as Highcharts.Options;
   }
 }

@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
 import {
   ElasticsearchResponse,
-  ElasticsearchQuery
+  ElasticsearchQuery,
 } from 'src/app/filters/services/interfaces';
 import { InView, ESHttpError } from './actions.interfaces';
 
@@ -11,7 +11,7 @@ export enum ActionTypes {
   getDataError = '[items] GetDataError',
   SetCounters = '[items] SetCounters',
   GetCounters = '[items] GetCounters',
-  SetInView = '[items] SetInView'
+  SetInView = '[items] SetInView',
 }
 
 export class GetData implements Action {
@@ -21,7 +21,10 @@ export class GetData implements Action {
 
 export class GetDataSuccess implements Action {
   readonly type = ActionTypes.getDataSuccess;
-  constructor(public payload: ElasticsearchResponse = null) {}
+  constructor(
+    public payload: ElasticsearchResponse = null,
+    public addHits: boolean = true
+  ) {}
 }
 
 export class GetDataError implements Action {

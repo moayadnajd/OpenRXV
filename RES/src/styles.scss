@@ -1,10 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
-@import 'customTheme.scss';
+@import './configs/customTheme.scss';
 @import '~@ng-select/ng-select/themes/material.theme.css';
 @import '~bootstrap/scss/bootstrap-reboot';
 @import '~bootstrap/scss/bootstrap-grid';
 @import '~nouislider/distribute/nouislider.min.css';
 // @import '~highcharts/css/themes/dark-unica.scss';
+
+@import './scss/responsive.scss';
 
 html,
 body {
@@ -125,45 +127,33 @@ mat-spinner {
   border-width: 1px !important;
 }
 
-.arrow {
-  z-index: 10;
-  border-width: 12px;
-}
-
-.arrow, .arrow:after {
-  display: block;
-  width: 0;
-  height: 0;
-  border-color: transparent;
-  border-style: solid;
-}
-
 .lists_counts {
   text-align: center;
   padding: 5px 0;
-  border-radius: .25em;
+  border-radius: 0.25em;
   color: white;
   width: 90px;
 }
-.no-side-padding{
+.no-side-padding {
   padding-left: 0 !important;
   padding-right: 0 !important;
 }
-.main-container{
+.main-container {
   margin-top: 78px;
 }
 
 .mat-toolbar {
   position: fixed !important;
-  z-index: 999999 !important;;
-  padding-bottom: 5px !important;;
+  z-index: 999999 !important;
+  padding-bottom: 5px !important;
 }
 
 .mat-drawer-inner-container section.btn-group-vertical {
   margin-top: -8px;
   height: 92.5%;
 }
-app-paginated-list p, app-paginated-list app-tags {
+app-paginated-list p,
+app-paginated-list app-tags {
   padding-bottom: 0;
   margin-bottom: 0;
   padding-top: 0;
@@ -175,4 +165,12 @@ app-paginated-list p, app-paginated-list app-tags {
 }
 .shorter .viewport {
   height: 412px !important;
+}
+
+@include small {
+  #main-content {
+    padding-top: 0 !important;
+    padding-right: 40px !important;
+    padding-left: 0 !important;
+  }
 }

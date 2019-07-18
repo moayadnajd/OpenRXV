@@ -2,9 +2,8 @@ import * as Highcharts from 'highcharts';
 import {
   LegendNavigationColors,
   legendTextColorForPie,
-  chartValuesColors
-} from 'src/configs/chartColors';
-import { ChartTypes } from 'src/configs/generalConfig.interface';
+  chartValuesColors,
+} from 'src/configs/codeobia.colors';
 
 export class ChartHelper {
   protected chartType: any;
@@ -12,29 +11,32 @@ export class ChartHelper {
   commonProperties(): Highcharts.Options {
     return {
       title: {
-        text: undefined
+        text: undefined,
       },
       responsive: {
-        rules: this.responsiveRules()
+        rules: this.responsiveRules(),
       },
       colors: chartValuesColors,
       credits: {
-        enabled: false
+        enabled: false,
       },
-      legend: this.legendAttributes()
+      legend: this.legendAttributes(),
     };
   }
 
   private legendAttributes(): Highcharts.LegendOptions {
     return {
       itemStyle: {
-        color: legendTextColorForPie
+        color: legendTextColorForPie,
       },
       enabled: true,
       layout: 'horizontal',
-      floating: this.chartType === ChartTypes.map,
-      align: this.chartType === ChartTypes.pie ? 'right' : 'center',
-      verticalAlign: this.chartType === ChartTypes.map ? 'bottom' : 'middle',
+      floating: this.chartType === 'map',
+      align: this.chartType === 'pie' ? 'right' : 'center',
+      verticalAlign:
+        this.chartType === 'map' || this.chartType === 'column'
+          ? 'bottom'
+          : 'middle',
       navigation: {
         activeColor: LegendNavigationColors.activeColor,
         animation: true,
@@ -43,9 +45,9 @@ export class ChartHelper {
         style: {
           fontWeight: 'bold',
           color: LegendNavigationColors.style.color,
-          fontSize: '12px'
-        }
-      } as Highcharts.LegendNavigationOptions
+          fontSize: '12px',
+        },
+      } as Highcharts.LegendNavigationOptions,
     };
   }
 
@@ -53,14 +55,14 @@ export class ChartHelper {
     return [
       {
         condition: {
-          maxWidth: 500
+          maxWidth: 500,
         },
         chartOptions: {
           legend: {
-            enabled: false
-          }
-        }
-      } as Highcharts.ResponsiveRulesOptions
+            enabled: false,
+          },
+        },
+      } as Highcharts.ResponsiveRulesOptions,
     ];
   }
 }

@@ -6,7 +6,7 @@ import {
   QueryYearAttribute,
   BuildQueryObj,
   ResetOptions,
-  ResetCaller
+  ResetCaller,
 } from '../services/interfaces';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../../store';
@@ -17,7 +17,7 @@ import { ParentComponent } from 'src/app/parent-component.class';
   selector: 'app-range',
   templateUrl: './range.component.html',
   styleUrls: ['./range.component.scss'],
-  providers: [RangeService]
+  providers: [RangeService],
 })
 export class RangeComponent extends ParentComponent implements OnInit {
   range: number[];
@@ -35,6 +35,7 @@ export class RangeComponent extends ParentComponent implements OnInit {
   ) {
     super();
     this.disabled = false;
+    this.rangeService.storeVal = this.store;
   }
 
   ngOnInit(): void {
@@ -50,7 +51,7 @@ export class RangeComponent extends ParentComponent implements OnInit {
     const query: bodybuilder.Bodybuilder = this.rangeService.addAttributeToMainQuery(
       {
         gte: this.range[0],
-        lte: this.range[1]
+        lte: this.range[1],
       } as QueryYearAttribute
     );
     this.rangeService.resetNotification();
@@ -85,18 +86,21 @@ export class RangeComponent extends ParentComponent implements OnInit {
           this.min = this.firstMin;
           this.max = this.firstMax;
         } else {
-          this.getYears(ro.caller);
+          this.getYears(ro.caller, true);
         }
       }
     });
   }
 
-  private getYears(caller?: ResetCaller): void {
+  private getYears(caller?: ResetCaller, force: boolean = false): void {
     const qb: BuildQueryObj = {
-      size: 100000
+      size: 100000,
     };
     this.rangeService
-      .getYears(this.rangeService.buildquery(qb).build() as ElasticsearchQuery)
+      .getYears(
+        this.rangeService.buildquery(qb).build() as ElasticsearchQuery,
+        force
+      )
       .subscribe(
         (n: number[]) =>
           n.length

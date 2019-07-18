@@ -1,8 +1,13 @@
 import * as actions from 'src/store/actions/items.actions';
 import { mapObjIndexed } from 'ramda';
 import { ElasticsearchResponse } from 'src/app/filters/services/interfaces';
-import { ComponentsIdsToScroll } from 'src/configs/generalConfig.interface';
 import { InView } from '../actions/actions.interfaces';
+import { dashboardConfig } from 'src/configs/dashboard';
+import {
+  GeneralConfigs,
+  ComponentDashboardConfigs,
+} from 'src/configs/generalConfig.interface';
+import { countersConfig } from 'src/configs/counters';
 
 export interface ViewState {
   userSeesMe: boolean;
@@ -11,7 +16,6 @@ export interface ViewState {
 }
 
 export interface InViewState {
-  // key is  is one of `ComponentsIdsToScroll`
   [key: string]: ViewState;
 }
 
@@ -31,15 +35,19 @@ const initialState: ItemsState = {
   inView: (() => {
     // creating the state dynamically
     const obj = Object.create(null);
-    Object.values(ComponentsIdsToScroll).forEach(
-      (s: string) => (obj[s] = { collapsed: false, userSeesMe: false })
+    Object.values([countersConfig[0], ...dashboardConfig]).forEach(
+      ({ componentConfigs }: GeneralConfigs) =>
+        (obj[(componentConfigs as ComponentDashboardConfigs).id] = {
+          collapsed: false,
+          userSeesMe: false,
+        })
     );
     return obj;
   })() as InViewState,
   loaded: false,
   loading: true,
   loadingOnlyHits: false,
-  error: null
+  error: null,
 };
 
 export function reducer(
@@ -48,29 +56,35 @@ export function reducer(
 ): ItemsState {
   switch (action.type) {
     case actions.ActionTypes.getDataSuccess: {
-      const data = action.payload;
+      const { payload, addHits } = action;
       return {
         ...state,
         data: {
-          hits: data.hits,
-          aggregations: data.aggregations || state.data.aggregations
+          hits: {
+            ...state.data.hits,
+            ...(addHits ? payload.hits : {}),
+          },
+          aggregations: {
+            ...state.data.aggregations,
+            ...payload.aggregations,
+          },
         },
         loadingOnlyHits: false,
         loading: false,
-        loaded: true
+        loaded: true,
       };
     }
     case actions.ActionTypes.GetCounters: {
       const counters = action.payload;
       return {
         ...state,
-        counters
+        counters,
       };
     }
     case actions.ActionTypes.SetInView: {
       const {
         id,
-        viewState: { collapsed, linkedWith, userSeesMe }
+        viewState: { collapsed, linkedWith, userSeesMe },
       } = action.payload;
       const comp: ViewState = state.inView[id];
       const origianlCollapsed = comp && comp.collapsed;
@@ -81,9 +95,9 @@ export function reducer(
           [id]: {
             userSeesMe,
             collapsed: collapsed === undefined ? origianlCollapsed : collapsed,
-            linkedWith
-          }
-        }
+            linkedWith,
+          },
+        },
       };
     }
     case actions.ActionTypes.getDataError: {
@@ -93,7 +107,7 @@ export function reducer(
         error,
         loading: false,
         loaded: true,
-        loadingOnlyHits: false
+        loadingOnlyHits: false,
       };
     }
     case actions.ActionTypes.getData: {
@@ -101,7 +115,7 @@ export function reducer(
         ...state,
         loadingOnlyHits: !action.payload.aggs,
         loading: true,
-        loaded: false
+        loaded: false,
       };
     }
     default: {
@@ -131,7 +145,7 @@ export const inViewFirstOne = (state: ItemsState) =>
     mapObjIndexed(
       (viewState: ViewState, id: string, obj: object): InView => ({
         id,
-        viewState
+        viewState,
       }),
       state.inView
     )

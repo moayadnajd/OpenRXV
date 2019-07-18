@@ -2,27 +2,25 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../../../store';
 import { InView } from 'src/store/actions/actions.interfaces';
-import {
-  GeneralConfigs,
-  ComponentDashboardConfigs
-} from 'src/configs/generalConfig.interface';
+import { GeneralConfigs } from 'src/configs/generalConfig.interface';
 import { InViewState } from 'src/store/reducers/items.reducer';
 import {
   ScrollHelperService,
-  componentIdWitSate
+  componentIdWitSate,
 } from '../services/scrollTo/scroll-helper.service';
+import { ViewChild } from '../list/paginated-list/filter-paginated-list/types.interface';
 
 @Component({
   selector: 'app-scroll-to',
   templateUrl: './scroll-to.component.html',
   styleUrls: ['./scroll-to.component.scss'],
-  providers: [ScrollHelperService]
+  providers: [ScrollHelperService],
 })
 export class ScrollToComponent implements OnInit {
   dashboardConfig: GeneralConfigs[];
   btnStatus: Map<string, boolean>;
   id: string;
-  private linking: Map<string, string[]>;
+  linking: Map<string, string[]>;
   private idsToHide: Set<string>;
 
   constructor(
@@ -30,9 +28,9 @@ export class ScrollToComponent implements OnInit {
     private readonly scrollHelperService: ScrollHelperService
   ) {
     this.dashboardConfig = this.scrollHelperService.getNotSiblings();
-    this.idsToHide = new Set();
-    this.linking = new Map(); // <'pie' => ['pie', 'chart2', ...]>
-    this.btnStatus = new Map(); // <'pie' => show me or hide me>
+    this.idsToHide = new Set<string>();
+    this.linking = new Map<string, string[]>(); // <'pie' => ['pie', 'chart2', ...]>
+    this.btnStatus = new Map<string, boolean>(); // <'pie' => show me or hide me>
   }
 
   ngOnInit(): void {
@@ -98,18 +96,30 @@ export class ScrollToComponent implements OnInit {
     this.scrollHelperService
       .getScrollToCompConf()
       .forEach(
-        ({ scroll: { linkedWith }, componentConfigs }: GeneralConfigs) => {
-          const { id } = componentConfigs as ComponentDashboardConfigs;
+        ({
+          scroll: { linkedWith },
+          componentConfigs: { id },
+        }: GeneralConfigs) => {
           if (!linkedWith) {
-            this.linking.set(id, [id]);
+            this.linking.set(id, [
+              ...this.scrollHelperService
+                .getChildren()
+                .map(({ linkedId, compId }: ViewChild) =>
+                  linkedId === id ? compId : undefined
+                )
+                .filter((s: string | undefined) => !!s),
+            ]);
             this.btnStatus.set(id, true);
           } else {
             this.linking.set(linkedWith, [
               ...(this.linking.get(linkedWith) || []),
-              id
+              linkedWith,
             ]);
           }
         }
       );
+    this.linking.forEach(
+      (value, key) => !value.length && this.linking.set(key, [key])
+    );
   }
 }

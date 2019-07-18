@@ -1,17 +1,19 @@
 import {
   SortOption,
   GeneralConfigs,
-  ComponentCounterConfigs
+  ComponentCounterConfigs,
+  ComponentDashboardConfigs,
 } from 'src/configs/generalConfig.interface';
 import { Subject } from 'rxjs';
 import {
   QuerySearchAttribute,
   QueryYearAttribute,
   QueryFilterAttribute,
-  QueryBlock
+  QueryBlock,
 } from 'src/app/filters/services/interfaces';
-import { SourceSchema, ListSchema } from 'src/configs/schema';
 import { countersConfig } from 'src/configs/counters';
+import { dashboardConfig } from 'src/configs/dashboard';
+import { filtersConfig } from 'src/configs/filters';
 
 export class BuilderUtilities {
   private querySourceBucketsFilter: QueryBlock[];
@@ -32,7 +34,15 @@ export class BuilderUtilities {
     this.hitsAttributes = Object.create(null) as SortOption;
     this.orOperator = new Subject();
     this.or = false;
-    this.titleSource = ListSchema.title || 'dc_title';
+    this.titleSource =
+      (() => {
+        const [conf] = dashboardConfig.filter(
+          ({ componentConfigs }: GeneralConfigs) =>
+            (componentConfigs as ComponentDashboardConfigs).content
+        );
+        return (conf.componentConfigs as ComponentDashboardConfigs).content
+          .title;
+      })() || 'dc_title';
   }
 
   protected addCounterAgg(b: bodybuilder.Bodybuilder): void {
@@ -45,7 +55,7 @@ export class BuilderUtilities {
     if (key === 'year.keyword') {
       const years = {
         gte: this.aggAttributes[key].gte,
-        lte: this.aggAttributes[key].lte
+        lte: this.aggAttributes[key].lte,
       };
       // this.or ? b.orQuery('range', key, years) : b.query('range', key, years);
       b.query('range', key, years);
@@ -74,26 +84,57 @@ export class BuilderUtilities {
 
   private convertEnumToQueryBlock(): QueryBlock[] {
     const arr: QueryBlock[] = [];
-    Object.keys(SourceSchema).map((key: string) =>
-      SourceSchema[key] === SourceSchema.status
+    const mainQuerySources: Array<string> = Array.from(
+      new Set([
+        ...this.getSourcesFromConfigs(dashboardConfig),
+        ...this.getSourcesFromConfigs(filtersConfig, true),
+        ...this.getSourcesFromConfigs(countersConfig, true),
+      ])
+    );
+    // I'm assuming  that this will always will have 'status'
+    mainQuerySources.forEach((key: string) =>
+      key.includes('status')
         ? arr.push(
             {
-              source: `${SourceSchema[key]}.keyword`,
-              buckets: SourceSchema[key],
-              filter: this.openLimitedAcc[0]
+              source: `${key}.keyword`,
+              buckets: key,
+              filter: this.openLimitedAcc[0],
             },
             {
-              source: `${SourceSchema[key]}.keyword`,
-              buckets: SourceSchema[key],
-              filter: this.openLimitedAcc[1]
+              source: `${key}.keyword`,
+              buckets: key,
+              filter: this.openLimitedAcc[1],
             }
           )
-        : arr.push({
-            source: `${SourceSchema[key]}.keyword`,
-            buckets: SourceSchema[key]
-          })
+        : arr.push({ source: `${key}.keyword`, buckets: key })
     );
     return arr;
+  }
+
+  private getSourcesFromConfigs(
+    configs: Array<GeneralConfigs>,
+    filterBasedOnAddInMainQuery: boolean = false
+  ): Array<string> {
+    return [
+      ...(filterBasedOnAddInMainQuery
+        ? configs
+            .filter(
+              ({ componentConfigs }: GeneralConfigs) =>
+                (componentConfigs as any).addInMainQuery
+            )
+            .map(
+              ({ componentConfigs }: GeneralConfigs) =>
+                (componentConfigs as any).source
+            )
+        : configs.map(
+            ({ componentConfigs }: GeneralConfigs) =>
+              (componentConfigs as any).source
+          )),
+    ]
+      .map((s: string | Array<string>) =>
+        !Array.isArray(s) && s ? s.replace('.keyword', '') : undefined
+      )
+      .filter((d: string | undefined) => d);
   }
 
   private addCounterAttrToMainQuery(
@@ -106,7 +147,7 @@ export class BuilderUtilities {
         'cardinality',
         {
           field: source,
-          precision_threshold: 40000
+          precision_threshold: 40000,
         },
         source
       );
@@ -116,7 +157,7 @@ export class BuilderUtilities {
       b.aggregation(
         'filter',
         {
-          term: obj
+          term: obj,
         },
         `${source}_${filter}`
       );
@@ -133,20 +174,19 @@ export class BuilderUtilities {
   }
 
   private getSize(buckets: string): number {
-    const { affiliation, author } = SourceSchema;
-    return buckets === affiliation || buckets === author
+    return buckets.includes('affiliation') || buckets.includes('author')
       ? 20
       : this.checkWordcloud(buckets);
   }
 
   private checkWordcloud(buckets: string): number {
-    return buckets === SourceSchema.subject ? 50 : 1000;
+    return buckets.includes('subject') ? 50 : 1000;
   }
 
   private buildTermRules(size: number, source: string): object {
     return {
       field: source,
-      size
+      size,
     };
   }
 }

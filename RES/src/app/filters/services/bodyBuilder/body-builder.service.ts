@@ -9,11 +9,11 @@ import {
   QuerySearchAttribute,
   BuildQueryObj,
   ResetOptions,
-  ResetCaller
+  ResetCaller,
 } from '../interfaces';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BodyBuilderService {
   /**
@@ -96,20 +96,27 @@ export class BodyBuilderService {
   }
 
   private addInclude(term: string, termRules: AggsRules): void {
-    //replace each character with "(LowerCase|UpperCase)" //regex format
-    term = term.split('').map(character => character !== ' ' ? ('(' + character.toLowerCase() + '|' + character.toUpperCase() + ')') : character).join('');
-    //build a regex to match any item that has (full or partial) all the words
+    // replace each character with "(LowerCase|UpperCase)" //regex format
+    term = term
+      .split('')
+      .map(character =>
+        character !== ' '
+          ? '(' + character.toLowerCase() + '|' + character.toUpperCase() + ')'
+          : character
+      )
+      .join('');
+    // build a regex to match any item that has (full or partial) all the words
     termRules.include = '.*' + term.split(' ').join('.*&.*') + '.*';
   }
 
-  private buildTermRules(size: number, source: string): AggsRules {
+  private buildTermRules(size: number, source: any): AggsRules {
     return {
       field: source,
       size: size,
       shard_size: size,
       order: {
-        _term: 'asc'
-      }
+        _term: 'asc',
+      },
     };
   }
 

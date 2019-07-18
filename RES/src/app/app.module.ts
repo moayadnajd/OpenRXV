@@ -21,7 +21,7 @@ import {
   MatPaginatorModule,
   MatRippleModule,
   MatSnackBarModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
 } from '@angular/material';
 import { FiltersComponent } from './filters/filters.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -41,7 +41,7 @@ import { InViewportModule } from '@thisissoon/angular-inviewport';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { ChartComponent } from './dashboard/components/chart/chart.component';
 import { ListComponent } from './dashboard/components/list/list.component';
-import { ScrollDispatchModule } from '@angular/cdk/scrolling';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { PaginatedListComponent } from './dashboard/components/list/paginated-list/paginated-list.component';
 import { PubImageComponent } from './dashboard/components/list/paginated-list/pub-image/pub-image.component';
 import { LinkTextComponent } from './dashboard/components/list/paginated-list/link-text/link-text.component';
@@ -64,6 +64,8 @@ import { MapComponent } from './dashboard/components/map/map.component';
 import { GetFirstImage } from './pipes/images.pipe';
 import { LineComponent } from './dashboard/components/line/line.component';
 import { SimiCircleComponent } from './dashboard/components/simi-circle/simi-circle.component';
+import { BarComponent } from './dashboard/components/bar/bar.component';
+import { LayoutModule } from '@angular/cdk/layout';
 
 @NgModule({
   declarations: [
@@ -95,7 +97,8 @@ import { SimiCircleComponent } from './dashboard/components/simi-circle/simi-cir
     MapComponent,
     GetFirstImage,
     LineComponent,
-    SimiCircleComponent
+    SimiCircleComponent,
+    BarComponent,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -115,13 +118,13 @@ import { SimiCircleComponent } from './dashboard/components/simi-circle/simi-cir
     EffectsModule.forRoot(efficts),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
-      logOnly: environment.production // Restrict extension to log-only mode,
+      logOnly: environment.production, // Restrict extension to log-only mode,
     }),
     MatInputModule,
     MatButtonModule,
     MatListModule,
     HighchartsChartModule,
-    ScrollDispatchModule,
+    ScrollingModule,
     MatPaginatorModule,
     NgxLoadingModule.forRoot({}),
     MatRippleModule,
@@ -131,7 +134,8 @@ import { SimiCircleComponent } from './dashboard/components/simi-circle/simi-cir
     RouterModule.forRoot([{ path: '', component: AppComponent }]), // for TourMatMenuModule,
     MdePopoverModule, // https://github.com/angular/material2/issues/2691
     MatSnackBarModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    LayoutModule,
   ],
   entryComponents: [
     ChartComponent,
@@ -147,8 +151,9 @@ import { SimiCircleComponent } from './dashboard/components/simi-circle/simi-cir
     WordcloudComponent,
     MapComponent,
     LineComponent,
-    SimiCircleComponent
+    SimiCircleComponent,
+    BarComponent,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,30 +1,48 @@
-import { Component, OnInit } from '@angular/core';
-import { ChartTypes } from 'src/configs/generalConfig.interface';
+import {
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ChartMathodsService } from '../services/chartCommonMethods/chart-mathods.service';
 import * as Highcharts from 'highcharts';
 import { ParentChart } from '../parent-chart';
+import { Bucket } from 'src/app/filters/services/interfaces';
 
 @Component({
   selector: 'app-pie',
   templateUrl: './pie.component.html',
   styleUrls: ['./pie.component.scss'],
-  providers: [ChartMathodsService]
+  providers: [ChartMathodsService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PieComponent extends ParentChart implements OnInit {
-  constructor(cms: ChartMathodsService) {
+  constructor(
+    cms: ChartMathodsService,
+    private readonly cdr: ChangeDetectorRef
+  ) {
     super(cms);
   }
 
   ngOnInit(): void {
-    this.init(ChartTypes.pie);
-    this.buildOptions.subscribe(() => (this.chartOptions = this.setOptions()));
+    this.init('pie');
+    this.buildOptions.subscribe((buckets: Array<Bucket>) => {
+      if (buckets) {
+        this.chartOptions = this.setOptions(buckets);
+      }
+      this.cdr.detectChanges();
+    });
   }
 
-  private setOptions(): Highcharts.Options {
+  private setOptions(buckets: Array<Bucket>): Highcharts.Options {
     return {
       chart: {
-        type: ChartTypes.pie,
-        animation: true
+        type: 'pie',
+        animation: true,
+      },
+      boost: {
+        enabled: true,
+        useGPUTranslations: true,
       },
       plotOptions: {
         pie: {
@@ -32,15 +50,21 @@ export class PieComponent extends ParentChart implements OnInit {
           showInLegend: true,
           tooltip: {
             pointFormat: ' <b>{point.y}</b>',
-            headerFormat: '{point.key}:'
+            headerFormat: '{point.key}:',
           },
           dataLabels: {
-            enabled: false
-          }
-        }
+            enabled: false,
+          },
+        },
       },
-      series: this.chartOptions.series,
-      ...this.cms.commonProperties()
+      series: [
+        {
+          animation: true,
+          type: 'pie',
+          data: buckets.map((b: Bucket) => ({ name: b.key, y: b.doc_count })),
+        },
+      ],
+      ...this.cms.commonProperties(),
     };
   }
 }

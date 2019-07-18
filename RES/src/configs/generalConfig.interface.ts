@@ -1,10 +1,4 @@
-export type ComponentConfigs =
-  | ComponentDashboardConfigs
-  | ComponentCounterConfigs
-  | ComponentLabelConfigs
-  | ComponentSearchConfigs
-  | ComponentFilterConfigs
-  | Tour;
+import { Bucket } from 'src/app/filters/services/interfaces';
 
 export interface Tour {
   id: string;
@@ -17,22 +11,21 @@ export interface GeneralConfigs {
   tour?: boolean;
   component?: string;
   title?: string;
-  componentConfigs: ComponentConfigs;
+  componentConfigs: any;
   class?: string;
   scroll?: Scroll;
 }
 
 export interface Scroll {
   icon?: string;
-  linkedWith?: ComponentsIdsToScroll;
+  linkedWith?: string;
 }
 
 export interface ComponentDashboardConfigs {
   id: string;
   title: string;
-  chartType: ChartTypes;
   description: string;
-  source: string; // SourceSchema
+  source: string | Array<string>;
   content?: PaginatedListConfigs;
 }
 
@@ -40,14 +33,14 @@ export interface ComponentCounterConfigs {
   id: string;
   title: string;
   source: string;
-  percentageFromTotal: boolean;
+  percentageFromTotal?: boolean;
   filter?: string;
   description?: string;
 }
 
 export interface ComponentLabelConfigs {
   text: string;
-  border: boolean;
+  border?: boolean;
   description?: string;
 }
 
@@ -57,9 +50,10 @@ export interface ComponentSearchConfigs {
 }
 
 export interface ComponentFilterConfigs {
-  source: string; // FilterSchema | SourceSchema
-  placeholder?: string;
+  source: string;
+  placeholder: string;
   expandPosition?: 'top' | 'bottom';
+  addInMainQuery?: boolean;
 }
 
 export interface SortOption {
@@ -75,48 +69,20 @@ export interface SortOption {
  *    * string => is the value e.g: <label> : 92
  */
 export interface PaginatedListConfigs {
-  icon: string; // ListSchema
-  title: string; // ListSchema
-  description: string; // ListSchema
-  tags: object; // [string, ListSchema];
-  identifierUri: string; // ListSchema
+  icon: string;
+  title: string;
+  description: string;
+  tags: object;
+  identifierUri: string;
   altmetric: boolean;
   filterOptions: SortOption[];
 }
 
 export enum searchOptions {
   titleSearch,
-  allSearch
+  allSearch,
 }
 
-export enum ComponentsIdsToScroll {
-  counters = 'counters',
-  pie = 'pie',
-  wordcloud = 'wordcloud',
-  map = 'map',
-  mapTop='mapTop',
-  topLists = 'topLists',
-  topAffiliations = 'topAffiliations',
-  CRP = 'CRP',
-  funders = 'funders',
-  paginatedList = 'paginatedList',
-  lineChart = 'lineChart',
-  SimiCircle = 'SimiCircle',
-}
-
-export enum icons {
-  export = 'view_headline',
-  arrowUp = 'expand_less',
-  pdf = 'picture_as_pdf',
-  xls = 'view_array',
-  word = 'dock',
-  loop = 'loop'
-}
-
-export enum ChartTypes {
-  pie = 'pie',
-  wordcloud = 'wordcloud',
-  map = 'map',
-  line = 'line',
-  spline = 'spline',
+export interface MergedSelect {
+  [key: string]: Array<Bucket>;
 }

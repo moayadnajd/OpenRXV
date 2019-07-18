@@ -3,14 +3,13 @@ import {
   OnInit,
   ViewChild,
   ElementRef,
-  HostListener
+  HostListener,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../../../store';
-import {
-  ComponentDashboardConfigs,
-  ComponentsIdsToScroll
-} from 'src/configs/generalConfig.interface';
+import { ComponentDashboardConfigs } from 'src/configs/generalConfig.interface';
 import { Bucket, Hits, hits } from 'src/app/filters/services/interfaces';
 import { PageEvent } from '@angular/material';
 import { ScrollHelperService } from '../services/scrollTo/scroll-helper.service';
@@ -27,7 +26,8 @@ declare function _altmetric_embed_init(): any;
   selector: 'app-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss'],
-  providers: [ScrollHelperService]
+  providers: [ScrollHelperService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListComponent extends ParentComponent implements OnInit {
   @ViewChild('clickToEnable') clickToEnable: ElementRef;
@@ -38,7 +38,8 @@ export class ListComponent extends ParentComponent implements OnInit {
 
   constructor(
     private readonly store: Store<fromStore.AppState>,
-    public readonly scrollHelperService: ScrollHelperService
+    public readonly scrollHelperService: ScrollHelperService,
+    private readonly cdr: ChangeDetectorRef
   ) {
     super();
   }
@@ -68,30 +69,29 @@ export class ListComponent extends ParentComponent implements OnInit {
   }
 
   private seeIfThisCompInView(): void {
-    const { id, source } = this.componentConfigs as ComponentDashboardConfigs;
-    this.scrollHelperService.seeIfThisCompInView(
-      this.shouldWePaginate(source)
-        ? ComponentsIdsToScroll.paginatedList
-        : ComponentsIdsToScroll[id]
-    );
+    const { id } = this.componentConfigs as ComponentDashboardConfigs;
+    this.scrollHelperService.seeIfThisCompInView(id);
   }
 
   private subToDataFromStore(): void {
     const { source } = this.componentConfigs as ComponentDashboardConfigs;
-    this.shouldWePaginate(source)
+    this.shouldWePaginate(source as string)
       ? this.store.select(fromStore.getHits).subscribe((h: Hits) => {
-          this.initPagination(source, h);
+          this.initPagination(source as string, h);
+          this.cdr.detectChanges();
           this.expandOrStay(this.safeCheckLength(h && h.hits));
         })
       : this.store
           .select(fromStore.getBuckets, source)
           .subscribe((b: Bucket[]) => {
             this.listData = b;
+            this.cdr.detectChanges();
             this.expandOrStay(this.safeCheckLength(b));
           });
-    this.store
-      .select(fromStore.getLoadingOnlyHits)
-      .subscribe((b: boolean) => (this.loadingHits = b));
+    this.store.select(fromStore.getLoadingOnlyHits).subscribe((b: boolean) => {
+      this.loadingHits = b;
+      this.cdr.detectChanges();
+    });
   }
 
   private initPagination(source: string, h: Hits): void {

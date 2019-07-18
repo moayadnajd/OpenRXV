@@ -1,11 +1,7 @@
 import {
   GeneralConfigs,
   ComponentDashboardConfigs,
-  ComponentsIdsToScroll,
-  icons,
-  ChartTypes
 } from './generalConfig.interface';
-import { SourceSchema, ListSchema } from './schema';
 
 /**
  * * componentConfigs.source determine where
@@ -18,240 +14,252 @@ import { SourceSchema, ListSchema } from './schema';
  */
 
 export const dashboardConfig: GeneralConfigs[] = [
-  {
-    show: false,
-    class: 'col-md-3 no-side-padding',
-    component: 'SimiCircleComponent',
-    componentConfigs: {
-      id: ComponentsIdsToScroll.SimiCircle,
-      title: 'Info Products by Type',
-      source: SourceSchema.status,
-      chartType: ChartTypes.pie,
-      description: `
-          All the available :${
-        icons.export
-        } to export this graphic, click on ICONS:${
-        icons.arrowUp
-        } to collapse it.
-      `
-    } as ComponentDashboardConfigs,
-    scroll: {
-      linkedWith: ComponentsIdsToScroll.topLists
-    },
-    tour: true
-  },
-  {
-    show: false,
-    class: 'col-md-9 no-side-padding',
-    component: 'LineComponent',
-    componentConfigs: {
-      id: ComponentsIdsToScroll.lineChart,
-      title: 'Info Products by Type',
-      source: SourceSchema.status,
-      chartType: ChartTypes.line,
-      description: `
-          All the available :${
-            icons.export
-          } to export this graphic, click on ICONS:${
-        icons.arrowUp
-      } to collapse it.
-      `
-    } as ComponentDashboardConfigs,
-    scroll: {
-      linkedWith: ComponentsIdsToScroll.topLists
-    },
-    tour: true
-  },
+  // {
+  //   show: false,
+  //   class: 'col-md-3 no-side-padding',
+  //   component: 'SimiCircleComponent',
+  //   componentConfigs: {
+  //     id: 'SimiCircle',
+  //     title: 'Info Products by Type',
+  //     source: 'status',
+  //     chartType: 'pie',
+  //     description: `
+  //         All the available :${
+  //           icons.export
+  //         } to export this graphic, click on ICONS:${
+  //       icons.arrowUp
+  //     } to collapse it.
+  //     `,
+  //   } as ComponentDashboardConfigs,
+  //   scroll: {
+  //     linkedWith: 'topLists',
+  //   },
+  //   tour: true,
+  // },
+  // {
+  //   show: false,
+  //   class: 'col-md-9 no-side-padding',
+  //   component: 'LineComponent',
+  //   componentConfigs: {
+  //     id: 'lineChart',
+  //     title: 'Info Products by Type',
+  //     source: 'status',
+  //     chartType: 'line',
+  //     description: `
+  //         All the available :${
+  //           icons.export
+  //         } to export this graphic, click on ICONS:${
+  //       icons.arrowUp
+  //     } to collapse it.
+  //     `,
+  //   } as ComponentDashboardConfigs,
+  //   scroll: {
+  //     linkedWith: 'topLists',
+  //   },
+  //   tour: true,
+  // },
   {
     show: true,
     class: 'col-md-6 no-side-padding',
     component: 'PieComponent',
     componentConfigs: {
-      id: ComponentsIdsToScroll.pie,
+      id: 'pie',
       title: 'Info Products by Type',
-      source: SourceSchema.type,
+      source: 'type',
       description: `
           All the available information products are represented here and disaggregated by Type.
           You can toggle on/off individual type of visualization in the list at the right side of
-          the graphic. Click on ICONS:${
-            icons.export
-          } to export this graphic, click on ICONS:${
-        icons.arrowUp
-      } to collapse it.
-      `
+          the graphic. Click on ICONS:view_headline to export this graphic, click on ICONS:expand_less to collapse it.
+      `,
     } as ComponentDashboardConfigs,
     scroll: {
-      icon: 'pie_chart'
+      icon: 'pie_chart',
     },
-    tour: true
+    tour: true,
   },
   {
     class: 'col-md-6 no-side-padding',
     show: true,
     component: 'WordcloudComponent',
     componentConfigs: {
-      id: ComponentsIdsToScroll.wordcloud,
+      id: 'wordcloud',
       title: 'Info Products by Subject',
-      source: SourceSchema.subject,
-      chartType: ChartTypes.wordcloud,
+      source: 'subject',
       description: `
           Top Subjects tags for all the information products are represented here, the greater the word,
-          the higher the number of information. Products tagged to that specific Subject. Click on ICONS:${
-            icons.export
-          }
-          to export this graphic, click on ICONS:${
-            icons.arrowUp
-          } to collapse it.
-      `
+          the higher the number of information. Products tagged to that specific Subject. Click on ICONS:view_headline
+          to export this graphic, click on ICONS:expand_less to collapse it.
+      `,
     } as ComponentDashboardConfigs,
     scroll: {
-      linkedWith: ComponentsIdsToScroll.pie
+      linkedWith: 'pie',
     },
-    tour: true
+    tour: true,
   },
   {
     show: true,
     class: 'col-md-9 mt-3 no-side-padding',
     component: 'MapComponent',
     componentConfigs: {
-      id: ComponentsIdsToScroll.map,
-      source: SourceSchema.country,
+      id: 'map',
+      source: 'country',
       title: 'Info Products Overview',
-      chartType: ChartTypes.map,
       description: `
           Geographic tags for all the information products found are represented here and disaggregated by
           country. The darker the color the higher the number of information products tagged to that specific
           country. Overall, the graphic shows the world areas targeted by research activities that produced
-          information products. Click on ICONS:${icons.export}
-          to export this graphic, click on ICONS:${icons.arrowUp}
+          information products. Click on ICONS:view_headline
+          to export this graphic, click on ICONS:expand_less
           to collapse it.
-      `
+      `,
     } as ComponentDashboardConfigs,
     scroll: {
-      icon: 'map'
+      icon: 'map',
     },
-    tour: true
+    tour: true,
   },
   {
     class: 'col-md-3 mt-3 no-side-padding shorter',
     show: true,
     component: 'ListComponent',
     componentConfigs: {
-      id: ComponentsIdsToScroll.mapTop,
+      id: 'mapTop',
       title: 'Top Countries',
-      source: SourceSchema.country,
+      source: 'country',
       description: `
           The top Countries by number of information products.
-          Click on ICONS:${icons.arrowUp} to collapse the list.
-      `
+          Click on ICONS:expand_less to collapse the list.
+      `,
     } as ComponentDashboardConfigs,
     scroll: {
-      linkedWith:ComponentsIdsToScroll.map
+      linkedWith: 'map',
     },
-    tour: true
+    tour: true,
+  },
+  {
+    show: false,
+    class: 'col-md-12 mt-3 no-side-padding',
+    component: 'BarComponent',
+    componentConfigs: {
+      id: 'column',
+      source: ['type', `year.keyword`],
+      title: 'Info Products Analytics',
+      chartType: 'column',
+      description: `
+            All Information Products are represented here and can be further disaggregated by two variables at the same time
+            choosing from “Type", "Year", "Author", "CRP" and "Funder". The "Year" pre-selects the five most recent years. The
+            other filters automatically pre-select those options that have the most results, helping you to access your
+            information faster. Click on ICONS:view_headline to export
+            this graphic, click on ICONS:expand_less to collapse it.
+      `,
+    } as ComponentDashboardConfigs,
+    scroll: {
+      icon: 'bar_chart',
+    },
+    tour: true,
   },
   {
     class: 'col-md-6 mt-3 no-side-padding',
     show: true,
     component: 'ListComponent',
     componentConfigs: {
-      id: ComponentsIdsToScroll.topLists,
+      id: 'topLists',
       title: 'Top Contributors',
-      source: SourceSchema.author,
+      source: 'author',
       description: `
           The top twenty Authors by number of information products.
-          Click on ICONS:${icons.arrowUp} to collapse the list.
-      `
+          Click on ICONS:expand_less to collapse the list.
+      `,
     } as ComponentDashboardConfigs,
     scroll: {
-      icon: 'list_alt'
+      icon: 'list_alt',
     },
-    tour: true
+    tour: true,
   },
   {
     class: 'col-md-6 mt-3 no-side-padding',
     show: true,
     component: 'ListComponent',
     componentConfigs: {
-      id: ComponentsIdsToScroll.topAffiliations,
+      id: 'topAffiliations',
       title: 'Top Affiliations',
-      source: SourceSchema.affiliation,
+      source: 'affiliation',
       description: `
           Top twenty affiliations by number of information products.
-          Click on ICONS:${icons.arrowUp} to collapse the list.
-      `
+          Click on ICONS:expand_less to collapse the list.
+      `,
     } as ComponentDashboardConfigs,
     scroll: {
-      linkedWith: ComponentsIdsToScroll.topLists
+      linkedWith: 'topLists',
     },
-    tour: true
+    tour: true,
   },
   {
     class: 'col-md-6 mt-3 no-side-padding',
     show: true,
     component: 'ListComponent',
     componentConfigs: {
-      id: ComponentsIdsToScroll.CRP,
+      id: 'CRP',
       title: 'CRPs and Platforms',
-      source: SourceSchema.crp,
+      source: 'crp',
       description: `
           All CRPs and platforms tagged across all information products
           are represented here and ordered by quantity of tags for
           each CRP or platform. Scroll down to see more results.
-          Click on ICONS:${icons.arrowUp} to collapse the list.
-      `
+          Click on ICONS:expand_less to collapse the list.
+      `,
     } as ComponentDashboardConfigs,
     scroll: {
-      icon: 'star_rate'
+      icon: 'star_rate',
     },
-    tour: true
+    tour: true,
   },
   {
     class: 'col-md-6 mt-3 no-side-padding',
     show: true,
     component: 'ListComponent',
     componentConfigs: {
-      id: ComponentsIdsToScroll.funders,
+      id: 'funders',
       title: 'Funders',
-      source: SourceSchema.sponsorship,
+      source: 'sponsorship',
       description: `
           All funders tagged across all information products are represented here and
           orderd by quantity of tags for each funder. Scroll down to see more results.
-          Click on ICONS:${icons.arrowUp} to collapse the list.
-      `
+          Click on ICONS:expand_less to collapse the list.
+      `,
     } as ComponentDashboardConfigs,
     scroll: {
-      linkedWith: ComponentsIdsToScroll.CRP
+      linkedWith: 'CRP',
     },
-    tour: true
+    tour: true,
   },
   {
     class: 'col-md-12 mt-3 no-side-padding',
     show: true,
     component: 'ListComponent',
     componentConfigs: {
-      id: ComponentsIdsToScroll.paginatedList,
+      id: 'paginatedList',
       title: 'Info Producs List of Results',
       description: `
           All information products found are represented here, You can sort this list by "Date",
           "Type", "Authors", "Altmetric: Attention Score" and "Views & Downloads" info.
-          Click on ICONS:${icons.arrowUp} to collapse the list.
+          Click on ICONS:expand_less to collapse the list.
       `,
       content: {
-        title: ListSchema.title,
-        icon: ListSchema.icon,
-        identifierUri: ListSchema.identifierUri,
+        title: 'title',
+        icon: 'repo',
+        identifierUri: 'uri',
         altmetric: true,
-        description: ListSchema.description,
+        description: 'citation',
         tags: {
-          Publisher: ListSchema.publisher,
-          Subject: ListSchema.subject,
-          Type: ListSchema.type,
-          Status: ListSchema.status,
-          'Date issued': ListSchema.date,
-          'Reporting CRP(s) and Platform(s)': ListSchema.crp,
-          'Attention Score': ListSchema.altmetric,
-          numbers: ListSchema.numbers
+          Publisher: 'publisher',
+          Subject: 'subject',
+          Type: 'type',
+          Status: 'status',
+          'Date issued': 'date',
+          'Reporting CRP(s) and Platform(s)': 'crp',
+          'Attention Score': 'altmetric',
+          numbers: 'numbers',
         },
         filterOptions: [
           { display: 'Date', value: 'date', sort: 'desc' },
@@ -259,20 +267,24 @@ export const dashboardConfig: GeneralConfigs[] = [
           {
             display: 'Authors',
             value: 'citation.keyword',
-            sort: 'desc'
+            sort: 'desc',
           },
           {
             display: 'Altmetric: Attention Score',
             value: 'altmetric.score',
-            sort: 'desc'
+            sort: 'desc',
           },
-          { display: 'Views & Downloads', value: 'numbers.score', sort: 'desc' }
-        ]
-      }
+          {
+            display: 'Views & Downloads',
+            value: 'numbers.score',
+            sort: 'desc',
+          },
+        ],
+      },
     } as ComponentDashboardConfigs,
     scroll: {
-      icon: 'view_list'
+      icon: 'view_list',
     },
-    tour: true
-  }
+    tour: true,
+  },
 ];
