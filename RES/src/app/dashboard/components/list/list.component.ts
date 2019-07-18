@@ -13,12 +13,8 @@ import { ComponentDashboardConfigs } from 'src/configs/generalConfig.interface';
 import { Bucket, Hits, hits } from 'src/app/filters/services/interfaces';
 import { PageEvent } from '@angular/material';
 import { ScrollHelperService } from '../services/scrollTo/scroll-helper.service';
-import { first, concatMap } from 'rxjs/operators';
+import { first } from 'rxjs/operators';
 import { ParentComponent } from 'src/app/parent-component.class';
-import { ExportService } from './services/export/export.service';
-import { of, Observable } from 'rxjs';
-import { ExportFiles } from './paginated-list/filter-paginated-list/types.interface';
-import { logGroup } from 'src/debug/debug.functions';
 /**
  * declare is used to tell TypeScript compiler that the variable has been created elsewhere.
  * If you use declare, nothing is added to the JavaScript that is generated - it is simply a hint to the compiler.
@@ -30,7 +26,7 @@ declare function _altmetric_embed_init(): any;
   selector: 'app-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss'],
-  providers: [ScrollHelperService, ExportService],
+  providers: [ScrollHelperService],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ListComponent extends ParentComponent implements OnInit {
@@ -44,8 +40,7 @@ export class ListComponent extends ParentComponent implements OnInit {
   constructor(
     private readonly store: Store<fromStore.AppState>,
     public readonly scrollHelperService: ScrollHelperService,
-    private readonly cdr: ChangeDetectorRef,
-    private readonly exportService: ExportService
+    private readonly cdr: ChangeDetectorRef
   ) {
     super();
     this.req = 0;
@@ -73,42 +68,6 @@ export class ListComponent extends ParentComponent implements OnInit {
     if (this.clickToEnable) {
       this.clickToEnable.nativeElement.hidden = false;
     }
-  }
-
-  exportFile(id?: string): Observable<ExportFiles> {
-    const exporter: Observable<ExportFiles> = this.exportService.export(
-      'pdf',
-      id
-    );
-    this.req++;
-    // concatMap(({ scrollId, end }: ExportFiles) =>
-    //   end ? of(null) : this.exportFile(scrollId)
-    // )
-    exporter.subscribe(({ scrollId, end, total }: ExportFiles) => {
-      logGroup(`EXPORT #${this.req}`, () => {
-        console.log(
-          `%cShould we end ?? ${end} ~ should be ≈ 85`,
-          'color:lightblue; font-size:10px'
-        );
-        console.log(
-          `%cREQUEST NUMBER => ${this.req}`,
-          'color:pink; font-size:15px;  font-weight: bold;'
-        );
-
-        console.log(
-          `%c ~ remains ${total - 2000 * this.req} from ${total}`,
-          'color:yellow; font-size:15px;  font-weight: italic;'
-        );
-      });
-
-      // ONLY FALSE if undefined STOP
-      if (end === false) {
-        this.exportFile(scrollId);
-      } else {
-        console.log('@@@@@@@@STOP@@@@@@@@@@');
-      }
-    });
-    return exporter;
   }
 
   private seeIfThisCompInView(): void {

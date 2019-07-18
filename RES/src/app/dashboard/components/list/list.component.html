@@ -3,11 +3,6 @@
   (afterCollapse)="disPatchSetInView(true)"
   (afterExpand)="disPatchSetInView(false)"
 >
-  <mat-panel-description *ngIf="isPaginatedList" (click)="exportFile()">
-    <button mat-mini-fab color="primary">
-      <mat-icon>arrow_downward</mat-icon>
-    </button>
-  </mat-panel-description>
   <div
     class="prevent-scroll"
     *ngIf="!isPaginatedList"

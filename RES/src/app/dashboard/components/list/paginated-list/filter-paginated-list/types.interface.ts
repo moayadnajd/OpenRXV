@@ -20,10 +20,3 @@ export interface BarComposerHelper {
   subFlag: boolean;
   forgetYearsFromStore: boolean;
 }
-
-export interface ExportFiles {
-  end: boolean;
-  fileName: string;
-  scrollId: string;
-  total: number; // DELETE THIS
-}
