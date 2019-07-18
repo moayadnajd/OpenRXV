@@ -10,3 +10,13 @@ export interface ViewChild {
   linkedId: string;
   compId: string;
 }
+
+export enum UpdateCallerBarChart {
+  BarChartNgSelect,
+  SideFilters
+}
+
+export interface BarComposerHelper {
+  subFlag: boolean;
+  forgetYearsFromStore: boolean;
+}

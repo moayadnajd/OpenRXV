@@ -5,7 +5,7 @@ import {
   ElementRef,
   HostListener,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
+  ChangeDetectorRef
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../../../store';
@@ -27,7 +27,7 @@ declare function _altmetric_embed_init(): any;
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss'],
   providers: [ScrollHelperService],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ListComponent extends ParentComponent implements OnInit {
   @ViewChild('clickToEnable') clickToEnable: ElementRef;
@@ -35,6 +35,7 @@ export class ListComponent extends ParentComponent implements OnInit {
   listData: Bucket[]; // for aggrigiation list
   isPaginatedList: boolean; // determine if we should display the hits or not
   paginationAtt: PageEvent;
+  req: number;
 
   constructor(
     private readonly store: Store<fromStore.AppState>,
@@ -42,6 +43,7 @@ export class ListComponent extends ParentComponent implements OnInit {
     private readonly cdr: ChangeDetectorRef
   ) {
     super();
+    this.req = 0;
   }
 
   ngOnInit(): void {

@@ -1,9 +1,9 @@
 import { Injectable, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import {
   ComponentDashboardConfigs,
-  MergedSelect,
+  MergedSelect
 } from 'src/configs/generalConfig.interface';
-import { Observable, merge } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import * as fromStore from '../../../../../store';
 import { Store } from '@ngrx/store';
 import { ChartHelper } from '../chart/chart-helper.class';
@@ -41,7 +41,7 @@ export class ChartMathodsService extends ChartHelper {
 
   constructor(
     private readonly store: Store<fromStore.ItemsState>,
-    private readonly cdr: ChangeDetectorRef
+    cdr: ChangeDetectorRef
   ) {
     super();
     this.shs = new ScrollHelperService(cdr);
@@ -67,25 +67,41 @@ export class ChartMathodsService extends ChartHelper {
 
   private subToDataFromStore(): void {
     if (Array.isArray(this.cc.source)) {
-      const observableArr: Array<Observable<MergedSelect>> = [];
-      (this.cc.source as Array<string>).forEach((s: string) => {
-        observableArr.push(
-          this.store
-            .select(fromStore.getBuckets, s)
-            .pipe(map((buckets: Bucket[]) => ({ [s]: buckets })))
-        );
-      });
-      merge(...observableArr).subscribe((ms: MergedSelect) => {
-        const [key] = Object.keys(ms);
-        if (ms[key]) {
-          this.goBuildDataSeries.emit(ms);
-        }
-      });
+      this.processArraySorces();
     } else {
       this.store
         .select(fromStore.getBuckets, this.cc.source)
         .subscribe((b: Bucket[]) => this.goBuildDataSeries.emit(b));
     }
     this.loadingHits$ = this.store.select(fromStore.getLoadingOnlyHits);
+  }
+
+  private processArraySorces(): void {
+    const observableArr: Array<Observable<MergedSelect>> = [];
+    (this.cc.source as Array<string>).forEach((s: string) => {
+      observableArr.push(
+        this.store
+          .select(fromStore.getBuckets, s)
+          .pipe(map((buckets: Bucket[]) => ({ [s]: buckets })))
+      );
+    });
+    this.zipObservablesAndOmit(observableArr);
+  }
+
+  private zipObservablesAndOmit(
+    observableArr: Array<Observable<MergedSelect>>
+  ) {
+    combineLatest(...observableArr)
+      .pipe(
+        map((msArr: Array<MergedSelect>) => {
+          const obj: MergedSelect = {};
+          msArr.forEach((ms: MergedSelect) => {
+            const [key] = Object.keys(ms);
+            obj[key] = ms[key];
+          });
+          return obj;
+        })
+      )
+      .subscribe((ms: MergedSelect) => this.goBuildDataSeries.emit(ms));
   }
 }

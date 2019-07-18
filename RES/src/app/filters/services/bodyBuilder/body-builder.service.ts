@@ -75,8 +75,8 @@ export class BodyBuilderService {
     return this.mainBodyBuilderService.deleteFromMainQuery(fromSearchAll);
   }
 
-  resetOtherComponent(caller: ResetCaller): void {
-    this.reset.next({ caller });
+  resetOtherComponent({ caller, data }: ResetOptions): void {
+    this.reset.next({ caller, data });
   }
 
   private addAggreigation(

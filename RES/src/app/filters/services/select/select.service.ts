@@ -8,7 +8,7 @@ import {
   QueryFilterAttribute,
   Bucket,
   BuildQueryObj,
-  ResetOptions
+  ResetOptions,
 } from '../interfaces';
 import { BodyBuilderService } from '../bodyBuilder/body-builder.service';
 
@@ -38,7 +38,7 @@ export class SelectService {
   }
 
   resetNotification(): void {
-    this.bodyBuilderService.resetOtherComponent('select');
+    this.bodyBuilderService.resetOtherComponent({ caller: 'select' });
   }
 
   paginateData(
@@ -55,7 +55,7 @@ export class SelectService {
     const bq: BuildQueryObj = {
       size: bqa.size ? bqa.size : 10,
       source: this.source,
-      term: bqa.term
+      term: bqa.term,
     };
     return this.bodyBuilderService.buildquery(bq);
   }

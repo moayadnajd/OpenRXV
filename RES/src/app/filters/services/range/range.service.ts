@@ -7,7 +7,7 @@ import {
   BuildQueryObj,
   ResetOptions,
   QuerySearchAttribute,
-  QueryFilterAttribute,
+  QueryFilterAttribute
 } from '../interfaces';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
@@ -31,6 +31,10 @@ export class RangeService {
     this.source = s;
   }
 
+  get sourceVal(): string {
+    return this.source;
+  }
+
   set storeVal(s: Store<fromStore.ItemsState>) {
     this.store = s;
   }
@@ -51,10 +55,18 @@ export class RangeService {
     return this.bodyBuilderService.getAggAttributes;
   }
 
-  resetNotification(): void {
-    this.bodyBuilderService.resetOtherComponent('range');
+  resetNotification(data?: any): void {
+    this.bodyBuilderService.resetOtherComponent({ data, caller: 'range' });
   }
 
+  /**
+   *
+   * @param query is the query that gets the array of years
+   * @param force when true we will get the years another time, even if had them !
+   * * we are checking if we have the years, by getting them from the store
+   * * if we do we simply retutn an observable of the years
+   * * else we get them from the server.
+   */
   getYears(
     query: ElasticsearchQuery,
     force: boolean = false

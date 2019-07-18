@@ -80,7 +80,7 @@ export interface PaginatedListConfigs {
 
 export enum searchOptions {
   titleSearch,
-  allSearch,
+  allSearch
 }
 
 export interface MergedSelect {

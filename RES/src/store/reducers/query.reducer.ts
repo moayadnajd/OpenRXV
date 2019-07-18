@@ -1,10 +1,11 @@
 import * as actions from 'src/store/actions/query.actions';
+import { ElasticsearchQuery } from 'src/app/filters/services/interfaces';
 export interface QueryState {
-  body: any;
+  body: ElasticsearchQuery;
 }
 
 const initialState: QueryState = {
-  body: null
+  body: null,
 };
 
 export function reducer(
@@ -16,7 +17,7 @@ export function reducer(
       const body = action.payload;
       return {
         ...state,
-        body
+        body,
       };
     }
     default: {
@@ -25,4 +26,7 @@ export function reducer(
   }
 }
 
-export const getQueryBody = (state: QueryState) => state.body;
+export const getQueryBody = (state: QueryState): ElasticsearchQuery =>
+  state.body;
+export const getQueryFromBody = (body: ElasticsearchQuery): object =>
+  body.query;
