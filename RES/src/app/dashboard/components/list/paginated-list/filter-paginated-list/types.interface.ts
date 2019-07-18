@@ -13,10 +13,17 @@ export interface ViewChild {
 
 export enum UpdateCallerBarChart {
   BarChartNgSelect,
-  SideFilters,
+  SideFilters
 }
 
 export interface BarComposerHelper {
   subFlag: boolean;
   forgetYearsFromStore: boolean;
+}
+
+export interface ExportFiles {
+  end: boolean;
+  fileName: string;
+  scrollId: string;
+  total: number; // DELETE THIS
 }
