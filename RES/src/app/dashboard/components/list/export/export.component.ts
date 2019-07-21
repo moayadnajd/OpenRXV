@@ -5,7 +5,7 @@ import {
   ExportFilesModal
 } from '../paginated-list/filter-paginated-list/types.interface';
 import { ExportService } from '../services/export/export.service';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, first } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { ElasticsearchQuery } from 'src/app/filters/services/interfaces';
 import { environment } from 'src/environments/environment';
@@ -55,6 +55,7 @@ export class ExportComponent implements OnInit {
   exportFile(id?: string): void {
     this.installing = true;
     const exporter: Observable<ExporterResponse> = this.query.pipe(
+      first(),
       switchMap((q: ElasticsearchQuery) =>
         this.exportService.export({
           type: this.type,
