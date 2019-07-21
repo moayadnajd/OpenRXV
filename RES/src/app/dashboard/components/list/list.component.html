@@ -11,15 +11,15 @@
     <mat-icon>more_vert</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item (click)="exportFile()">
+    <button mat-menu-item (click)="exportFile('pdf')">
       <mat-icon>dialpad</mat-icon>
       <span>Pdf</span>
     </button>
-    <button mat-menu-item>
+    <button mat-menu-item (click)="exportFile('docx')">
       <mat-icon>voicemail</mat-icon>
       <span>word</span>
     </button>
-    <button mat-menu-item>
+    <button mat-menu-item (click)="exportFile('xlsx')">
       <mat-icon>notifications_off</mat-icon>
       <span>Excel</span>
     </button>

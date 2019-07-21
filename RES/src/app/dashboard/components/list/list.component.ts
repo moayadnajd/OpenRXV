@@ -20,7 +20,10 @@ import { PageEvent } from '@angular/material';
 import { ScrollHelperService } from '../services/scrollTo/scroll-helper.service';
 import { first, concatMap, switchMap } from 'rxjs/operators';
 import { ParentComponent } from 'src/app/parent-component.class';
-import { ExportFiles } from './paginated-list/filter-paginated-list/types.interface';
+import {
+  ExportFiles,
+  FileType
+} from './paginated-list/filter-paginated-list/types.interface';
 import { Observable } from 'rxjs';
 import { ExportService } from './services/export/export.service';
 /**
@@ -34,7 +37,7 @@ declare function _altmetric_embed_init(): any;
   selector: 'app-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss'],
-  providers: [ScrollHelperService],
+  providers: [ScrollHelperService, ExportService],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ListComponent extends ParentComponent implements OnInit {
@@ -77,13 +80,13 @@ export class ListComponent extends ParentComponent implements OnInit {
     }
   }
 
-  exportFile(id?: string): void {
+  exportFile(type: FileType, id?: string): void {
     const exporter: Observable<ExportFiles> = this.store
       .select(fromStore.getQuery)
       .pipe(
         switchMap((q: ElasticsearchQuery) =>
           this.exportService.export({
-            type: 'pdf',
+            type,
             scrollId: id,
             body: q
           })
@@ -93,7 +96,7 @@ export class ListComponent extends ParentComponent implements OnInit {
     exporter.subscribe(({ scrollId, end }: ExportFiles) => {
       // ONLY FALSE if undefined STOP
       if (end === false) {
-        this.exportFile(scrollId);
+        this.exportFile(type, scrollId);
       }
     });
   }

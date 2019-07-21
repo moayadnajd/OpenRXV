@@ -22,7 +22,8 @@ import {
   MatRippleModule,
   MatSnackBarModule,
   MatProgressSpinnerModule,
-  MatMenuModule
+  MatMenuModule,
+  MatDialogModule
 } from '@angular/material';
 import { FiltersComponent } from './filters/filters.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -67,6 +68,7 @@ import { LineComponent } from './dashboard/components/line/line.component';
 import { SimiCircleComponent } from './dashboard/components/simi-circle/simi-circle.component';
 import { BarComponent } from './dashboard/components/bar/bar.component';
 import { LayoutModule } from '@angular/cdk/layout';
+import { ExportComponent } from './dashboard/components/list/export/export.component';
 
 @NgModule({
   declarations: [
@@ -99,7 +101,8 @@ import { LayoutModule } from '@angular/cdk/layout';
     GetFirstImage,
     LineComponent,
     SimiCircleComponent,
-    BarComponent
+    BarComponent,
+    ExportComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -154,7 +157,8 @@ import { LayoutModule } from '@angular/cdk/layout';
     MapComponent,
     LineComponent,
     SimiCircleComponent,
-    BarComponent
+    BarComponent,
+    ExportComponent
   ],
   bootstrap: [AppComponent]
 })
