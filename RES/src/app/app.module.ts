@@ -22,6 +22,7 @@ import {
   MatRippleModule,
   MatSnackBarModule,
   MatProgressSpinnerModule,
+  MatMenuModule
 } from '@angular/material';
 import { FiltersComponent } from './filters/filters.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -98,7 +99,7 @@ import { LayoutModule } from '@angular/cdk/layout';
     GetFirstImage,
     LineComponent,
     SimiCircleComponent,
-    BarComponent,
+    BarComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -118,7 +119,7 @@ import { LayoutModule } from '@angular/cdk/layout';
     EffectsModule.forRoot(efficts),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
-      logOnly: environment.production, // Restrict extension to log-only mode,
+      logOnly: environment.production // Restrict extension to log-only mode,
     }),
     MatInputModule,
     MatButtonModule,
@@ -136,6 +137,7 @@ import { LayoutModule } from '@angular/cdk/layout';
     MatSnackBarModule,
     MatProgressSpinnerModule,
     LayoutModule,
+    MatMenuModule
   ],
   entryComponents: [
     ChartComponent,
@@ -152,8 +154,8 @@ import { LayoutModule } from '@angular/cdk/layout';
     MapComponent,
     LineComponent,
     SimiCircleComponent,
-    BarComponent,
+    BarComponent
   ],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}

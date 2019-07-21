@@ -10,10 +10,15 @@ import {
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../../../store';
 import { ComponentDashboardConfigs } from 'src/configs/generalConfig.interface';
-import { Bucket, Hits, hits } from 'src/app/filters/services/interfaces';
+import {
+  Bucket,
+  Hits,
+  hits,
+  ElasticsearchQuery
+} from 'src/app/filters/services/interfaces';
 import { PageEvent } from '@angular/material';
 import { ScrollHelperService } from '../services/scrollTo/scroll-helper.service';
-import { first, concatMap } from 'rxjs/operators';
+import { first, concatMap, switchMap } from 'rxjs/operators';
 import { ParentComponent } from 'src/app/parent-component.class';
 import { ExportService } from './services/export/export.service';
 import { of, Observable } from 'rxjs';
@@ -39,7 +44,6 @@ export class ListComponent extends ParentComponent implements OnInit {
   listData: Bucket[]; // for aggrigiation list
   isPaginatedList: boolean; // determine if we should display the hits or not
   paginationAtt: PageEvent;
-  req: number;
 
   constructor(
     private readonly store: Store<fromStore.AppState>,
@@ -48,7 +52,6 @@ export class ListComponent extends ParentComponent implements OnInit {
     private readonly exportService: ExportService
   ) {
     super();
-    this.req = 0;
   }
 
   ngOnInit(): void {
@@ -75,40 +78,25 @@ export class ListComponent extends ParentComponent implements OnInit {
     }
   }
 
-  exportFile(id?: string): Observable<ExportFiles> {
-    const exporter: Observable<ExportFiles> = this.exportService.export(
-      'pdf',
-      id
-    );
-    this.req++;
-    // concatMap(({ scrollId, end }: ExportFiles) =>
-    //   end ? of(null) : this.exportFile(scrollId)
-    // )
-    exporter.subscribe(({ scrollId, end, total }: ExportFiles) => {
-      logGroup(`EXPORT #${this.req}`, () => {
-        console.log(
-          `%cShould we end ?? ${end} ~ should be ≈ 85`,
-          'color:lightblue; font-size:10px'
-        );
-        console.log(
-          `%cREQUEST NUMBER => ${this.req}`,
-          'color:pink; font-size:15px;  font-weight: bold;'
-        );
+  exportFile(id?: string): void {
+    const exporter: Observable<ExportFiles> = this.store
+      .select(fromStore.getQuery)
+      .pipe(
+        switchMap((q: ElasticsearchQuery) =>
+          this.exportService.export({
+            type: 'pdf',
+            scrollId: id,
+            body: q
+          })
+        )
+      );
 
-        console.log(
-          `%c ~ remains ${total - 2000 * this.req} from ${total}`,
-          'color:yellow; font-size:15px;  font-weight: italic;'
-        );
-      });
-
+    exporter.subscribe(({ scrollId, end }: ExportFiles) => {
       // ONLY FALSE if undefined STOP
       if (end === false) {
         this.exportFile(scrollId);
-      } else {
-        console.log('@@@@@@@@STOP@@@@@@@@@@');
       }
     });
-    return exporter;
   }
 
   private seeIfThisCompInView(): void {

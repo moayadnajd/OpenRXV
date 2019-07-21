@@ -1,5 +1,6 @@
 import { PageEvent } from '@angular/material';
 import { SortOption } from 'src/configs/generalConfig.interface';
+import { hits, ElasticsearchQuery } from 'src/app/filters/services/interfaces';
 export interface SortPaginationOptions {
   reset: boolean;
   pageEvent: PageEvent;
@@ -25,5 +26,21 @@ export interface ExportFiles {
   end: boolean;
   fileName: string;
   scrollId: string;
-  total: number; // DELETE THIS
+}
+
+export type FileType = 'pdf' | 'docx' | 'xlsx';
+
+export interface ExporterResponse {
+  end: boolean;
+  scrollId: string;
+  fileName: string;
+  hits?: Array<hits>; // undefined in case of pdf & docx
+  per_doc_size: number;
+  total: number;
+}
+
+export interface DataForExporter {
+  scrollId?: string;
+  type: FileType;
+  body: ElasticsearchQuery;
 }

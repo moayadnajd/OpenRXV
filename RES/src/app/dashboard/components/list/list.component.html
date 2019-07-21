@@ -3,11 +3,27 @@
   (afterCollapse)="disPatchSetInView(true)"
   (afterExpand)="disPatchSetInView(false)"
 >
-  <mat-panel-description *ngIf="isPaginatedList" (click)="exportFile()">
-    <button mat-mini-fab color="primary">
-      <mat-icon>arrow_downward</mat-icon>
+  <button
+    mat-icon-button
+    [matMenuTriggerFor]="menu"
+    aria-label="Options for exporting files"
+  >
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="exportFile()">
+      <mat-icon>dialpad</mat-icon>
+      <span>Pdf</span>
     </button>
-  </mat-panel-description>
+    <button mat-menu-item>
+      <mat-icon>voicemail</mat-icon>
+      <span>word</span>
+    </button>
+    <button mat-menu-item>
+      <mat-icon>notifications_off</mat-icon>
+      <span>Excel</span>
+    </button>
+  </mat-menu>
   <div
     class="prevent-scroll"
     *ngIf="!isPaginatedList"

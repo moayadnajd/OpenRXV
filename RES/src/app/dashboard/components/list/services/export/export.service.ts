@@ -2,6 +2,11 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import {
+  ExporterResponse,
+  FileType,
+  DataForExporter
+} from '../../paginated-list/filter-paginated-list/types.interface';
 
 @Injectable()
 export class ExportService {
@@ -9,12 +14,9 @@ export class ExportService {
   constructor(private readonly http: HttpClient) {}
 
   // TODO resolve any
-  export(
-    fileType: 'pdf' | 'docx' | 'xlsx',
-    scrollId?: string
-  ): Observable<any> {
-    return this.http.get(
-      `${this.api_end_export_point}/${fileType}/${scrollId ? scrollId : ''}`
-    );
+  export(d: DataForExporter): Observable<ExporterResponse> {
+    return this.http.post(this.api_end_export_point, d) as Observable<
+      ExporterResponse
+    >;
   }
 }
