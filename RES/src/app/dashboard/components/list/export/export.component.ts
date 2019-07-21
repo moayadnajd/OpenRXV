@@ -27,7 +27,7 @@ export class ExportComponent implements OnInit {
       return false;
     }
     return (
-      this.delegationArr.filter(({ loaded }: ExportFilesModal) => !loaded)
+      this.delegationArr.filter(({ loaded }: ExportFilesModal) => loaded)
         .length === this.delegationArr.length
     );
   }
