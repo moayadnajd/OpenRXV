@@ -1,0 +1,8 @@
+.mat-list-item {
+  a {
+    color: #000;
+  }
+  &.downloaded {
+    background-color: #ccc;
+  }
+}

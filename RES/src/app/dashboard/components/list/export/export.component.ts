@@ -8,6 +8,7 @@ import { ExportService } from '../services/export/export.service';
 import { switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { ElasticsearchQuery } from 'src/app/filters/services/interfaces';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-export',
@@ -21,6 +22,8 @@ export class ExportComponent implements OnInit {
   installing: boolean;
   delegationArr: Array<ExportFilesModal>;
   indexToToggleLoaded: number;
+  downloadPath: string;
+  exportPoint: string;
 
   get finishedExporting(): boolean {
     if (!this.delegationArr) {
@@ -35,9 +38,19 @@ export class ExportComponent implements OnInit {
   constructor(private readonly exportService: ExportService) {
     this.installing = false;
     this.indexToToggleLoaded = 0;
+    this.exportPoint = environment.exportPoint;
   }
 
   ngOnInit(): void {}
+
+  markasDownloaded(name: string): void {
+    this.delegationArr = this.delegationArr.map((v: ExportFilesModal) => {
+      if (name === v.name) {
+        v.downloaded = true;
+      }
+      return v;
+    });
+  }
 
   exportFile(id?: string): void {
     this.installing = true;
@@ -52,14 +65,25 @@ export class ExportComponent implements OnInit {
     );
 
     exporter.subscribe(
-      ({ scrollId, end, per_doc_size, total }: ExporterResponse) => {
+      ({
+        scrollId,
+        end,
+        per_doc_size,
+        total,
+        path,
+        fileName
+      }: ExporterResponse) => {
+        if (!this.downloadPath) {
+          this.downloadPath = path;
+        }
         if (!this.delegationArr) {
           this.delegationArr = Array.from(
             { length: Math.ceil(total / per_doc_size) },
             (v: unknown, i: number): ExportFilesModal => ({
               name: `Part ${i + 1}`,
               downloaded: false,
-              loaded: i === this.indexToToggleLoaded
+              loaded: i === this.indexToToggleLoaded,
+              fileName
             })
           );
         }

@@ -37,6 +37,7 @@ export interface ExporterResponse {
   hits?: Array<hits>; // undefined in case of pdf & docx
   per_doc_size: number;
   total: number;
+  path: string;
 }
 
 export interface DataForExporter {
@@ -49,4 +50,5 @@ export interface ExportFilesModal {
   name: string;
   loaded: boolean;
   downloaded: boolean;
+  fileName: string;
 }

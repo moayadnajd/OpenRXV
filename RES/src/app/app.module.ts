@@ -23,7 +23,8 @@ import {
   MatSnackBarModule,
   MatProgressSpinnerModule,
   MatMenuModule,
-  MatDialogModule
+  MatDialogModule,
+  MatDividerModule
 } from '@angular/material';
 import { FiltersComponent } from './filters/filters.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -141,7 +142,8 @@ import { ExportComponent } from './dashboard/components/list/export/export.compo
     MatProgressSpinnerModule,
     LayoutModule,
     MatMenuModule,
-    MatDialogModule
+    MatDialogModule,
+    MatDividerModule
   ],
   entryComponents: [
     ChartComponent,

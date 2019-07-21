@@ -16,23 +16,35 @@
   </ng-container>
   <ng-template #installingNow>
     <ng-container *ngIf="delegationArr; else loadingFirstTime">
-      <mat-selection-list>
-        <mat-list-option
-          *ngFor="let delegation of delegationArr"
-          [disabled]="!delegation.loaded || delegation.downloaded"
-        >
-          <ng-container *ngIf="!delegation.loaded; else loaded">
-            <h4>Preparing {{ delegation.name }}</h4>
-            <mat-progress-bar
-              *ngIf="!delegation.loaded"
-              mode="buffer"
-            ></mat-progress-bar>
-          </ng-container>
-          <ng-template #loaded>
-            <h4 mat-line>Download {{ delegation.name }}</h4>
-          </ng-template>
-        </mat-list-option>
-      </mat-selection-list>
+      <mat-list>
+        <ng-container *ngFor="let delegation of delegationArr">
+          <mat-list-item
+            (click)="markasDownloaded(delegation.name)"
+            matRipple
+            [ngClass]="{ downloaded: delegation.downloaded }"
+          >
+            <a
+              download
+              target="_blank"
+              class="w-100"
+              [href]="exportPoint + downloadPath + '/' + delegation.fileName"
+            >
+              <ng-container *ngIf="!delegation.loaded; else loaded">
+                Preparing {{ delegation.name }}
+                <mat-progress-bar
+                  *ngIf="!delegation.loaded"
+                  mode="buffer"
+                  color="accent"
+                ></mat-progress-bar>
+              </ng-container>
+              <ng-template #loaded>
+                <h4 mat-line>Download {{ delegation.name }}</h4>
+              </ng-template>
+            </a>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+        </ng-container>
+      </mat-list>
     </ng-container>
     <ng-template #loadingFirstTime>
       <mat-progress-bar mode="query"></mat-progress-bar>
