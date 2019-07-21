@@ -20,10 +20,9 @@ import { PageEvent } from '@angular/material';
 import { ScrollHelperService } from '../services/scrollTo/scroll-helper.service';
 import { first, concatMap, switchMap } from 'rxjs/operators';
 import { ParentComponent } from 'src/app/parent-component.class';
-import { ExportService } from './services/export/export.service';
-import { of, Observable } from 'rxjs';
 import { ExportFiles } from './paginated-list/filter-paginated-list/types.interface';
-import { logGroup } from 'src/debug/debug.functions';
+import { Observable } from 'rxjs';
+import { ExportService } from './services/export/export.service';
 /**
  * declare is used to tell TypeScript compiler that the variable has been created elsewhere.
  * If you use declare, nothing is added to the JavaScript that is generated - it is simply a hint to the compiler.
@@ -35,7 +34,7 @@ declare function _altmetric_embed_init(): any;
   selector: 'app-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss'],
-  providers: [ScrollHelperService, ExportService],
+  providers: [ScrollHelperService],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ListComponent extends ParentComponent implements OnInit {
