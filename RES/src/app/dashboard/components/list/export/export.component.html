@@ -1,3 +1,45 @@
-<p>
-  export works!
-</p>
+<h2 mat-dialog-title>
+  <ng-container *ngIf="finishedExporting; else stillExporting">
+    Finished
+  </ng-container>
+  <ng-template #stillExporting>
+    {{ installing ? 'Please wait....' : 'Export' }}
+    <small *ngIf="delegationArr">
+      getting {{ delegationArr.length }} parts
+    </small>
+  </ng-template>
+</h2>
+<mat-dialog-content>
+  <ng-container *ngIf="!installing; else installingNow">
+    Please, note that very lengthy lists of publications will be exported in
+    more than one part to allow a quicker download. Would you like to continue?
+  </ng-container>
+  <ng-template #installingNow>
+    <ng-container *ngIf="delegationArr; else loadingFirstTime">
+      <mat-selection-list>
+        <mat-list-option
+          *ngFor="let delegation of delegationArr"
+          [disabled]="!delegation.loaded || delegation.downloaded"
+        >
+          <ng-container *ngIf="!delegation.loaded; else loaded">
+            <h4>Preparing {{ delegation.name }}</h4>
+            <mat-progress-bar
+              *ngIf="!delegation.loaded"
+              mode="buffer"
+            ></mat-progress-bar>
+          </ng-container>
+          <ng-template #loaded>
+            <h4 mat-line>Download {{ delegation.name }}</h4>
+          </ng-template>
+        </mat-list-option>
+      </mat-selection-list>
+    </ng-container>
+    <ng-template #loadingFirstTime>
+      <mat-progress-bar mode="query"></mat-progress-bar>
+    </ng-template>
+  </ng-template>
+</mat-dialog-content>
+<mat-dialog-actions align="end" *ngIf="!installing">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button cdkFocusInitial (click)="exportFile()">Export</button>
+</mat-dialog-actions>

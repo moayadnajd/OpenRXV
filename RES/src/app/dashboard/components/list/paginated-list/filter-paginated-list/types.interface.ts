@@ -44,3 +44,9 @@ export interface DataForExporter {
   type: FileType;
   body: ElasticsearchQuery;
 }
+
+export interface ExportFilesModal {
+  name: string;
+  loaded: boolean;
+  downloaded: boolean;
+}

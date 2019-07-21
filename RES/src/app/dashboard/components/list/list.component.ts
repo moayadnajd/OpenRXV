@@ -16,7 +16,7 @@ import {
   hits,
   ElasticsearchQuery
 } from 'src/app/filters/services/interfaces';
-import { PageEvent } from '@angular/material';
+import { PageEvent, MatDialog } from '@angular/material';
 import { ScrollHelperService } from '../services/scrollTo/scroll-helper.service';
 import { first, concatMap, switchMap } from 'rxjs/operators';
 import { ParentComponent } from 'src/app/parent-component.class';
@@ -26,6 +26,7 @@ import {
 } from './paginated-list/filter-paginated-list/types.interface';
 import { Observable } from 'rxjs';
 import { ExportService } from './services/export/export.service';
+import { ExportComponent } from './export/export.component';
 /**
  * declare is used to tell TypeScript compiler that the variable has been created elsewhere.
  * If you use declare, nothing is added to the JavaScript that is generated - it is simply a hint to the compiler.
@@ -37,7 +38,7 @@ declare function _altmetric_embed_init(): any;
   selector: 'app-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss'],
-  providers: [ScrollHelperService, ExportService],
+  providers: [ScrollHelperService],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ListComponent extends ParentComponent implements OnInit {
@@ -51,7 +52,7 @@ export class ListComponent extends ParentComponent implements OnInit {
     private readonly store: Store<fromStore.AppState>,
     public readonly scrollHelperService: ScrollHelperService,
     private readonly cdr: ChangeDetectorRef,
-    private readonly exportService: ExportService
+    private readonly dialog: MatDialog
   ) {
     super();
   }
@@ -80,24 +81,13 @@ export class ListComponent extends ParentComponent implements OnInit {
     }
   }
 
-  exportFile(type: FileType, id?: string): void {
-    const exporter: Observable<ExportFiles> = this.store
-      .select(fromStore.getQuery)
-      .pipe(
-        switchMap((q: ElasticsearchQuery) =>
-          this.exportService.export({
-            type,
-            scrollId: id,
-            body: q
-          })
-        )
-      );
+  exportFile(type: FileType): void {
+    const dialogRef = this.dialog.open(ExportComponent, { width: '400px' });
+    dialogRef.componentInstance.type = type;
+    dialogRef.componentInstance.query = this.store.select(fromStore.getQuery);
 
-    exporter.subscribe(({ scrollId, end }: ExportFiles) => {
-      // ONLY FALSE if undefined STOP
-      if (end === false) {
-        this.exportFile(type, scrollId);
-      }
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
     });
   }
 

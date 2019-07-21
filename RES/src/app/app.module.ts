@@ -140,7 +140,8 @@ import { ExportComponent } from './dashboard/components/list/export/export.compo
     MatSnackBarModule,
     MatProgressSpinnerModule,
     LayoutModule,
-    MatMenuModule
+    MatMenuModule,
+    MatDialogModule
   ],
   entryComponents: [
     ChartComponent,
