@@ -10,22 +10,12 @@ import {
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../../../store';
 import { ComponentDashboardConfigs } from 'src/configs/generalConfig.interface';
-import {
-  Bucket,
-  Hits,
-  hits,
-  ElasticsearchQuery
-} from 'src/app/filters/services/interfaces';
+import { Bucket, Hits, hits } from 'src/app/filters/services/interfaces';
 import { PageEvent, MatDialog } from '@angular/material';
 import { ScrollHelperService } from '../services/scrollTo/scroll-helper.service';
-import { first, concatMap, switchMap } from 'rxjs/operators';
+import { first } from 'rxjs/operators';
 import { ParentComponent } from 'src/app/parent-component.class';
-import {
-  ExportFiles,
-  FileType
-} from './paginated-list/filter-paginated-list/types.interface';
-import { Observable } from 'rxjs';
-import { ExportService } from './services/export/export.service';
+import { FileType } from './paginated-list/filter-paginated-list/types.interface';
 import { ExportComponent } from './export/export.component';
 /**
  * declare is used to tell TypeScript compiler that the variable has been created elsewhere.

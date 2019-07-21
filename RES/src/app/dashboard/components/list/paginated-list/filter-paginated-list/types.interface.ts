@@ -43,7 +43,7 @@ export interface ExporterResponse {
 export interface DataForExporter {
   scrollId?: string;
   type: FileType;
-  body: ElasticsearchQuery;
+  query: ElasticsearchQuery;
 }
 
 export interface ExportFilesModal {

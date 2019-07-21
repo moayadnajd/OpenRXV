@@ -59,7 +59,7 @@ export class ExportComponent implements OnInit {
         this.exportService.export({
           type: this.type,
           scrollId: id,
-          body: q
+          query: q
         })
       )
     );
