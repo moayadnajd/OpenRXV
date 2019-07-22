@@ -13,13 +13,9 @@ import { hits } from 'src/app/filters/services/interfaces';
 @Injectable()
 export class ExportService {
   private readonly api_end_export_point: string = environment.exportPoint;
-  private xlsxHeader: Array<string>;
   constructor(private readonly http: HttpClient) {}
 
   export(d: DataForExporter): Observable<ExporterResponse> {
-    if (d.type === 'xlsx') {
-      this.xlsxHeader = this.getHeader();
-    }
     return this.http.post(this.api_end_export_point, d) as Observable<
       ExporterResponse
     >;
@@ -47,7 +43,7 @@ export class ExportService {
   }
 
   downloadFile(excelData: Array<Array<string>>, fileName: string) {
-    const sheet = utils.aoa_to_sheet(excelData);
+    const sheet = utils.aoa_to_sheet([this.getHeader(), ...excelData]);
     const workBook = utils.book_new();
     utils.book_append_sheet(workBook, sheet, 'Publications');
     writeFile(workBook, fileName, { bookType: 'xlsx' });
