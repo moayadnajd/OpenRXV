@@ -83,7 +83,10 @@ export class PaginatedListComponent implements OnInit {
   }
 
   exportFile(type: FileType): void {
-    const dialogRef = this.dialog.open(ExportComponent, { width: '400px' });
+    const dialogRef = this.dialog.open(ExportComponent, {
+      width: '400px',
+      disableClose: true
+    });
     dialogRef.componentInstance.type = type;
     dialogRef.componentInstance.query = this.store.select(fromStore.getQuery);
 

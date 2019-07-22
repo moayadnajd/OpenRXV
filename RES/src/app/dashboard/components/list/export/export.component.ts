@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, HostListener } from '@angular/core';
 import {
   FileType,
   ExporterResponse,
@@ -9,6 +9,7 @@ import { switchMap, first } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { ElasticsearchQuery } from 'src/app/filters/services/interfaces';
 import { environment } from 'src/environments/environment';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-export',
@@ -19,6 +20,7 @@ import { environment } from 'src/environments/environment';
 export class ExportComponent implements OnInit {
   @Input() type: FileType;
   @Input() query: Observable<ElasticsearchQuery>;
+  forceEnd: boolean;
   installing: boolean;
   delegationArr: Array<ExportFilesModal>;
   indexToToggleLoaded: number;
@@ -35,10 +37,14 @@ export class ExportComponent implements OnInit {
     );
   }
 
-  constructor(private readonly exportService: ExportService) {
+  constructor(
+    private readonly exportService: ExportService,
+    private readonly dialog: MatDialog
+  ) {
     this.installing = false;
     this.indexToToggleLoaded = 0;
     this.exportPoint = environment.exportPoint;
+    this.forceEnd = false;
   }
 
   ngOnInit(): void {}
@@ -64,6 +70,22 @@ export class ExportComponent implements OnInit {
         this.exportService.createXlsxFile(toDownload),
         fileName
       );
+    }
+  }
+
+  @HostListener('window:keyup.esc') onKeyUp() {
+    if (this.installing) {
+      const cn = confirm('Are you sure you want to end the export?');
+      if (cn) {
+        this.dialog.closeAll();
+        this.forceEnd = true;
+      }
+    }
+  }
+
+  @HostListener('window:beforeunload', ['$event']) unloadHandler(event: Event) {
+    if (this.installing) {
+      event.returnValue = false;
     }
   }
 
@@ -97,7 +119,7 @@ export class ExportComponent implements OnInit {
         );
       }
       // ONLY FALSE if undefined STOP
-      if (er.end === false) {
+      if (er.end === false && !this.forceEnd) {
         this.delegationArr = this.delegationArr.map(
           (efm: ExportFilesModal, i: number) => {
             if (i === this.indexToToggleLoaded) {
