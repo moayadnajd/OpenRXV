@@ -43,17 +43,23 @@ export class ExportComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  markAsDownloaded(name: string, fileName: string): void {
+  prevent(e, efm: ExportFilesModal): void {
+    if (!efm.loaded) {
+      e.preventDefault();
+    }
+  }
+
+  markAsDownloaded({ name, fileName, loaded }: ExportFilesModal): void {
     let toDownload: ExportFilesModal;
     this.delegationArr = this.delegationArr.map((v: ExportFilesModal) => {
-      if (name === v.name) {
+      if (name === v.name && v.loaded) {
         v.downloaded = true;
       }
       toDownload = { ...v };
       return v;
     });
 
-    if (this.type === 'xlsx') {
+    if (this.type === 'xlsx' && loaded) {
       this.exportService.downloadFile(
         this.exportService.createXlsxFile(toDownload),
         fileName

@@ -18,39 +18,48 @@
     <ng-container *ngIf="delegationArr; else loadingFirstTime">
       <mat-list>
         <ng-container *ngFor="let delegation of delegationArr">
-          <mat-list-item
-            (click)="markAsDownloaded(delegation.name, delegation.fileName)"
-            matRipple
-            [ngClass]="{ downloaded: delegation.downloaded }"
-          >
-            <ng-container *ngIf="type === 'xlsx'; else pdfDocx">
+          <ng-container *ngIf="type === 'xlsx'; else pdfDocx">
+            <ng-container *ngTemplateOutlet="info"></ng-container>
+          </ng-container>
+          <ng-template #pdfDocx>
+            <a
+              [attr.download]="delegation.loaded ? delegation.fileName : null"
+              [attr.target]="delegation.loaded ? '_blank' : null"
+              class="w-100"
+              [ngClass]="{ disable: !delegation.loaded }"
+              [href]="
+                delegation.loaded
+                  ? exportPoint + downloadPath + '/' + delegation.fileName
+                  : ''
+              "
+              (click)="prevent($event, delegation)"
+            >
               <ng-container *ngTemplateOutlet="info"></ng-container>
-            </ng-container>
-            <ng-template #pdfDocx>
-              <a
-                download
-                target="_blank"
-                class="w-100"
-                [href]="exportPoint + downloadPath + '/' + delegation.fileName"
-              >
-                <ng-container *ngTemplateOutlet="info"></ng-container>
-              </a>
-            </ng-template>
+            </a>
+          </ng-template>
 
-            <ng-template #info>
+          <ng-template #info>
+            <mat-list-item
+              (click)="markAsDownloaded(delegation)"
+              matRipple
+              [ngClass]="{
+                downloaded: delegation.downloaded,
+                disable: !delegation.loaded
+              }"
+            >
               <ng-container *ngIf="!delegation.loaded; else loaded">
                 Preparing {{ delegation.name }}
                 <mat-progress-bar
                   *ngIf="!delegation.loaded"
                   mode="buffer"
-                  color="accent"
+                  color="warn"
                 ></mat-progress-bar>
               </ng-container>
               <ng-template #loaded>
                 <h4 mat-line>Download {{ delegation.name }}</h4>
               </ng-template>
-            </ng-template>
-          </mat-list-item>
+            </mat-list-item>
+          </ng-template>
           <mat-divider></mat-divider>
         </ng-container>
       </mat-list>

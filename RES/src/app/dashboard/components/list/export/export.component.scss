@@ -1,6 +1,13 @@
+a {
+  color: #000;
+  text-decoration: none;
+  &.disable {
+    cursor: default;
+  }
+}
 .mat-list-item {
-  a {
-    color: #000;
+  &:hover:not(.disable) {
+    cursor: pointer;
   }
   &.downloaded {
     background-color: #ccc;
