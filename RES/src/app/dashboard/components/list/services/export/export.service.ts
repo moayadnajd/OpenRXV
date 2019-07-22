@@ -22,27 +22,25 @@ export class ExportService {
   }
 
   createXlsxFile({ hits }: ExportFilesModal): Array<Array<string>> {
-    return hits.map(({ _source }: hits) => {
-      return [
-        _source.title,
-        _source.citation,
-        _source.date,
-        this.formatter(_source.author),
-        _source.publisher,
-        _source.status,
-        _source.crp,
-        this.formatter(_source.affiliation),
-        this.formatter(_source.language),
-        this.formatter(_source.subject),
-        _source.region,
-        this.formatter(_source.country),
-        this.formatter(_source.repo),
-        _source.handle
-      ];
-    });
+    return hits.map(({ _source }: hits) => [
+      _source.title,
+      _source.citation,
+      _source.date,
+      this.formatter(_source.author),
+      _source.publisher,
+      _source.status,
+      _source.crp,
+      this.formatter(_source.affiliation),
+      this.formatter(_source.language),
+      this.formatter(_source.subject),
+      _source.region,
+      this.formatter(_source.country),
+      this.formatter(_source.repo),
+      _source.handle
+    ]);
   }
 
-  downloadFile(excelData: Array<Array<string>>, fileName: string) {
+  downloadFile(excelData: Array<Array<string>>, fileName: string): void {
     const sheet = utils.aoa_to_sheet([this.getHeader(), ...excelData]);
     const workBook = utils.book_new();
     utils.book_append_sheet(workBook, sheet, 'Publications');
@@ -50,7 +48,7 @@ export class ExportService {
   }
 
   private formatter(toFormat: Array<string> | string): string {
-    return Array.isArray(toFormat) ? toFormat.join('; ') : toFormat;
+    return Array.isArray(toFormat) ? toFormat.join('; ') : toFormat || 'None';
   }
 
   private getHeader(): Array<string> {
@@ -60,7 +58,7 @@ export class ExportService {
       'Date',
       'Author(s)',
       'Publisher',
-      'ISI Status',
+      'Status',
       'CRP',
       'Affiliation(s)',
       'Language',
