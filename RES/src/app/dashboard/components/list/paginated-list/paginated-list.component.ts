@@ -89,10 +89,6 @@ export class PaginatedListComponent implements OnInit {
     });
     dialogRef.componentInstance.type = type;
     dialogRef.componentInstance.query = this.store.select(fromStore.getQuery);
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
   }
 
   private dispatchAction(spo: SortPaginationOptions): void {
