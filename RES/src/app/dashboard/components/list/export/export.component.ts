@@ -9,7 +9,8 @@ import { switchMap, first } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { ElasticsearchQuery } from 'src/app/filters/services/interfaces';
 import { environment } from 'src/environments/environment';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-export',
@@ -39,7 +40,8 @@ export class ExportComponent implements OnInit {
 
   constructor(
     private readonly exportService: ExportService,
-    private readonly dialog: MatDialog
+    private readonly dialog: MatDialog,
+    private readonly snackBar: MatSnackBar
   ) {
     this.installing = false;
     this.indexToToggleLoaded = 0;
@@ -102,35 +104,45 @@ export class ExportComponent implements OnInit {
       )
     );
 
-    exporter.subscribe((er: ExporterResponse) => {
-      if (!this.downloadPath) {
-        this.downloadPath = er.path;
-      }
-      if (!this.delegationArr) {
-        this.delegationArr = Array.from(
-          { length: Math.ceil(er.total / er.per_doc_size) },
-          (_: unknown, i: number): ExportFilesModal => ({
-            name: `Part ${i + 1}`,
-            downloaded: false,
-            loaded: i === this.indexToToggleLoaded,
-            fileName: er.fileName,
-            hits: er.hits
-          })
-        );
-      }
-      // ONLY FALSE if undefined STOP
-      if (er.end === false && !this.forceEnd) {
-        this.delegationArr = this.delegationArr.map(
-          (efm: ExportFilesModal, i: number) => {
-            if (i === this.indexToToggleLoaded) {
-              efm.loaded = true;
+    exporter.subscribe(
+      (er: ExporterResponse) => {
+        if (!this.downloadPath) {
+          this.downloadPath = er.path;
+        }
+        if (!this.delegationArr) {
+          this.delegationArr = Array.from(
+            { length: Math.ceil(er.total / er.per_doc_size) },
+            (_: unknown, i: number): ExportFilesModal => ({
+              name: `Part ${i + 1}`,
+              downloaded: false,
+              loaded: i === this.indexToToggleLoaded,
+              fileName: er.fileName,
+              hits: er.hits
+            })
+          );
+        }
+        // ONLY FALSE if undefined STOP
+        if (er.end === false && !this.forceEnd) {
+          this.delegationArr = this.delegationArr.map(
+            (efm: ExportFilesModal, i: number) => {
+              if (i === this.indexToToggleLoaded) {
+                efm.loaded = true;
+              }
+              return efm;
             }
-            return efm;
-          }
+          );
+          this.indexToToggleLoaded++;
+          this.exportFile(er.scrollId);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        this.dialog.closeAll();
+        this.snackBar.open(
+          'Something went wrong, please try exporting again',
+          'Dismiss',
+          { duration: 15000 }
         );
-        this.indexToToggleLoaded++;
-        this.exportFile(er.scrollId);
       }
-    });
+    );
   }
 }
