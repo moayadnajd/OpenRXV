@@ -6,3 +6,9 @@ img {
   height: 30px;
   width: 30px;
 }
+
+.v-center {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
