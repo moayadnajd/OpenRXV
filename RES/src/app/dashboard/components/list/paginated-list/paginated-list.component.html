@@ -1,5 +1,6 @@
 <app-filter-paginated-list
   (filterChanged)="changeFilter($event)"
+  (startExporting)="exportFile($event)"
   [filterOptions]="content.filterOptions"
 ></app-filter-paginated-list>
 

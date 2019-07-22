@@ -11,12 +11,11 @@ import { Store } from '@ngrx/store';
 import * as fromStore from '../../../../store';
 import { ComponentDashboardConfigs } from 'src/configs/generalConfig.interface';
 import { Bucket, Hits, hits } from 'src/app/filters/services/interfaces';
-import { PageEvent, MatDialog } from '@angular/material';
+import { PageEvent } from '@angular/material';
 import { ScrollHelperService } from '../services/scrollTo/scroll-helper.service';
 import { first } from 'rxjs/operators';
 import { ParentComponent } from 'src/app/parent-component.class';
-import { FileType } from './paginated-list/filter-paginated-list/types.interface';
-import { ExportComponent } from './export/export.component';
+
 /**
  * declare is used to tell TypeScript compiler that the variable has been created elsewhere.
  * If you use declare, nothing is added to the JavaScript that is generated - it is simply a hint to the compiler.
@@ -41,8 +40,7 @@ export class ListComponent extends ParentComponent implements OnInit {
   constructor(
     private readonly store: Store<fromStore.AppState>,
     public readonly scrollHelperService: ScrollHelperService,
-    private readonly cdr: ChangeDetectorRef,
-    private readonly dialog: MatDialog
+    private readonly cdr: ChangeDetectorRef
   ) {
     super();
   }
@@ -69,16 +67,6 @@ export class ListComponent extends ParentComponent implements OnInit {
     if (this.clickToEnable) {
       this.clickToEnable.nativeElement.hidden = false;
     }
-  }
-
-  exportFile(type: FileType): void {
-    const dialogRef = this.dialog.open(ExportComponent, { width: '400px' });
-    dialogRef.componentInstance.type = type;
-    dialogRef.componentInstance.query = this.store.select(fromStore.getQuery);
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
   }
 
   private seeIfThisCompInView(): void {

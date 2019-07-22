@@ -4,18 +4,20 @@ import {
   Output,
   Input,
   OnInit,
-  ChangeDetectionStrategy,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { SortOption } from 'src/configs/generalConfig.interface';
+import { FileType } from './types.interface';
 
 @Component({
   selector: 'app-filter-paginated-list',
   templateUrl: './filter-paginated-list.component.html',
   styleUrls: ['./filter-paginated-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FilterPaginatedListComponent implements OnInit {
   @Output() filterChanged: EventEmitter<SortOption>;
+  @Output() startExporting: EventEmitter<FileType>;
   @Input() filterOptions: SortOption[];
   selectedFilter: SortOption;
   ascDesc: SortOption[];
@@ -23,18 +25,19 @@ export class FilterPaginatedListComponent implements OnInit {
 
   constructor() {
     this.filterChanged = new EventEmitter();
+    this.startExporting = new EventEmitter();
   }
 
   ngOnInit(): void {
     this.ascDesc = [
       {
         display: 'Descending',
-        value: 'desc',
+        value: 'desc'
       },
       {
         display: 'Ascending',
-        value: 'asc',
-      },
+        value: 'asc'
+      }
     ];
     this.reverseOption = this.ascDesc[0].value;
     this.selectedFilter = this.filterOptions[0];
@@ -50,5 +53,9 @@ export class FilterPaginatedListComponent implements OnInit {
       return so;
     });
     this.onFilterChanged(this.selectedFilter);
+  }
+
+  startExportingNow(type: FileType): void {
+    this.startExporting.emit(type);
   }
 }
