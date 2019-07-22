@@ -9,7 +9,4 @@ a {
   &:hover:not(.disable) {
     cursor: pointer;
   }
-  &.downloaded {
-    background-color: #ccc;
-  }
 }
