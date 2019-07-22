@@ -75,17 +75,21 @@ export class ExportComponent implements OnInit {
     }
   }
 
-  @HostListener('window:keyup.esc') onKeyUp() {
+  @HostListener('window:keyup.esc') onKeyUp(): void {
     if (this.installing) {
       const cn = confirm('Are you sure you want to end the export?');
       if (cn) {
         this.dialog.closeAll();
         this.forceEnd = true;
       }
+    } else {
+      this.dialog.closeAll();
     }
   }
 
-  @HostListener('window:beforeunload', ['$event']) unloadHandler(event: Event) {
+  @HostListener('window:beforeunload', ['$event']) unloadHandler(
+    event: Event
+  ): void {
     if (this.installing) {
       event.returnValue = false;
     }

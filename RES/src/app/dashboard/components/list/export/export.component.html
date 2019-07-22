@@ -73,7 +73,7 @@
     </ng-template>
   </ng-template>
 </mat-dialog-content>
-<mat-dialog-actions align="end" *ngIf="!installing">
-  <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button cdkFocusInitial (click)="exportFile()">Export</button>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onKeyUp()">Cancel</button>
+  <button mat-button (click)="exportFile()" *ngIf="!installing">Export</button>
 </mat-dialog-actions>
