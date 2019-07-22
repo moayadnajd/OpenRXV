@@ -51,4 +51,5 @@ export interface ExportFilesModal {
   loaded: boolean;
   downloaded: boolean;
   fileName: string;
+  hits?: Array<hits>;
 }

@@ -19,16 +19,25 @@
       <mat-list>
         <ng-container *ngFor="let delegation of delegationArr">
           <mat-list-item
-            (click)="markasDownloaded(delegation.name)"
+            (click)="markAsDownloaded(delegation.name, delegation.fileName)"
             matRipple
             [ngClass]="{ downloaded: delegation.downloaded }"
           >
-            <a
-              download
-              target="_blank"
-              class="w-100"
-              [href]="exportPoint + downloadPath + '/' + delegation.fileName"
-            >
+            <ng-container *ngIf="type === 'xlsx'; else pdfDocx">
+              <ng-container *ngTemplateOutlet="info"></ng-container>
+            </ng-container>
+            <ng-template #pdfDocx>
+              <a
+                download
+                target="_blank"
+                class="w-100"
+                [href]="exportPoint + downloadPath + '/' + delegation.fileName"
+              >
+                <ng-container *ngTemplateOutlet="info"></ng-container>
+              </a>
+            </ng-template>
+
+            <ng-template #info>
               <ng-container *ngIf="!delegation.loaded; else loaded">
                 Preparing {{ delegation.name }}
                 <mat-progress-bar
@@ -40,7 +49,7 @@
               <ng-template #loaded>
                 <h4 mat-line>Download {{ delegation.name }}</h4>
               </ng-template>
-            </a>
+            </ng-template>
           </mat-list-item>
           <mat-divider></mat-divider>
         </ng-container>
