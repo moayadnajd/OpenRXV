@@ -40,8 +40,6 @@
 
           <ng-template #info>
             <mat-list-item
-              (click)="markAsDownloaded(delegation)"
-              matRipple
               [ngClass]="{
                 disable: !delegation.loaded
               }"
@@ -55,12 +53,19 @@
                 ></mat-progress-bar>
               </ng-container>
               <ng-template #loaded>
-                <h4 mat-line>
-                  <mat-icon [inline]="true" *ngIf="delegation.downloaded"
-                    >done_all</mat-icon
-                  >
-                  Download {{ delegation.name }}
-                </h4>
+                <button
+                  mat-flat-button
+                  color="primary"
+                  class="w-100"
+                  (click)="markAsDownloaded(delegation)"
+                >
+                  <h4 mat-line>
+                    <mat-icon [inline]="true" *ngIf="delegation.downloaded">
+                      done_all
+                    </mat-icon>
+                    Download {{ delegation.name }}
+                  </h4>
+                </button>
               </ng-template>
             </mat-list-item>
           </ng-template>
