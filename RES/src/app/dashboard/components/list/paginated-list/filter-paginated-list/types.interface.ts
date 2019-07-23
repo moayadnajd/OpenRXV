@@ -44,6 +44,7 @@ export interface DataForExporter {
   scrollId?: string;
   type: FileType;
   query: ElasticsearchQuery;
+  part: number;
 }
 
 export interface ExportFilesModal {

@@ -27,6 +27,7 @@ export class ExportComponent implements OnInit {
   indexToToggleLoaded: number;
   downloadPath: string;
   exportPoint: string;
+  part: number;
 
   get finishedExporting(): boolean {
     if (!this.delegationArr) {
@@ -47,6 +48,7 @@ export class ExportComponent implements OnInit {
     this.indexToToggleLoaded = 0;
     this.exportPoint = environment.exportPoint;
     this.forceEnd = false;
+    this.part = 1;
   }
 
   ngOnInit(): void {}
@@ -103,50 +105,65 @@ export class ExportComponent implements OnInit {
         this.exportService.export({
           type: this.type,
           scrollId: id,
-          query: q
+          query: q,
+          part: this.part
         })
       )
     );
 
-    exporter.subscribe(
-      (er: ExporterResponse) => {
-        if (!this.downloadPath) {
-          this.downloadPath = er.path;
+    exporter.subscribe(this.subscriber.bind(this), (err: HttpErrorResponse) => {
+      this.dialog.closeAll();
+      this.snackBar.open(
+        'Something went wrong, please try exporting again',
+        'Dismiss',
+        { duration: 15000 }
+      );
+    });
+  }
+
+  private createDeligationOneTime(er: ExporterResponse): void {
+    if (!this.delegationArr) {
+      this.delegationArr = Array.from(
+        { length: Math.ceil(er.total / er.per_doc_size) },
+        (_: unknown, i: number): ExportFilesModal => ({
+          name: `Part ${i + 1}`,
+          downloaded: false,
+          loaded: i === this.indexToToggleLoaded,
+          fileName: er.fileName,
+          hits: er.hits
+        })
+      );
+    } else {
+      this.delegationArr = this.delegationArr.map(
+        (efm: ExportFilesModal, i: number) => {
+          if (i === this.part - 1) {
+            efm.fileName = er.fileName;
+          }
+          return efm;
         }
-        if (!this.delegationArr) {
-          this.delegationArr = Array.from(
-            { length: Math.ceil(er.total / er.per_doc_size) },
-            (_: unknown, i: number): ExportFilesModal => ({
-              name: `Part ${i + 1}`,
-              downloaded: false,
-              loaded: i === this.indexToToggleLoaded,
-              fileName: er.fileName,
-              hits: er.hits
-            })
-          );
+      );
+    }
+  }
+
+  private subscriber(er: ExporterResponse): void {
+    if (!this.downloadPath) {
+      this.downloadPath = er.path;
+    }
+    this.createDeligationOneTime(er);
+    // ONLY FALSE if undefined STOP
+    if (er.end === false && !this.forceEnd) {
+      this.delegationArr = this.delegationArr.map(
+        (efm: ExportFilesModal, i: number) => {
+          if (i === this.indexToToggleLoaded) {
+            efm.loaded = true;
+          }
+          return efm;
         }
-        // ONLY FALSE if undefined STOP
-        if (er.end === false && !this.forceEnd) {
-          this.delegationArr = this.delegationArr.map(
-            (efm: ExportFilesModal, i: number) => {
-              if (i === this.indexToToggleLoaded) {
-                efm.loaded = true;
-              }
-              return efm;
-            }
-          );
-          this.indexToToggleLoaded++;
-          this.exportFile(er.scrollId);
-        }
-      },
-      (err: HttpErrorResponse) => {
-        this.dialog.closeAll();
-        this.snackBar.open(
-          'Something went wrong, please try exporting again',
-          'Dismiss',
-          { duration: 15000 }
-        );
-      }
-    );
+      );
+      this.indexToToggleLoaded++;
+
+      this.part++;
+      this.exportFile(er.scrollId);
+    }
   }
 }
