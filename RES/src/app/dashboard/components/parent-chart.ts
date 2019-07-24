@@ -24,7 +24,6 @@ export class ParentChart extends ParentComponent {
           this.cms.setExpanded = bu.length >= 1;
         } else {
           this.cms.setExpanded = this.checkExpandedForObject(bu);
-          console.log(bu);
         }
       } else {
         this.cms.setExpanded = false;

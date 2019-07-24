@@ -51,6 +51,7 @@ export interface hits {
   showMe?: boolean;
 }
 
+// TODO DELETE THE KEYS !
 /**
  * **Elasticsearch** _source.
  * These could change based on the value
@@ -61,6 +62,30 @@ export interface hits {
  */
 export interface ESSource {
   [key: string]: any;
+  id: string;
+  handle: string;
+  thumbnail: string;
+  date: string;
+  identifier: string | Array<string>;
+  uri: string;
+  abstract: string;
+  region: string;
+  language: Array<string>;
+  publisher: string;
+  type: string;
+  title: string;
+  status: string;
+  citation: string;
+  sponsorship: string;
+  affiliation: string | Array<string>;
+  crp: string;
+  author: Array<string> | string;
+  community: string | Array<string>;
+  year: string;
+  repo: string;
+  numbers: Numbers;
+  country?: Array<string>;
+  subject?: Array<string>;
 }
 
 /**

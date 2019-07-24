@@ -3,26 +3,30 @@ import {
   Input,
   ViewChild,
   OnInit,
-  ChangeDetectionStrategy,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { hits } from 'src/app/filters/services/interfaces';
-import { PageEvent, MatPaginator } from '@angular/material';
+import { PageEvent, MatPaginator, MatDialog } from '@angular/material';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../../../../store';
 import { MainBodyBuilderService } from 'src/services/mainBodyBuilderService/main-body-builder.service';
-import { SortPaginationOptions } from './filter-paginated-list/types.interface';
+import {
+  SortPaginationOptions,
+  FileType
+} from './filter-paginated-list/types.interface';
 import { QueryState } from 'src/store/reducers/query.reducer';
 import {
   SortOption,
-  PaginatedListConfigs,
+  PaginatedListConfigs
 } from 'src/configs/generalConfig.interface';
 import { skip } from 'rxjs/operators';
+import { ExportComponent } from '../export/export.component';
 
 @Component({
   selector: 'app-paginated-list',
   templateUrl: './paginated-list.component.html',
   styleUrls: ['./paginated-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PaginatedListComponent implements OnInit {
   @Input() hits: hits[];
@@ -43,7 +47,8 @@ export class PaginatedListComponent implements OnInit {
   private flag: boolean;
   constructor(
     private readonly store: Store<fromStore.AppState>,
-    private readonly mainBodyBuilderService: MainBodyBuilderService
+    private readonly mainBodyBuilderService: MainBodyBuilderService,
+    private readonly dialog: MatDialog
   ) {
     this.flag = true;
   }
@@ -60,7 +65,7 @@ export class PaginatedListComponent implements OnInit {
       this.dispatchAction({
         reset: false,
         pageEvent: e,
-        sortOption: this.sortOption,
+        sortOption: this.sortOption
       });
     } else {
       this.flag = true;
@@ -73,8 +78,17 @@ export class PaginatedListComponent implements OnInit {
     this.dispatchAction({
       reset: true,
       pageEvent: this.paginationAtt,
-      sortOption: e,
+      sortOption: e
     });
+  }
+
+  exportFile(type: FileType): void {
+    const dialogRef = this.dialog.open(ExportComponent, {
+      width: '400px',
+      disableClose: true
+    });
+    dialogRef.componentInstance.type = type;
+    dialogRef.componentInstance.query = this.store.select(fromStore.getQuery);
   }
 
   private dispatchAction(spo: SortPaginationOptions): void {

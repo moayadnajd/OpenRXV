@@ -15,6 +15,7 @@ import { PageEvent } from '@angular/material';
 import { ScrollHelperService } from '../services/scrollTo/scroll-helper.service';
 import { first } from 'rxjs/operators';
 import { ParentComponent } from 'src/app/parent-component.class';
+
 /**
  * declare is used to tell TypeScript compiler that the variable has been created elsewhere.
  * If you use declare, nothing is added to the JavaScript that is generated - it is simply a hint to the compiler.
@@ -35,7 +36,6 @@ export class ListComponent extends ParentComponent implements OnInit {
   listData: Bucket[]; // for aggrigiation list
   isPaginatedList: boolean; // determine if we should display the hits or not
   paginationAtt: PageEvent;
-  req: number;
 
   constructor(
     private readonly store: Store<fromStore.AppState>,
@@ -43,7 +43,6 @@ export class ListComponent extends ParentComponent implements OnInit {
     private readonly cdr: ChangeDetectorRef
   ) {
     super();
-    this.req = 0;
   }
 
   ngOnInit(): void {
