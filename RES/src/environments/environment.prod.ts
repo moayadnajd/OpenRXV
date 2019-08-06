@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  endPoint: '/explorer/api/items/item/_search'
+  endPoint: '/explorer/api/items/item/_search',
+  exportPoint: '/exports'
 };
