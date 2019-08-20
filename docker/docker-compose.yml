@@ -83,3 +83,19 @@ services:
     environment:
       - ELASTICSEARCH_URL=http://elasticsearch:9200        
             
+  export:
+     container_name: export
+     working_dir: /script/
+     restart: always
+     image: node
+     ports:
+       - 3000:3000
+     command: "npm run install_and_run"
+     volumes:
+       - /home/codeobia/AReS_Exporter:/script
+     depends_on:
+       - elasticsearch
+       - angular_nginx
+     links:
+       - elasticsearch
+       - angular_nginx

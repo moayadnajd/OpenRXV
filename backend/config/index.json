@@ -28,13 +28,13 @@
             "name": "altmetric",
             "param": "10947",
             "description": "get altmetric numbers from altmetric api for cgspace",
-            "active": true
+            "active": false
         },
         {
             "name": "altmetric",
             "param": "10568",
             "description": "get altmetric numbers from altmetric api for cgspace",
-            "active": true
+            "active": false
         },
         {
             "name": "altmetric",
@@ -46,22 +46,209 @@
             "name": "altmetric",
             "param": "20.500.11766",
             "description": "get altmetric numbers from altmetric api for melspace",
-            "active": true
+            "active": false
         },
         {
             "name": "MelDownloadsAndViews",
             "description": "get mel downloads and views numbers",
-            "active": true
+            "active":  false
         },
         {
             "name": "DownloadsAndViews",
             "param": "https://cgspace.cgiar.org",
             "description": "get cgspace downloads and views numbers",
-            "active": true
+            "active": false
         }
     ],
     "startOnFirstInit": true,
     "repositories": [
+        {
+            "type": "Dspace",
+            "name": "CGSPACE",
+            "startPage": 0,
+            "allCores": true,
+            "itemsEndPoint": "https://cgspace.cgiar.org/rest/items?expand=metadata,bitstreams,parentCommunityList",
+            "schema": {
+                "id": "id",
+                "handle": "handle",
+                "metadata": [
+                    {
+                        "where": {
+                            "key": "dc.date.issued"
+                        },
+                        "value": {
+                            "value": "date"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "dc.identifier"
+                        },
+                        "value": {
+                            "value": "identifier"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "dc.identifier.uri"
+                        },
+                        "value": {
+                            "value": "uri"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "dc.description.abstract"
+                        },
+                        "value": {
+                            "value": "abstract"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "cg.coverage.region"
+                        },
+                        "value": {
+                            "value": "region"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "cg.coverage.country"
+                        },
+                        "value": {
+                            "value": "country"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "dc.language.iso"
+                        },
+                        "value": {
+                            "value": "language"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "dc.publisher"
+                        },
+                        "value": {
+                            "value": "publisher"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "dc.subject"
+                        },
+                        "value": {
+                            "value": "subject"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "dc.subject"
+                        },
+                        "value": {
+                            "value": "subject"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "dc.type"
+                        },
+                        "value": {
+                            "value": "type"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "dc.title"
+                        },
+                        "value": {
+                            "value": "title"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "cg.identifier.status"
+                        },
+                        "value": {
+                            "value": "status"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "dc.identifier.citation"
+                        },
+                        "value": {
+                            "value": "citation"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "dc.description.sponsorship"
+                        },
+                        "value": {
+                            "value": "sponsorship"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "dc.description.sponsorship"
+                        },
+                        "value": {
+                            "value": "sponsorship"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "cg.contributor.affiliation"
+                        },
+                        "value": {
+                            "value": "affiliation"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "cg.contributor.crp"
+                        },
+                        "value": {
+                            "value": "crp"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "dc.contributor.author"
+                        },
+                        "value": {
+                            "value": "author"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "dc.contributor"
+                        },
+                        "value": {
+                            "value": "author"
+                        }
+                    }
+                ],
+                "parentCommunityList": {
+                    "name": "community"
+                },
+                "bitstreams": [
+                    {
+                        "where": {
+                            "bundleName": "THUMBNAIL"
+                        },
+                        "value": {
+                            "retrieveLink": "thumbnail"
+                        },
+                        "prefix": "https://cgspace.cgiar.org/rest"
+                    }
+                ]
+            }
+        },
         {
             "type": "Dspace",
             "name": "MELSPACE",
@@ -253,196 +440,11 @@
                 }
                 
             }
-        },
-        {
-            "type": "Dspace",
-            "name": "CGSPACE",
-            "startPage": 0,
-            "allCores": true,
-            "itemsEndPoint": "https://cgspace.cgiar.org/rest/items?expand=metadata,bitstreams,parentCommunityList",
-            "schema": {
-                "id": "id",
-                "handle": "handle",
-                "metadata": [
-                    {
-                        "where": {
-                            "key": "dc.date.issued"
-                        },
-                        "value": {
-                            "value": "date"
-                        }
-                    },
-                    {
-                        "where": {
-                            "key": "dc.identifier"
-                        },
-                        "value": {
-                            "value": "identifier"
-                        }
-                    },
-                    {
-                        "where": {
-                            "key": "dc.identifier.uri"
-                        },
-                        "value": {
-                            "value": "uri"
-                        }
-                    },
-                    {
-                        "where": {
-                            "key": "dc.description.abstract"
-                        },
-                        "value": {
-                            "value": "abstract"
-                        }
-                    },
-                    {
-                        "where": {
-                            "key": "cg.coverage.region"
-                        },
-                        "value": {
-                            "value": "region"
-                        }
-                    },
-                    {
-                        "where": {
-                            "key": "cg.coverage.country"
-                        },
-                        "value": {
-                            "value": "country"
-                        }
-                    },
-                    {
-                        "where": {
-                            "key": "dc.language.iso"
-                        },
-                        "value": {
-                            "value": "language"
-                        }
-                    },
-                    {
-                        "where": {
-                            "key": "dc.publisher"
-                        },
-                        "value": {
-                            "value": "publisher"
-                        }
-                    },
-                    {
-                        "where": {
-                            "key": "dc.subject"
-                        },
-                        "value": {
-                            "value": "subject"
-                        }
-                    },
-                    {
-                        "where": {
-                            "key": "dc.subject"
-                        },
-                        "value": {
-                            "value": "subject"
-                        }
-                    },
-                    {
-                        "where": {
-                            "key": "dc.type"
-                        },
-                        "value": {
-                            "value": "type"
-                        }
-                    },
-                    {
-                        "where": {
-                            "key": "dc.title"
-                        },
-                        "value": {
-                            "value": "title"
-                        }
-                    },
-                    {
-                        "where": {
-                            "key": "cg.identifier.status"
-                        },
-                        "value": {
-                            "value": "status"
-                        }
-                    },
-                    {
-                        "where": {
-                            "key": "dc.identifier.citation"
-                        },
-                        "value": {
-                            "value": "citation"
-                        }
-                    },
-                    {
-                        "where": {
-                            "key": "dc.description.sponsorship"
-                        },
-                        "value": {
-                            "value": "sponsorship"
-                        }
-                    },
-                    {
-                        "where": {
-                            "key": "dc.description.sponsorship"
-                        },
-                        "value": {
-                            "value": "sponsorship"
-                        }
-                    },
-                    {
-                        "where": {
-                            "key": "cg.contributor.affiliation"
-                        },
-                        "value": {
-                            "value": "affiliation"
-                        }
-                    },
-                    {
-                        "where": {
-                            "key": "cg.contributor.crp"
-                        },
-                        "value": {
-                            "value": "crp"
-                        }
-                    },
-                    {
-                        "where": {
-                            "key": "dc.contributor.author"
-                        },
-                        "value": {
-                            "value": "author"
-                        }
-                    },
-                    {
-                        "where": {
-                            "key": "dc.contributor"
-                        },
-                        "value": {
-                            "value": "author"
-                        }
-                    }
-                ],
-                "parentCommunityList": {
-                    "name": "community"
-                },
-                "bitstreams": [
-                    {
-                        "where": {
-                            "bundleName": "THUMBNAIL"
-                        },
-                        "value": {
-                            "retrieveLink": "thumbnail"
-                        },
-                        "prefix": "https://cgspace.cgiar.org/rest"
-                    }
-                ]
-            }
         }
+        
     ],
     "example": [
+        
         {
             "type": "Dspace",
             "name": "MELSPACE",

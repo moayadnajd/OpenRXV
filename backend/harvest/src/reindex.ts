@@ -54,48 +54,71 @@ export function makeIndexesIfNotExist() {
 }
 
 
-export function reindex() {
+export async function reindex() {
+    try {
+        console.log("reindex function is called")
 
-    es_client.indices.updateAliases({
-        body: {
-            actions: [
-                { remove: { index: config.final_index, alias: 'items' } },
-                { add: { index: config.temp_index, alias: 'items' } }
-            ]
-        }
-    })
-        .catch((err: Error) => console.error('Could not add alias "items" to index "items-temp", ', err))
-        .then(() => es_client.deleteByQuery({
-            refresh: 'wait_for',
+        await es_client.indices.updateAliases({
+            body: {
+                actions: [
+                    { remove: { index: config.final_index, alias: 'items' } },
+                    { add: { index: config.temp_index, alias: 'items' } }
+                ]
+            }
+        }).then(d => console.log("updateAliases done "))
+
+
+
+        await es_client.indices.delete({
             index: config.final_index,
-            type: config.index_type,
-            body: { query: { match_all: {} } }
-        }))
-        .then(() => console.log('Cleared items-final.'))
-        .then(() => es_client.reindex({
+            ignoreUnavailable: true
+        }).then(d => console.log("delete done "))
+
+
+        await es_client.indices.create({
+            index: config.final_index,
+
+        }).then(d => console.log("create done "))
+
+
+        await es_client.reindex({
             waitForCompletion: true,
             body: {
-                source: { index: config.temp_index },
+                "conflicts": "proceed",
+                source: {
+                    index: config.temp_index
+                },
                 dest: { index: config.final_index }
             }
-        }))
-        .then(() => console.log('Reindexing complete.'))
-        .then(() => es_client.deleteByQuery({
-            refresh: 'wait_for',
-            index: config.temp_index,
-            type: config.index_type,
-            body: { query: { match_all: {} } }
-        }))
-        .then(() => console.log('Cleared items-temp.'))
-        .then(() => es_client.search({ index: config.temp_index, type: config.index_type, body: { query: { match_all: {} } } }).then((res: any) => console.log('total in items-temp after clearing: ', res.hits.total)))
-        .then(() => es_client.indices.updateAliases({
+        }).then(d => console.log("reindex done "))
+
+
+        await es_client.indices.updateAliases({
             body: {
                 actions: [
                     { remove: { index: config.temp_index, alias: 'items' } },
                     { add: { index: config.final_index, alias: 'items' } }
                 ]
             }
-        }))
-        .then(() => console.log('Switched alias pointer back to index config.final_index.'))
+        }).then(d => console.log("updateAliases done "))
+
+
+        await es_client.indices.delete({
+            index: config.temp_index,
+            ignoreUnavailable: true
+        }).then(d => console.log(" delete done "))
+
+        await es_client.indices.create({
+            index: config.temp_index,
+        }).then(d => console.log("create done "))
+
+        console.log(" All Done ")
+        process.exit(0);
+    } catch (e) {
+        if (e.body.failures)
+            console.dir(e.body.failures);
+        else
+            console.dir(e);
+    }
 
 }

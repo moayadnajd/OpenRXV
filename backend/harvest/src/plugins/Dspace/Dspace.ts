@@ -5,39 +5,17 @@ import { Job, Queue } from "bull";
 export class Dspace extends common {
     startPage: number = 0; // starting page 
     pipe: number = 1; // how many jobs to be added at ones 
-
-    repeatName: string = "";
+    repeatName: string = 'Repeat indexing with Cron ' + config.cron + ' for ' + this.repo.name;
     constructor(repo: any) {
         super(repo);
-
-
-
-
-
     }
-    //, repeat: { cron: "*/10 * * * *" }
     init() {
-
-        this.cleanr(this.repeatJobs).then(() => {
-
             console.log("init " + this.repo.name);
-            this.repeatName = 'Repeat indexing with Cron ' + config.cron + ' for ' + this.repo.name
-            this.repeatJobs.process(this.repeatName, 1, (job, done) => {
-                this.addJobs();
-                done(null)
-            })
             if (this.repo.startPage)
                 this.startPage = this.repo.startPage
-
             if (this.repo.allCores)
                 this.pipe = require('os').cpus().length * 2;
-
             this.repeatJobs.getDelayed().then(async (jobs) => {
-                if (jobs[0] && jobs[0].name != this.repeatName) {
-                    await this.repeatJobs.clean(0, "delayed")
-                    jobs = [];
-                }
-
                 if (jobs.length == 0) {
                     if (config.startOnFirstInit)
                         this.addJobs();
@@ -46,10 +24,7 @@ export class Dspace extends common {
                     }).catch(e => console.log(e));
                 }
             })
-        })
-
     }
-
     addJobs() {
         this.clean().then(() => {
             for (let i = 0; i < this.pipe; i++) {
@@ -79,15 +54,13 @@ export class Dspace extends common {
         cleners.push(Q.clean(0, 'failed'))
         return Promise.all(cleners)
     }
-
-
-
     process() {
+        this.repeatJobs.process(this.repeatName, 1, (job, done) => {
+            this.addJobs();
+            done(null)
+        })
         this.fetchQueue.process(this.fetchJobTitle, 1, this.fetch)
         this.indexQueue.process(this.indexJobTitle, 1, this.index)
 
     }
-
-
-
 }
