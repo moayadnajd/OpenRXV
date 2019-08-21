@@ -1,7 +1,7 @@
 
 import { Client as elasticsearch } from 'elasticsearch'
 import * as config from '../../../../../config/index.json';
-import { AddOn } from './AddOn.js';
+import { AddOn } from './AddOn';
 function cnf() {
     return { host: config.elasticsearch.host };
 }
