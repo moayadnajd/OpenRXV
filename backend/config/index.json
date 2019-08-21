@@ -303,7 +303,8 @@
                         },
                         "value": {
                             "value": "country"
-                        }
+                        },
+                        "addOn": "country"
                     },
                     {
                         "where": {
@@ -311,7 +312,8 @@
                         },
                         "value": {
                             "value": "language"
-                        }
+                        },
+                        "addOn": "language"
                     },
                     {
                         "where": {
