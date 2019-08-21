@@ -33,9 +33,9 @@ export class DownloadsAndViewsMEL extends AddOn {
         let publicationsToUpdate = job.data.publicationsToUpdate;
         let scrollId = job.data.scrollId;
         try {
-            console.dir(publicationsToUpdate);
+           // console.dir(publicationsToUpdate);
             const statRequest = nodeClient.get(
-                melnumbersUrl + publicationsToUpdate.map((p: any) => p._source._id.split("_")[1]).join(','),
+                melnumbersUrl + publicationsToUpdate.map((p: any) => p._source.id).join(','),
                 { headers: { 'Content-Type': 'application/json' }, timeout: 120000 },
                 (stats: any) => {
                     let finaldata: Array<any> = [];
@@ -79,7 +79,7 @@ export class DownloadsAndViewsMEL extends AddOn {
         }
 
     }
-    
+
     getNextBatch = (scrollId: string) => es_client.scroll({ scroll: '5m', scrollId })
 
 
