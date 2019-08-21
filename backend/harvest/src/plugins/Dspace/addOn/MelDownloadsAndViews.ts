@@ -33,6 +33,7 @@ export class DownloadsAndViewsMEL extends AddOn {
         let publicationsToUpdate = job.data.publicationsToUpdate;
         let scrollId = job.data.scrollId;
         try {
+            console.dir(publicationsToUpdate);
             const statRequest = nodeClient.get(
                 melnumbersUrl + publicationsToUpdate.map((p: any) => p._source._id.split("_")[1]).join(','),
                 { headers: { 'Content-Type': 'application/json' }, timeout: 120000 },
