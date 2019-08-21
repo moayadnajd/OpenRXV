@@ -48,7 +48,7 @@ export class Altmetric extends AddOn {
     index = (job: any, done: any) => {
         let prefix = job.data.prefix;
         let page = job.data.page;
-
+        job.progress(20);
         let Allindexing: Array<any> = []
         client.get("https://api.altmetric.com/v1/citations/at?num_results=100&handle_prefix=" + prefix + "&page=" + page, (data: any) => {
             if (data.results) {
@@ -63,19 +63,20 @@ export class Altmetric extends AddOn {
                         Allindexing.push({ "doc": { altmetric } });
                     }
                 });
-
+                job.progress(80);
                 es_client.bulk({
                     refresh: 'wait_for',
                     body: Allindexing
                 }).then((currentResult: any) => {
                     if (page < Math.ceil(parseInt(data.query.total) / 100))
                         this.queue.add('altmetric_', { page: page + 1, prefix }).then(() => {
-                            done(null, currentResult.items)
+                            job.progress(100);
+                            done(null, currentResult.items)                           
                         }).catch(e => done(e));
-                    else
+                    else{
+                        job.progress(100);
                         done(null,"Data Finished")
-
-
+                    }
                 }).catch((e: any) => {
                     this.queue.add('altmetric_', { page: page + 1, prefix }).then(() => {
                         done(e);
