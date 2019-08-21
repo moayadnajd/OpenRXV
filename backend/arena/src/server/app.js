@@ -19,8 +19,13 @@ module.exports = function () {
   const Config = require('../../../config/index.json');
 
 
-  const defaultConfig = {  queues: [] }
-
+  const defaultConfig = { queues: [] }
+  defaultConfig.queues.push({
+    "name": "addOns",
+    "port": Config.redis.port,
+    "host": Config.redis.host,
+    "hostId": "RES"
+  })
   Config.repositories.forEach(element => {
     defaultConfig.queues.push({
       "name": element.name + "_repeat",
