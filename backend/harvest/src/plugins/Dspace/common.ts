@@ -159,11 +159,10 @@ export class common implements Harvester {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
-    mapIsoToLang = (langArr: Array<any>) => langArr.map(lang => langISO.validate(lang) ? langISO.getName(lang) : lang)
-    mapIsoToCountry = (langArr: Array<any>) => langArr.map((lang: string) => {
-        return lang.length == 2 && ISO.whereAlpha2(lang) ? ISO.whereAlpha2(lang).country : this.capitalizeFirstLetter(lang)
-    }
-    )
+    mapIsoToLang = (value: string) => langISO.validate(value) ? langISO.getName(value) : value
+    mapIsoToCountry = (value: string) => ISO.whereAlpha2(value) ? ISO.whereAlpha2(value).country : this.capitalizeFirstLetter(value)
+
+
     mapIt(value: any, addOn = null): string {
 
         value = addOn == "country" ? this.mapIsoToCountry(value) : value
