@@ -41,7 +41,7 @@ export class DownloadsAndViewsMEL extends AddOn {
                     let finaldata: Array<any> = [];
                     if (stats && stats.data && stats.data.length > 0)
                         stats.data.forEach((stat: any) => {
-                            let dspace_id = publicationsToUpdate.find((p: any) => p._source.id.split("_")[1] == stat.dspace_item_id)._id;
+                            let dspace_id = publicationsToUpdate.find((p: any) => p._source.id == stat.dspace_item_id)._id;
 
                             if (dspace_id) {
                                 finaldata.push(
