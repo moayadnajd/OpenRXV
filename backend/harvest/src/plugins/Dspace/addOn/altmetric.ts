@@ -1,5 +1,5 @@
 let Client = require('node-rest-client').Client;
-import Bull, { Queue } from 'bull'
+
 let client = new Client();
 import { Client as elasticsearch, SearchResponse } from 'elasticsearch'
 import * as config from '../../../../../config/index.json';
@@ -8,26 +8,11 @@ function cnf() {
 }
 const es_client = new elasticsearch(cnf())
 
-class AddOn {
-    queueName: string = "addOns";
-    queue: Queue;
-    constructor() {
-        this.queue = new Bull(this.queueName, {
-            limiter: {
-                max: 100,
-                duration: 9000
-            },
-            settings: {
-                retryProcessDelay: 10000
-            },
-            redis: config.redis
-        });
-    }
-}
+import { AddOn } from './AddOn'
 
 
 export class Altmetric extends AddOn {
-
+    jobName: string = 'altmetric_'
     handlesIds: any;
     constructor() {
         super();
@@ -36,14 +21,12 @@ export class Altmetric extends AddOn {
     init() {
         this.generateCache().then((d) => {
             this.handlesIds = d
-            this.queue.add('altmetric_', { page: 1, prefix: "20.500.11766" }).then(() => {
+            this.queue.add(this.jobName, { page: 1, prefix: "20.500.11766" }).then(() => {
             }).catch(e => console.log(e));
         })
     }
 
-    process() {
-        this.queue.process('altmetric_', 1, this.index)
-    }
+
 
     index = (job: any, done: any) => {
         let prefix = job.data.prefix;
@@ -71,11 +54,11 @@ export class Altmetric extends AddOn {
                     if (page < Math.ceil(parseInt(data.query.total) / 100))
                         this.queue.add('altmetric_', { page: page + 1, prefix }).then(() => {
                             job.progress(100);
-                            done(null, currentResult.items)                           
+                            done(null, currentResult.items)
                         }).catch(e => done(e));
-                    else{
+                    else {
                         job.progress(100);
-                        done(null,"Data Finished")
+                        done(null, "Data Finished")
                     }
                 }).catch((e: any) => {
                     this.queue.add('altmetric_', { page: page + 1, prefix }).then(() => {
