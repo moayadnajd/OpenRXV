@@ -61,7 +61,7 @@ export class DownloadsAndViewsMEL extends AddOn {
                     }).then(async (result) => {
                         const batch = await this.getNextBatch(scrollId)
                         if (batch.hits.hits.length === 0) {
-                            done(null, result.items)
+                            done(null, "data finish")
                         } else
                             this.queue.add(this.jobName, { publicationsToUpdate: batch.hits.hits, scrollId }).then(() => {
                                 done(null, result.items)
