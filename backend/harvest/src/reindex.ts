@@ -2,7 +2,7 @@
 import { Client } from 'elasticsearch';
 import * as config from '../../config/index.json'
 import { addOns } from './plugins/';
-import { AddOn } from './plugins/Dspace/addOn/AddOn.js';
+import { AddOn } from './plugins/Dspace/addOn/AddOn';
 
 function cnf() {
     return { host: config.elasticsearch.host, requestTimeout: 100000 };
