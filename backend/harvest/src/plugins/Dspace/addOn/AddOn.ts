@@ -21,6 +21,6 @@ export class AddOn {
     }
 
     process() {
-        this.queue.process('altmetric_', 1, this.index)
+        this.queue.process(this.jobName, 1, this.index)
     }
 }
