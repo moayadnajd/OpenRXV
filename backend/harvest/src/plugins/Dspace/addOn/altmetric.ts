@@ -34,7 +34,7 @@ export class Altmetric extends AddOn {
     }
 
     init() {
-        this.generateCache().then((d )=> {
+        this.generateCache().then((d) => {
             this.handlesIds = d
             this.queue.add('altmetric_', { page: 1, prefix: "20.500.11766" }).then(() => {
             }).catch(e => console.log(e));
@@ -70,13 +70,13 @@ export class Altmetric extends AddOn {
                 }).then((currentResult: any) => {
                     if (page < Math.ceil(parseInt(data.query.total) / 100))
                         this.queue.add('altmetric_', { page: page + 1, prefix }).then(() => {
-                            done(currentResult.items)
-                        }).catch(e => console.log(e));
+                            done(null, currentResult.items)
+                        }).catch(e => done(e));
 
                 }).catch((e: any) => {
                     this.queue.add('altmetric_', { page: page + 1, prefix }).then(() => {
                         done(e);
-                    }).catch(e => console.log(e));
+                    }).catch(e => done(e));
 
                 })
             }
