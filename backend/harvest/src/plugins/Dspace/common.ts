@@ -10,6 +10,8 @@ let mapto: any = mappings;
 const request = <RequestAPI<Request, CoreOptions, RequiredUriUrl>>require('request');
 import Bull from 'bull'
 import * as _ from 'underscore'
+const ISO = require('iso-3166-1')
+const langISO = require('iso-639-1')
 let moment = require('moment')
 export class common implements Harvester {
     repo: any
@@ -133,7 +135,7 @@ export class common implements Harvester {
                     _.each(item, (subItem: any, subIndex: string) => {
                         let values = json[index].
                             filter((d: any) => d[Object.keys(subItem.where)[0]] == subItem.where[Object.keys(subItem.where)[0]])
-                            .map((d: any) => subItem.prefix ? subItem.prefix + this.mapIt(d[Object.keys(subItem.value)[0]]) : this.mapIt(d[Object.keys(subItem.value)[0]]))
+                            .map((d: any) => subItem.prefix ? subItem.prefix + this.mapIt(d[Object.keys(subItem.value)[0]], subItem.addOn ? subItem.addOn : null) : this.mapIt(d[Object.keys(subItem.value)[0]], subItem.addOn ? subItem.addOn : null))
                         if (values.length)
                             finalValues[subItem.value[Object.keys(subItem.value)[0]]] = this.getArrayOrValue(values)
                     })
@@ -153,7 +155,20 @@ export class common implements Harvester {
 
     }
 
-    mapIt(value: any): string {
+    capitalizeFirstLetter(string: string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    mapIsoToLang = (langArr: Array<any>) => langArr.map(lang => langISO.validate(lang) ? langISO.getName(lang) : lang)
+    mapIsoToCountry = (langArr: Array<any>) => langArr.map((lang: string) => {
+        return lang.length == 2 && ISO.whereAlpha2(lang) ? ISO.whereAlpha2(lang).country : this.capitalizeFirstLetter(lang)
+    }
+    )
+    mapIt(value: any, addOn = null): string {
+
+        value = addOn == "country" ? this.mapIsoToCountry(value) : value
+        value = addOn == "language" ? this.mapIsoToLang(value) : value
+
         return mapto[value] ? mapto[value] : value
     }
     getArrayOrValue(values: Array<any>) {

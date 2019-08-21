@@ -15,9 +15,10 @@ export class DownloadsAndViews extends AddOn {
         super();
     }
 
-    init() {
-        this.queue.add(this.jobName, { page: 1, link: "https://cgspace.cgiar.org" }).then(() => {
-        }).catch(e => console.log(e));
+    init(link:string) {
+        console.log("init DownloadsAndViews "+link)
+        // this.queue.add(this.jobName, { page: 1, link }).then(() => {
+        // }).catch(e => console.log(e));
     }
 
 

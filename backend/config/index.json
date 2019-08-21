@@ -13,51 +13,39 @@
     "cron": "0 0 * * *",
     "AddOns": [
         {
-            "name": "fixLanguage",
-            "param": "language",
-            "description": "convert iso-code to language name",
-            "active": true
-        },
-        {
-            "name": "fixCountries",
-            "param": "country",
-            "description": "convert iso-code to country name",
-            "active": true
-        },
-        {
-            "name": "altmetric",
+            "name": "Altmetric",
             "param": "10947",
             "description": "get altmetric numbers from altmetric api for cgspace",
-            "active": false
+            "active": true
         },
         {
-            "name": "altmetric",
+            "name": "Altmetric",
             "param": "10568",
             "description": "get altmetric numbers from altmetric api for cgspace",
-            "active": false
+            "active": true
         },
         {
-            "name": "altmetric",
+            "name": "Altmetric",
             "param": "20.500.12348",
             "description": "get altmetric numbers from altmetric api for worldfish",
             "active": false
         },
         {
-            "name": "altmetric",
+            "name": "Altmetric",
             "param": "20.500.11766",
             "description": "get altmetric numbers from altmetric api for melspace",
-            "active": false
+            "active": true
         },
         {
-            "name": "MelDownloadsAndViews",
+            "name": "DownloadsAndViewsMEL",
             "description": "get mel downloads and views numbers",
-            "active":  false
+            "active": true
         },
         {
             "name": "DownloadsAndViews",
             "param": "https://cgspace.cgiar.org",
             "description": "get cgspace downloads and views numbers",
-            "active": false
+            "active": true
         }
     ],
     "startOnFirstInit": true,
@@ -65,7 +53,7 @@
         {
             "type": "Dspace",
             "name": "CGSPACE",
-            "startPage": 0,
+            "startPage": 117,
             "allCores": true,
             "itemsEndPoint": "https://cgspace.cgiar.org/rest/items?expand=metadata,bitstreams,parentCommunityList",
             "schema": {
@@ -118,7 +106,8 @@
                         },
                         "value": {
                             "value": "country"
-                        }
+                        },
+                        "addOn": "country"
                     },
                     {
                         "where": {
@@ -126,7 +115,8 @@
                         },
                         "value": {
                             "value": "language"
-                        }
+                        },
+                        "addOn": "language"
                     },
                     {
                         "where": {
@@ -252,7 +242,7 @@
         {
             "type": "Dspace",
             "name": "MELSPACE",
-            "startPage": 0,
+            "startPage": 1602,
             "allCores": true,
             "itemsEndPoint": "http://repo.mel.cgiar.org/rest/items?expand=metadata,parentCommunityList",
             "schema": {
@@ -435,16 +425,26 @@
                             "value": "author"
                         }
                     }
-                ],"parentCommunityList": {
+                ],
+                "parentCommunityList": {
                     "name": "community"
                 }
-                
             }
         }
-        
     ],
     "example": [
-        
+        {
+            "name": "fixLanguage",
+            "param": "language",
+            "description": "convert iso-code to language name",
+            "active": true
+        },
+        {
+            "name": "fixCountries",
+            "param": "country",
+            "description": "convert iso-code to country name",
+            "active": true
+        },
         {
             "type": "Dspace",
             "name": "MELSPACE",

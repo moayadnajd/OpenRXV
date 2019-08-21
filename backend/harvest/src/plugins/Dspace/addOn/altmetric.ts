@@ -12,18 +12,19 @@ import { AddOn } from './AddOn'
 
 
 export class Altmetric extends AddOn {
-    jobName: string = 'altmetric_'
+    jobName: string = 'Altmetric'
     handlesIds: any;
     constructor() {
         super();
     }
 
-    init() {
-        this.generateCache().then((d) => {
-            this.handlesIds = d
-            this.queue.add(this.jobName, { page: 1, prefix: "20.500.11766" }).then(() => {
-            }).catch(e => console.log(e));
-        })
+    init(prefix: string) {
+        console.log("init Altmetric " + prefix)
+        // this.generateCache().then((d) => {
+        //     this.handlesIds = d
+        //     this.queue.add(this.jobName, { page: 1, prefix }).then(() => {
+        //     }).catch(e => console.log(e));
+        // })
     }
 
 
