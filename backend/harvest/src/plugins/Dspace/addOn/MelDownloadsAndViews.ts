@@ -18,7 +18,7 @@ export class DownloadsAndViewsMEL extends AddOn {
     }
     init() {
         es_client.search({
-            index: config.final_index,
+            index: config.temp_index,
             scroll: '5m',
             body: { size: 100, query: { match: { 'repo.keyword': 'MELSPACE' } } }
         }).then(async (melInitBatch: any) => {
@@ -45,7 +45,7 @@ export class DownloadsAndViewsMEL extends AddOn {
 
                             if (dspace_id) {
                                 finaldata.push(
-                                    { "update": { "_id": dspace_id, "_type": config.index_type, "_index": config.final_index } }
+                                    { "update": { "_id": dspace_id, "_type": config.index_type, "_index": config.temp_index } }
                                 )
                                 finaldata.push({ "doc": { numbers: { views: parseInt(stat.views), downloads: parseInt(stat.downloads), score: parseInt(stat.views) + parseInt(stat.downloads) } } })
 
@@ -84,9 +84,3 @@ export class DownloadsAndViewsMEL extends AddOn {
 
 
 }
-
-
-let dav = new DownloadsAndViewsMEL();
-
-dav.init();
-dav.process();
