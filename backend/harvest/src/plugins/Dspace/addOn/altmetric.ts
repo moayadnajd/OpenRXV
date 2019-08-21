@@ -72,6 +72,9 @@ export class Altmetric extends AddOn {
                         this.queue.add('altmetric_', { page: page + 1, prefix }).then(() => {
                             done(null, currentResult.items)
                         }).catch(e => done(e));
+                    else
+                        done(null,"Data Finished")
+
 
                 }).catch((e: any) => {
                     this.queue.add('altmetric_', { page: page + 1, prefix }).then(() => {
