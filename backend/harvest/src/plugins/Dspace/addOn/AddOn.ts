@@ -26,7 +26,7 @@ export class AddOn {
         this.queue.process("waiting", 1, (job: Job, done: DoneCallback) => {
             setTimeout(() => {
                 done()
-            }, 10000);
+            }, 20000);
         })
 
         this.queue.add("waiting");
