@@ -156,7 +156,7 @@ export class common implements Harvester {
     }
 
     capitalizeFirstLetter(string: string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
+        return string.charAt(0).toUpperCase() + string.toLocaleLowerCase().slice(1);
     }
 
     mapIsoToLang = (value: string) => langISO.validate(value) ? langISO.getName(value) : value
