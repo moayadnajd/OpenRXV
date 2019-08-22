@@ -20,9 +20,9 @@ export class AddOn {
         });
     }
 
-   
+
     process() {
-        console.log("this.jobName =>", this.jobName)
+        console.log("this.jobName =>", this.jobName, this.index)
         this.queue.process(this.jobName, 1, this.index)
     }
 
