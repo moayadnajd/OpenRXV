@@ -20,18 +20,7 @@ export class AddOn {
         });
     }
 
-    prepare() {
-
-
-        this.queue.process("waiting", 1, (job: Job, done: DoneCallback) => {
-            setTimeout(() => {
-                done()
-            }, 20000);
-        })
-
-        this.queue.add("waiting");
-    }
-
+   
     process() {
         console.log("this.jobName =>", this.jobName)
         this.queue.process(this.jobName, 1, this.index)
