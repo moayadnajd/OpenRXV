@@ -39,7 +39,7 @@ export class DownloadsAndViews extends AddOn {
                     };
 
                     //TODO: CGSPACE_ must change 
-                    toUpdateIndexes.push({ update: { _index: config.temp_index, _type: config.index_type, _id: "CGSPACE_" + stat.id } });
+                    toUpdateIndexes.push({ update: { _index: config.final_index, _type: config.index_type, _id: "CGSPACE_" + stat.id } });
                     toUpdateIndexes.push({ "doc": { numbers } })
                 });
                 es_client.bulk({

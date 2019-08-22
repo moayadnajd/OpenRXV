@@ -43,7 +43,7 @@ export class Altmetric extends AddOn {
                         mentions: element.cited_by_accounts_count
                     }
                     if (this.handlesIds[element.handle]) {
-                        Allindexing.push({ update: { _index: config.temp_index, _type: config.index_type, _id: this.handlesIds[element.handle] } });
+                        Allindexing.push({ update: { _index: config.final_index, _type: config.index_type, _id: this.handlesIds[element.handle] } });
                         Allindexing.push({ "doc": { altmetric } });
                     }
                 });
@@ -77,7 +77,7 @@ export class Altmetric extends AddOn {
             let total = 0;
 
             let elastic_data = {
-                index: config.temp_index,
+                index: config.final_index,
                 type: config.index_type,
                 body: {
                     size: 500,
