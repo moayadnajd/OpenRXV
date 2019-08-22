@@ -17,8 +17,8 @@ export class DownloadsAndViews extends AddOn {
 
     init(link:string) {
         console.log("init DownloadsAndViews "+link)
-        // this.queue.add(this.jobName, { page: 1, link }).then(() => {
-        // }).catch(e => console.log(e));
+        this.queue.add(this.jobName, { page: 1, link }).then(() => {
+        }).catch(e => console.log(e));
     }
 
 

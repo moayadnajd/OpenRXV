@@ -20,16 +20,16 @@ export class DownloadsAndViewsMEL extends AddOn {
 
 console.log("init DownloadsAndViewsMEL")
 
-        // es_client.search({
-        //     index: config.temp_index,
-        //     scroll: '5m',
-        //     body: { size: 100, query: { match: { 'repo.keyword': 'MELSPACE' } } }
-        // }).then(async (melInitBatch: any) => {
-        //     const scrollId = melInitBatch._scroll_id
-        //     const batch = await this.getNextBatch(scrollId)
-        //     this.queue.add(this.jobName, { publicationsToUpdate: batch.hits.hits, scrollId: scrollId }).then(() => {
-        //     }).catch(e => console.log(e));
-        // })
+        es_client.search({
+            index: config.temp_index,
+            scroll: '5m',
+            body: { size: 100, query: { match: { 'repo.keyword': 'MELSPACE' } } }
+        }).then(async (melInitBatch: any) => {
+            const scrollId = melInitBatch._scroll_id
+            const batch = await this.getNextBatch(scrollId)
+            this.queue.add(this.jobName, { publicationsToUpdate: batch.hits.hits, scrollId: scrollId }).then(() => {
+            }).catch(e => console.log(e));
+        })
     }
 
     index = (job: any, done: any) => {

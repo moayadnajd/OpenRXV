@@ -20,11 +20,11 @@ export class Altmetric extends AddOn {
 
     init(prefix: string) {
         console.log("init Altmetric " + prefix)
-        // this.generateCache().then((d) => {
-        //     this.handlesIds = d
-        //     this.queue.add(this.jobName, { page: 1, prefix }).then(() => {
-        //     }).catch(e => console.log(e));
-        // })
+        this.generateCache().then((d) => {
+            this.handlesIds = d
+            this.queue.add(this.jobName, { page: 1, prefix }).then(() => {
+            }).catch(e => console.log(e));
+        })
     }
 
 
