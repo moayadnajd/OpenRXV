@@ -133,8 +133,9 @@ export function runAddons() {
             activeAddOns.forEach((addOn) => {
                 console.dir(addOn);
                 let addOnObj = new addOns[addOn.name]();
-                addOn.param ? addOnObj.init(addOn.param) : addOnObj.init();
                 addOnObj.process();
+                addOn.param ? addOnObj.init(addOn.param) : addOnObj.init();
+               
             })
             let timeout: any = null;
             Que.queue.on('global:drained', () => {
