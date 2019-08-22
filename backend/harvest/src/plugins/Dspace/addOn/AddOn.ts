@@ -6,7 +6,7 @@ export class AddOn {
     queueName: string = "addOns";
     queue: Queue;
     jobName: string = "add on job"
-    index: ProcessCallbackFunction<Job> = (job: Job, done: DoneCallback) => { };
+    index: ProcessCallbackFunction<Job> = (job: Job, done: DoneCallback) => { done() };
     constructor() {
         this.queue = new Bull(this.queueName, {
             limiter: {
