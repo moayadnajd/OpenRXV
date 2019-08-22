@@ -53,7 +53,7 @@ export class Altmetric extends AddOn {
                     body: Allindexing
                 }).then((currentResult: any) => {
                     if (page < Math.ceil(parseInt(data.query.total) / 100))
-                        this.queue.add('altmetric_', { page: page + 1, prefix }).then(() => {
+                        this.queue.add(this.jobName, { page: page + 1, prefix }).then(() => {
                             job.progress(100);
                             done(null, currentResult.items)
                         }).catch(e => done(e));
@@ -62,7 +62,7 @@ export class Altmetric extends AddOn {
                         done(null, "Data Finished")
                     }
                 }).catch((e: any) => {
-                    this.queue.add('altmetric_', { page: page + 1, prefix }).then(() => {
+                    this.queue.add(this.jobName, { page: page + 1, prefix }).then(() => {
                         done(e);
                     }).catch(e => done(e));
 
