@@ -127,6 +127,7 @@ export async function reindex() {
 
 export function runAddons() {
     let Que = new AddOn();
+    Que.prepare();
     setTimeout(() => {
         Que.clean().then(d => {
             let activeAddOns = config.AddOns.filter(d => d.active == true)
@@ -134,8 +135,11 @@ export function runAddons() {
                 console.dir(addOn);
                 let addOnObj = new addOns[addOn.name]();
                 addOnObj.process();
+
                 addOn.param ? addOnObj.init(addOn.param) : addOnObj.init();
-               
+
+
+
             })
             let timeout: any = null;
             Que.queue.on('global:drained', () => {
