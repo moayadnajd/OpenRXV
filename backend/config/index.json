@@ -53,7 +53,7 @@
         {
             "type": "Dspace",
             "name": "CGSPACE",
-            "startPage": 1602,
+            "startPage": 1590,
             "allCores": true,
             "itemsEndPoint": "https://cgspace.cgiar.org/rest/items?expand=metadata,bitstreams,parentCommunityList",
             "schema": {
@@ -242,7 +242,7 @@
         {
             "type": "Dspace",
             "name": "MELSPACE",
-            "startPage": 117,
+            "startPage": 110,
             "allCores": true,
             "itemsEndPoint": "http://repo.mel.cgiar.org/rest/items?expand=metadata,parentCommunityList",
             "schema": {

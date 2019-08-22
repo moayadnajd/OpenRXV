@@ -136,7 +136,7 @@ export function runAddons() {
                 addOnObj.process();
                 setTimeout(() => {
                     addOn.param ? addOnObj.init(addOn.param) : addOnObj.init();
-                }, 2000);
+                }, 20000);
             })
             let timeout: any = null;
             Que.queue.on('global:drained', () => {
