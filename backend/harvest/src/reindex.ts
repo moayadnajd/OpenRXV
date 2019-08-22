@@ -126,13 +126,13 @@ export async function reindex() {
 
 
 export function runAddons() {
-    let Que = new AddOn();
+    var Que = new AddOn();
     setTimeout(() => {
         Que.clean().then(d => {
-            let activeAddOns = config.AddOns.filter(d => d.active == true)
+            var activeAddOns = config.AddOns.filter(d => d.active == true)
             activeAddOns.forEach((addOn) => {
                 console.dir(addOn);
-                let addOnObj = new addOns[addOn.name]();
+                var addOnObj = new addOns[addOn.name]();
                 addOnObj.process();
                 setTimeout(() => {
                     addOn.param ? addOnObj.init(addOn.param) : addOnObj.init();
