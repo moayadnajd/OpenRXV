@@ -10,7 +10,10 @@ var Que = new AddOn();
             activeAddOns.forEach((addOn) => {
                 console.dir(addOn);
                 var addOnObj = new addOns[addOn.name]();
-                addOnObj.process();
+                setTimeout(() => {
+                    addOnObj.process();
+                }, 10000);
+               
                 setTimeout(() => {
                     addOn.param ? addOnObj.init(addOn.param) : addOnObj.init();
                 }, 20000);
