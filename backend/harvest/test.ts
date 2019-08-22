@@ -1,36 +1,47 @@
 import { AddOn } from "./src/plugins/Dspace/addOn/AddOn";
-import { addOns } from "./src/plugins";
-import * as config from "../config/index.json";
-import { reindex } from "./src/reindex";
+import { Altmetric, DownloadsAndViewsMEL, DownloadsAndViews } from "./src/plugins/Dspace";
 
 var Que = new AddOn();
-    setTimeout(() => {
-        Que.clean().then(d => {
-            var activeAddOns = config.AddOns.filter(d => d.active == true)
-            activeAddOns.forEach((addOn) => {
-                console.dir(addOn);
-                var addOnObj = new addOns[addOn.name]();
-                setTimeout(() => {
-                    addOnObj.process();
-                }, 10000);
-               
-                setTimeout(() => {
-                    addOn.param ? addOnObj.init(addOn.param) : addOnObj.init();
-                }, 20000);
-            })
-            let timeout: any = null;
-            Que.queue.on('global:drained', () => {
-                if (timeout) {
-                    clearTimeout(timeout);
-                    console.log("time cleared")
-                }
-                timeout = setTimeout(() => {
-                    console.log("global:drained AddOn");
-                    reindex()
-                }, 60000);
-            });
 
-            if (!activeAddOns.length)
-                reindex()
-        })
-    }, 1000);
+var addOnObj10947 = new Altmetric();
+
+addOnObj10947.process();
+
+
+addOnObj10947.init("10947")
+
+var addOnObj10568 = new Altmetric();
+
+addOnObj10568.process();
+
+
+addOnObj10568.init("10568")
+
+var addOnObjMEL = new Altmetric();
+
+addOnObjMEL.process();
+
+
+addOnObjMEL.init("20.500.11766")
+
+var downjMEL = new DownloadsAndViewsMEL();
+downjMEL.process();
+downjMEL.init();
+
+var down = new DownloadsAndViews();
+down.process();
+down.init('https://cgspace.cgiar.org');
+
+
+
+let timeout: any = null;
+
+Que.queue.on('global:drained', () => {
+    if (timeout) {
+        clearTimeout(timeout);
+        console.log("time cleared")
+    }
+    timeout = setTimeout(() => {
+        console.log("global:drained AddOn");
+    }, 60000);
+});
