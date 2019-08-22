@@ -23,4 +23,13 @@ export class AddOn {
     process() {
         this.queue.process(this.jobName, 1, this.index)
     }
+
+    clean() {
+        let cleners: Array<Promise<any>> = [];
+        cleners.push(this.queue.clean(0, 'completed'))
+        cleners.push(this.queue.clean(0, 'active'))
+        cleners.push(this.queue.clean(0, 'failed'))
+        cleners.push(this.queue.clean(0, 'wait'))
+        return Promise.all(cleners)
+    }
 }

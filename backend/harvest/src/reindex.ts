@@ -127,28 +127,30 @@ export async function reindex() {
 
 
 export function runAddons() {
-    let activeAddOns = config.AddOns.filter(d => d.active == true)
-    activeAddOns.forEach((addOn) => {
-        console.dir(addOn);
-        let addOnObj = new addOns[addOn.name]();
-        addOn.param ? addOnObj.init(addOn.param) : addOnObj.init();
-        addOnObj.process();
-    })
-
     let Que = new AddOn();
-    let timeout: any = null;
     setTimeout(() => {
-        Que.queue.on('global:drained', () => {
-            if (timeout) {
-                clearTimeout(timeout);
-                console.log("time cleared")
-            }
-            timeout = setTimeout(() => {
-                console.log("global:drained AddOn");
+        Que.clean().then(d => {
+            let activeAddOns = config.AddOns.filter(d => d.active == true)
+            activeAddOns.forEach((addOn) => {
+                console.dir(addOn);
+                let addOnObj = new addOns[addOn.name]();
+                addOn.param ? addOnObj.init(addOn.param) : addOnObj.init();
+                addOnObj.process();
+            })
+            let timeout: any = null;
+            Que.queue.on('global:drained', () => {
+                if (timeout) {
+                    clearTimeout(timeout);
+                    console.log("time cleared")
+                }
+                timeout = setTimeout(() => {
+                    console.log("global:drained AddOn");
+                    reindex()
+                }, 60000);
+            });
+
+            if (!activeAddOns.length)
                 reindex()
-            }, 60000);
-        });
+        })
     }, 1000);
-    if (!activeAddOns.length)
-        reindex()
 }
