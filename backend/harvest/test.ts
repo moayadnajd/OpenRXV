@@ -6,34 +6,37 @@ Que.clean().then(d => {
 
     var addOnObj10947 = new Altmetric();
 
-    addOnObj10947.process();
 
 
     addOnObj10947.init("10947")
+    addOnObj10947.process();
+
 
     var addOnObj10568 = new Altmetric();
 
-    addOnObj10568.process();
+
 
 
     addOnObj10568.init("10568")
+    addOnObj10568.process();
 
     var addOnObjMEL = new Altmetric();
 
-    addOnObjMEL.process();
+
 
 
     addOnObjMEL.init("20.500.11766")
+    addOnObjMEL.process();
 
     var downjMEL = new DownloadsAndViewsMEL();
-    downjMEL.process();
-    downjMEL.init();
 
+    downjMEL.init();
+    downjMEL.process();
     var down = new DownloadsAndViews();
-    down.process();
+
     down.init('https://cgspace.cgiar.org');
 
-
+    down.process();
 
     let timeout: any = null;
 
