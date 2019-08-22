@@ -115,7 +115,6 @@ export async function reindex() {
         }).then(d => console.log("create done "))
 
         console.log(" All Done ")
-        process.exit(0);
     } catch (e) {
         if (e.body.failures)
             console.dir(e.body.failures);

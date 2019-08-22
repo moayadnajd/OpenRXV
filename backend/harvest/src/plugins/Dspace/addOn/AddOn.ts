@@ -21,6 +21,7 @@ export class AddOn {
     }
 
     process() {
+        console.log("this.jobName =>",this.jobName)
         this.queue.process(this.jobName, 1, this.index)
     }
 
