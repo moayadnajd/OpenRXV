@@ -3,9 +3,7 @@ import * as config from '../../config/index.json'
 import { plugins } from './plugins'
 import cluster from 'cluster';
 import { EventEmitter } from 'events';
-import { reindex, makeIndexesIfNotExist } from './reindex';
-import { Job } from 'bull';
-import { TIMEOUT } from 'dns';
+import { runAddons, makeIndexesIfNotExist } from './reindex';
 
 if (cluster.isMaster) {
     makeIndexesIfNotExist().then(() => {
@@ -19,7 +17,7 @@ if (cluster.isMaster) {
             if (finishjobs.length == config.repositories.length) {
                 finishjobs = [];
                 console.log("All indexing finished");
-                reindex();
+                runAddons();
             }
         })
         config.repositories.forEach((repo) => {
