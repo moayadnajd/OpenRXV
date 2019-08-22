@@ -3,29 +3,27 @@ import Bull, { Queue, ProcessCallbackFunction, Job, DoneCallback } from 'bull'
 import * as config from '../../../../../config/index.json';
 
 export class AddOn {
+    handlers: Array<string> = [];
     queueName: string = "addOns";
     queue: Queue;
     jobName: string = "add on job"
     index: ProcessCallbackFunction<Job> = (job: Job, done: DoneCallback) => { done() };
     constructor() {
         this.queue = new Bull(this.queueName, {
-            limiter: {
-                max: 100,
-                duration: 9000
-            },
-            settings: {
-                retryProcessDelay: 10000
+            settings:{
+                drainDelay:10000,
             },
             redis: config.redis
         });
     }
 
 
-    process() {
-        console.log("this.jobName =>", this.jobName, this.index)
-        this.queue.process(this.jobName, 1, this.index)
+    process(jobName: string, index: any) {
+        if (this.handlers.indexOf(jobName) == -1) {
+            this.handlers.push(jobName);
+            this.queue.process(jobName, 1, index)
+        }
     }
-
     clean() {
         let cleners: Array<Promise<any>> = [];
         cleners.push(this.queue.clean(0, 'completed'))

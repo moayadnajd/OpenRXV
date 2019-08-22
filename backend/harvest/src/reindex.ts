@@ -115,6 +115,7 @@ export async function reindex() {
         }).then(d => console.log("create done "))
 
         console.log(" All Done ")
+        runAddOn();
     } catch (e) {
         if (e.body.failures)
             console.dir(e.body.failures);
@@ -124,3 +125,15 @@ export async function reindex() {
 
 }
 
+export function runAddOn() {
+
+    var Que = new AddOn();
+    Que.clean().then(d => {
+        var activeAddOns = config.AddOns.filter(d => d.active == true)
+        activeAddOns.forEach((addOn) => {
+            var addOnObj = new addOns[addOn.name]();
+            Que.process(addOnObj.jobName, addOnObj.index);
+            addOn.param ? addOnObj.init(addOn.param) : addOnObj.init();
+        })
+    });
+}
