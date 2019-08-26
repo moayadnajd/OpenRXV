@@ -14,7 +14,6 @@ export function removeGlobal() {
         es_client.updateByQuery({
             index: config.final_index,
             type: config.index_type,
-            refresh:true,
             waitForCompletion: true,
             body: {
                 query: {

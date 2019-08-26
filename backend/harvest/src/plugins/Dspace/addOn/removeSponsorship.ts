@@ -15,7 +15,6 @@ export function removeSponsorship() {
         es_client.updateByQuery({
             index: config.final_index,
             type: config.index_type,
-            refresh:true,
             waitForCompletion: true,
             body: {
                 "script": {
