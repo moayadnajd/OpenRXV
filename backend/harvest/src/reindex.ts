@@ -3,6 +3,7 @@ import { Client } from 'elasticsearch';
 import * as config from '../../config/index.json'
 import { addOns } from './plugins/';
 import { AddOn } from './plugins/Dspace/addOn/AddOn';
+import { fixLanguage, removeGlobal, removeSponsorship } from './plugins/Dspace/index.js';
 
 function cnf() {
     return { host: config.elasticsearch.host, requestTimeout: 100000 };
@@ -114,8 +115,14 @@ export async function reindex() {
             index: config.temp_index,
         }).then(d => console.log("create done "))
 
-        console.log(" All Done ")
+        console.log("Index All Done ")
         runAddOn();
+
+        fixLanguage().then(d => console.log(d)).catch(e => console.dir(e));
+
+        removeGlobal().then(d => console.log(d)).catch(e => console.dir(e));
+
+        removeSponsorship().then(d => console.log(d)).catch(e => console.dir(e));
     } catch (e) {
         if (e.body.failures)
             console.dir(e.body.failures);
