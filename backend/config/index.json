@@ -184,14 +184,6 @@
                     },
                     {
                         "where": {
-                            "key": "dc.description.sponsorship"
-                        },
-                        "value": {
-                            "value": "sponsorship"
-                        }
-                    },
-                    {
-                        "where": {
                             "key": "cg.contributor.affiliation"
                         },
                         "value": {

@@ -1,3 +1,5 @@
-import { fixLanguage } from "./src/plugins/Dspace";
+import { fixLanguage, removeGlobal, removeSponsorship } from "./src/plugins/Dspace";
 
-fixLanguage()
+removeGlobal();
+
+removeSponsorship()

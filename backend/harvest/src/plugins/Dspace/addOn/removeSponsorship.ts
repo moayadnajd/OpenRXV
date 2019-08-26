@@ -9,28 +9,25 @@ const es_client = new elasticsearch(cnf())
  */
 
 
-export function removeGlobal() {
+export function removeSponsorship() {
     return new Promise((resolve, reject) => {
+
         es_client.updateByQuery({
             index: config.final_index,
             type: config.index_type,
             refresh:true,
             waitForCompletion: true,
             body: {
-                query: {
-                    bool: {
-                        must: [
-                            { match: { 'region.keyword': 'Global' } }
-                        ]
-                    }
+                "script": {
+                    "source": "ctx._source.sponsorship = null"
                 },
-                script: {
-                    source: "ctx._source.region = null"
+                "query": {
+                    "match": { "sponsorship": "Not Applicable" }
                 }
             }
         })
-            .then(() => resolve('Done updating "Global" region to null.'))
-            .catch(err => reject('Error while updating "Global" region to null, '))
+            .then(() => resolve('Done updating "Not Applicable"  to null.'))
+            .catch(err => reject('Error while updating "Not Applicable"  to null, '))
 
     })
 

@@ -13,3 +13,6 @@ export * from './year'
 export * from './fixDate'
 
 export * from './DownloadsAndViews'
+
+export * from './removeSponsorship'
+
