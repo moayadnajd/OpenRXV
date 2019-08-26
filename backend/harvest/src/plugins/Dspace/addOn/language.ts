@@ -28,7 +28,7 @@ export function fixLanguage() {
         }
         // first we do a search, and specify a scroll timeout
         es_client.search({
-            index: config.temp_index,
+            index: config.final_index,
             type: config.index_type,
             scroll: '1m',
             body: {
@@ -64,7 +64,7 @@ export function fixLanguage() {
                 let obj: any = {}
                 obj[language] = mappedLang
                 finaldata.push(
-                    { "update": { "_id": doc._id, "_type": config.index_type, "_index": config.temp_index } }
+                    { "update": { "_id": doc._id, "_type": config.index_type, "_index": config.final_index } }
                 )
                 finaldata.push({ "doc": obj })
             })
