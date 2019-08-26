@@ -1,4 +1,8 @@
 {
+
+
+
+
     "temp_index": "items-temp",
     "final_index": "items-final",
     "index_type": "item",
@@ -136,7 +140,79 @@
                     },
                     {
                         "where": {
-                            "key": "dc.subject"
+                            "key": "cg.subject.cta"
+                        },
+                        "value": {
+                            "value": "subject"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "cg.subject.ilri"
+                        },
+                        "value": {
+                            "value": "subject"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "cg.subject.cip"
+                        },
+                        "value": {
+                            "value": "subject"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "cg.subject.ciat"
+                        },
+                        "value": {
+                            "value": "subject"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "cg.subject.wle"
+                        },
+                        "value": {
+                            "value": "subject"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "cg.subject.ccafs"
+                        },
+                        "value": {
+                            "value": "subject"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "cg.subject.iita"
+                        },
+                        "value": {
+                            "value": "subject"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "cg.subject.agrovoc"
+                        },
+                        "value": {
+                            "value": "subject"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "cg.subject.cta"
+                        },
+                        "value": {
+                            "value": "subject"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "cg.subject.humidtropics"
                         },
                         "value": {
                             "value": "subject"
@@ -313,14 +389,6 @@
                         },
                         "value": {
                             "value": "publisher"
-                        }
-                    },
-                    {
-                        "where": {
-                            "key": "dc.subject"
-                        },
-                        "value": {
-                            "value": "subject"
                         }
                     },
                     {
