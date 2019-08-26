@@ -27,7 +27,7 @@ export function removeSponsorship() {
             }
         })
             .then(() => resolve('Done updating "Not Applicable"  to null.'))
-            .catch(err => reject('Error while updating "Not Applicable"  to null, '))
+            .catch(err => reject(err))
 
     })
 

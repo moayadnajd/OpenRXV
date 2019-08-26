@@ -1,5 +1,5 @@
 import { fixLanguage, removeGlobal, removeSponsorship } from "./src/plugins/Dspace";
 
-removeGlobal();
+removeGlobal().then(d => console.log(d)).catch(e => console.dir(e));
 
-removeSponsorship()
+removeSponsorship().then(d => console.log(d)).catch(e => console.dir(e));
