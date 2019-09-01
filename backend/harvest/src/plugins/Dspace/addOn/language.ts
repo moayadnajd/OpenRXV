@@ -69,7 +69,7 @@ export function fixLanguage() {
                 finaldata.push({ "doc": obj })
             })
             es_client.bulk({
-                refresh: 'wait_for',
+                refresh: false,
                 body: finaldata
             }).then(() => {
                 if (response.hits.total !== allRecords.length) {
