@@ -1,14 +1,11 @@
 
 import * as config from '../../config/index.json'
-import { plugins, addOns } from './plugins'
+import { plugins } from './plugins'
 import cluster from 'cluster';
 import { EventEmitter } from 'events';
 import { reindex, makeIndexesIfNotExist } from './reindex';
 
 if (cluster.isMaster) {
-
-   
-
     makeIndexesIfNotExist().then(() => {
         let emmiter = new EventEmitter()
         let finishjobs: Array<any> = [];
@@ -16,7 +13,6 @@ if (cluster.isMaster) {
             finishjobs.push(data)
             console.log(finishjobs.length, "<====>", config.repositories.length)
             console.log("-----------------------------------");
-            console.log(finishjobs);
             if (finishjobs.length == config.repositories.length) {
                 finishjobs = [];
                 console.log("All indexing finished");
@@ -30,7 +26,6 @@ if (cluster.isMaster) {
             job.fetchQueue.on('global:drained', () => {
                 if (timeout) {
                     clearTimeout(timeout);
-                    console.log("time cleared")
                 }
                 timeout = setTimeout(() => {
                     console.log("global:drained");
