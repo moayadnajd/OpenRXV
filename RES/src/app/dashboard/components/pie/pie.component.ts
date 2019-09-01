@@ -61,7 +61,7 @@ export class PieComponent extends ParentChart implements OnInit {
         {
           animation: true,
           type: 'pie',
-          data: buckets.map((b: Bucket) => ({ name: b.key, y: b.doc_count })),
+          data: buckets.map((b: Bucket) => ({ name: b.key.substr(0,50), y: b.doc_count })),
         },
       ],
       ...this.cms.commonProperties(),
