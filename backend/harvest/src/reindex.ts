@@ -114,15 +114,12 @@ export async function reindex() {
         await es_client.indices.create({
             index: config.temp_index,
         }).then(d => console.log("create done "))
+        
+        console.log("Index All Done ");
 
-        console.log("Index All Done ")
-        runAddOn();
-
-        fixLanguage().then(d => console.log(d)).catch(e => console.dir(e));
-
-        removeGlobal().then(d => console.log(d)).catch(e => console.dir(e));
-
-        removeSponsorship().then(d => console.log(d)).catch(e => console.dir(e));
+        Promise.all([fixLanguage(), removeGlobal(), removeSponsorship()]).then((d) => {
+            runAddOn();
+        }).catch(e => console.dir(e));
     } catch (e) {
         if (e.body.failures)
             console.dir(e.body.failures);
