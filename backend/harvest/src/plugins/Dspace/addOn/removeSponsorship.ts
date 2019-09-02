@@ -16,7 +16,7 @@ export function removeSponsorship() {
             index: config.final_index,
             type: config.index_type,
             waitForCompletion: true,
-            refresh:false,
+            conflicts: "proceed",
             body: {
                 "script": {
                     "source": "ctx._source.sponsorship = null"
