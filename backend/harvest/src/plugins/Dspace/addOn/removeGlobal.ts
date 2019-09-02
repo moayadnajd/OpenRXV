@@ -29,7 +29,7 @@ export function removeGlobal() {
             }
         })
             .then(() => resolve('Done updating "Global" region to null.'))
-            .catch(err => reject('Error while updating "Global" region to null, '))
+            .catch(err => { console.log('Error while updating "Global" region to null'); reject(err); })
 
     })
 
