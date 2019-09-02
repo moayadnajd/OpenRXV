@@ -15,6 +15,7 @@ export function removeGlobal() {
             index: config.final_index,
             type: config.index_type,
             waitForCompletion: true,
+            refresh:false,
             body: {
                 query: {
                     bool: {
