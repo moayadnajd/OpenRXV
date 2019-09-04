@@ -175,7 +175,7 @@ export const filtersConfig: GeneralConfigs[] = [
     componentConfigs: {
       expandPosition: 'top',
       placeholder: 'Select Community(ies)',
-      source: 'communityList.keyword',
+      source: 'community.keyword',
       addInMainQuery: false,
     } as ComponentFilterConfigs,
   },
