@@ -32,7 +32,7 @@
             "name": "Altmetric",
             "param": "20.500.12348",
             "description": "get altmetric numbers from altmetric api for worldfish",
-            "active": false
+            "active": true
         },
         {
             "name": "Altmetric",
