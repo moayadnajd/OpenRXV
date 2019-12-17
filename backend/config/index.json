@@ -498,7 +498,7 @@
             "name": "WORLDFISH",
             "startPage": 0,
             "allCores": true,
-            "itemsEndPoint": "https://digitalarchive.worldfishcenter.org//rest/items?expand=metadata,bitstreams,parentCommunityList",
+            "itemsEndPoint": "https://digitalarchive.worldfishcenter.org/rest/items?expand=metadata,bitstreams,parentCommunityList",
             "schema": {
                 "id": "id",
                 "handle": "handle",
