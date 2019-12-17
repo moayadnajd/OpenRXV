@@ -492,55 +492,287 @@
                     "name": "community"
                 }
             }
-        }
-    ],
-    "example": [
-        {
-            "name": "fixLanguage",
-            "param": "language",
-            "description": "convert iso-code to language name",
-            "active": true
-        },
-        {
-            "name": "fixCountries",
-            "param": "country",
-            "description": "convert iso-code to country name",
-            "active": true
         },
         {
             "type": "Dspace",
-            "name": "MELSPACE",
+            "name": "WORLDFISH",
             "startPage": 0,
             "allCores": true,
-            "API": "http://repo.mel.cgiar.org/rest/items?expand=metadata,parentCommunityList",
+            "itemsEndPoint": "https://digitalarchive.worldfishcenter.org//rest/items?expand=metadata,bitstreams,parentCommunityList",
             "schema": {
                 "id": "id",
-                "dc.date": "date",
-                "dc.identifier": "identifier",
-                "dc.identifier.uri": "uri",
-                "dc.description.abstract": "abstract",
-                "cg.coverage.region": "region",
-                "cg.coverage.country": "country",
-                "dc.format": "format",
-                "dc.language": "language",
-                "dc.publisher": "publisher",
-                "dc.rights": "rights",
-                "dc.subject": "subject",
-                "dc.type": "type",
-                "dc.title": "title",
-                "dc.identifier.status": "status",
-                "dc.identifier.citation": "citation",
-                "cg.contributor.funder": "sponsorship",
-                "cg.contributor.center": "affiliation",
-                "cg.contributor.crp": "crp",
-                "dc.creator": "author",
-                "dc.contributor": "author",
                 "handle": "handle",
-                "mel.file.thumbnail": "thumbnail",
-                "parentCommunityList": "community"
+                "metadata": [
+                    {
+                        "where": {
+                            "key": "cg.contributor.funder"
+                        },
+                        "value": {
+                            "value": "sponsorship"
+                        }
+                    },
+                    
+                    {
+                        "where": {
+                            "key": "dc.creator"
+                        },
+                        "value": {
+                            "value": "author"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "cg.contribution.worldfishauthor"
+                        },
+                        "value": {
+                            "value": "author"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "dc.date.issued"
+                        },
+                        "value": {
+                            "value": "date"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "dc.identifier"
+                        },
+                        "value": {
+                            "value": "identifier"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "dc.identifier.uri"
+                        },
+                        "value": {
+                            "value": "uri"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "dc.description.abstract"
+                        },
+                        "value": {
+                            "value": "abstract"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "cg.coverage.region"
+                        },
+                        "value": {
+                            "value": "region"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "cg.coverage.country"
+                        },
+                        "value": {
+                            "value": "country"
+                        },
+                        "addOn": "country"
+                    },
+                    {
+                        "where": {
+                            "key": "dc.language"
+                        },
+                        "value": {
+                            "value": "language"
+                        },
+                        "addOn": "language"
+                    },
+                    {
+                        "where": {
+                            "key": "dc.publisher"
+                        },
+                        "value": {
+                            "value": "publisher"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "dc.subject"
+                        },
+                        "value": {
+                            "value": "subject"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "cg.subject.cta"
+                        },
+                        "value": {
+                            "value": "subject"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "cg.subject.ilri"
+                        },
+                        "value": {
+                            "value": "subject"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "cg.subject.cip"
+                        },
+                        "value": {
+                            "value": "subject"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "cg.subject.ciat"
+                        },
+                        "value": {
+                            "value": "subject"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "cg.subject.wle"
+                        },
+                        "value": {
+                            "value": "subject"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "cg.subject.ccafs"
+                        },
+                        "value": {
+                            "value": "subject"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "cg.subject.iita"
+                        },
+                        "value": {
+                            "value": "subject"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "cg.subject.agrovoc"
+                        },
+                        "value": {
+                            "value": "subject"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "cg.subject.cta"
+                        },
+                        "value": {
+                            "value": "subject"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "cg.subject.humidtropics"
+                        },
+                        "value": {
+                            "value": "subject"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "dc.type"
+                        },
+                        "value": {
+                            "value": "type"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "dc.title"
+                        },
+                        "value": {
+                            "value": "title"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "cg.identifier.status"
+                        },
+                        "value": {
+                            "value": "status"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "dc.identifier.citation"
+                        },
+                        "value": {
+                            "value": "citation"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "dc.description.sponsorship"
+                        },
+                        "value": {
+                            "value": "sponsorship"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "cg.contributor.affiliation"
+                        },
+                        "value": {
+                            "value": "affiliation"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "cg.contributor.crp"
+                        },
+                        "value": {
+                            "value": "crp"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "dc.contributor.author"
+                        },
+                        "value": {
+                            "value": "author"
+                        }
+                    },
+                    {
+                        "where": {
+                            "key": "dc.contributor"
+                        },
+                        "value": {
+                            "value": "author"
+                        }
+                    }
+                ],
+                "parentCommunityList": {
+                    "name": "community"
+                },
+                "bitstreams": [
+                    {
+                        "where": {
+                            "bundleName": "THUMBNAIL"
+                        },
+                        "value": {
+                            "retrieveLink": "thumbnail"
+                        },
+                        "prefix": "https://cgspace.cgiar.org/rest"
+                    }
+                ]
             }
-        },
-        {
+        }
+    ],
+    "example": [ {
             "type": "Dspace",
             "name": "Demo",
             "startPage": 0,
