@@ -766,7 +766,7 @@
                         "value": {
                             "retrieveLink": "thumbnail"
                         },
-                        "prefix": "https://cgspace.cgiar.org/rest"
+                        "prefix": "https://digitalarchive.worldfishcenter.org/rest"
                     }
                 ]
             }
