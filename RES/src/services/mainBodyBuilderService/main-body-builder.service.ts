@@ -152,7 +152,9 @@ export class MainBodyBuilderService extends BuilderUtilities {
 
   private sortHitsQuery(b: bodybuilder.Bodybuilder, from: number): void {
     const { sort, value } = this.hitsAttributes;
-    b.sort(value ? value : 'date', {
+    b.sort('_score', {
+      "order": "desc"
+    }).sort(value ? value : 'date', {
       mode: 'max',
       order: sort ? sort : 'desc'
     }).from(from);

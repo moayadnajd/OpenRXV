@@ -46,7 +46,7 @@ export class SearchComponent extends ParentComponent implements OnInit {
   prepareQueryString(string: string) {
     string = string.replace(new RegExp('\\&|\\||\\!|\\(|\\)|\\{|\\}|\\[|\\]|\\^|\\"|\\~|\\*|\\?|\\:|\\-|\\\\|\\/|\\=|\\+|\\%|\\,|\\@', 'gm'), ' ');//remove special characters
     string = string.trim().replace(new RegExp('\\s{2,}', 'gm'), ' ');//remove extra whitespaces
-    return string.split(' ').join('*') + '*';
+    return string ;
   }
   private applySearchTerm(): void {
     const { type } = this.componentConfigs as ComponentSearchConfigs;
@@ -54,6 +54,8 @@ export class SearchComponent extends ParentComponent implements OnInit {
       this.bodyBuilderService.setAggAttributes = <QuerySearchAttribute>{
         query: {
           "query_string": {
+            "type":       "best_fields",
+            "minimum_should_match": 2,
             "query": this.prepareQueryString(this.searchTerm)
           }
         }
