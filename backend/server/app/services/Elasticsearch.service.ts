@@ -21,7 +21,7 @@ export class ElasticsearchService {
         });
       } else {
         scrollSearch = await this.client.search({
-          index: 'items-temp',
+          index: 'items',
           scroll: '10m',
           method: 'POST',
           body: { ...q }

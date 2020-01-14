@@ -11,7 +11,7 @@ export class SearchController {
     return async ({ body }: Request, res: Response): Promise<void> => {
       try {
         this.ess.client.search({
-          index: 'items-temp',
+          index: 'items',
           method: 'POST',
           body: body
         }).then(data => res.json(data.body)).catch(e => res.status(500).json(e))

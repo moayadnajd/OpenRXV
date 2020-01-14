@@ -48,7 +48,7 @@ export class ExportService {
   }
 
   private formatter(toFormat: Array<string> | string): string {
-    return Array.isArray(toFormat) ? toFormat.join('; ') : toFormat || 'None';
+    return Array.isArray(toFormat) ? toFormat.join('; ') : toFormat || '';
   }
 
   private getHeader(): Array<string> {

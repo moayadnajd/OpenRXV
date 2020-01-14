@@ -40,10 +40,8 @@ services:
        - 127.0.0.1:80:80
     depends_on:
        - elasticsearch
-       - kibana
     links:
        - elasticsearch
-       - kibana   
   redis:
       container_name: redis
       image: redis
@@ -82,20 +80,19 @@ services:
       - 127.0.0.1:5601:5601
     environment:
       - ELASTICSEARCH_URL=http://elasticsearch:9200        
-            
-  export:
-     container_name: export
-     working_dir: /script/
-     restart: always
-     image: node
-     ports:
-       - 127.0.0.1:3000:3000
-     command: "npm run install_and_run"
-     volumes:
-       - /home/codeobia/AReS_Exporter:/script
-     depends_on:
-       - elasticsearch
-       - angular_nginx
-     links:
-       - elasticsearch
-       - angular_nginx
+  server:
+    container_name: server
+    working_dir: /backend/server
+    restart: always
+    image: node
+    command: "npm run install_and_run"
+    ports: 
+      - 127.0.0.1:3000:3000
+    volumes:
+      - ../backend:/backend
+    depends_on:
+      - elasticsearch
+      - angular_nginx
+    links:
+      - elasticsearch   
+      - angular_nginx
