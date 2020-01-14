@@ -186,7 +186,7 @@ export interface QueryFilterAttribute {
  *   the main query*
  */
 export interface QuerySearchAttribute {
-  query: string;
+  query: any;
   operator: string;
   fuzziness: string;
 }

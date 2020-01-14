@@ -63,7 +63,12 @@ export class BuilderUtilities {
       this.or
         ? b.orFilter('match', { [key]: this.aggAttributes[key] })
         : b.filter('match', { [key]: this.aggAttributes[key] });
-    } else {
+    }
+    else if (this.aggAttributes[key].query_string) {
+      //console.log(this.aggAttributes[key])
+      b.query('query_string', this.aggAttributes[key].query_string)
+    } 
+    else {
       this.aggAttributes[key].forEach((s: string) =>
         this.or ? b.orFilter('term', key, s) : b.filter('term', key, s)
       );

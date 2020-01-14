@@ -33,25 +33,31 @@ export class SearchComponent extends ParentComponent implements OnInit {
   }
 
   onClick() {
-    if (this.checkIfInputIsEmpty()) {
-      this.checkTypeThenDelete();
-      return;
-    }
+    // if (this.checkIfInputIsEmpty()) {
+    //   this.checkTypeThenDelete();
+    //   return;
+    // }
     this.applySearchTerm();
   }
 
   private deleteFromMainQuery(allSearch: boolean): string {
     return this.bodyBuilderService.deleteFromMainQuery(allSearch);
   }
-
+  prepareQueryString(string: string) {
+    string = string.replace(new RegExp('\\&|\\||\\!|\\(|\\)|\\{|\\}|\\[|\\]|\\^|\\"|\\~|\\*|\\?|\\:|\\-|\\\\|\\/|\\=|\\+|\\%|\\,|\\@', 'gm'), ' ');//remove special characters
+    string = string.trim().replace(new RegExp('\\s{2,}', 'gm'), ' ');//remove extra whitespaces
+    return string.split(' ').join('*') + '*';
+  }
   private applySearchTerm(): void {
     const { type } = this.componentConfigs as ComponentSearchConfigs;
     if (type === searchOptions.allSearch) {
-      this.bodyBuilderService.setAggAttributes = {
-        fuzziness: 'AUTO',
-        operator: 'and',
-        query: this.searchTerm,
-      } as QuerySearchAttribute;
+      this.bodyBuilderService.setAggAttributes = <QuerySearchAttribute>{
+        query: {
+          "query_string": {
+            "query": this.prepareQueryString(this.searchTerm)
+          }
+        }
+      }
     } else {
       this.bodyBuilderService.setAggAttributes = this.searchTerm;
     }
