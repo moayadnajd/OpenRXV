@@ -13,7 +13,7 @@ import { hits } from 'src/app/filters/services/interfaces';
 @Injectable()
 export class ExportService {
   private readonly api_end_export_point: string = environment.exportPoint;
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly http: HttpClient) { }
 
   export(d: DataForExporter): Observable<ExporterResponse> {
     return this.http.post(this.api_end_export_point, d) as Observable<
@@ -23,20 +23,20 @@ export class ExportService {
 
   createXlsxFile({ hits }: ExportFilesModal): Array<Array<string>> {
     return hits.map(({ _source }: hits) => [
-      _source.title,
-      _source.citation,
-      _source.date,
+      this.formatter(_source.title),
+      this.formatter(_source.citation),
+      this.formatter(_source.date),
       this.formatter(_source.author),
-      _source.publisher,
-      _source.status,
-      _source.crp,
+      this.formatter(_source.publisher),
+      this.formatter(_source.status),
+      this.formatter(_source.crp),
       this.formatter(_source.affiliation),
       this.formatter(_source.language),
       this.formatter(_source.subject),
-      _source.region,
+      this.formatter(_source.region),
       this.formatter(_source.country),
       this.formatter(_source.repo),
-      _source.handle
+      this.formatter(_source.handle)
     ]);
   }
 
@@ -46,9 +46,11 @@ export class ExportService {
     utils.book_append_sheet(workBook, sheet, 'Publications');
     writeFile(workBook, fileName, { bookType: 'xlsx' });
   }
-
-  private formatter(toFormat: Array<string> | string): string {
-    return Array.isArray(toFormat) ? toFormat.join('; ') : toFormat || '';
+  replaceSTR(string) {
+    return string.replace(new RegExp('\\&|\\||\\!|\\(|\\)|\\{|\\}|\\[|\\]|\\^|\\"|\\~|\\*|\\?|\\:|\\-|\\\\|\\/|\\=|\\+|\\%|\\,|\\@', 'gm'), ' ');//remove special characters
+  }
+  private formatter(toFormat: any): string {
+    return this.replaceSTR((Array.isArray(toFormat) && toFormat.length) ? toFormat.join('; ') : toFormat || '' || '');
   }
 
   private getHeader(): Array<string> {
