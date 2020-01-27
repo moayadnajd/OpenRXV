@@ -8,7 +8,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc": "tsc",
     "dev": "ts-node-dev --respawn --transpileOnly ./app/app.ts",
-    "prod": "tsc && node ./build/server/app/app.js"
+    "makepublic": "mkdir -p ./build/server/app/public/downloads/",
+    "cptemp": "cp -r ./app/template-files ./build/server/app/",
+    "prod": "tsc && npm run cptemp && npm run makepublic  && node ./build/server/app/app.js"
   },
   "keywords": [],
   "author": "Mohammed Al-rowad",
