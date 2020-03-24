@@ -31,7 +31,7 @@ declare function _altmetric_embed_init(): any;
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ListComponent extends ParentComponent implements OnInit {
-  @ViewChild('clickToEnable') clickToEnable: ElementRef;
+  @ViewChild('clickToEnable', {static: false}) clickToEnable: ElementRef;
   hits: Hits; // for the paginated list
   listData: Bucket[]; // for aggrigiation list
   isPaginatedList: boolean; // determine if we should display the hits or not

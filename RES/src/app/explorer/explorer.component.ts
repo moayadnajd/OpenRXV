@@ -24,7 +24,7 @@ import { ScreenSizeService } from 'src/app/explorer/services/screenSize/screen-s
   styleUrls: ['./explorer.component.scss'],
 })
 export class ExplorerComponent implements OnInit {
-  @ViewChild('drawer') sidenav: MatDrawer;
+  @ViewChild('drawer', {static: false}) sidenav: MatDrawer;
   loading$: Observable<boolean>;
   render: boolean;
   orOperator: boolean;

@@ -33,7 +33,7 @@ export class PaginatedListComponent implements OnInit {
   @Input() paginationAtt: PageEvent;
   @Input() loadingHits: boolean;
   @Input() content: PaginatedListConfigs;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
   private sortOption: SortOption;
   /**
    * `flag` helps preventing the store action

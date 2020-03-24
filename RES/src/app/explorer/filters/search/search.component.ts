@@ -17,7 +17,7 @@ import { ParentComponent } from 'src/app/explorer/parent-component.class';
   styleUrls: ['./search.component.scss'],
 })
 export class SearchComponent extends ParentComponent implements OnInit {
-  @ViewChild('search') searchInput: ElementRef;
+  @ViewChild('search', { static: false }) searchInput: ElementRef;
   searchTerm: string;
 
   constructor(
@@ -46,7 +46,7 @@ export class SearchComponent extends ParentComponent implements OnInit {
   prepareQueryString(string: string) {
     string = string.replace(new RegExp('\\&|\\||\\!|\\(|\\)|\\{|\\}|\\[|\\]|\\^|\\"|\\~|\\*|\\?|\\:|\\-|\\\\|\\/|\\=|\\+|\\%|\\,|\\@', 'gm'), ' ');//remove special characters
     string = string.trim().replace(new RegExp('\\s{2,}', 'gm'), ' ');//remove extra whitespaces
-    return string ;
+    return string;
   }
   private applySearchTerm(): void {
     const { type } = this.componentConfigs as ComponentSearchConfigs;
@@ -54,7 +54,7 @@ export class SearchComponent extends ParentComponent implements OnInit {
       this.bodyBuilderService.setAggAttributes = <QuerySearchAttribute>{
         query: {
           "query_string": {
-            "type":       "best_fields",
+            "type": "best_fields",
             "minimum_should_match": 2,
             "query": this.prepareQueryString(this.searchTerm)
           }
@@ -92,17 +92,18 @@ export class SearchComponent extends ParentComponent implements OnInit {
    * clears the input
    */
   private subToSearchTerms() {
-    fromEvent(this.searchInput.nativeElement, 'input')
-      .pipe(
-        map((e: any) => e.target.value),
-        debounceTime(250),
-        map((s: string) => {
-          if (this.checkIfInputIsEmpty()) {
-            this.checkTypeThenDelete();
-          }
-        })
-      )
-      .subscribe();
+    if (this.searchInput)
+      fromEvent(this.searchInput.nativeElement, 'input')
+        .pipe(
+          map((e: any) => e.target.value),
+          debounceTime(250),
+          map((s: string) => {
+            if (this.checkIfInputIsEmpty()) {
+              this.checkTypeThenDelete();
+            }
+          })
+        )
+        .subscribe();
   }
 
   private checkIfInputIsEmpty(): boolean {

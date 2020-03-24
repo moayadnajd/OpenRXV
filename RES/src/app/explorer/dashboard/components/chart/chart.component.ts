@@ -36,7 +36,7 @@ export class ChartComponent {
   @Input() chartOptions: Highcharts.Options;
   @Output() expanded: EventEmitter<boolean>;
   @Output() chartInstance: EventEmitter<Highcharts.Chart>;
-  @ViewChild('clickToEnable') clickToEnable: ElementRef;
+  @ViewChild('clickToEnable', {static: false}) clickToEnable: ElementRef;
   Highcharts = Highcharts;
   constructor() {
     this.expanded = new EventEmitter<boolean>();
