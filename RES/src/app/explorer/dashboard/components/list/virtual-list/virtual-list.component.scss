@@ -1,0 +1,43 @@
+@import '../../../../../../scss/responsive.scss';
+@include small {
+  .viewport {
+    .item {
+      height: 90px !important;
+    }
+  }
+}
+
+.viewport {
+  height: 500px;
+  overflow-x: hidden !important; // firefox
+  .item {
+    height: 50px;
+    .progress {
+      height: 7px;
+      display: flex;
+      overflow: hidden;
+      font-size: 0.75rem;
+      background-color: #e9ecef;
+      border-radius: 0.25rem;
+      margin-top: 5px;
+    }
+
+    .arrow {
+      z-index: 10;
+      border-width: 12px;
+    }
+
+    .arrow,
+    .arrow:after {
+      display: block;
+      width: 0;
+      height: 0;
+      border-color: transparent;
+      border-style: solid;
+    }
+
+    .spacer {
+      flex: 1 1 auto;
+    }
+  }
+}
