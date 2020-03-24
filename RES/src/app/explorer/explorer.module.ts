@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { AppComponent } from './app.component';
+import { ExplorerComponent } from './explorer.component';
 import { StoreModule } from '@ngrx/store';
 import { reducers, efficts } from 'src/app/explorer/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -70,10 +70,11 @@ import { SimiCircleComponent } from './dashboard/components/simi-circle/simi-cir
 import { BarComponent } from './dashboard/components/bar/bar.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { ExportComponent } from './dashboard/components/list/export/export.component';
+import { ExplorerRoutingModule } from './explorer.routing.module';
 
 @NgModule({
   declarations: [
-    AppComponent,
+    ExplorerComponent,
     FiltersComponent,
     DashboardComponent,
     SelectComponent,
@@ -136,7 +137,7 @@ import { ExportComponent } from './dashboard/components/list/export/export.compo
     MatProgressBarModule,
     NouisliderModule,
     TourMatMenuModule.forRoot(),
-    RouterModule.forRoot([{ path: '', component: AppComponent }]), // for TourMatMenuModule,
+    ExplorerRoutingModule, // for TourMatMenuModule,
     MdePopoverModule, // https://github.com/angular/material2/issues/2691
     MatSnackBarModule,
     MatProgressSpinnerModule,
@@ -162,7 +163,6 @@ import { ExportComponent } from './dashboard/components/list/export/export.compo
     SimiCircleComponent,
     BarComponent,
     ExportComponent
-  ],
-  bootstrap: [AppComponent]
+  ]
 })
-export class AppModule {}
+export class ExplorerModule {}

@@ -19,11 +19,11 @@ import { orAndToolTip } from 'src/app/explorer/configs/tooltips';
 import { ScreenSizeService } from 'src/app/explorer/services/screenSize/screen-size.service';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+  selector: 'explorer-root',
+  templateUrl: './explorer.component.html',
+  styleUrls: ['./explorer.component.scss'],
 })
-export class AppComponent implements OnInit {
+export class ExplorerComponent implements OnInit {
   @ViewChild('drawer') sidenav: MatDrawer;
   loading$: Observable<boolean>;
   render: boolean;
