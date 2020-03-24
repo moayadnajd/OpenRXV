@@ -1,1 +1,30 @@
-<router-outlet></router-outlet>
+<div class="row">
+  <div class="container-fluid">
+    <mat-toolbar color="primary" class="toolbar-style">
+      <mat-toolbar-row>
+        hello
+
+      </mat-toolbar-row>
+    </mat-toolbar>
+  </div>
+</div>
+
+<div class="row">
+  <div class="container-fluid">
+    <mat-drawer-container class="container-admin">
+      <mat-drawer mode="side" opened>
+        
+        Drawer content
+
+       
+      </mat-drawer>
+      <mat-drawer-content>
+          <div class="col-md-12">
+            <h1>Hi</h1>
+            <router-outlet name="admin"></router-outlet>
+          </div>
+        
+      </mat-drawer-content>
+    </mat-drawer-container>
+  </div>
+</div>
