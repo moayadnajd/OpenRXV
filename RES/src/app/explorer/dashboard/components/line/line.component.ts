@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ChartMathodsService } from '../services/chartCommonMethods/chart-mathods.service';
 import * as Highcharts from 'highcharts';
 import { ParentChart } from '../parent-chart';
-
+import { ComponentLookup } from '../dynamic/lookup.registry';
+@ComponentLookup('LineComponent')
 @Component({
   selector: 'app-line',
   templateUrl: './line.component.html',

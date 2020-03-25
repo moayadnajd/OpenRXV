@@ -8,7 +8,8 @@ import * as Highcharts from 'highcharts';
 import { ChartMathodsService } from '../services/chartCommonMethods/chart-mathods.service';
 import { ParentChart } from '../parent-chart';
 import { Bucket } from 'src/app/explorer/filters/services/interfaces';
-
+import { ComponentLookup } from '../dynamic/lookup.registry';
+@ComponentLookup('WordcloudComponent')
 @Component({
   selector: 'app-wordcloud',
   templateUrl: './wordcloud.component.html',

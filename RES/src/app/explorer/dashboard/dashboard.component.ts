@@ -7,7 +7,7 @@ import { SetQuery } from '../store';
 import { BodyBuilderService } from '../filters/services/bodyBuilder/body-builder.service';
 import { tourConfig } from 'src/app/explorer/configs/tour';
 import { ESHttpError } from 'src/app/explorer/store/actions/actions.interfaces';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackComponent } from './representationalComponents/snack/snack.component';
 import {
   GeneralConfigs,

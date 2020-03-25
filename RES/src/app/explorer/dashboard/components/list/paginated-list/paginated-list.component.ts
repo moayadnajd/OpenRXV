@@ -6,7 +6,8 @@ import {
   ChangeDetectionStrategy
 } from '@angular/core';
 import { hits } from 'src/app/explorer/filters/services/interfaces';
-import { PageEvent, MatPaginator, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../../../store';
 import { MainBodyBuilderService } from 'src/app/explorer/services/mainBodyBuilderService/main-body-builder.service';
@@ -33,7 +34,7 @@ export class PaginatedListComponent implements OnInit {
   @Input() paginationAtt: PageEvent;
   @Input() loadingHits: boolean;
   @Input() content: PaginatedListConfigs;
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   private sortOption: SortOption;
   /**
    * `flag` helps preventing the store action

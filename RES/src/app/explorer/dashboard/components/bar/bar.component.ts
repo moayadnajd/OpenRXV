@@ -17,7 +17,9 @@ import * as fromStore from '../../../store';
 import { BarService } from './services/bar/bar.service';
 import { UpdateCallerBarChart } from '../list/paginated-list/filter-paginated-list/types.interface';
 import { map } from 'rxjs/operators';
+import { ComponentLookup } from '../dynamic/lookup.registry';
 
+@ComponentLookup('BarComponent')
 @Component({
   selector: 'app-bar',
   templateUrl: './bar.component.html',

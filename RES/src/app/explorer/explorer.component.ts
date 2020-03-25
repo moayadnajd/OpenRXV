@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatDrawer } from '@angular/material';
+import { MatDrawer } from '@angular/material/sidenav';
 import * as fromStore from './store';
-import 'hammerjs';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { MainBodyBuilderService } from 'src/app/explorer/services/mainBodyBuilderService/main-body-builder.service';
@@ -24,7 +23,7 @@ import { ScreenSizeService } from 'src/app/explorer/services/screenSize/screen-s
   styleUrls: ['./explorer.component.scss'],
 })
 export class ExplorerComponent implements OnInit {
-  @ViewChild('drawer', {static: false}) sidenav: MatDrawer;
+  @ViewChild('drawer') sidenav: MatDrawer;
   loading$: Observable<boolean>;
   render: boolean;
   orOperator: boolean;

@@ -11,10 +11,11 @@ import { Store } from '@ngrx/store';
 import * as fromStore from '../../../store';
 import { ComponentDashboardConfigs } from 'src/app/explorer/configs/generalConfig.interface';
 import { Bucket, Hits, hits } from 'src/app/explorer/filters/services/interfaces';
-import { PageEvent } from '@angular/material';
+import { PageEvent } from '@angular/material/paginator';
 import { ScrollHelperService } from '../services/scrollTo/scroll-helper.service';
 import { first } from 'rxjs/operators';
 import { ParentComponent } from 'src/app/explorer/parent-component.class';
+import { ComponentLookup } from '../dynamic/lookup.registry';
 
 /**
  * declare is used to tell TypeScript compiler that the variable has been created elsewhere.
@@ -23,6 +24,7 @@ import { ParentComponent } from 'src/app/explorer/parent-component.class';
  * externalModule to hint to the TypeScript compiler that externalModule has already been set up
  */
 declare function _altmetric_embed_init(): any;
+@ComponentLookup('ListComponent')
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
@@ -31,7 +33,7 @@ declare function _altmetric_embed_init(): any;
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ListComponent extends ParentComponent implements OnInit {
-  @ViewChild('clickToEnable', {static: false}) clickToEnable: ElementRef;
+  @ViewChild('clickToEnable') clickToEnable: ElementRef;
   hits: Hits; // for the paginated list
   listData: Bucket[]; // for aggrigiation list
   isPaginatedList: boolean; // determine if we should display the hits or not

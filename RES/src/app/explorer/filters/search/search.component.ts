@@ -10,14 +10,15 @@ import { fromEvent } from 'rxjs';
 import { map, debounceTime } from 'rxjs/operators';
 import { BodyBuilderService } from '../services/bodyBuilder/body-builder.service';
 import { ParentComponent } from 'src/app/explorer/parent-component.class';
-
+import { ComponentLookup } from '../../dashboard/components/dynamic/lookup.registry';
+@ComponentLookup('SearchComponent')
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss'],
 })
 export class SearchComponent extends ParentComponent implements OnInit {
-  @ViewChild('search', { static: false }) searchInput: ElementRef;
+  @ViewChild('search') searchInput: ElementRef;
   searchTerm: string;
 
   constructor(

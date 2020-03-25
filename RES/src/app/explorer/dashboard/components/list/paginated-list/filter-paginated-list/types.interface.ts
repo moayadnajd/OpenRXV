@@ -1,4 +1,4 @@
-import { PageEvent } from '@angular/material';
+import { PageEvent } from '@angular/material/paginator';
 import { SortOption } from 'src/app/explorer/configs/generalConfig.interface';
 import { hits, ElasticsearchQuery } from 'src/app/explorer/filters/services/interfaces';
 export interface SortPaginationOptions {

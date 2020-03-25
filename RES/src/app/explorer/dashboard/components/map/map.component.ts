@@ -11,7 +11,9 @@ import { axisColorForMap, selectMapColors } from 'src/app/explorer/configs/chart
 import { ParentChart } from '../parent-chart';
 import { Bucket } from 'src/app/explorer/filters/services/interfaces';
 import { getCountryCode } from '../services/countryList.helper';
+import { ComponentLookup } from '../dynamic/lookup.registry';
 
+@ComponentLookup('MapComponent')
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',

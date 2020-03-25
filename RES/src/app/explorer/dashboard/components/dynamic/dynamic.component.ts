@@ -6,6 +6,7 @@ import {
   ComponentFactoryResolver,
   ViewContainerRef,
 } from '@angular/core';
+import { ComponentLookupRegistry } from './lookup.registry';
 
 @Component({
   selector: 'app-dynamic',
@@ -20,11 +21,12 @@ export class DynamicComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const factories = Array.from(this.resolver['_factories'].keys());
-    const factoryClass = <Type<any>>(
-      factories.find((x: any) => x.name === this.comp)
-    );
-
+    //const factories = Array.from(this.resolver['_factories'].keys());
+    const factoryClass =<Type<any>> ComponentLookupRegistry.get(this.comp); 
+    // <Type<any>>(
+    //   factories.find((x: any) => x.name === this.comp)
+    // );
+console.log(factoryClass);
     if (factoryClass) {
       const factory = this.resolver.resolveComponentFactory(factoryClass);
       const compRef = this.vcRef.createComponent(factory);

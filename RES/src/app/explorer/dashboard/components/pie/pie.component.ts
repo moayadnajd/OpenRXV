@@ -8,7 +8,8 @@ import { ChartMathodsService } from '../services/chartCommonMethods/chart-mathod
 import * as Highcharts from 'highcharts';
 import { ParentChart } from '../parent-chart';
 import { Bucket } from 'src/app/explorer/filters/services/interfaces';
-
+import { ComponentLookup } from '../dynamic/lookup.registry';
+@ComponentLookup('PieComponent')
 @Component({
   selector: 'app-pie',
   templateUrl: './pie.component.html',

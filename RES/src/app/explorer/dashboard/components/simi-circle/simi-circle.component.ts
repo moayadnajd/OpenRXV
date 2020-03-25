@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ChartMathodsService } from '../services/chartCommonMethods/chart-mathods.service';
 import * as Highcharts from 'highcharts';
 import { ParentChart } from '../parent-chart';
+import { ComponentLookup } from '../dynamic/lookup.registry';
 
+@ComponentLookup('SimiCircleComponent')
 @Component({
   selector: 'app-simi-circle',
   templateUrl: './simi-circle.component.html',

@@ -12,7 +12,8 @@ import { Store } from '@ngrx/store';
 import * as fromStore from '../../store';
 import { Observable } from 'rxjs';
 import { ParentComponent } from 'src/app/explorer/parent-component.class';
-
+import { ComponentLookup } from '../../dashboard/components/dynamic/lookup.registry';
+@ComponentLookup('RangeComponent')
 @Component({
   selector: 'app-range',
   templateUrl: './range.component.html',

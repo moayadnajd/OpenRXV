@@ -18,7 +18,8 @@ import { SelectService } from '../services/select/select.service';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../store';
 import { ParentComponent } from 'src/app/explorer/parent-component.class';
-
+import { ComponentLookup } from '../../dashboard/components/dynamic/lookup.registry';
+@ComponentLookup('SelectComponent')
 @Component({
   selector: 'app-select',
   templateUrl: './select.component.html',

@@ -8,7 +8,7 @@ highcharts-chart {
   height: 420px;
 }
 
-/deep/ .mat-expansion-panel-content {
+::ng-deep .mat-expansion-panel-content {
   position: relative !important; // for the prevent scroll !
 }
 

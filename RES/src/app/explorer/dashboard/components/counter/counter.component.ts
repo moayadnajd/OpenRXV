@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ComponentCounterConfigs } from 'src/app/explorer/configs/generalConfig.interface';
 import { AggregationsValue } from 'src/app/explorer/filters/services/interfaces';
+import { ComponentLookup } from '../dynamic/lookup.registry';
+@ComponentLookup('CounterComponent')
 @Component({
   selector: 'app-counter',
   templateUrl: './counter.component.html',

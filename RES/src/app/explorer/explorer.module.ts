@@ -8,24 +8,22 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../../environments/environment';
 import { EffectsModule } from '@ngrx/effects';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {
-  MatSidenavModule,
-  MatExpansionModule,
-  MatCardModule,
-  MatToolbarModule,
-  MatInputModule,
-  MatButtonModule,
-  MatListModule,
-  MatIconModule,
-  MatProgressBarModule,
-  MatPaginatorModule,
-  MatRippleModule,
-  MatSnackBarModule,
-  MatProgressSpinnerModule,
-  MatMenuModule,
-  MatDialogModule,
-  MatDividerModule
-} from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatRippleModule } from '@angular/material/core';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { FiltersComponent } from './filters/filters.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -54,7 +52,6 @@ import { FilterPaginatedListComponent } from './dashboard/components/list/pagina
 import { NgxLoadingModule } from 'ngx-loading';
 import { FooterComponent } from './dashboard/components/footer/footer.component';
 import { TourMatMenuModule } from 'ngx-tour-md-menu';
-import { RouterModule } from '@angular/router';
 import { WelcomeComponent } from './dashboard/representationalComponents/welcome/welcome.component';
 import { MdePopoverModule } from '@material-extended/mde';
 import { IconsWithTextComponent } from './dashboard/representationalComponents/icons-with-text/icons-with-text.component';

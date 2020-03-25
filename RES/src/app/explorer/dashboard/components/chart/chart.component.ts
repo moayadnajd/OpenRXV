@@ -14,11 +14,12 @@ import wordCloudModule from 'highcharts/modules/wordcloud';
 import ExportingModule from 'highcharts/modules/exporting';
 import BoostModule from 'highcharts/modules/boost';
 import MapModule from 'highcharts/modules/map';
+import { ComponentLookup } from '../dynamic/lookup.registry';
 wordCloudModule(Highcharts);
 ExportingModule(Highcharts);
 MapModule(Highcharts);
 BoostModule(Highcharts);
-
+@ComponentLookup('ChartComponent')
 @Component({
   selector: 'app-chart',
   templateUrl: './chart.component.html',
@@ -36,7 +37,7 @@ export class ChartComponent {
   @Input() chartOptions: Highcharts.Options;
   @Output() expanded: EventEmitter<boolean>;
   @Output() chartInstance: EventEmitter<Highcharts.Chart>;
-  @ViewChild('clickToEnable', {static: false}) clickToEnable: ElementRef;
+  @ViewChild('clickToEnable') clickToEnable: ElementRef;
   Highcharts = Highcharts;
   constructor() {
     this.expanded = new EventEmitter<boolean>();
