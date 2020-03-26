@@ -143,3 +143,6 @@ export function runAddOn() {
         })
     });
 }
+makeIndexesIfNotExist().then(()=>{
+    reindex();
+})

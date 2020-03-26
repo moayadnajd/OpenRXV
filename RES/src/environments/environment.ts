@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  endPoint: 'https://cgspace.cgiar.org/explorer/api/search',
-  exportPoint: 'https://cgspace.cgiar.org/explorer/api/exports'
+  endPoint: 'http://localhost:3000/search',
+  exportPoint: 'http://localhost:3000/export'
 };
 
 /*

@@ -8,22 +8,17 @@
     </mat-toolbar>
   </div>
 </div>
+  <mat-drawer-container  class="container-admin">
+    <mat-drawer width="300px" mode="side" opened>
 
-<div class="row">
-  <div class="container-fluid">
-    <mat-drawer-container id="main-content" class="container-admin">
-      <mat-drawer mode="side" opened>
-        
-        Drawer content
+      Drawer content
 
-       
-      </mat-drawer>
-      <mat-drawer-content>
-          <div class="col-md-12">
-            <router-outlet></router-outlet>
-          </div>
-        
-      </mat-drawer-content>
-    </mat-drawer-container>
-  </div>
-</div>
+
+    </mat-drawer>
+    <mat-drawer-content id="main-content">
+      <div class="col-md-12">
+        <router-outlet></router-outlet>
+      </div>
+
+    </mat-drawer-content>
+  </mat-drawer-container>

@@ -1,22 +1,22 @@
-import { FileType } from '../models/types.helpers';
+import { Injectable } from '@nestjs/common';
+import { FileType } from 'src/shared/models/types.helpers';
 import {
   BodyResponse,
   Hits,
   InnterHits,
   ExporterResponse
-} from '../models/ResponseBody.modal';
-import { DocxData, Publication } from '../models/DocxData.modal';
+} from 'src/shared/models/ResponseBody.modal';
+import { DocxData, Publication } from 'src/shared/models/DocxData.modal';
 import { ApiResponse } from '@elastic/elasticsearch';
 import { Response as ExpressRes } from 'express';
 import { v4 } from 'uuid';
 import * as path from 'path';
-import { promises as fs } from 'fs';
-import * as JSZip from 'jszip';
+import * as fs from 'fs';
+import * as PizZip from 'pizzip';
 import * as Docxtemplater from 'docxtemplater';
 import * as word2pdf from 'word2pdf';
-// import * as ora from 'ora';
-import { HITS_SIZE } from '../globals/globals';
 
+@Injectable()
 export class ExportService {
   async downloadFile(
     res: ExpressRes,
@@ -36,7 +36,7 @@ export class ExportService {
         scrollId: _scroll_id,
         fileName: `${fileName}.${type}`,
         path: '/downloads',
-        per_doc_size: HITS_SIZE,
+        per_doc_size: 2000,
         total: hits.total
       };
 
@@ -61,8 +61,8 @@ export class ExportService {
 
   private async createDocx(fileName: string, hits: Hits): Promise<string> {
     try {
-      const zip = new JSZip(
-        await fs.readFile(this.resolvePath('exports-template.docx'), 'binary')
+      const zip = new PizZip(
+        await fs.promises.readFile(this.resolvePath('exports-template.docx'), 'binary')
       );
       const doc = new Docxtemplater();
       doc.loadZip(zip);
@@ -73,7 +73,7 @@ export class ExportService {
       const buf = doc.getZip().generate({ type: 'nodebuffer' });
       const filePath = this.resolvePath(`${fileName}.docx`, true);
       // const spinner = ora(`🚀 writing DOCX`).start();
-      return fs.writeFile(filePath, buf).then(() => {
+      return fs.promises.writeFile(filePath, buf).then(() => {
         // spinner.succeed(`👾 we are done writing DOCX`).stop();
         return filePath;
       });
@@ -85,7 +85,7 @@ export class ExportService {
 
   private resolvePath(file: string, download?: boolean): string {
     return download
-      ? path.resolve(__dirname, `../public/downloads/${file}`)
+      ? path.resolve(__dirname, `../../../public/downloads/${file}`)
       : path.resolve(__dirname, `../template-files/${file}`);
   }
 
@@ -99,7 +99,7 @@ export class ExportService {
     // const spinner = ora(`🔭 converting to PDF`).start();
     word2pdf(filePath)
       .then((data: Buffer) => {
-        fs.writeFile(this.resolvePath(`${fileName}.${type}`, true), data).then(
+        fs.promises.writeFile(this.resolvePath(`${fileName}.${type}`, true), data).then(
           () => {
             // spinner.succeed(`☄️ Done writing  PDF FROM DOCX`).stop();
             res.json(response);
