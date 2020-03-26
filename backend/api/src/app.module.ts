@@ -7,7 +7,6 @@ import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { SharedModule } from './shared/shared.module';
 import { ExportModule } from './export/export.module';
-console.log(join(__dirname, 'public/downloads'));
 @Module({
   imports: [ExplorerModule, AdminModule,
     SharedModule,
