@@ -7,6 +7,8 @@ import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { SharedModule } from './shared/shared.module';
 import { ExportModule } from './export/export.module';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 @Module({
   imports: [ExplorerModule, AdminModule,
     SharedModule,
@@ -15,6 +17,8 @@ import { ExportModule } from './export/export.module';
       serveRoot:'/export/downloads',
       rootPath: join(__dirname, 'public/downloads'),
     }),
+    AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
