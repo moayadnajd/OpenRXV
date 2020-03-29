@@ -1,9 +1,23 @@
+@import "src/app/explorer/configs/customTheme.scss";
 .container-admin {
   margin-top: 69px;
   width: 100%;
 }
 
 mat-drawer {
-  width: 200px;
+  position: fixed;
+  top: 64px;
+  bottom: 0;
+  left: 0;
+  padding: 0;
+  min-width: 260px;
   height: 100%;
+  background: rgba(0, 0, 0, 0.03);
+  box-shadow: 6px 0 6px rgba(0, 0, 0, 0.1);
+}
+
+.mat-list-item:hover,.mat-list-item.active {
+  background-color: #dbdbdb;
+  color: map-get($customTheme, 500) !important;
+  text-shadow: 0 0 5px #fff;
 }

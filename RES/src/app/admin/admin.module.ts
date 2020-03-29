@@ -10,24 +10,43 @@ import { BrowserModule } from '@angular/platform-browser';
 import { LoginComponent } from './login/login.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCard, MatCardModule } from '@angular/material/card';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-
+import { UsersComponent } from './components/users/users.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { DemoMaterialModule } from 'src/app/material/material.module';
+import { FormComponent } from './components/users/form/form.component'
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenInterceptor } from './auth/token.interceptor';
+import { ConfirmationComponent } from './components/confirmation/confirmation.component';
+import { MappingMetadataComponent } from './components/mapping-metadata/mapping-metadata.component';
 @NgModule({
-  declarations: [DashboardComponent, RootComponent, LoginComponent],
+  declarations: [
+    DashboardComponent,
+    RootComponent,
+    LoginComponent,
+    UsersComponent,
+    FormComponent,
+    ConfirmationComponent,
+    MappingMetadataComponent
+  ],
   imports: [
     BrowserModule,
+    FormsModule,
     ReactiveFormsModule,
-    MatIconModule,
-    MatToolbarModule,
-    MatSidenavModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatCardModule,
+    MatPaginatorModule,
     CommonModule,
-    AdminRoutingModule
-  ]
+    DemoMaterialModule,
+    AdminRoutingModule,
+
+  ],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: TokenInterceptor,
+    multi: true
+  }],
+  entryComponents: [FormComponent, ConfirmationComponent]
 })
 export class AdminModule { }

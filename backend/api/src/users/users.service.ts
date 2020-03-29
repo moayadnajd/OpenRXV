@@ -1,32 +1,24 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException, UnauthorizedException } from '@nestjs/common';
+import { ElasticService } from 'src/shared/services/elastic/elastic.service';
 
 export type User = any;
 
 @Injectable()
 export class UsersService {
-  private readonly users: User[];
 
-  constructor() {
-    this.users = [
-      {
-        userId: 1,
-        username: 'john',
-        password: 'changeme',
-      },
-      {
-        userId: 2,
-        username: 'chris',
-        password: 'secret',
-      },
-      {
-        userId: 3,
-        username: 'maria',
-        password: 'guess',
-      },
-    ];
-  }
 
-  async findOne(username: string): Promise<User | undefined> {
-    return this.users.find(user => user.username === username);
-  }
+    constructor(private elastic: ElasticService) { }
+
+    async findOne(email: string): Promise<User | undefined> {
+        let data = await this.elastic.find({ "email.keyword": email });
+        if (data.hits[0])
+            return data.hits[0]._source
+        else
+            throw new UnauthorizedException();
+    }
+    async add(user) {
+        return await this.elastic.add(user);
+    }
+
+
 }

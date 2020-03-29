@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  api: 'http://localhost:3000/',
   endPoint: 'http://localhost:3000/search',
   exportPoint: 'http://localhost:3000/export'
 };

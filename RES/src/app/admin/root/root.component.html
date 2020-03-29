@@ -8,17 +8,22 @@
     </mat-toolbar>
   </div>
 </div>
-  <mat-drawer-container  class="container-admin">
-    <mat-drawer width="300px" mode="side" opened>
+<mat-drawer-container class="container-admin">
+  <mat-drawer width="300px" mode="side" opened>
+    <mat-nav-list>
+      <a mat-list-item routerLink="/admin" routerLinkActive="active" routerLinkActive="active"
+        [routerLinkActiveOptions]="{exact: true}"> Dashboard </a>
+      <a mat-list-item routerLink="/admin/users" routerLinkActive="active"
+        [routerLinkActiveOptions]="{exact: true}">Users</a>
+      <a mat-list-item routerLink="/admin/mapping-meta-data" routerLinkActive="active"
+        [routerLinkActiveOptions]="{exact: true}">Mapping MetaData</a>
 
-      Drawer content
+    </mat-nav-list>
+  </mat-drawer>
+  <mat-drawer-content id="main-content">
+    <div class="col-md-12 pt-5">
+      <router-outlet></router-outlet>
+    </div>
 
-
-    </mat-drawer>
-    <mat-drawer-content id="main-content">
-      <div class="col-md-12">
-        <router-outlet></router-outlet>
-      </div>
-
-    </mat-drawer-content>
-  </mat-drawer-container>
+  </mat-drawer-content>
+</mat-drawer-container>
