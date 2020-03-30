@@ -1,9 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, FormControl, Validators, AsyncValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
-import { UsersService } from 'src/app/admin/services/users.service';
+import { MetadataService } from 'src/app/admin/services/metadata.service';
 import { Observable } from 'rxjs';
-
 
 @Component({
   selector: 'app-metadata-form',
@@ -15,29 +14,27 @@ export class MetadataForm implements OnInit {
     find: new FormControl(''),
     replace: new FormControl(''),
   });
-  get email() { return this.form.get('email'); }
+
   async submit() {
     if (this.form.valid && this.data == null)
-      this.dialogRef.close(await this.userService.PostUser(this.form.value));
+      this.dialogRef.close(await this.userService.post(this.form.value));
     else if (this.form.valid && this.data)
-      this.dialogRef.close(await this.userService.updateUser(this.data.id, this.form.value));
+      this.dialogRef.close(await this.userService.put(this.data.id, this.form.value));
   }
 
 
   constructor(
     public dialogRef: MatDialogRef<MetadataForm>,
-    private userService: UsersService,
+    private userService: MetadataService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
 
 
   ngOnInit(): void {
     if (this.data) {
-      this.form.removeControl('email');
-      this.form.registerControl('email', new FormControl(null, [Validators.email])); // [existValidator(!this.data ? this.userService : null)]
       let temp = this.data;
-      temp['password'] = '';
       delete temp.created_at
+      delete temp.id
       this.form.setValue(this.data);
     }
   }

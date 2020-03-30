@@ -22,6 +22,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './auth/token.interceptor';
 import { ConfirmationComponent } from './components/confirmation/confirmation.component';
 import { MappingMetadataComponent } from './components/mapping-metadata/mapping-metadata.component';
+import { MetadataForm } from './components/mapping-metadata/form/metadata-form.component';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -30,7 +31,8 @@ import { MappingMetadataComponent } from './components/mapping-metadata/mapping-
     UsersComponent,
     FormComponent,
     ConfirmationComponent,
-    MappingMetadataComponent
+    MappingMetadataComponent,
+    MetadataForm
   ],
   imports: [
     BrowserModule,
@@ -47,6 +49,6 @@ import { MappingMetadataComponent } from './components/mapping-metadata/mapping-
     useClass: TokenInterceptor,
     multi: true
   }],
-  entryComponents: [FormComponent, ConfirmationComponent]
+  entryComponents: [FormComponent, ConfirmationComponent,MetadataForm]
 })
 export class AdminModule { }

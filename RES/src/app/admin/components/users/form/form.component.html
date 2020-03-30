@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>New Users</h1>
+<h1 mat-dialog-title>{{ data? 'Edit' :'New' }} User</h1>
 <form [formGroup]="form" (ngSubmit)="submit()">
     <div mat-dialog-content>
         <p>
@@ -15,19 +15,19 @@
         </p>
 
         <p>
-           
-                <mat-form-field>
-                    <mat-label>Role</mat-label>
-                    <mat-select required formControlName="role">
-                      <mat-option  value="Admin">
+
+            <mat-form-field>
+                <mat-label>Role</mat-label>
+                <mat-select required formControlName="role">
+                    <mat-option value="Admin">
                         Admin
-                      </mat-option>
-                      <mat-option  value="Editor">
+                    </mat-option>
+                    <mat-option value="Editor">
                         Editor
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-           
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
         </p>
 
         <p>
@@ -45,7 +45,9 @@
 
     </div>
     <div mat-dialog-actions align="end">
-        <button mat-raised-button color="default" (click)="onNoClick($event)">Close <mat-icon>close</mat-icon></button>
-        <button type="submit" color="primary" mat-raised-button>Submit <mat-icon>done</mat-icon></button>
+        <button type="button" mat-raised-button color="default" (click)="onNoClick($event)">Close <mat-icon>close
+            </mat-icon></button>
+        <button type="button" color="primary" (keyup.enter)="submit()" (click)="submit()" mat-raised-button>Submit
+            <mat-icon>done</mat-icon></button>
     </div>
 </form>

@@ -25,10 +25,7 @@ export class MetadataController {
     @Get(':id')
     async  GetOneUser(@Param('id') id: string) {
         let user: any = await this.elastic.findOne(id);
-
-        delete user.password
         user['id'] = id;
-
         return user
     }
     update

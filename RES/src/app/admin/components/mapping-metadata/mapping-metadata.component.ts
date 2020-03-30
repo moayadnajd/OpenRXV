@@ -20,6 +20,7 @@ export class MappingMetadataComponent implements OnInit {
   openDialog(): void {
 
     const dialogRef = this.dialog.open(MetadataForm, {
+      disableClose: true ,
       width: '30%',
       data: null
     });
@@ -43,7 +44,7 @@ export class MappingMetadataComponent implements OnInit {
     })
   }
   async toEdit(id) {
-    let user = await this.metadataService.find(id);
+    let user = await this.metadataService.findOne(id);
 
     const dialogRef = this.dialog.open(MetadataForm, {
       width: '30%',
