@@ -38,7 +38,7 @@ You can see an example of the project working on our [Agricultural Research e-Se
 
 ## Installation  
 
-#### After you have satisfied the requirements you can clone this repository and build the project:
+#### After you have satisfied the requirements you can clone this repository:
 ```console
 $ cd docker
 $ sudo docker-compose up -d
