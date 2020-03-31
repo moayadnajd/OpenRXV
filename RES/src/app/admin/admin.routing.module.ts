@@ -7,6 +7,7 @@ import { LoginComponent } from './login/login.component';
 import { AdminGuard } from './admin.guard';
 import { UsersComponent } from './components/users/users.component';
 import { MappingMetadataComponent } from './components/mapping-metadata/mapping-metadata.component';
+import { MappingValuesComponent } from './components/mapping-values/mapping-values.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -15,7 +16,8 @@ const routes: Routes = [
       { path: '', component: DashboardComponent , canActivate: [AdminGuard]},
       { path: 'dashboard', component: DashboardComponent  , canActivate: [AdminGuard]},
       { path: 'users', component: UsersComponent  , canActivate: [AdminGuard]},
-      { path: 'mapping-meta-data', component: MappingMetadataComponent  , canActivate: [AdminGuard]}
+      { path: 'mapping-meta-data', component: MappingMetadataComponent  , canActivate: [AdminGuard]},
+      { path: 'mapping-values', component: MappingValuesComponent  , canActivate: [AdminGuard]}
     ]
   },
 ];

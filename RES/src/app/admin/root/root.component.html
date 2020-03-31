@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <mat-toolbar color="primary" class="toolbar-style">
       <mat-toolbar-row>
-        hello
+        <img src="assets/AReS2.png" alt="AReS logo" class="nab-bar-images" />
 
       </mat-toolbar-row>
     </mat-toolbar>
@@ -17,11 +17,13 @@
         [routerLinkActiveOptions]="{exact: true}">Users</a>
       <a mat-list-item routerLink="/admin/mapping-meta-data" routerLinkActive="active"
         [routerLinkActiveOptions]="{exact: true}">Mapping MetaData</a>
+        <a mat-list-item routerLink="/admin/mapping-values" routerLinkActive="active"
+        [routerLinkActiveOptions]="{exact: true}">Mapping Values</a>
 
     </mat-nav-list>
   </mat-drawer>
   <mat-drawer-content id="main-content">
-    <div class="col-md-12 pt-5">
+    <div class="col-md-12 pt-2">
       <router-outlet></router-outlet>
     </div>
 

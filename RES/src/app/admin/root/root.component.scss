@@ -21,3 +21,7 @@ mat-drawer {
   color: map-get($customTheme, 500) !important;
   text-shadow: 0 0 5px #fff;
 }
+
+img{
+  max-height: 49px !important;
+}

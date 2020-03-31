@@ -534,10 +534,10 @@
                 "metadata": [
                     {
                         "where": {
-                            "key": "dc.date.issued"
+                            "key": "uuid"
                         },
                         "value": {
-                            "value": "date"
+                            "value": "id"
                         }
                     },
                     {

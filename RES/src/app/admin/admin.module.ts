@@ -23,6 +23,8 @@ import { TokenInterceptor } from './auth/token.interceptor';
 import { ConfirmationComponent } from './components/confirmation/confirmation.component';
 import { MappingMetadataComponent } from './components/mapping-metadata/mapping-metadata.component';
 import { MetadataForm } from './components/mapping-metadata/form/metadata-form.component';
+import { MappingValuesComponent } from './components/mapping-values/mapping-values.component';
+import { ValuesForm } from './components/mapping-values/form/values-form.component';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -32,7 +34,9 @@ import { MetadataForm } from './components/mapping-metadata/form/metadata-form.c
     FormComponent,
     ConfirmationComponent,
     MappingMetadataComponent,
-    MetadataForm
+    MetadataForm,
+    MappingValuesComponent,
+    ValuesForm,
   ],
   imports: [
     BrowserModule,
@@ -49,6 +53,6 @@ import { MetadataForm } from './components/mapping-metadata/form/metadata-form.c
     useClass: TokenInterceptor,
     multi: true
   }],
-  entryComponents: [FormComponent, ConfirmationComponent,MetadataForm]
+  entryComponents: [FormComponent, ConfirmationComponent,MetadataForm,ValuesForm]
 })
 export class AdminModule { }
