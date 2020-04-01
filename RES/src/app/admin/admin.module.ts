@@ -25,6 +25,7 @@ import { MappingMetadataComponent } from './components/mapping-metadata/mapping-
 import { MetadataForm } from './components/mapping-metadata/form/metadata-form.component';
 import { MappingValuesComponent } from './components/mapping-values/mapping-values.component';
 import { ValuesForm } from './components/mapping-values/form/values-form.component';
+import { SetupComponent } from './components/setup/setup.component';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -37,6 +38,7 @@ import { ValuesForm } from './components/mapping-values/form/values-form.compone
     MetadataForm,
     MappingValuesComponent,
     ValuesForm,
+    SetupComponent,
   ],
   imports: [
     BrowserModule,
