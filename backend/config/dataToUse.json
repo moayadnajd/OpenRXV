@@ -1,0 +1,81 @@
+{
+    "temp_index": "items-temp",
+    "final_index": "items-final",
+    "index_type": "items",
+    "index_alias": "items",
+    "elasticsearch": {
+        "host": "elasticsearch:9200"
+    },
+    "redis": {
+        "host": "redis",
+        "port": 6379
+    },
+    "cron": "0 0 * * *",
+    "startOnFirstInit": true,
+    "repositories": [
+        {
+            "type": "Dspace",
+            "startPage": "0",
+            "itemsEndPoint": "http://repo.mel.cgiar.org/rest/items?expand=metadata,parentCommunityList",
+            "allCores": true,
+            "schema": {
+                "metadata": {
+                    "schema": [
+                        {
+                            "where": {
+                                "key": "dc.date"
+                            },
+                            "value": {
+                                "value": "date"
+                            }
+                        },
+                        {
+                            "where": {
+                                "key": "dc.type"
+                            },
+                            "value": {
+                                "value": "type"
+                            }
+                        },
+                        {
+                            "where": {
+                                "key": "dc.title"
+                            },
+                            "value": {
+                                "value": "title"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Dspace",
+            "startPage": "asd",
+            "itemsEndPoint": "asd",
+            "allCores": true,
+            "schema": {
+                "metadata": {
+                    "schema": [
+                        {
+                            "where": {
+                                "key": "asd"
+                            },
+                            "value": {
+                                "value": "asd"
+                            }
+                        },
+                        {
+                            "where": {
+                                "key": "asd2"
+                            },
+                            "value": {
+                                "value": "asd2"
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}

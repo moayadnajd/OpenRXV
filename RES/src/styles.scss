@@ -6,6 +6,8 @@
 @import '~nouislider/distribute/nouislider.min.css';
 // @import '~highcharts/css/themes/dark-unica.scss';
 
+@import '~ngx-toastr/toastr';
+
 @import './scss/responsive.scss';
 
 html,
@@ -143,6 +145,7 @@ mat-spinner {
 }
 
 .mat-toolbar {
+  margin-top: 2px;
   position: fixed !important;
   z-index: 999999 !important;
   padding-bottom: 5px !important;

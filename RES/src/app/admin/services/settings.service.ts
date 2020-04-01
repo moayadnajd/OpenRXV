@@ -15,4 +15,10 @@ export class SettingsService {
     })).toPromise();
   }
 
+  async  read() {
+    return await this.http.get(environment.api + 'settings').pipe(map((data: any) => {
+      return data;
+    })).toPromise();
+  }
+
 }

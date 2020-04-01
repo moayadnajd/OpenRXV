@@ -26,6 +26,8 @@ import { MetadataForm } from './components/mapping-metadata/form/metadata-form.c
 import { MappingValuesComponent } from './components/mapping-values/mapping-values.component';
 import { ValuesForm } from './components/mapping-values/form/values-form.component';
 import { SetupComponent } from './components/setup/setup.component';
+import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
+import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -48,6 +50,8 @@ import { SetupComponent } from './components/setup/setup.component';
     CommonModule,
     DemoMaterialModule,
     AdminRoutingModule,
+    LoadingBarHttpClientModule,
+    LoadingBarRouterModule,
 
   ],
   providers: [{
