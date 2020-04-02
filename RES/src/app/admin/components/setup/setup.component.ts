@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@ang
 import { SettingsService } from '../../services/settings.service';
 import { async } from '@angular/core/testing';
 import { ToastrService } from 'ngx-toastr';
+import { split } from 'ramda';
 
 @Component({
   selector: 'app-setup',
@@ -22,10 +23,10 @@ export class SetupComponent implements OnInit {
     startOnFirstInit: new FormControl(),
   });
 
-  baseSchema() {
+  baseSchema(metadada = null, disply_name = null) {
     return {
-      metadata: new FormControl(),
-      disply_name: new FormControl(),
+      metadata: new FormControl(metadada),
+      disply_name: new FormControl(disply_name),
     }
 
   }
@@ -45,12 +46,11 @@ export class SetupComponent implements OnInit {
   constructor(private settingService: SettingsService, private toastr: ToastrService) { }
 
   async ngOnInit() {
-  
+
     let data = await this.settingService.read()
     await this.firstFormGroup.patchValue(data);
     await this.secondFormGroup.patchValue(data);
     data.repositories.forEach((element, repoindex) => {
-      console.log(repoindex);
       if (repoindex > 0)
         this.AddNewRepo()
       element.schema.forEach((element, index) => {
@@ -61,14 +61,31 @@ export class SetupComponent implements OnInit {
     await this.repositories.patchValue(data.repositories)
 
 
-    this.toastr.success('Hello world!', 'Toastr fun!');
+
   }
 
-  submit() {
+  async submit() {
     if (this.firstFormGroup.valid && this.secondFormGroup.valid && this.repositories.valid) {
       let settings = { ...this.firstFormGroup.value, ...this.secondFormGroup.value, ...{ repositories: this.repositories.value } }
-      this.settingService.save(settings);
+      await this.settingService.save(settings);
+      this.toastr.success('Settings have been saved successfully');
     }
+
+  }
+
+  async getMetadata(index) {
+    let repo = this.repositories.at(index);
+    if (!repo.get('itemsEndPoint').valid) {
+      this.toastr.error('REST API endpint is not defind');
+      return;
+    }
+    let schema = <FormArray>repo.get('schema');
+    let metadada = await this.settingService.retreiveMetadata(repo.get('itemsEndPoint').value);
+    schema.clear();
+    metadada.forEach(element => {
+      let splited = element.split('.');
+      schema.push(new FormGroup(this.baseSchema(element, splited[splited.length - 1])))
+    });
 
   }
 
@@ -89,6 +106,9 @@ export class SetupComponent implements OnInit {
   }
   delete(schema: FormArray, index: number) {
     schema.removeAt(index);
+  }
+  deleteRepo(index) {
+    this.repositories.removeAt(index)
   }
 
   AddNewMetadata(schema: any) {

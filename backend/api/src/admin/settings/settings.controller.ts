@@ -1,11 +1,13 @@
-import { Controller, UseGuards, Post, Body, Get } from '@nestjs/common';
+import { Controller, UseGuards, Post, Body, Get, HttpService, Query } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { JsonFilesService } from '../json-files/json-files.service';
+import { map } from 'rxjs/operators';
+import { RequestParams } from '@elastic/elasticsearch';
 
 @Controller('settings')
 export class SettingsController {
 
-    constructor(private jsonfielServoce: JsonFilesService) { }
+    constructor(private jsonfielServoce: JsonFilesService, private httpService: HttpService) { }
     Data = {
         temp_index: "items-temp",
         final_index: "items-final",
@@ -270,7 +272,6 @@ export class SettingsController {
 
             let schema = [];
             repo.schema.forEach(item => {
-                console.log(item);
                 schema.push({
                     "where": {
                         "key": item.metadata
@@ -307,6 +308,25 @@ export class SettingsController {
     @Get('')
     async  Read() {
         return await this.jsonfielServoce.read('../../../../config/data.json');
+    }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Get('autometa')
+    async  AutoMeta(@Query('link') link: string) {
+        let data = await this.httpService.get(link + 'items?expand=metadata,parentCommunityList&limit=25').pipe(map((data: any) => {
+            data = data.data.map(element => {
+                return element.metadata.map(item => {
+                    return item.key
+                })
+            })
+            let merged = [].concat.apply([], data);
+            return Array.from(new Set(merged));
+        }
+
+
+        )).toPromise();
+
+        return data;
     }
 
 }

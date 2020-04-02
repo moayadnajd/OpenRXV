@@ -18,7 +18,6 @@ export class MetadataController {
     @UseGuards(AuthGuard('jwt'))
     @Post('')
     NewUser(@Body() body: any) {
-       console.log(body)
         return this.elastic.add(body);
     }
 

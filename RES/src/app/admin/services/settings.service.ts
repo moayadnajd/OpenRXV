@@ -21,4 +21,13 @@ export class SettingsService {
     })).toPromise();
   }
 
+
+  async retreiveMetadata(linlk) {
+
+    return await this.http.get(environment.api + 'settings/autometa?link='+linlk).pipe(map((data: any) => {
+      return data;
+    })).toPromise();
+
+  }
+
 }
