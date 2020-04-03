@@ -38,7 +38,7 @@ You can see an example of the project working on our [Agricultural Research e-Se
 
 ## Installation  
 
-#### After you have satisfied the requirements you can clone this repository and build the project:
+#### After you have satisfied the requirements you can clone this repository:
 ```console
 $ cd docker
 $ sudo docker-compose up -d
@@ -51,23 +51,6 @@ $ sudo docker-compose up -d
 Configuration of repositories and metadata to harvest is in `backend/config/index.json`. Mappings of equivalent metadata values — for example "Kenya" and "KENYA" — are in `backend/config/mapping.json`.
 
   
-
-## Build and Run  
-
-```console
-$ git clone https://github.com/ILRI/AReS.git
-$ cd AReS/frontend
-$ npm i
-$ npm install -g @angular/cli
-$ ng build --prod # for building the project in production mode
-$ # or
-$ ng serve --base-href=/explorer/ # for developing locally
-$ cd AReS/app
-$ npm i
-$ cd AReS
-$ sudo chmod 777 -R esConfig/
-$ docker-compose up -d
-```
 ## Todo
 
 - Improve documentation (in progress...)
