@@ -19,6 +19,7 @@ import { Store } from '@ngrx/store';
 import * as fromStore from '../../store';
 import { ParentComponent } from 'src/app/explorer/parent-component.class';
 import { ComponentLookup } from '../../dashboard/components/dynamic/lookup.registry';
+import { BodyBuilderService } from '../services/bodyBuilder/body-builder.service';
 @ComponentLookup('SelectComponent')
 @Component({
   selector: 'app-select',
@@ -39,7 +40,9 @@ export class SelectComponent extends ParentComponent implements OnInit {
 
   constructor(
     private readonly selectService: SelectService,
-    private readonly store: Store<fromStore.AppState>
+    private readonly store: Store<fromStore.AppState>,
+    private readonly bodyBuilderService: BodyBuilderService
+    
   ) {
     super();
     this.filterOptions = [];
@@ -49,7 +52,23 @@ export class SelectComponent extends ParentComponent implements OnInit {
     this.selectedOptions = [];
     this.opened = false;
   }
+  private subtoToQuery(source): void {
+    this.store.select(fromStore.getQuery).subscribe((query) => {
+      let filters = this.bodyBuilderService.getFiltersFromQuery();
 
+      filters.forEach((element) => {
+
+        for (var key in element)
+          if (key == source) {
+            this.selectedOptions = [...this.selectedOptions.filter(d => d.key != element[key]), ...[{ key: element[key], doc_count: 1 }]]
+          }
+      });
+
+      if (!filters.filter(element => element[source]).length)
+        this.selectedOptions = [];
+
+    });
+  }
   ngOnInit(): void {
     const { source } = this.componentConfigs as ComponentFilterConfigs;
     this.selectService.sourceVal = source;
@@ -57,6 +76,7 @@ export class SelectComponent extends ParentComponent implements OnInit {
     this.subtoDataStream();
     this.subtoTermStream();
     this.shouldReset();
+    this.subtoToQuery(source)
   }
 
   getDataOnOpen(): void {

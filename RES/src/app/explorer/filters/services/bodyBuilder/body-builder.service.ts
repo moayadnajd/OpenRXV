@@ -51,11 +51,22 @@ export class BodyBuilderService {
   ) {
     this.mainBodyBuilderService.setAggAttributes = queryAttribute;
   }
+  set setAggAttributesDirect(queryAttribute) {
+    this.mainBodyBuilderService.aggAttributesDeirect = queryAttribute;
+  }
+
 
   get orOperator(): Subject<boolean> {
     return this.mainBodyBuilderService.getOrOperator;
   }
+  yearsBuildquery(bq: BuildQueryObj) {
+    bq.size = bq.size ? bq.size : 0;
+    return this.addAggreigation(
+      bodybuilder().size(0), // no need for the hits
+      bq
+    );
 
+  }
   buildquery(bq: BuildQueryObj): bodybuilder.Bodybuilder {
     bq.size = bq.size ? bq.size : 10;
     return this.addQueryAttributes(
@@ -79,7 +90,7 @@ export class BodyBuilderService {
     this.reset.next({ caller, data });
   }
 
-  private addAggreigation(
+  public addAggreigation(
     query: bodybuilder.Bodybuilder,
     qb: BuildQueryObj
   ): bodybuilder.Bodybuilder {
@@ -120,9 +131,37 @@ export class BodyBuilderService {
     };
   }
 
-  private addQueryAttributes(
+  public addQueryAttributes(
     q: bodybuilder.Bodybuilder
   ): bodybuilder.Bodybuilder {
     return this.mainBodyBuilderService.addQueryAttributes(q);
   }
+
+  getFiltersFromQuery() {
+    const query = this.buildMainQuery().build();
+    let finalObj = []
+    this.traverse(query, (obj: any, key: any, val: any) => {
+      if (key == 'term' && val instanceof Object)
+        finalObj.push(val)
+      if (key == 'range' && val instanceof Object)
+        finalObj.push(val)
+      if (key == 'match' && val instanceof Object) {
+        finalObj.push(val)
+      }
+      if (key == 'query_string' && val instanceof Object) {
+        finalObj.push(val)
+      }
+    });
+    return finalObj;
+  }
+
+  async traverse(o: any, fn: (obj: any, prop: string, value: any) => void) {
+    for (const i in o) {
+      fn.apply(this, [o, i, o[i]]);
+      if (o[i] !== null && typeof (o[i]) === 'object') {
+        this.traverse(o[i], fn);
+      }
+    }
+  }
+
 }

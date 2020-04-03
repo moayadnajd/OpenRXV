@@ -54,8 +54,20 @@ export class DashboardComponent implements OnInit {
     if (shareID) {
       try {
         let shareitem: any = await this.itemsService.getShare(shareID);
-        if (shareitem)
-          this.bodyBuilderService.setAggAttributes = shareitem.attr;
+        if (shareitem) {
+          let sprateObjects = Object.keys(shareitem.attr).map(function (key) {
+            let obj = {}
+            obj[key] = shareitem.attr[key];
+            return obj;
+          });
+          sprateObjects.forEach((item: any) => {
+            this.bodyBuilderService.setAggAttributes = item;
+          })
+        
+        }
+
+
+
         else
           this.route.navigate(['notfound'])
       } catch (e) {

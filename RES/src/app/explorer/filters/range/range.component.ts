@@ -13,6 +13,7 @@ import * as fromStore from '../../store';
 import { Observable } from 'rxjs';
 import { ParentComponent } from 'src/app/explorer/parent-component.class';
 import { ComponentLookup } from '../../dashboard/components/dynamic/lookup.registry';
+import { BodyBuilderService } from '../services/bodyBuilder/body-builder.service';
 @ComponentLookup('RangeComponent')
 @Component({
   selector: 'app-range',
@@ -32,7 +33,8 @@ export class RangeComponent extends ParentComponent implements OnInit {
 
   constructor(
     private readonly rangeService: RangeService,
-    private readonly store: Store<fromStore.AppState>
+    private readonly store: Store<fromStore.AppState>,
+    private readonly bodyBuilderService: BodyBuilderService
   ) {
     super();
     this.disabled = false;
@@ -46,6 +48,7 @@ export class RangeComponent extends ParentComponent implements OnInit {
     this.shouldReset();
     this.loading$ = this.store.select(fromStore.getLoadingStatus);
     this.subToOrOperator();
+    
   }
 
   onYearSliderChange(): void {
@@ -58,6 +61,22 @@ export class RangeComponent extends ParentComponent implements OnInit {
     );
     this.rangeService.resetNotification({ min, max });
     this.store.dispatch(new fromStore.SetQuery(query.build()));
+  }
+
+  private subtoToQuery(source): void {
+    this.store.select(fromStore.getQuery).subscribe((query) => {
+      let filters = this.bodyBuilderService.getFiltersFromQuery();
+      filters.forEach((element) => {
+        for (var key in element)
+          if (key == source) {
+            this.range = [element[key].gte, element[key].lte];
+          }
+      });
+
+      // if (!filters.filter(element => element[source]).length)
+      //   this.range = [this.min, this.max];
+
+    });
   }
 
   private subToOrOperator() {
@@ -137,6 +156,7 @@ export class RangeComponent extends ParentComponent implements OnInit {
     this.max = max;
     this.setFirstMinMax(max, min);
     this.range = [min, max];
+    this.subtoToQuery(this.rangeService.sourceVal);
   }
 
   private setFirstMinMax(max: number, min: number): void {

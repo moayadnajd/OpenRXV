@@ -24,7 +24,9 @@ export class MainBodyBuilderService extends BuilderUtilities {
     this.rawOptions = this.buildRawOptions();
     this.orOperator.next(false);
   }
-
+  aggAttributesDeirect(q) {
+    this.aggAttributes = q
+  }
   get getAggAttributes():
     | string
     | QuerySearchAttribute
@@ -146,7 +148,7 @@ export class MainBodyBuilderService extends BuilderUtilities {
     }
     // bitstreams needed for the images
     // handle needed for the altmetric
-    rows.push('thumbnail', 'handle', 'bitstreams','author','affiliation','language','country','region');
+    rows.push('thumbnail', 'handle', 'bitstreams', 'author', 'affiliation', 'language', 'country', 'region');
     return rows;
   }
 

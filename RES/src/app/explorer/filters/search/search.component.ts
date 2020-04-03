@@ -2,6 +2,9 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import {
   searchOptions,
   ComponentSearchConfigs,
+  ComponentFilterConfigs,
+  GeneralConfigs,
+  ComponentDashboardConfigs,
 } from 'src/app/explorer/configs/generalConfig.interface';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../store';
@@ -11,6 +14,8 @@ import { map, debounceTime } from 'rxjs/operators';
 import { BodyBuilderService } from '../services/bodyBuilder/body-builder.service';
 import { ParentComponent } from 'src/app/explorer/parent-component.class';
 import { ComponentLookup } from '../../dashboard/components/dynamic/lookup.registry';
+import { dashboardConfig } from '../../configs/dashboard';
+import { type } from 'os';
 @ComponentLookup('SearchComponent')
 @Component({
   selector: 'app-search',
@@ -29,16 +34,28 @@ export class SearchComponent extends ParentComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    let sorcue =
+      (() => {
+        const [conf] = dashboardConfig.filter(
+          ({ componentConfigs }: GeneralConfigs) =>
+            (componentConfigs as ComponentDashboardConfigs).content
+        );
+        return (conf.componentConfigs as ComponentDashboardConfigs).content
+          .title;
+      })() || 'dc_title';
     this.subToSearchTerms();
     this.subToOrOperator();
+    this.subtoToQuery(sorcue);
   }
 
   onClick() {
+
     // if (this.checkIfInputIsEmpty()) {
     //   this.checkTypeThenDelete();
     //   return;
     // }
     this.applySearchTerm();
+
   }
 
   private deleteFromMainQuery(allSearch: boolean): string {
@@ -64,9 +81,22 @@ export class SearchComponent extends ParentComponent implements OnInit {
     } else {
       this.bodyBuilderService.setAggAttributes = this.searchTerm;
     }
+    console.log(this.searchTerm);
     this.dispatchActions();
   }
-
+  private subtoToQuery(source): void {
+    const { type } = this.componentConfigs as ComponentSearchConfigs;
+    this.store.select(fromStore.getQuery).subscribe((query) => {
+      let filters = this.bodyBuilderService.getFiltersFromQuery();
+      filters.forEach((element) => {
+        for (var key in element)
+          if (key == 'query')
+            this.searchTerm = element[key];
+          else if (key == source && type == 0)
+            this.searchTerm = element[key];
+      });
+    });
+  }
   private checkTypeThenDelete() {
     let thereWasATerm: string;
     const { type } = this.componentConfigs as ComponentSearchConfigs;
