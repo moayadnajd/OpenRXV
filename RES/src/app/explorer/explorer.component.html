@@ -25,6 +25,17 @@
       >
         <mat-icon>contact_support</mat-icon>
       </button>
+
+      <button
+        *ngIf="!isSmall"
+        mat-icon-button
+        (click)="share()"
+        aria-label="refresh page button"
+      >
+        <mat-icon>share</mat-icon>
+      </button>
+
+      
     </mat-toolbar-row>
   </mat-toolbar>
 </header>

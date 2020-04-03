@@ -13,6 +13,10 @@ import {
   GeneralConfigs,
   ComponentDashboardConfigs,
 } from 'src/app/explorer/configs/generalConfig.interface';
+import { ItemsService } from '../services/itemsService/items.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MainBodyBuilderService } from '../services/mainBodyBuilderService/main-body-builder.service';
+import { NotfoundComponent } from 'src/app/components/notfound/notfound.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -28,7 +32,11 @@ export class DashboardComponent implements OnInit {
   constructor(
     private readonly store: Store<fromStore.AppState>,
     private readonly bodyBuilderService: BodyBuilderService,
-    private readonly snackBar: MatSnackBar
+    private readonly mainbodyBuilderService: MainBodyBuilderService,
+    private readonly snackBar: MatSnackBar,
+    private readonly itemsService: ItemsService,
+    private activeRoute: ActivatedRoute,
+    private route: Router
   ) {
     this.oldViewState = new Map<string, boolean>();
     [this.countersConfig[0], ...this.dashboardConfig].forEach(
@@ -40,10 +48,24 @@ export class DashboardComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+
+    let shareID = this.activeRoute.snapshot.paramMap.get("id");
+    if (shareID) {
+      try {
+        let shareitem: any = await this.itemsService.getShare(shareID);
+        if (shareitem)
+          this.bodyBuilderService.setAggAttributes = shareitem.attr;
+        else
+          this.route.navigate(['notfound'])
+      } catch (e) {
+        this.route.navigate(['notfound'])
+      }
+    }
     this.store.dispatch(
       new SetQuery(this.bodyBuilderService.buildMainQuery().build())
     );
+
     this.store.select(fromStore.getErrors).subscribe((e: ESHttpError) => {
       if (e) {
         this.snackBar.openFromComponent(SnackComponent).instance.error =

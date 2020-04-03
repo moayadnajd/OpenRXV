@@ -16,6 +16,8 @@ import { dashboardConfig } from 'src/app/explorer/configs/dashboard';
 import { tourConfig } from 'src/app/explorer/configs/tour';
 import { orAndToolTip } from 'src/app/explorer/configs/tooltips';
 import { ScreenSizeService } from 'src/app/explorer/services/screenSize/screen-size.service';
+import { ItemsService } from './services/itemsService/items.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'explorer-root',
@@ -26,6 +28,7 @@ export class ExplorerComponent implements OnInit {
   @ViewChild('drawer') sidenav: MatDrawer;
   loading$: Observable<boolean>;
   render: boolean;
+  shareID: string
   orOperator: boolean;
   readonly orAndToolTip: string;
   private prevenetMouseOnNav: boolean;
@@ -34,7 +37,12 @@ export class ExplorerComponent implements OnInit {
     fixed: true,
     top: 0,
   };
+  share() {
 
+    console.log(this.itemsService.saveShare(this.mainBodyBuilderService.getAggAttributes));
+
+
+  }
   get isSmall(): boolean {
     return this.screenSizeService.isSmallScreen;
   }
@@ -43,7 +51,8 @@ export class ExplorerComponent implements OnInit {
     private readonly store: Store<fromStore.AppState>,
     private readonly mainBodyBuilderService: MainBodyBuilderService,
     private readonly tourService: TourService,
-    private readonly screenSizeService: ScreenSizeService
+    private readonly screenSizeService: ScreenSizeService,
+    private readonly itemsService: ItemsService,
   ) {
     this.orOperator = false;
     this.orAndToolTip = orAndToolTip;
@@ -54,7 +63,7 @@ export class ExplorerComponent implements OnInit {
     };
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.loading$ = this.store.select(fromStore.getLoadingStatus);
   }
 

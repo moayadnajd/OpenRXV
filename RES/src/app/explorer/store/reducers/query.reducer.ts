@@ -29,4 +29,4 @@ export function reducer(
 export const getQueryBody = (state: QueryState): ElasticsearchQuery =>
   state.body;
 export const getQueryFromBody = (body: ElasticsearchQuery): object =>
-  body.query;
+body ? body.query : null;
