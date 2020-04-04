@@ -1,21 +1,21 @@
 import { Controller, HttpCode, Post, Body, Get, Param } from '@nestjs/common';
-import { ElasticService } from 'src/shared/services/elastic/elastic.service';
+
+import { ShareService } from 'src/shared/services/share.service';
 
 @Controller('share')
 export class ShareController {
-    constructor(private readonly elasticSearvice: ElasticService) { }
+    constructor(private readonly shareservice: ShareService) { }
     @HttpCode(200)
     @Post('/')
     save(@Body() query: any) {
 
-        return this.elasticSearvice.saveShare(query);
+        return this.shareservice.saveShare(query);
     }
 
     @HttpCode(200)
     @Get('/:id')
     get(@Param('id') id: string) {
-        console.log(id);
-        return this.elasticSearvice.findShare(id);
+        return this.shareservice.findOne(id);
     }
 
 

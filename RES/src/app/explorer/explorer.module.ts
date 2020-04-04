@@ -68,6 +68,8 @@ import { BarComponent } from './dashboard/components/bar/bar.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { ExportComponent } from './dashboard/components/list/export/export.component';
 import { ExplorerRoutingModule } from './explorer.routing.module';
+import { ShareComponent } from './share/share.component';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 @NgModule({
   declarations: [
@@ -101,7 +103,8 @@ import { ExplorerRoutingModule } from './explorer.routing.module';
     LineComponent,
     SimiCircleComponent,
     BarComponent,
-    ExportComponent
+    ExportComponent,
+    ShareComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -141,7 +144,8 @@ import { ExplorerRoutingModule } from './explorer.routing.module';
     LayoutModule,
     MatMenuModule,
     MatDialogModule,
-    MatDividerModule
+    MatDividerModule,
+    ClipboardModule,
   ],
   entryComponents: [
     ChartComponent,

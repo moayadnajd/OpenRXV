@@ -1,22 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { Update } from '@elastic/elasticsearch/api/requestParams';
-
 @Injectable()
 export class ElasticService {
     index: string = 'users'
     constructor(public readonly elasticsearchService: ElasticsearchService) { }
-    async saveShare(item) {
-
-        let { body } = await this.elasticsearchService.index({
-            index: 'shared',
-            refresh: 'wait_for',
-            type: '_doc', // uncomment this line if you are using Elasticsearch ≤ 6
-            body: { created_at: new Date(), attr: item }
-        })
-
-        return body;
-    }
+   
     async search(query) {
         const { body } = await this.elasticsearchService.search({
             index: 'items',
@@ -57,13 +46,7 @@ export class ElasticService {
 
         return body._source;
     }
-    async findShare(id) {
-        let { body } = await this.elasticsearchService.get({
-            index: 'shared',
-            id
-        })
-        return body._source;
-    }
+
     async findOne(id) {
         let { body } = await this.elasticsearchService.get({
             index: this.index,

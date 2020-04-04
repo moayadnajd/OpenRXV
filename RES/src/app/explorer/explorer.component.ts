@@ -18,6 +18,9 @@ import { orAndToolTip } from 'src/app/explorer/configs/tooltips';
 import { ScreenSizeService } from 'src/app/explorer/services/screenSize/screen-size.service';
 import { ItemsService } from './services/itemsService/items.service';
 import { ActivatedRoute } from '@angular/router';
+import { ShareComponent } from './share/share.component';
+import { MatDialog } from '@angular/material/dialog';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'explorer-root',
@@ -37,11 +40,8 @@ export class ExplorerComponent implements OnInit {
     fixed: true,
     top: 0,
   };
-  share() {
-
-    console.log(this.itemsService.saveShare(this.mainBodyBuilderService.getAggAttributes));
-
-
+  async share() {
+    this.openDialog(environment.domain_name+await this.itemsService.saveShare(this.mainBodyBuilderService.getAggAttributes));
   }
   get isSmall(): boolean {
     return this.screenSizeService.isSmallScreen;
@@ -53,6 +53,7 @@ export class ExplorerComponent implements OnInit {
     private readonly tourService: TourService,
     private readonly screenSizeService: ScreenSizeService,
     private readonly itemsService: ItemsService,
+    public dialog: MatDialog,
   ) {
     this.orOperator = false;
     this.orAndToolTip = orAndToolTip;
@@ -61,6 +62,13 @@ export class ExplorerComponent implements OnInit {
       fixed: true,
       top: 0,
     };
+  }
+
+  openDialog(link): void {
+    const dialogRef = this.dialog.open(ShareComponent, {
+      width: '600px',
+      data: { link }
+    });
   }
 
   async ngOnInit() {
