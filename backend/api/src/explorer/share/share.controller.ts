@@ -13,6 +13,11 @@ export class ShareController {
     }
 
     @HttpCode(200)
+    @Get('/')
+    getAll() {
+        return this.shareservice.find();
+    }
+    @HttpCode(200)
     @Get('/:id')
     get(@Param('id') id: string) {
         return this.shareservice.findOne(id);

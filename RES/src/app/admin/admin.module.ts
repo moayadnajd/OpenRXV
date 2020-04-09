@@ -28,6 +28,7 @@ import { ValuesForm } from './components/mapping-values/form/values-form.compone
 import { SetupComponent } from './components/setup/setup.component';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
+import { SharedComponent } from './components/shared/shared.component';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -41,6 +42,7 @@ import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
     MappingValuesComponent,
     ValuesForm,
     SetupComponent,
+    SharedComponent,
   ],
   imports: [
     BrowserModule,
