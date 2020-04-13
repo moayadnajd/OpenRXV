@@ -26,27 +26,19 @@ module.exports = function () {
     "host": Config.redis.host,
     "hostId": "RES"
   })
-  Config.repositories.forEach(element => {
-    defaultConfig.queues.push({
-      "name": element.name + "_repeat",
-      "port": Config.redis.port,
-      "host": Config.redis.host,
-      "hostId": "RES"
-    })
-    defaultConfig.queues.push({
-      "name": element.name + "_fetch",
-      "port": Config.redis.port,
-      "host": Config.redis.host,
-      "hostId": "RES"
-    })
-    defaultConfig.queues.push({
-      "name": element.name + "_index",
-      "port": Config.redis.port,
-      "host": Config.redis.host,
-      "hostId": "RES"
-    })
-
+  defaultConfig.queues.push({
+    "name": "fetch",
+    "port": Config.redis.port,
+    "host": Config.redis.host,
+    "hostId": "RES"
   });
+  defaultConfig.queues.push({
+    "name": "index",
+    "port": Config.redis.port,
+    "host": Config.redis.host,
+    "hostId": "RES"
+  })
+  
 
 
   const Queues = require('./queue');

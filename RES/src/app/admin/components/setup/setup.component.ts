@@ -23,10 +23,11 @@ export class SetupComponent implements OnInit {
     startOnFirstInit: new FormControl(),
   });
 
-  baseSchema(metadada = null, disply_name = null) {
+  baseSchema(metadada = null, disply_name = null, disply_label = '') {
     return {
       metadata: new FormControl(metadada),
       disply_name: new FormControl(disply_name),
+      disply_label: new FormControl(disply_label),
     }
 
   }
@@ -38,6 +39,9 @@ export class SetupComponent implements OnInit {
       itemsEndPoint: new FormControl(),
       allCores: new FormControl(),
       schema: new FormArray([
+        new FormGroup(this.baseSchema())
+      ]),
+      metadata: new FormArray([
         new FormGroup(this.baseSchema())
       ])
     })
@@ -53,10 +57,16 @@ export class SetupComponent implements OnInit {
     data.repositories.forEach((element, repoindex) => {
       if (repoindex > 0)
         this.AddNewRepo()
-      element.schema.forEach((element, index) => {
-        if (index > 0)
-          this.AddNewMetadata(this.repositories.at(repoindex).get('schema'))
-      });
+      if (element.metadata)
+        element.metadata.forEach((element, index) => {
+          if (index > 0)
+            this.AddNewMetadata(this.repositories.at(repoindex).get('metadata'))
+        });
+      if (element.schema)
+        element.schema.forEach((element, index) => {
+          if (index > 0)
+            this.AddNewMetadata(this.repositories.at(repoindex).get('schema'))
+        });
     });
     await this.repositories.patchValue(data.repositories)
 
@@ -80,11 +90,17 @@ export class SetupComponent implements OnInit {
       return;
     }
     let schema = <FormArray>repo.get('schema');
-    let metadada = await this.settingService.retreiveMetadata(repo.get('itemsEndPoint').value);
+    let metadata = <FormArray>repo.get('metadata');
+    let data = await this.settingService.retreiveMetadata(repo.get('itemsEndPoint').value);
     schema.clear();
-    metadada.forEach(element => {
+    metadata.clear();
+    data.base.forEach(element => {
       let splited = element.split('.');
-      schema.push(new FormGroup(this.baseSchema(element, splited[splited.length - 1])))
+      schema.push(new FormGroup(this.baseSchema(element, (splited.join('_') as string).toLowerCase(), (splited[splited.length - 1] as string).toLowerCase().charAt(0).toUpperCase() + (splited[splited.length - 1] as string).toLowerCase().slice(1))))
+    });
+    data.metadata.forEach(element => {
+      let splited = element.split('.');
+      metadata.push(new FormGroup(this.baseSchema(element, (splited.join('_') as string).toLowerCase(), (splited[splited.length - 1] as string).toLowerCase().charAt(0).toUpperCase()+ (splited[splited.length - 1] as string).toLowerCase().slice(1))))
     });
 
   }
@@ -97,6 +113,11 @@ export class SetupComponent implements OnInit {
         itemsEndPoint: new FormControl(),
         allCores: new FormControl(),
         schema: new FormArray([
+          new FormGroup(
+            this.baseSchema(),
+          )
+        ]),
+        metadata: new FormArray([
           new FormGroup(
             this.baseSchema(),
           )

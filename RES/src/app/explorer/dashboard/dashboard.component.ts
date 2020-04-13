@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { dashboardConfig } from '../configs/dashboard';
-import { countersConfig } from 'src/app/explorer/configs/counters';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../store';
 import { SetQuery } from '../store';
@@ -16,7 +14,7 @@ import {
 import { ItemsService } from '../services/itemsService/items.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MainBodyBuilderService } from '../services/mainBodyBuilderService/main-body-builder.service';
-import { NotfoundComponent } from 'src/app/components/notfound/notfound.component';
+import { SettingsService } from 'src/app/admin/services/settings.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,8 +22,8 @@ import { NotfoundComponent } from 'src/app/components/notfound/notfound.componen
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-  dashboardConfig: Array<GeneralConfigs> = dashboardConfig;
-  countersConfig: Array<GeneralConfigs> = countersConfig;
+  dashboardConfig: Array<GeneralConfigs> = [];
+  countersConfig: Array<GeneralConfigs> = [];
   tourConfig = tourConfig;
   oldViewState: Map<string, boolean>;
 
@@ -36,9 +34,18 @@ export class DashboardComponent implements OnInit {
     private readonly snackBar: MatSnackBar,
     private readonly itemsService: ItemsService,
     private activeRoute: ActivatedRoute,
+    private settingsService: SettingsService,
     private route: Router
   ) {
     this.oldViewState = new Map<string, boolean>();
+
+  }
+  async getCounters() {
+    let settings = await this.settingsService.readExplorerSettings();
+    this.dashboardConfig = settings.dashboard
+
+    await localStorage.setItem('configs', JSON.stringify(settings ))
+    this.countersConfig = settings.counters;
     [this.countersConfig[0], ...this.dashboardConfig].forEach(
       ({ componentConfigs }: GeneralConfigs) =>
         this.oldViewState.set(
@@ -47,8 +54,11 @@ export class DashboardComponent implements OnInit {
         )
     );
   }
-
   async ngOnInit() {
+
+
+    await this.getCounters()
+
 
     let shareID = this.activeRoute.snapshot.paramMap.get("id");
     if (shareID) {
@@ -63,7 +73,7 @@ export class DashboardComponent implements OnInit {
           sprateObjects.forEach((item: any) => {
             this.bodyBuilderService.setAggAttributes = item;
           })
-        
+
         }
 
 

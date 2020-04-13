@@ -13,17 +13,24 @@ import {
   ComponentDashboardConfigs
 } from 'src/app/explorer/configs/generalConfig.interface';
 import { dashboardConfig } from 'src/app/explorer/configs/dashboard';
+import { SettingsService } from 'src/app/admin/services/settings.service';
 @Injectable({
   providedIn: 'root'
 })
 export class MainBodyBuilderService extends BuilderUtilities {
   private rawOptions: string[];
 
-  constructor() {
+  constructor(private settings: SettingsService) {
     super();
+
+  }
+ async start() {
+    await this.init();
     this.rawOptions = this.buildRawOptions();
     this.orOperator.next(false);
+
   }
+
   aggAttributesDeirect(q) {
     this.aggAttributes = q
   }
@@ -148,7 +155,7 @@ export class MainBodyBuilderService extends BuilderUtilities {
     }
     // bitstreams needed for the images
     // handle needed for the altmetric
-    rows.push('thumbnail', 'handle', 'bitstreams', 'author', 'affiliation', 'language', 'country', 'region');
+    rows.push('thumbnail', 'handle', 'bitstreams', 'contributor', 'affiliation', 'language', 'country', 'region');
     return rows;
   }
 

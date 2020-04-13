@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MetadataForm } from './metadata-form.component';
+import { StructureComponent } from './structure.component';
 
-describe('MetadataForm', () => {
-  let component: MetadataForm;
-  let fixture: ComponentFixture<MetadataForm>;
+describe('StructureComponent', () => {
+  let component: StructureComponent;
+  let fixture: ComponentFixture<StructureComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MetadataForm ]
+      declarations: [ StructureComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MetadataForm);
+    fixture = TestBed.createComponent(StructureComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

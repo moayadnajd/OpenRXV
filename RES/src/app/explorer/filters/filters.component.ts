@@ -1,11 +1,18 @@
-import { Component } from '@angular/core';
-import { filtersConfig } from '../configs/filters';
+import { Component, OnInit } from '@angular/core';
 import { GeneralConfigs } from 'src/app/explorer/configs/generalConfig.interface';
+import { SettingsService } from 'src/app/admin/services/settings.service';
 @Component({
   selector: 'app-filters',
   templateUrl: './filters.component.html',
   styleUrls: ['./filters.component.scss'],
 })
-export class FiltersComponent {
-  filters: GeneralConfigs[] = filtersConfig;
+export class FiltersComponent implements OnInit {
+  filters: GeneralConfigs[];
+  constructor(private settings: SettingsService) { }
+
+  async ngOnInit() {
+    let { filters } = await this.settings.readExplorerSettings();
+    this.filters = filters;
+  }
+
 }

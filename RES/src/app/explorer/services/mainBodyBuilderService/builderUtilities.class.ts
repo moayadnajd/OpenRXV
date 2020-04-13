@@ -4,18 +4,23 @@ import {
   ComponentCounterConfigs,
   ComponentDashboardConfigs,
 } from 'src/app/explorer/configs/generalConfig.interface';
-import { Subject } from 'rxjs';
+import { Subject, config } from 'rxjs';
 import {
   QuerySearchAttribute,
   QueryYearAttribute,
   QueryFilterAttribute,
   QueryBlock,
 } from 'src/app/explorer/filters/services/interfaces';
-import { countersConfig } from 'src/app/explorer/configs/counters';
-import { dashboardConfig } from 'src/app/explorer/configs/dashboard';
-import { filtersConfig } from 'src/app/explorer/configs/filters';
 
 export class BuilderUtilities {
+  private dashboardConfig
+  private countersConfig
+  private filtersConfig
+  async configs() {
+    let configs = await JSON.parse(localStorage.getItem('configs'));
+    console.log(configs);
+    return configs;
+  }
   private querySourceBucketsFilter: QueryBlock[];
   private openLimitedAcc: string[];
   protected aggAttributes:
@@ -25,9 +30,18 @@ export class BuilderUtilities {
   protected hitsAttributes: SortOption;
   protected orOperator: Subject<boolean>;
   protected or: boolean;
-  protected readonly titleSource: string;
+  protected titleSource: string;
 
   constructor() {
+
+  }
+  async init() {
+
+    let { dashboard, counters, filters } = await this.configs();
+    this.dashboardConfig = dashboard;
+    this.countersConfig = counters;
+    this.filtersConfig = filters;
+
     this.openLimitedAcc = this.extractOpenLimitedAccessFilter();
     this.querySourceBucketsFilter = this.convertEnumToQueryBlock();
     this.aggAttributes = Object.create(null);
@@ -36,12 +50,14 @@ export class BuilderUtilities {
     this.or = false;
     this.titleSource =
       (() => {
-        const [conf] = dashboardConfig.filter(
+        const [conf] = this.dashboardConfig.filter(
           ({ componentConfigs }: GeneralConfigs) =>
             (componentConfigs as ComponentDashboardConfigs).content
         );
-        return (conf.componentConfigs as ComponentDashboardConfigs).content
-          .title;
+        if (conf)
+          return (conf.componentConfigs as ComponentDashboardConfigs).content
+            .title;
+        else ''
       })() || 'dc_title';
   }
 
@@ -76,7 +92,7 @@ export class BuilderUtilities {
   }
 
   private extractOpenLimitedAccessFilter(): string[] {
-    return countersConfig
+    return this.countersConfig
       .filter((cg: GeneralConfigs) => {
         const { filter } = cg.componentConfigs as ComponentCounterConfigs;
         return !!filter;
@@ -91,9 +107,9 @@ export class BuilderUtilities {
     const arr: QueryBlock[] = [];
     const mainQuerySources: Array<string> = Array.from(
       new Set([
-        ...this.getSourcesFromConfigs(dashboardConfig),
-        ...this.getSourcesFromConfigs(filtersConfig, true),
-        ...this.getSourcesFromConfigs(countersConfig, true),
+        ...this.getSourcesFromConfigs(this.dashboardConfig),
+        ...this.getSourcesFromConfigs(this.filtersConfig, true),
+        ...this.getSourcesFromConfigs(this.countersConfig, true),
       ])
     );
     // I'm assuming  that this will always will have 'status'

@@ -1,0 +1,80 @@
+{
+    "counters": [
+        {
+            "show": true,
+            "componentConfigs": {
+                "id": "counter_total",
+                "title": "Total Items",
+                "source": "total",
+                "description": "Total number of information product found"
+            },
+            "scroll": {
+                "icon": "dashboard"
+            },
+            "tour": true
+        },
+        {
+            "show": true,
+            "componentConfigs": {
+                "id": "counter_language",
+                "title": "Languages",
+                "source": "language.keyword",
+                "description": "Total number of information products only accessible as by publishers specifications."
+            },
+            "scroll": {
+                "icon": "dashboard"
+            },
+            "tour": true
+        },
+        {
+            "show": true,
+            "componentConfigs": {
+                "id": "counter_contributor",
+                "title": "Authers",
+                "source": "contributor.keyword",
+                "description": "Total number of Authors involved with the information\nproduct found"
+            },
+            "scroll": {
+                "icon": "dashboard"
+            },
+            "tour": true
+        }
+    ],
+    "filters": [
+        {
+            "show": true,
+            "component": "SelectComponent",
+            "componentConfigs": {
+                "placeholder": "Select author(s)",
+                "source": "creator.keyword",
+                "addInMainQuery": "Select author(s)"
+            }
+        },
+        {
+            "show": true,
+            "component": "SelectComponent",
+            "componentConfigs": {
+                "placeholder": "Authors",
+                "source": "contributor.keyword",
+                "addInMainQuery": "Authors"
+            }
+        }
+    ],
+    "dashboard": [
+        {
+            "show": "true",
+            "class": "col-md-6 no-side-padding",
+            "component": "PieComponent",
+            "componentConfigs": {
+                "id": "pie",
+                "title": "Info Products by Type",
+                "source": "type",
+                "description": "All the available information products are represented here and disaggregated by Type"
+            },
+            "scroll": {
+                "icon": "pie_chart"
+            },
+            "tour": "true"
+        }
+    ]
+}

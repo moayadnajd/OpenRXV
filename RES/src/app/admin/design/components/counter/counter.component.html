@@ -1,0 +1,13 @@
+<mat-card>
+    <mat-card-title>
+        <button class="card-actions" (click)="delete()" color="warn" mat-icon-button>
+            <mat-icon>delete</mat-icon>
+        </button>
+        <button (click)="openDialog()" class="card-actions" mat-icon-button>
+            <mat-icon>settings</mat-icon>
+        </button>
+
+        {{configs.componentConfigs.title}}
+
+    </mat-card-title>
+</mat-card>

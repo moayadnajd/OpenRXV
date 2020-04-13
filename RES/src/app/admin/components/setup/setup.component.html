@@ -106,16 +106,15 @@
                                         <mat-card class="w-100">
 
                                             <mat-card-title>
-                                                Metadata 
-                                                <button  class="pull-right"
-                                                    (click)="getMetadata(repoindex)" color="info" mat-button>
-                                                    Auto import metadata
+                                                Data Structure
+                                                <button class="pull-right" (click)="getMetadata(repoindex)" color="info"
+                                                    mat-button>
+                                                    Auto import Data Structure
                                                     <mat-icon aria-hidden="false" aria-label="delete">cloud_download
                                                     </mat-icon>
-                                                    </button>
+                                                </button>
                                             </mat-card-title>
-
-
+                                            <h4>Schema</h4>
                                             <form class="col-12 pb-3"
                                                 *ngFor="let form of repoform.controls.schema.controls; let i = index;"
                                                 [formGroup]="form">
@@ -123,19 +122,26 @@
                                                 <div class="row">
                                                     <div class="col-md-3">
                                                         <mat-form-field>
-                                                            <mat-label>Metadata</mat-label>
+                                                            <mat-label>Schema</mat-label>
                                                             <input matInput formControlName="metadata"
-                                                                placeholder="dc.title" required>
+                                                                placeholder="e.g: id" required>
                                                         </mat-form-field>
                                                     </div>
                                                     <div class="col-md-3">
                                                         <mat-form-field>
-                                                            <mat-label>Display Name</mat-label>
+                                                            <mat-label>Elasticsearch label</mat-label>
                                                             <input matInput formControlName="disply_name"
-                                                                placeholder="Title" required>
+                                                                placeholder="e.g: title" required>
                                                         </mat-form-field>
                                                     </div>
-                                                    <div *ngIf="i > 0" class="col-md-4">
+                                                    <div class="col-md-3">
+                                                        <mat-form-field>
+                                                            <mat-label>Display label</mat-label>
+                                                            <input matInput formControlName="disply_label"
+                                                                placeholder="e.g: title" required>
+                                                        </mat-form-field>
+                                                    </div>
+                                                    <div *ngIf="i > 0" class="col-md-3">
                                                         <button class="pull-right"
                                                             (click)="delete(repoform.controls.schema,i)" color="warn"
                                                             mat-icon-button>
@@ -145,20 +151,64 @@
                                                     </div>
 
                                                 </div>
-
-
-
-
                                             </form>
                                             <div class="col-md-12 text-center">
                                                 <button class="float-left"
                                                     (click)="AddNewMetadata(repoform.controls.schema)"
+                                                    mat-raised-button>
+                                                    New Schema
+                                                    <mat-icon aria-hidden="false" aria-label="add">add
+                                                    </mat-icon>
+                                                </button>
+                                            </div>
+                                            <h4 class="pt-5">Metadata</h4>
+                                            <form class="col-12 pb-3"
+                                                *ngFor="let form of repoform.controls.metadata.controls; let i = index;"
+                                                [formGroup]="form">
+
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <mat-form-field>
+                                                            <mat-label>Schema</mat-label>
+                                                            <input matInput formControlName="metadata"
+                                                                placeholder="e.g: id" required>
+                                                        </mat-form-field>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <mat-form-field>
+                                                            <mat-label>Elasticsearch label</mat-label>
+                                                            <input matInput formControlName="disply_name"
+                                                                placeholder="e.g: title" required>
+                                                        </mat-form-field>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <mat-form-field>
+                                                            <mat-label>Display label</mat-label>
+                                                            <input matInput formControlName="disply_label"
+                                                                placeholder="e.g: title" required>
+                                                        </mat-form-field>
+                                                    </div>
+                                                    <div *ngIf="i > 0" class="col-md-3">
+                                                        <button class="pull-right"
+                                                            (click)="delete(repoform.controls.metadata,i)" color="warn"
+                                                            mat-icon-button>
+                                                            <mat-icon aria-hidden="false" aria-label="delete">delete
+                                                            </mat-icon>
+                                                        </button>
+                                                    </div>
+
+                                                </div>
+                                            </form>
+                                            <div class="col-md-12 text-center">
+                                                <button class="float-left"
+                                                    (click)="AddNewMetadata(repoform.controls.metadata)"
                                                     mat-raised-button>
                                                     New Metadata
                                                     <mat-icon aria-hidden="false" aria-label="add">add
                                                     </mat-icon>
                                                 </button>
                                             </div>
+
                                         </mat-card>
                                     </div>
                                 </div>

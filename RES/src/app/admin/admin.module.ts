@@ -21,14 +21,18 @@ import { FormComponent } from './components/users/form/form.component'
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './auth/token.interceptor';
 import { ConfirmationComponent } from './components/confirmation/confirmation.component';
-import { MappingMetadataComponent } from './components/mapping-metadata/mapping-metadata.component';
-import { MetadataForm } from './components/mapping-metadata/form/metadata-form.component';
 import { MappingValuesComponent } from './components/mapping-values/mapping-values.component';
 import { ValuesForm } from './components/mapping-values/form/values-form.component';
 import { SetupComponent } from './components/setup/setup.component';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
 import { SharedComponent } from './components/shared/shared.component';
+import { DesignComponent } from './design/design.component';
+import { CounterComponent } from './design/components/counter/counter.component';
+import { FilterComponent } from './design/components/filter/filter.component';
+import { StructureComponent } from './design/components/structure/structure.component';
+import { FormDialogComponent } from './design/components/form-dialog/form-dialog.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -37,12 +41,15 @@ import { SharedComponent } from './components/shared/shared.component';
     UsersComponent,
     FormComponent,
     ConfirmationComponent,
-    MappingMetadataComponent,
-    MetadataForm,
     MappingValuesComponent,
     ValuesForm,
     SetupComponent,
     SharedComponent,
+    DesignComponent,
+    CounterComponent,
+    FilterComponent,
+    StructureComponent,
+    FormDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -54,6 +61,7 @@ import { SharedComponent } from './components/shared/shared.component';
     AdminRoutingModule,
     LoadingBarHttpClientModule,
     LoadingBarRouterModule,
+    NgSelectModule,
 
   ],
   providers: [{
@@ -61,6 +69,6 @@ import { SharedComponent } from './components/shared/shared.component';
     useClass: TokenInterceptor,
     multi: true
   }],
-  entryComponents: [FormComponent, ConfirmationComponent,MetadataForm,ValuesForm]
+  entryComponents: [FormComponent, ConfirmationComponent,ValuesForm,FormDialogComponent]
 })
 export class AdminModule { }

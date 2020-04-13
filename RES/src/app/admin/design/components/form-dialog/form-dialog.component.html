@@ -1,0 +1,45 @@
+<h1 mat-dialog-title>Settings</h1>
+<div mat-dialog-content>
+    <form [formGroup]="form">
+        <ng-container *ngFor="let control of data.form_data">
+            <ng-container [ngSwitch]="control.type">
+
+                <p *ngSwitchCase="'text'">
+                    <mat-form-field>
+                        <mat-label>{{control.label}}</mat-label>
+                        <input [type]="control.type" matInput required [placeholder]="control.label"
+                            [formControlName]="control.name">
+                    </mat-form-field>
+                </p>
+                <p *ngSwitchCase="'textarea'">
+                    <mat-form-field>
+                        <mat-label>{{control.label}}</mat-label>
+                        <textarea [formControlName]="control.name" [placeholder]="control.label" matInput required
+                            cols="30" rows="10">
+                        </textarea>
+                    </mat-form-field>
+                </p>
+                <p *ngSwitchCase="'metadata'">
+
+                    <ng-select [addTag]="true" [items]="metadata" required bindValue="disply_name"
+                        bindLabel="disply_name" [clearable]="false" [searchable]="true" [formControlName]="control.name"
+                        [placeholder]="control.label">
+                    </ng-select>
+                </p>
+                <p *ngSwitchCase="'check'">
+                    <mat-checkbox matInput [formControlName]="control.name">Start Harvesting on
+                        {{control.label}}
+                    </mat-checkbox>
+                </p>
+
+
+            </ng-container>
+        </ng-container>
+    </form>
+</div>
+<div mat-dialog-actions align="end">
+    <button type="button" mat-raised-button color="default" (click)="onNoClick()">Close <mat-icon>close</mat-icon>
+    </button>
+    <button type="button" color="primary" (keyup.enter)="submit()" (click)="submit()" mat-raised-button>Save
+        <mat-icon>done</mat-icon></button>
+</div>

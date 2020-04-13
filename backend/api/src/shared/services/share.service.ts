@@ -13,7 +13,6 @@ export class ShareService extends ElasticService {
     async saveShare(item) {
         let hashedItem = hash(item);
         let result = await this.find({ 'hashedItem.keyword': hashedItem });
-        console.log(result);
         if (result.total == 0) {
             let { body } = await this.elasticsearchService.index({
                 index: 'shared',

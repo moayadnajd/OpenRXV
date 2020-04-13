@@ -3,11 +3,12 @@ import { AuthGuard } from '@nestjs/passport';
 import { JsonFilesService } from '../json-files/json-files.service';
 import { map } from 'rxjs/operators';
 import { RequestParams } from '@elastic/elasticsearch';
+import { HarvesterService } from 'src/harvester/services/harveter.service';
 
 @Controller('settings')
 export class SettingsController {
 
-    constructor(private jsonfielServoce: JsonFilesService, private httpService: HttpService) { }
+    constructor(private jsonfielServoce: JsonFilesService, private httpService: HttpService, private harvest: HarvesterService) { }
     Data = {
         temp_index: "items-temp",
         final_index: "items-final",
@@ -270,9 +271,20 @@ export class SettingsController {
         final['repositories'] = []
         body.repositories.forEach(repo => {
 
-            let schema = [];
-            repo.schema.forEach(item => {
-                schema.push({
+            let schema = {
+                metadata: []
+            };
+            repo.schema.filter(d => ['parentCollection', 'parentCollectionList', 'parentCommunityList'].indexOf(d.metadata) >= 0).forEach(item => {
+                schema[item.metadata] = {
+                    "name": item.disply_name
+                }
+            });
+            repo.schema.filter(d => ['parentCollection', 'parentCollectionList', 'parentCommunityList'].indexOf(d.metadata) == -1).forEach(item => {
+                schema[item.metadata] = item.disply_name
+            });
+
+            repo.metadata.forEach(item => {
+                schema.metadata.push({
                     "where": {
                         "key": item.metadata
                     },
@@ -280,15 +292,16 @@ export class SettingsController {
                         "value": item.disply_name
                     }
                 })
-            });
+            })
+
 
             final['repositories'].push({
+                name: repo.name,
                 type: "Dspace",
                 startPage: repo.startPage,
                 itemsEndPoint: repo.itemsEndPoint,
                 allCores: repo.allCores,
-                schema: { metadata: { schema } },
-
+                schema,
             })
         });
 
@@ -305,26 +318,64 @@ export class SettingsController {
     }
 
     @UseGuards(AuthGuard('jwt'))
+    @Post('explorer')
+    async  SaveExplorer(@Body() body: any) {
+        await this.jsonfielServoce.save(body, '../../../../config/explorer.json');
+        return { success: true }
+    }
+
+    @Get('explorer')
+    async  ReadExplorer() {
+        return await this.jsonfielServoce.read('../../../../config/explorer.json');
+    }
+    @UseGuards(AuthGuard('jwt'))
     @Get('')
     async  Read() {
         return await this.jsonfielServoce.read('../../../../config/data.json');
+    }
+    //@UseGuards(AuthGuard('jwt'))
+    @Get('startindex')
+    async  StartIndex() {
+        return { message: Date(), start: await this.harvest.startHarvest() }
+    }
+
+    @Get('stopindex')
+    async  StopIndex() {
+        return { message: Date(), start: await this.harvest.stopHarvest() }
+    }
+
+    @Get('reindex')
+    async  reIndex() {
+        return { message: Date(), start: await this.harvest.Reindex() }
+    }
+
+
+    @UseGuards(AuthGuard('jwt'))
+    @Get('metadata')
+    async  getMetadata() {
+        let data = await this.jsonfielServoce.read('../../../../config/data.json');
+
+        return Array.from(new Set([].concat.apply([], data.repositories.map(d => [...d.schema, ...d.metadata]))));
     }
 
     @UseGuards(AuthGuard('jwt'))
     @Get('autometa')
     async  AutoMeta(@Query('link') link: string) {
         let data = await this.httpService.get(link + 'items?expand=metadata,parentCommunityList&limit=25').pipe(map((data: any) => {
-            data = data.data.map(element => {
-                return element.metadata.map(item => {
-                    return item.key
-                })
-            })
-            let merged = [].concat.apply([], data);
-            return Array.from(new Set(merged));
-        }
-
-
-        )).toPromise();
+            let merged = {
+                base: [],
+                metadata: [],
+            }
+            data = data.data.forEach(element => {
+                merged.base = Array.from(new Set([].concat.apply(merged.base, Object.keys(element).filter(d => ['metadata', 'bitstreams', 'expand'].indexOf(d) == -1))));;
+                merged.metadata = Array.from(new Set([].concat.apply(merged.metadata,
+                    element.metadata.map(item => {
+                        return item.key
+                    })
+                )));
+            });
+            return merged;
+        })).toPromise();
 
         return data;
     }

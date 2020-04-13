@@ -79,7 +79,7 @@ export interface ESSource {
   sponsorship: string;
   affiliation: string | Array<string>;
   crp: string;
-  author: Array<string> | string;
+  contributor: Array<string> | string;
   community: string | Array<string>;
   year: string;
   repo: string;

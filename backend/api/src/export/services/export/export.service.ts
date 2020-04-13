@@ -14,7 +14,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as PizZip from 'pizzip';
 import * as Docxtemplater from 'docxtemplater';
-import * as word2pdf from 'word2pdf';
+import * as word2pdf from 'word2pdf-promises';
 
 @Injectable()
 export class ExportService {

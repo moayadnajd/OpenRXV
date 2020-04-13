@@ -1,0 +1,76 @@
+<div class="row">
+    <div class="col-md-12 p-2">
+        <mat-card>
+            <mat-card-title>
+                Explorer configs
+                <button class="save" (click)="save()" color="primary" mat-raised-button>
+                    Save
+                    <mat-icon>save</mat-icon>
+                </button>
+            </mat-card-title>
+        </mat-card>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 p-2">
+        <mat-card>
+            <mat-card-content>
+                <div class="row">
+                    <div class="col-3 side-left">
+                        <div class="border">
+                            <div class="content d-flex align-content-center flex-wrap">
+                                <app-filter *ngFor="let item of filters; let i = index;"
+                                    (onDelete)="onFilterDelete($event,i)" (edited)="filtersEdited($event,i)"
+                                    [configs]="item" class="w-100"></app-filter>
+                            </div>
+                            <button (click)="newFilter()" class="w-100" mat-button>
+                                Add Filter
+                                <mat-icon aria-hidden="false" aria-label="add">add</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-9 side-right">
+                        <div class="row">
+                            <div class="col-12 pb-2 header">
+                                <div class="border">
+                                    <div class="content d-flex align-content-stretch flex-wrap">
+                                        <app-counter class="m-auto" *ngFor="let item of counters; let i = index;"
+                                            (onDelete)="onCounterDelete($event,i)" [configs]="item"
+                                            (edited)="counterEdited($event,i)"></app-counter>
+                                    </div>
+                                    <button (click)="newCounter()" class="w-100" mat-button>
+                                        Add Counter
+                                        <mat-icon aria-hidden="false" aria-label="add">add</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-12 pb-2 content">
+                                <div class="border">
+                                    <div class="row">
+                                        <button class="col-6" mat-button>
+                                            Add Component
+                                            <mat-icon aria-hidden="false" aria-label="add">add</mat-icon>
+                                        </button>
+                                        <button class="col-6" mat-button>
+                                            Add Structure
+                                            <mat-icon aria-hidden="false" aria-label="add">view_module</mat-icon>
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-12 footer">
+                                <div class="border">
+                                    <button class="w-100" mat-button>
+                                        Add Footer Component
+                                        <mat-icon aria-hidden="false" aria-label="add">add</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
