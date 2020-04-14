@@ -33,6 +33,7 @@ import { FilterComponent } from './design/components/filter/filter.component';
 import { StructureComponent } from './design/components/structure/structure.component';
 import { FormDialogComponent } from './design/components/form-dialog/form-dialog.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { GridComponent } from './design/components/grid/grid.component';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -50,6 +51,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     FilterComponent,
     StructureComponent,
     FormDialogComponent,
+    GridComponent,
   ],
   imports: [
     BrowserModule,

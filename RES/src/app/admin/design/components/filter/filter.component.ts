@@ -110,15 +110,11 @@ export class FilterComponent implements OnInit {
       SearchComponent: 'Search',
       RangeComponent: 'Range'
     }
-
-
     this.icon = icons[this.configs.component]
     this.iconText = iconsTexts[this.configs.component];
-    console.log(this.icon);
   }
   ngOnInit(): void {
     this.restart()
-    console.log(this.configs);
     if (this.configs.component == 'LabelComponent') {
       this.form_data.splice(2, 3)
       this.pre = { name: "Label", value: "LabelComponent" }

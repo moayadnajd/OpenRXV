@@ -9,14 +9,29 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 })
 export class StructureComponent implements OnInit {
   @Output() edited: EventEmitter<any> = new EventEmitter()
+  @Output() onAdd: EventEmitter<any> = new EventEmitter()
   @Output() onDelete: EventEmitter<boolean> = new EventEmitter()
-  @Input() configs;
-
+  @Output() rowDeleted: EventEmitter<boolean> = new EventEmitter()
+  options = [
+    { name: "Pie Chart", value: "PieComponent", icon: "pie_chart" },
+    { name: "Word Cloud", value: "WordcloudComponent", icon: "filter_drama" }
+  ]
+  pre
   dialogRef: MatDialogRef<any>
   form_data = [
     {
-      name: 'placeholder',
-      label: 'Placeholder',
+      name: 'component',
+      label: 'Compinent Type',
+      type: 'select',
+      items: this.options,
+      onChange: (event) => {
+        this.pre = event;
+      },
+      required: true,
+    },
+    {
+      name: 'title',
+      label: 'Title',
       type: 'text',
       required: true,
     },
@@ -25,27 +40,50 @@ export class StructureComponent implements OnInit {
       label: 'Data Source',
       type: 'metadata',
       required: true,
+    },
+    {
+      name: 'description',
+      label: 'Tour Desctiption',
+      type: 'textarea',
+      required: true,
     }
+
   ];
   @Input() grid;
   constructor(public dialog: MatDialog) { }
 
   ngOnInit(): void {
+
+    console.log(this.grid)
   }
 
   addComponent(event) {
-    console.log(event);
+    console.log('emit', event)
+    this.onAdd.emit(event)
+    this.openDialog(event)
   }
+
+
 
   icon(component) {
-    let icons = {
-      PieComponent: 'pie_chart'
-    }
-    return icons[component];
+    let filterd = this.options.filter(d => d.value == component)
+    if (filterd.length && filterd[0])
+      return filterd[0].icon
   }
 
-  delete() {
+  word(component) {
+    let filterd = this.options.filter(d => d.value == component)
+    if (filterd.length && filterd[0])
+      return filterd[0].name
+  }
 
+  delete(index) {
+    console.log('delete', index)
+    this.onDelete.emit(index)
+  }
+
+  rowDelete() {
+    this.rowDeleted.emit(true)
   }
 
 
@@ -59,8 +97,10 @@ export class StructureComponent implements OnInit {
 
 
     this.dialogRef.afterClosed().subscribe(result => {
-      // if (result)
-      //   this.edited.emit(result)
+      if (result)
+        this.edited.emit({ result, index })
+      else if (!this.grid[index].component)
+        this.delete(index)
 
     });
   }

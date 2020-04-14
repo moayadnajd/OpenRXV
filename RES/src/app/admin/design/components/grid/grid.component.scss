@@ -1,0 +1,12 @@
+.border {
+  border: gray 1px solid;
+  padding: 20px;
+  min-height: 20px;
+}
+
+.row:hover {
+  .border {
+    border: green 1px solid;
+  }
+  cursor: pointer;
+}

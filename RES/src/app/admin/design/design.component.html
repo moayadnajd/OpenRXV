@@ -48,9 +48,9 @@
                                 <div class="border">
                                     <div class="row">
                                        <div class="col-12">
-                                           <app-structure [grid]="item.grid"  *ngFor="let item of dashboard"></app-structure>
+                                           <app-structure (rowDeleted)="dashboardRawDeleted($event,i)" (onDelete)="onDashboardItemDelete($event,i)" (onAdd)="onAddDashboardComponent($event,i)" (edited)="dashboardEdited($event,i)" [grid]="item"  *ngFor="let item of dashboard, let i = index"></app-structure>
                                        </div>
-                                        <button class="col-12" mat-button>
+                                        <button (click)="newRow()" class="col-12" mat-button>
                                             Add New Row
                                             <mat-icon aria-hidden="false" aria-label="add">view_module</mat-icon>
                                         </button>
@@ -60,7 +60,7 @@
                             </div>
                             <div class="col-12 footer">
                                 <div class="border">
-                                    <button class="w-100" mat-button>
+                                    <button class="w-100"  mat-button>
                                         Add Footer Component
                                         <mat-icon aria-hidden="false" aria-label="add">add</mat-icon>
                                     </button>

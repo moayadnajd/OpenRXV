@@ -3,7 +3,7 @@
         <div class="border">
             <div class="row">
                 <div class="col-12">
-                    <button class="card-actions" color="warn" mat-icon-button>
+                    <button (click)="rowDelete()" class="card-actions" color="warn" mat-icon-button>
                         <mat-icon>delete</mat-icon>
                     </button>
                 </div>
@@ -20,9 +20,9 @@
 
                             <mat-card-title>
 
-                                <span>Pi component</span>
+                                <span>{{ word(item.component)}}</span>
 
-                                <button class="card-actions" (click)="delete()" color="warn" mat-icon-button>
+                                <button class="card-actions" (click)="delete(i)" color="warn" mat-icon-button>
                                     <mat-icon>delete</mat-icon>
                                 </button>
                                 <button (click)="openDialog(i)" class="card-actions" mat-icon-button>

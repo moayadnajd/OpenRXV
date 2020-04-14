@@ -320,23 +320,6 @@ export class SettingsController {
     @UseGuards(AuthGuard('jwt'))
     @Post('explorer')
     async  SaveExplorer(@Body() body: any) {
-        body['dashboard'] = [
-            {
-                "show": "true",
-                "class": "col-md-6 no-side-padding",
-                "component": "PieComponent",
-                "componentConfigs": {
-                    "id": "pie",
-                    "title": "Info Products by Type",
-                    "source": "type",
-                    "description": "All the available information products are represented here and disaggregated by Type"
-                },
-                "scroll": {
-                    "icon": "pie_chart"
-                },
-                "tour": "true"
-            }
-        ]
         await this.jsonfielServoce.save(body, '../../../../config/explorer.json');
         return { success: true }
     }

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ComponentCounterConfigs, ComponentFilterConfigs, searchOptions, ComponentDashboardConfigs } from 'src/app/explorer/configs/generalConfig.interface';
 import { SettingsService } from '../services/settings.service';
+import { MatDialog } from '@angular/material/dialog';
+import { GridComponent } from './components/grid/grid.component';
 
 @Component({
   selector: 'app-design',
@@ -8,55 +10,79 @@ import { SettingsService } from '../services/settings.service';
   styleUrls: ['./design.component.scss']
 })
 export class DesignComponent implements OnInit {
-
-  constructor(private settingsService: SettingsService) { }
+  constructor(public dialog: MatDialog, private settingsService: SettingsService) { }
   counters: Array<any> = []
   filters: Array<any> = []
-  dashboard: Array<any> =
-    [
-      {
-        grid: [
-          {
-            class: 'col-md-12 no-side-padding' ,
-            show: true,
-            component: 'PieComponent',
-            componentConfigs: {
-              id: 'pie',
-              title: 'Info Products by Type',
-              source: 'type',
-              description: `
-                    All the available information products are represented here and disaggregated by Type.
-                    You can toggle on/off individual type of visualization in the list at the right side of
-                    the graphic. Click on ICONS:view_headline to export this graphic, click on ICONS:expand_less to collapse it.
-                `
-            } as ComponentDashboardConfigs,
-            scroll: {
-              icon: 'pie_chart'
-            },
-            tour: true
-          },
-        ]
-      },
-      {
-        grid: [
-          { class: 'col-md-6' },
-          { class: 'col-md-6' }
-        ]
-      },
-      {
-        grid: [
-          { class: 'col-md-3' },
-          { class: 'col-md-9' }
-        ]
-      }
-    ]
+  dashboard: Array<any> = []
+  // [
+  //   [
+  //     {
+  //       class: 'col-md-6 no-side-padding',
+  //       show: true,
+  //       component: 'PieComponent',
+  //       componentConfigs: {
+  //         id: 'pie',
+  //         title: 'Info Products by Type',
+  //         source: 'type',
+  //         description: `
+  //                   All the available information products are represented here and disaggregated by Type.
+  //                   You can toggle on/off individual type of visualization in the list at the right side of
+  //                   the graphic. Click on ICONS:view_headline to export this graphic, click on ICONS:expand_less to collapse it.
+  //               `
+  //       } as ComponentDashboardConfigs,
+  //       scroll: {
+  //         icon: 'pie_chart'
+  //       },
+  //       tour: true
+  //     },
+  //     {
+  //       class: 'col-md-6 no-side-padding',
+  //       show: true,
+  //       component: 'WordcloudComponent',
+  //       componentConfigs: {
+  //         id: 'wordcloud',
+  //         title: 'Info Products by Subject',
+  //         source: 'subject',
+  //         description: `
+  //                 Top Subjects tags for all the information products are represented here, the greater the word,
+  //                 the higher the number of information. Products tagged to that specific Subject. Click on ICONS:view_headline
+  //                 to export this graphic, click on ICONS:expand_less to collapse it.
+  //             `
+  //       } as ComponentDashboardConfigs,
+  //       scroll: {
+  //         linkedWith: 'pie'
+  //       },
+  //       tour: true
+  //     }
+  //   ]
+  // ]
 
+  newRow(): void {
+    const dialogRef = this.dialog.open(GridComponent, {
+      width: '450px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result)
+        this.dashboard.push(result)
+    });
+  }
   async ngOnInit() {
 
-    let settings = await this.settingsService.readExplorerSettings()
-    this.counters = settings.counters;
-    this.filters = settings.filters;
+    let { counters, filters, dashboard } = await this.settingsService.readExplorerSettings()
+    this.counters = counters;
+    this.filters = filters;
+    this.dashboard = dashboard;
 
+  }
+
+  onAddDashboardComponent(index2, index) {
+    console.log('onAddDashboardComponent', index2, index)
+    this.dashboard[index][index2] = this.createDashboardItem({}, index, index2);
+  }
+  dashboardEdited(event, index) {
+    this.dashboard[index][event.index] = this.createDashboardItem(event.result, index, event.index);
+    console.log(this.dashboard);
   }
 
   filtersEdited(value, index) {
@@ -67,6 +93,17 @@ export class DesignComponent implements OnInit {
     if (bool)
       this.filters.splice(i, 1);
   }
+  dashboardRawDeleted(bool, index) {
+    console.log('dashboardRawDeleted')
+    if (bool)
+      this.dashboard.splice(index, 1);
+  }
+  onDashboardItemDelete(index, index2) {
+    delete this.dashboard[index2][index].component;
+    delete this.dashboard[index2][index].componentConfigs;
+  }
+
+
 
   counterEdited(value, index) {
     this.counters[index] = this.createCounter(value);
@@ -87,9 +124,32 @@ export class DesignComponent implements OnInit {
       this.counters.splice(i, 1);
   }
   async save() {
-    await this.settingsService.saveExplorerSettings({ counters: this.counters, filters: this.filters });
+    await this.settingsService.saveExplorerSettings({ counters: this.counters, filters: this.filters, dashboard: this.dashboard });
   }
+  createDashboardItem(obj, index, index1) {
+    let temp = {};
+    if (obj.title)
+      temp['title'] = obj.title
 
+    if (obj.description)
+      temp['description'] = obj.description
+
+    if (obj.source)
+      temp['source'] = obj.source == 'total' ? obj.source : obj.source + '.keyword'
+    if (obj.source)
+      temp['id'] = temp['source'] + index + '_' + index1
+
+    return {
+      class: 'col-md-6 no-side-padding',
+      show: true,
+      component: obj.component ? obj.component : null,
+      componentConfigs: temp as ComponentFilterConfigs,
+      scroll: {
+        icon: 'pie_chart'
+      },
+      tour: true
+    }
+  }
   createFilter(obj) {
     let temp = {};
     if (obj.text)

@@ -33,7 +33,6 @@ export class FormDialogComponent implements OnInit {
   async ngOnInit() {
     let FormGroupControls: any = {};
     this.data.form_data.forEach(element => {
-      console.log(this.data.configs.componentConfigs[element.name])
       if (this.data.configs.componentConfigs[element.name] != null)
         FormGroupControls[element.name] = new FormControl(this.data.configs.componentConfigs[element.name]);
       else if (this.data.configs[element.name])
