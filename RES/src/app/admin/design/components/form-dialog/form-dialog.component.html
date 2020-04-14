@@ -5,32 +5,42 @@
             <ng-container [ngSwitch]="control.type">
 
                 <p *ngSwitchCase="'text'">
-                    <mat-form-field>
+                    <mat-form-field *ngIf="!control.ngIf || control.ngIf(form.controls[control.name].value)">
                         <mat-label>{{control.label}}</mat-label>
-                        <input [type]="control.type" matInput required [placeholder]="control.label"
+                        <input [type]="control.type" matInput [required]="control.required" [placeholder]="control.label"
                             [formControlName]="control.name">
                     </mat-form-field>
                 </p>
                 <p *ngSwitchCase="'textarea'">
-                    <mat-form-field>
+                    <mat-form-field *ngIf="!control.ngIf || control.ngIf(form.controls[control.name].value)">
                         <mat-label>{{control.label}}</mat-label>
-                        <textarea [formControlName]="control.name" [placeholder]="control.label" matInput required
-                            cols="30" rows="10">
+                        <textarea [formControlName]="control.name" [placeholder]="control.label" matInput
+                            [required]="control.required" cols="30" rows="10">
                         </textarea>
                     </mat-form-field>
                 </p>
-                <p *ngSwitchCase="'metadata'">
+                <p *ngSwitchCase="'select'">
 
-                    <ng-select [addTag]="true" [items]="metadata" required bindValue="disply_name"
-                        bindLabel="disply_name" [clearable]="false" [searchable]="true" [formControlName]="control.name"
+                    <ng-select *ngIf="!control.ngIf || control.ngIf(form.controls[control.name].value)" [addTag]="false"
+                        (change)="control.onChange($event)" [items]="control.items" [required]="control.required" bindValue="value"
+                        bindLabel="name" [clearable]="false" [searchable]="false" [formControlName]="control.name"
                         [placeholder]="control.label">
                     </ng-select>
                 </p>
+                <p *ngSwitchCase="'metadata'">
+
+                    <ng-select *ngIf="!control.ngIf || control.ngIf(form.controls[control.name].value)" [addTag]="true"
+                        [items]="metadata" [required]="control.required" bindValue="disply_name" bindLabel="disply_name" [clearable]="false"
+                        [searchable]="true" [formControlName]="control.name" [placeholder]="control.label">
+                    </ng-select>
+                </p>
                 <p *ngSwitchCase="'check'">
-                    <mat-checkbox matInput [formControlName]="control.name">Start Harvesting on
+                    <mat-checkbox  *ngIf="!control.ngIf || control.ngIf(form.controls[control.name].value)" matInput
+                        [formControlName]="control.name">Start Harvesting on
                         {{control.label}}
                     </mat-checkbox>
                 </p>
+
 
 
             </ng-container>

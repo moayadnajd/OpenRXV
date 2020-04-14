@@ -21,6 +21,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ShareComponent } from './share/share.component';
 import { MatDialog } from '@angular/material/dialog';
 import { environment } from 'src/environments/environment';
+import { SettingsService } from '../admin/services/settings.service';
 
 @Component({
   selector: 'explorer-root',
@@ -72,6 +73,7 @@ export class ExplorerComponent implements OnInit {
   }
 
   async ngOnInit() {
+   
     this.loading$ = this.store.select(fromStore.getLoadingStatus);
   }
 

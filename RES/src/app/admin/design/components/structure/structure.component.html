@@ -1,1 +1,47 @@
-<p>structure works!</p>
+<div class="row mb-3">
+    <div class="col-12">
+        <div class="border">
+            <div class="row">
+                <div class="col-12">
+                    <button class="card-actions" color="warn" mat-icon-button>
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div *ngFor="let item of grid ; let i = index;" [ngClass]="item.class">
+                    <div class="p-3">
+                        <mat-card *ngIf="!item.component">
+                            <button (click)="addComponent(i)" class="w-100" color="primary" mat-button>
+                                <mat-icon>add</mat-icon>
+                            </button>
+                        </mat-card>
+                        <mat-card *ngIf="item.component">
+
+                            <mat-card-title>
+
+                                <span>Pi component</span>
+
+                                <button class="card-actions" (click)="delete()" color="warn" mat-icon-button>
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                                <button (click)="openDialog(i)" class="card-actions" mat-icon-button>
+                                    <mat-icon>settings</mat-icon>
+                                </button>
+                            </mat-card-title>
+
+
+                            <mat-card-content>
+                                <mat-icon>{{ icon(item.component) }}</mat-icon>
+                            </mat-card-content>
+
+                        </mat-card>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

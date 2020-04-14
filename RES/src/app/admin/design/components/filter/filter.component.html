@@ -1,13 +1,15 @@
 <mat-card>
     <mat-card-title>
 
-        <h3>{{configs.component}}</h3>
+        <mat-icon>{{icon}}</mat-icon><span>{{iconText}}</span>
+
         <button class="card-actions" (click)="delete()" color="warn" mat-icon-button>
             <mat-icon>delete</mat-icon>
         </button>
         <button (click)="openDialog()" class="card-actions" mat-icon-button>
             <mat-icon>settings</mat-icon>
         </button>
-
     </mat-card-title>
+    <mat-card-subtitle>{{configs.componentConfigs.placeholder || configs.componentConfigs.text }}</mat-card-subtitle>
+
 </mat-card>

@@ -1,4 +1,4 @@
-.border {
+:host ::ng-deep  .border {
   border: gray 1px solid;
   padding: 20px;
   min-height: 20px;

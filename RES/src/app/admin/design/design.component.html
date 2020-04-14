@@ -47,12 +47,11 @@
                             <div class="col-12 pb-2 content">
                                 <div class="border">
                                     <div class="row">
-                                        <button class="col-6" mat-button>
-                                            Add Component
-                                            <mat-icon aria-hidden="false" aria-label="add">add</mat-icon>
-                                        </button>
-                                        <button class="col-6" mat-button>
-                                            Add Structure
+                                       <div class="col-12">
+                                           <app-structure [grid]="item.grid"  *ngFor="let item of dashboard"></app-structure>
+                                       </div>
+                                        <button class="col-12" mat-button>
+                                            Add New Row
                                             <mat-icon aria-hidden="false" aria-label="add">view_module</mat-icon>
                                         </button>
                                     </div>

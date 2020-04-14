@@ -1,11 +1,26 @@
 mat-card-title {
   font-size: 12px;
-  text-align: center;
+  text-align: left;
+  //   height: 21px;
+  vertical-align: middle;
+  span {
+    height: 24px;
+    vertical-align: top;
+    padding-top: 3px;
+    display: inline-block;
+  }
 }
 
 mat-card {
   width: 100%;
   display: inline-block;
+  margin-bottom: 20px;
+}
+
+mat-card-subtitle {
+  float: left;
+  text-align: left;
+  display: block;
 }
 
 h3 {

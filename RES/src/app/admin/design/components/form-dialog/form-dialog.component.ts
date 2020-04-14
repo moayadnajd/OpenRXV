@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject, Output } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MetadataService } from 'src/app/admin/services/metadata.service';
 
 @Component({
@@ -21,16 +21,23 @@ export class FormDialogComponent implements OnInit {
     this.dialogRef.close();
   }
   submit() {
+    let names_exist: Array<string> = this.data.form_data.map(d => d.name)
+    Object.keys(this.form.controls).forEach(key => {
+      if (names_exist.indexOf(key) == -1)
+        this.form.removeControl(key)
+    })
     if (this.form.valid)
       this.dialogRef.close(this.form.value);
-
+      console.log(this.form.controls)
   }
   async ngOnInit() {
     let FormGroupControls: any = {};
     this.data.form_data.forEach(element => {
       console.log(this.data.configs.componentConfigs[element.name])
-      if (this.data.configs.componentConfigs[element.name]!=null)
+      if (this.data.configs.componentConfigs[element.name] != null)
         FormGroupControls[element.name] = new FormControl(this.data.configs.componentConfigs[element.name]);
+      else if (this.data.configs[element.name])
+        FormGroupControls[element.name] = new FormControl(this.data.configs[element.name]);
       else
         FormGroupControls[element.name] = new FormControl(null);
     });
