@@ -13,12 +13,11 @@ import {
 } from 'src/app/explorer/filters/services/interfaces';
 
 export class BuilderUtilities {
-  private dashboardConfig
-  private countersConfig
-  private filtersConfig
+  protected dashboardConfig=[]
+  protected countersConfig=[]
+  protected filtersConfig=[]
   async configs() {
     let configs = await JSON.parse(localStorage.getItem('configs'));
-    console.log(configs);
     return configs;
   }
   private querySourceBucketsFilter: QueryBlock[];
@@ -38,7 +37,7 @@ export class BuilderUtilities {
   async init() {
 
     let { dashboard, counters, filters } = await this.configs();
-    this.dashboardConfig = dashboard;
+    this.dashboardConfig = dashboard.flat(1);
     this.countersConfig = counters;
     this.filtersConfig = filters;
 

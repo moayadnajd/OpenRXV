@@ -2,8 +2,6 @@ import { Injectable, ChangeDetectorRef } from '@angular/core';
 import { ViewState } from 'src/app/explorer/store/reducers/items.reducer';
 import { InView } from 'src/app/explorer/store/actions/actions.interfaces';
 import { GeneralConfigs } from 'src/app/explorer/configs/generalConfig.interface';
-import { countersConfig } from 'src/app/explorer/configs/counters';
-import { dashboardConfig } from 'src/app/explorer/configs/dashboard';
 import { Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../../../store';
@@ -15,6 +13,8 @@ export class ScrollHelperService {
   private expanded: boolean;
   private store: Store<fromStore.ItemsState>;
   private children: Array<ViewChild>;
+  countersConfig = [];
+  dashboardConfig = [];
   dataIsReadyArrived: Subject<void>;
   loading: boolean;
 
@@ -41,6 +41,9 @@ export class ScrollHelperService {
   constructor(private readonly cdr: ChangeDetectorRef) {
     this.expanded = true;
     this.dataIsReadyArrived = new Subject();
+    let { counters, dashboard } = JSON.parse(localStorage.getItem('configs'));
+    this.countersConfig = counters;
+    this.dashboardConfig = dashboard.flat(1);
   }
 
   changeViewState(id: string, collapsed: boolean): InView {
@@ -52,7 +55,7 @@ export class ScrollHelperService {
   }
 
   getScrollToCompConf(): GeneralConfigs[] {
-    return [countersConfig[0], ...dashboardConfig];
+    return [this.countersConfig[0], ...this.dashboardConfig];
   }
 
   getChildren(): Array<ViewChild> {
@@ -60,7 +63,7 @@ export class ScrollHelperService {
       return this.children;
     } else {
       const children: Array<ViewChild> = [];
-      dashboardConfig.forEach(
+      this.dashboardConfig.forEach(
         d =>
           d.scroll.linkedWith &&
           children.push({
@@ -79,8 +82,8 @@ export class ScrollHelperService {
    */
   getNotSiblings(): GeneralConfigs[] {
     return [
-      countersConfig[0],
-      ...dashboardConfig.filter(
+      this.countersConfig[0],
+      ...this.dashboardConfig.filter(
         (gc: GeneralConfigs) => gc.scroll.icon && gc.show
       ),
     ];

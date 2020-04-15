@@ -30,7 +30,6 @@ export class DashboardComponent implements OnInit {
   constructor(
     private readonly store: Store<fromStore.AppState>,
     private readonly bodyBuilderService: BodyBuilderService,
-    private readonly mainbodyBuilderService: MainBodyBuilderService,
     private readonly snackBar: MatSnackBar,
     private readonly itemsService: ItemsService,
     private activeRoute: ActivatedRoute,
@@ -42,7 +41,7 @@ export class DashboardComponent implements OnInit {
   }
   async getCounters() {
     let settings = await this.settingsService.readExplorerSettings();
-    this.dashboardConfig = settings.dashboard
+    this.dashboardConfig =  settings.dashboard.flat(1)
 
     await localStorage.setItem('configs', JSON.stringify(settings ))
     this.countersConfig = settings.counters;

@@ -5,23 +5,19 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { MainBodyBuilderService } from 'src/app/explorer/services/mainBodyBuilderService/main-body-builder.service';
 import { TourService, IStepOption } from 'ngx-tour-md-menu';
-import { countersConfig } from 'src/app/explorer/configs/counters';
 import {
   GeneralConfigs,
   ComponentCounterConfigs,
   ComponentDashboardConfigs,
   Tour,
 } from 'src/app/explorer/configs/generalConfig.interface';
-import { dashboardConfig } from 'src/app/explorer/configs/dashboard';
 import { tourConfig } from 'src/app/explorer/configs/tour';
 import { orAndToolTip } from 'src/app/explorer/configs/tooltips';
 import { ScreenSizeService } from 'src/app/explorer/services/screenSize/screen-size.service';
 import { ItemsService } from './services/itemsService/items.service';
-import { ActivatedRoute } from '@angular/router';
 import { ShareComponent } from './share/share.component';
 import { MatDialog } from '@angular/material/dialog';
 import { environment } from 'src/environments/environment';
-import { SettingsService } from '../admin/services/settings.service';
 
 @Component({
   selector: 'explorer-root',
@@ -34,6 +30,8 @@ export class ExplorerComponent implements OnInit {
   render: boolean;
   shareID: string
   orOperator: boolean;
+  countersConfig=[]
+  dashboardConfig=[]
   readonly orAndToolTip: string;
   private prevenetMouseOnNav: boolean;
   options: any = {
@@ -73,7 +71,9 @@ export class ExplorerComponent implements OnInit {
   }
 
   async ngOnInit() {
-   
+    let {counters , dashboard} = await JSON.parse(localStorage.getItem('configs'));
+    this.countersConfig=counters;
+    this.dashboardConfig = dashboard.flat(1);
     this.loading$ = this.store.select(fromStore.getLoadingStatus);
   }
 
@@ -115,7 +115,8 @@ export class ExplorerComponent implements OnInit {
   }
 
   private mapConfigsToTour(): IStepOption[] {
-    return [...tourConfig, ...countersConfig, ...dashboardConfig]
+    console.log(this.countersConfig,this.dashboardConfig)
+    return [...tourConfig, ...this.countersConfig, ...this.dashboardConfig]
       .filter(({ show }: GeneralConfigs) => show)
       .map(({ componentConfigs, tour }: GeneralConfigs) => {
         const { description, title, id } = componentConfigs as

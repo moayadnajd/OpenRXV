@@ -5,7 +5,7 @@ import {
   Bucket
 } from 'src/app/explorer/filters/services/interfaces';
 import { InView } from '../actions/actions.interfaces';
-import { dashboardConfig } from 'src/app/explorer/configs/dashboard';
+
 import {
   GeneralConfigs,
   ComponentDashboardConfigs
@@ -36,9 +36,10 @@ const initialState: ItemsState = {
   data: {},
   counters: {},
   inView: (() => {
+    let { counters, dashboard } = JSON.parse(localStorage.getItem('configs'));
     // creating the state dynamically
     const obj = Object.create(null);
-    Object.values([countersConfig[0], ...dashboardConfig]).forEach(
+    Object.values([counters[0], ...dashboard.flat(1)]).forEach(
       ({ componentConfigs }: GeneralConfigs) =>
         (obj[(componentConfigs as ComponentDashboardConfigs).id] = {
           collapsed: false,

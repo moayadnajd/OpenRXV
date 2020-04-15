@@ -14,49 +14,6 @@ export class DesignComponent implements OnInit {
   counters: Array<any> = []
   filters: Array<any> = []
   dashboard: Array<any> = []
-  // [
-  //   [
-  //     {
-  //       class: 'col-md-6 no-side-padding',
-  //       show: true,
-  //       component: 'PieComponent',
-  //       componentConfigs: {
-  //         id: 'pie',
-  //         title: 'Info Products by Type',
-  //         source: 'type',
-  //         description: `
-  //                   All the available information products are represented here and disaggregated by Type.
-  //                   You can toggle on/off individual type of visualization in the list at the right side of
-  //                   the graphic. Click on ICONS:view_headline to export this graphic, click on ICONS:expand_less to collapse it.
-  //               `
-  //       } as ComponentDashboardConfigs,
-  //       scroll: {
-  //         icon: 'pie_chart'
-  //       },
-  //       tour: true
-  //     },
-  //     {
-  //       class: 'col-md-6 no-side-padding',
-  //       show: true,
-  //       component: 'WordcloudComponent',
-  //       componentConfigs: {
-  //         id: 'wordcloud',
-  //         title: 'Info Products by Subject',
-  //         source: 'subject',
-  //         description: `
-  //                 Top Subjects tags for all the information products are represented here, the greater the word,
-  //                 the higher the number of information. Products tagged to that specific Subject. Click on ICONS:view_headline
-  //                 to export this graphic, click on ICONS:expand_less to collapse it.
-  //             `
-  //       } as ComponentDashboardConfigs,
-  //       scroll: {
-  //         linkedWith: 'pie'
-  //       },
-  //       tour: true
-  //     }
-  //   ]
-  // ]
-
   newRow(): void {
     const dialogRef = this.dialog.open(GridComponent, {
       width: '450px'
@@ -135,12 +92,17 @@ export class DesignComponent implements OnInit {
       temp['description'] = obj.description
 
     if (obj.source)
-      temp['source'] = obj.source == 'total' ? obj.source : obj.source + '.keyword'
+      temp['source'] = obj.source == 'total' ? obj.source : obj.source 
     if (obj.source)
-      temp['id'] = temp['source'] + index + '_' + index1
+      temp['id'] = temp['source'] + '_' + index + '_' + index1
+
+    var class_name = null
+
+    if (typeof obj.class == 'string')
+      class_name = obj.class
 
     return {
-      class: 'col-md-6 no-side-padding',
+      class: class_name + ' no-side-padding',
       show: true,
       component: obj.component ? obj.component : null,
       componentConfigs: temp as ComponentFilterConfigs,

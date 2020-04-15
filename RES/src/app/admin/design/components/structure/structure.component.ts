@@ -12,6 +12,7 @@ export class StructureComponent implements OnInit {
   @Output() onAdd: EventEmitter<any> = new EventEmitter()
   @Output() onDelete: EventEmitter<boolean> = new EventEmitter()
   @Output() rowDeleted: EventEmitter<boolean> = new EventEmitter()
+  class_names = []
   options = [
     { name: "Pie Chart", value: "PieComponent", icon: "pie_chart" },
     { name: "Word Cloud", value: "WordcloudComponent", icon: "filter_drama" }
@@ -53,6 +54,9 @@ export class StructureComponent implements OnInit {
   constructor(public dialog: MatDialog) { }
 
   ngOnInit(): void {
+    this.grid.forEach((element, index) => {
+      this.class_names[index] = element.class
+    });
 
     console.log(this.grid)
   }
@@ -97,8 +101,11 @@ export class StructureComponent implements OnInit {
 
 
     this.dialogRef.afterClosed().subscribe(result => {
-      if (result)
+
+      if (result) {
+        result.class = this.class_names[index];
         this.edited.emit({ result, index })
+      }
       else if (!this.grid[index].component)
         this.delete(index)
 

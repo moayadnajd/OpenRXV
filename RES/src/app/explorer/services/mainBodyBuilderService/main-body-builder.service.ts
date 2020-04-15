@@ -12,7 +12,6 @@ import {
   GeneralConfigs,
   ComponentDashboardConfigs
 } from 'src/app/explorer/configs/generalConfig.interface';
-import { dashboardConfig } from 'src/app/explorer/configs/dashboard';
 import { SettingsService } from 'src/app/admin/services/settings.service';
 @Injectable({
   providedIn: 'root'
@@ -26,6 +25,10 @@ export class MainBodyBuilderService extends BuilderUtilities {
   }
  async start() {
     await this.init();
+    let { dashboard, counters, filters } = await this.configs();
+    this.dashboardConfig = dashboard.flat(1);
+    this.countersConfig = counters;
+    this.filtersConfig = filters;
     this.rawOptions = this.buildRawOptions();
     this.orOperator.next(false);
 
@@ -132,27 +135,28 @@ export class MainBodyBuilderService extends BuilderUtilities {
 
   private buildRawOptions(): Array<string> {
     let rows: Array<string> = [];
-    const { content } = dashboardConfig.find(
-      (curr: GeneralConfigs) =>
-        !!(curr.componentConfigs as ComponentDashboardConfigs).content
-    ).componentConfigs as ComponentDashboardConfigs;
-    for (const key in content) {
-      if (content.hasOwnProperty(key)) {
-        if (typeof content[key] === 'string') {
-          rows = [...rows, content[key]];
-        } else if (
-          typeof content[key] === 'object' &&
-          !Array.isArray(content[key])
-        ) {
-          rows = [...rows, ...(Object.values(content[key]) as Array<string>)];
-        } else if (Array.isArray(content[key])) {
-          (content[key] as Array<SortOption>).forEach(({ value }: SortOption) =>
-            rows.push(value.replace('.keyword', '').replace('.score', ''))
-          );
-        }
-        // else is boolean
-      }
-    }
+    // const { content } = this.dashboardConfig.find(
+    //   (curr: GeneralConfigs) =>
+    //     !!(curr.componentConfigs as ComponentDashboardConfigs).content
+    // ).componentConfigs as ComponentDashboardConfigs;
+   
+    // for (const key in content) {
+    //   if (content.hasOwnProperty(key)) {
+    //     if (typeof content[key] === 'string') {
+    //       rows = [...rows, content[key]];
+    //     } else if (
+    //       typeof content[key] === 'object' &&
+    //       !Array.isArray(content[key])
+    //     ) {
+    //       rows = [...rows, ...(Object.values(content[key]) as Array<string>)];
+    //     } else if (Array.isArray(content[key])) {
+    //       (content[key] as Array<SortOption>).forEach(({ value }: SortOption) =>
+    //         rows.push(value.replace('.keyword', '').replace('.score', ''))
+    //       );
+    //     }
+    //     // else is boolean
+    //   }
+    // }
     // bitstreams needed for the images
     // handle needed for the altmetric
     rows.push('thumbnail', 'handle', 'bitstreams', 'contributor', 'affiliation', 'language', 'country', 'region');

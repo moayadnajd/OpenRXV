@@ -14,7 +14,6 @@ import { map, debounceTime } from 'rxjs/operators';
 import { BodyBuilderService } from '../services/bodyBuilder/body-builder.service';
 import { ParentComponent } from 'src/app/explorer/parent-component.class';
 import { ComponentLookup } from '../../dashboard/components/dynamic/lookup.registry';
-import { dashboardConfig } from '../../configs/dashboard';
 import { type } from 'os';
 @ComponentLookup('SearchComponent')
 @Component({
@@ -34,9 +33,10 @@ export class SearchComponent extends ParentComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    let { counters, dashboard } = JSON.parse(localStorage.getItem('configs'));
     let sorcue =
       (() => {
-        const [conf] = dashboardConfig.filter(
+        const [conf] = dashboard.flat(1).filter(
           ({ componentConfigs }: GeneralConfigs) =>
             (componentConfigs as ComponentDashboardConfigs).content
         );
