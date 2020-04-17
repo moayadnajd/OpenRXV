@@ -13,63 +13,68 @@
 </div>
 <div class="row">
     <div class="col-md-12 p-2">
-        <mat-card>
-            <mat-card-content>
+        <div class="row">
+            <div class="col-3 side-left">
+                <div class="border">
+                    <div class="content d-flex align-content-center flex-wrap">
+                        <app-filter *ngFor="let item of filters; let i = index;" (onDelete)="onFilterDelete($event,i)"
+                            (edited)="filtersEdited($event,i)" [configs]="item" class="w-100"></app-filter>
+                    </div>
+                    <button (click)="newFilter()" class="w-100" mat-button>
+                        Add Filter
+                        <mat-icon aria-hidden="false" aria-label="add">add</mat-icon>
+                    </button>
+                </div>
+            </div>
+            <div class="col-9 side-right">
                 <div class="row">
-                    <div class="col-3 side-left">
+                    <div class="col-12 pb-2 header">
                         <div class="border">
-                            <div class="content d-flex align-content-center flex-wrap">
-                                <app-filter *ngFor="let item of filters; let i = index;"
-                                    (onDelete)="onFilterDelete($event,i)" (edited)="filtersEdited($event,i)"
-                                    [configs]="item" class="w-100"></app-filter>
+                            <div class="content d-flex align-content-stretch flex-wrap">
+                                <app-counter class="m-auto" *ngFor="let item of counters; let i = index;"
+                                    (onDelete)="onCounterDelete($event,i)" [configs]="item"
+                                    (edited)="counterEdited($event,i)"></app-counter>
                             </div>
-                            <button (click)="newFilter()" class="w-100" mat-button>
-                                Add Filter
+                            <button (click)="newCounter()" class="w-100" mat-button>
+                                Add Counter
                                 <mat-icon aria-hidden="false" aria-label="add">add</mat-icon>
                             </button>
                         </div>
                     </div>
-                    <div class="col-9 side-right">
-                        <div class="row">
-                            <div class="col-12 pb-2 header">
-                                <div class="border">
-                                    <div class="content d-flex align-content-stretch flex-wrap">
-                                        <app-counter class="m-auto" *ngFor="let item of counters; let i = index;"
-                                            (onDelete)="onCounterDelete($event,i)" [configs]="item"
-                                            (edited)="counterEdited($event,i)"></app-counter>
-                                    </div>
-                                    <button (click)="newCounter()" class="w-100" mat-button>
-                                        Add Counter
-                                        <mat-icon aria-hidden="false" aria-label="add">add</mat-icon>
-                                    </button>
+                    <div class="col-12 pb-2 content">
+                        <div class="border">
+                            <div class="row">
+                                <div class="col-12">
+                                    <app-structure (rowDeleted)="dashboardRawDeleted($event,i)"
+                                        (onDelete)="onDashboardItemDelete($event,i)"
+                                        (onAdd)="onAddDashboardComponent($event,i)" (edited)="dashboardEdited($event,i)"
+                                        [grid]="item" *ngFor="let item of dashboard, let i = index"></app-structure>
                                 </div>
+                                <button (click)="newRow()" class="col-12" mat-button>
+                                    Add New Row
+                                    <mat-icon aria-hidden="false" aria-label="add">view_module</mat-icon>
+                                </button>
                             </div>
-                            <div class="col-12 pb-2 content">
-                                <div class="border">
-                                    <div class="row">
-                                       <div class="col-12">
-                                           <app-structure (rowDeleted)="dashboardRawDeleted($event,i)" (onDelete)="onDashboardItemDelete($event,i)" (onAdd)="onAddDashboardComponent($event,i)" (edited)="dashboardEdited($event,i)" [grid]="item"  *ngFor="let item of dashboard, let i = index"></app-structure>
-                                       </div>
-                                        <button (click)="newRow()" class="col-12" mat-button>
-                                            Add New Row
-                                            <mat-icon aria-hidden="false" aria-label="add">view_module</mat-icon>
-                                        </button>
-                                    </div>
 
-                                </div>
-                            </div>
-                            <div class="col-12 footer">
-                                <div class="border">
-                                    <button class="w-100"  mat-button>
-                                        Add Footer Component
-                                        <mat-icon aria-hidden="false" aria-label="add">add</mat-icon>
-                                    </button>
-                                </div>
-                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 footer">
+                        <div class="border">
+                            <button class="w-100" mat-button>
+                                Add Footer Component
+                                <mat-icon aria-hidden="false" aria-label="add">add</mat-icon>
+                            </button>
                         </div>
                     </div>
                 </div>
-            </mat-card-content>
-        </mat-card>
+            </div>
+            <div class="icon-wrapper">
+                <div class="border">
+                    <button *ngFor="let item of icons" mat-button class="icon-holder">
+                        <mat-icon>{{item}}</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

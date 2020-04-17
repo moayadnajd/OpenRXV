@@ -9,7 +9,7 @@ import { ViewChild } from '../../list/paginated-list/filter-paginated-list/types
 
 @Injectable()
 export class ScrollHelperService {
-  private viewState: ViewState;
+  viewState: ViewState;
   private expanded: boolean;
   private store: Store<fromStore.ItemsState>;
   private children: Array<ViewChild>;
@@ -122,7 +122,8 @@ export class ScrollHelperService {
   }
 
   private changeCollapsed(collapsed: boolean): void {
-    this.viewState.collapsed = collapsed;
+
+    this.viewState = { ... this.viewState, collapsed };
   }
 }
 

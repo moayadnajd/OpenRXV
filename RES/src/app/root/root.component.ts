@@ -14,6 +14,7 @@ export class RootComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
+    console.log("root init")
     let settings = await this.settingsService.readExplorerSettings();
     await localStorage.setItem('configs', JSON.stringify(settings))
     this.loadSettigs = true

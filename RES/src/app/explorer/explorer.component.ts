@@ -18,6 +18,7 @@ import { ItemsService } from './services/itemsService/items.service';
 import { ShareComponent } from './share/share.component';
 import { MatDialog } from '@angular/material/dialog';
 import { environment } from 'src/environments/environment';
+import { InViewState } from './store/reducers/items.reducer';
 
 @Component({
   selector: 'explorer-root',
@@ -30,8 +31,8 @@ export class ExplorerComponent implements OnInit {
   render: boolean;
   shareID: string
   orOperator: boolean;
-  countersConfig=[]
-  dashboardConfig=[]
+  countersConfig = []
+  dashboardConfig = []
   readonly orAndToolTip: string;
   private prevenetMouseOnNav: boolean;
   options: any = {
@@ -40,7 +41,7 @@ export class ExplorerComponent implements OnInit {
     top: 0,
   };
   async share() {
-    this.openDialog(environment.domain_name+await this.itemsService.saveShare(this.mainBodyBuilderService.getAggAttributes));
+    this.openDialog(environment.domain_name + await this.itemsService.saveShare(this.mainBodyBuilderService.getAggAttributes));
   }
   get isSmall(): boolean {
     return this.screenSizeService.isSmallScreen;
@@ -71,10 +72,35 @@ export class ExplorerComponent implements OnInit {
   }
 
   async ngOnInit() {
-    let {counters , dashboard} = await JSON.parse(localStorage.getItem('configs'));
-    this.countersConfig=counters;
+    let { counters, dashboard } = await JSON.parse(localStorage.getItem('configs'));
+
+    let inview = (() => {
+      let { counters, dashboard } = JSON.parse(localStorage.getItem('configs'));
+      // creating the state dynamically
+      const obj = Object.create(null);
+      Object.values([counters[0], ...dashboard.flat(1)]).forEach(
+        ({ componentConfigs }: GeneralConfigs) =>
+          (obj[(componentConfigs as ComponentDashboardConfigs).id] = {
+            collapsed: false,
+            userSeesMe: false
+          })
+      );
+      return obj;
+    })() as InViewState
+    Object.keys(inview).forEach(id => {
+      this.store.dispatch(
+        new fromStore.SetInView({
+          id,
+          viewState: inview[id]
+        })
+      );
+    });
+
+    this.countersConfig = counters;
     this.dashboardConfig = dashboard.flat(1);
     this.loading$ = this.store.select(fromStore.getLoadingStatus);
+
+
   }
 
   onMouseMove(event: MouseEvent): void {
@@ -115,7 +141,7 @@ export class ExplorerComponent implements OnInit {
   }
 
   private mapConfigsToTour(): IStepOption[] {
-    console.log(this.countersConfig,this.dashboardConfig)
+    console.log(this.countersConfig, this.dashboardConfig)
     return [...tourConfig, ...this.countersConfig, ...this.dashboardConfig]
       .filter(({ show }: GeneralConfigs) => show)
       .map(({ componentConfigs, tour }: GeneralConfigs) => {

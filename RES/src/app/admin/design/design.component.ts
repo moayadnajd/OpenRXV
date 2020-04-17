@@ -14,6 +14,7 @@ export class DesignComponent implements OnInit {
   counters: Array<any> = []
   filters: Array<any> = []
   dashboard: Array<any> = []
+  icons=[]
   newRow(): void {
     const dialogRef = this.dialog.open(GridComponent, {
       width: '450px'
@@ -30,7 +31,8 @@ export class DesignComponent implements OnInit {
     this.counters = counters;
     this.filters = filters;
     this.dashboard = dashboard;
-
+    this.icons = this.dashboard.map(d => d[0]?.scroll?.icon);
+    console.log(this.icons)
   }
 
   onAddDashboardComponent(index2, index) {
@@ -92,7 +94,7 @@ export class DesignComponent implements OnInit {
       temp['description'] = obj.description
 
     if (obj.source)
-      temp['source'] = obj.source == 'total' ? obj.source : obj.source 
+      temp['source'] = obj.source == 'total' ? obj.source : obj.source
     if (obj.source)
       temp['id'] = temp['source'] + '_' + index + '_' + index1
 
@@ -106,9 +108,7 @@ export class DesignComponent implements OnInit {
       show: true,
       component: obj.component ? obj.component : null,
       componentConfigs: temp as ComponentFilterConfigs,
-      scroll: {
-        icon: 'pie_chart'
-      },
+      scroll: obj.scroll ? obj.scroll : null,
       tour: true
     }
   }

@@ -6,12 +6,6 @@ import {
 } from 'src/app/explorer/filters/services/interfaces';
 import { InView } from '../actions/actions.interfaces';
 
-import {
-  GeneralConfigs,
-  ComponentDashboardConfigs
-} from 'src/app/explorer/configs/generalConfig.interface';
-import { countersConfig } from 'src/app/explorer/configs/counters';
-
 export interface ViewState {
   userSeesMe: boolean;
   linkedWith?: string;
@@ -35,19 +29,7 @@ export interface ItemsState {
 const initialState: ItemsState = {
   data: {},
   counters: {},
-  inView: (() => {
-    let { counters, dashboard } = JSON.parse(localStorage.getItem('configs'));
-    // creating the state dynamically
-    const obj = Object.create(null);
-    Object.values([counters[0], ...dashboard.flat(1)]).forEach(
-      ({ componentConfigs }: GeneralConfigs) =>
-        (obj[(componentConfigs as ComponentDashboardConfigs).id] = {
-          collapsed: false,
-          userSeesMe: false
-        })
-    );
-    return obj;
-  })() as InViewState,
+  inView: {},
   loaded: false,
   loading: true,
   loadingOnlyHits: false,

@@ -1,14 +1,14 @@
 <h1 mat-dialog-title>Settings</h1>
 <div mat-dialog-content>
-    <form [formGroup]="form">
+    <form class="formd" [formGroup]="form">
         <ng-container *ngFor="let control of data.form_data">
             <ng-container [ngSwitch]="control.type">
 
                 <p *ngSwitchCase="'text'">
                     <mat-form-field *ngIf="!control.ngIf || control.ngIf(form.controls[control.name].value)">
                         <mat-label>{{control.label}}</mat-label>
-                        <input [type]="control.type" matInput [required]="control.required" [placeholder]="control.label"
-                            [formControlName]="control.name">
+                        <input [type]="control.type" matInput [required]="control.required"
+                            [placeholder]="control.label" [formControlName]="control.name">
                     </mat-form-field>
                 </p>
                 <p *ngSwitchCase="'textarea'">
@@ -20,22 +20,28 @@
                     </mat-form-field>
                 </p>
                 <p *ngSwitchCase="'select'">
-
                     <ng-select *ngIf="!control.ngIf || control.ngIf(form.controls[control.name].value)" [addTag]="false"
-                        (change)="control.onChange($event)" [items]="control.items" [required]="control.required" bindValue="value"
-                        bindLabel="name" [clearable]="false" [searchable]="false" [formControlName]="control.name"
-                        [placeholder]="control.label">
+                        (change)="control.onChange($event)" [items]="control.items" [required]="control.required"
+                        bindValue="value" bindLabel="name" [clearable]="false" [searchable]="true"
+                        [formControlName]="control.name" [placeholder]="control.label">
+                        <ng-template *ngIf="control.icons" ng-label-tmp let-item="item">
+                            <mat-icon style="float: left;" color="primary">{{item.name}}</mat-icon> <b style="float: left;">{{item.name}} </b>
+                        </ng-template>
+                        <ng-template *ngIf="control.icons" ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                            <mat-icon style="float: left;" color="primary">{{item.name}}</mat-icon> <b style="float: left;">{{item.name}}</b>
+                        </ng-template>
                     </ng-select>
                 </p>
                 <p *ngSwitchCase="'metadata'">
 
                     <ng-select *ngIf="!control.ngIf || control.ngIf(form.controls[control.name].value)" [addTag]="true"
-                        [items]="metadata" [required]="control.required" bindValue="disply_name" bindLabel="disply_name" [clearable]="false"
-                        [searchable]="true" [formControlName]="control.name" [placeholder]="control.label">
+                        [items]="metadata" [required]="control.required" bindValue="disply_name" bindLabel="disply_name"
+                        [clearable]="false" [searchable]="true" [formControlName]="control.name"
+                        [placeholder]="control.label">
                     </ng-select>
                 </p>
                 <p *ngSwitchCase="'check'">
-                    <mat-checkbox  *ngIf="!control.ngIf || control.ngIf(form.controls[control.name].value)" matInput
+                    <mat-checkbox *ngIf="!control.ngIf || control.ngIf(form.controls[control.name].value)" matInput
                         [formControlName]="control.name">Start Harvesting on
                         {{control.label}}
                     </mat-checkbox>

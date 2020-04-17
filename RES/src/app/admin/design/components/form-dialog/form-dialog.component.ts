@@ -10,7 +10,9 @@ import { MetadataService } from 'src/app/admin/services/metadata.service';
 })
 export class FormDialogComponent implements OnInit {
   controls = [];
-  form: FormGroup;
+  form: FormGroup = new FormGroup({
+    icon: new FormControl('')
+  });
   metadata = []
   constructor(
     private metadataService: MetadataService,
@@ -28,11 +30,13 @@ export class FormDialogComponent implements OnInit {
     })
     if (this.form.valid)
       this.dialogRef.close(this.form.value);
-      console.log(this.form.controls)
+    console.log(this.form.controls)
   }
   async ngOnInit() {
     let FormGroupControls: any = {};
+    console.log(this.data.configs);
     this.data.form_data.forEach(element => {
+      
       if (this.data.configs.componentConfigs[element.name] != null)
         FormGroupControls[element.name] = new FormControl(this.data.configs.componentConfigs[element.name]);
       else if (this.data.configs[element.name])
@@ -40,8 +44,10 @@ export class FormDialogComponent implements OnInit {
       else
         FormGroupControls[element.name] = new FormControl(null);
     });
+    console.log(this.form)
     this.form = new FormGroup(FormGroupControls);
     this.metadata = await this.metadataService.get()
+
   }
 
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Inject, Output, EventEmitter } from '@angular/core';
 import { FormDialogComponent } from '../form-dialog/form-dialog.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { icons_list } from './icons';
 
 @Component({
   selector: 'app-structure',
@@ -51,14 +52,33 @@ export class StructureComponent implements OnInit {
 
   ];
   @Input() grid;
+
+  dialogReficons: MatDialogRef<any>
+  iconConfigs = {
+    componentConfigs: {
+      icon: "pie_chart",
+    }
+  }
+  iconsForm = [
+    {
+      name: 'icon',
+      label: 'Select Icon',
+      icons:true,
+      type: 'select',
+      items: icons_list.map(d => { return { name: d.name, value: d.name } }),
+      onChange: (event) => {
+        this.pre = event;
+      },
+      required: true,
+    }
+  ]
   constructor(public dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.grid.forEach((element, index) => {
       this.class_names[index] = element.class
     });
-
-    console.log(this.grid)
+    this.iconConfigs.componentConfigs.icon = this.grid[0]?.scroll?.icon || null
   }
 
   addComponent(event) {
@@ -90,7 +110,28 @@ export class StructureComponent implements OnInit {
     this.rowDeleted.emit(true)
   }
 
+  setIcon() {
 
+    this.dialogReficons = this.dialog.open(FormDialogComponent, {
+      width: '456px',
+      minHeight: '456px',
+      data: { form_data: this.iconsForm, configs: this.iconConfigs }
+    });
+    this.dialogReficons.afterClosed().subscribe(result => {
+
+      if (result) {
+        this.grid.forEach((element, index) => {
+          if (index == 0)
+            element['scroll'] = { icon: result.icon }
+          else
+            element['scroll'] = { linkedWith: this.grid[0].componentConfigs.id }
+        });
+
+      }
+
+
+    });
+  }
 
   openDialog(index): void {
 
