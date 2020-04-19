@@ -20,6 +20,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { environment } from 'src/environments/environment';
 import { InViewState } from './store/reducers/items.reducer';
 
+
 @Component({
   selector: 'explorer-root',
   templateUrl: './explorer.component.html',
@@ -29,8 +30,12 @@ export class ExplorerComponent implements OnInit {
   @ViewChild('drawer') sidenav: MatDrawer;
   loading$: Observable<boolean>;
   render: boolean;
-  shareID: string
+  shareID: string;
+  logo: string;
+  website_name: string;
   orOperator: boolean;
+  primaryColorPalette
+  primaryColor
   countersConfig = []
   dashboardConfig = []
   readonly orAndToolTip: string;
@@ -71,8 +76,16 @@ export class ExplorerComponent implements OnInit {
     });
   }
 
+
+
+
   async ngOnInit() {
-    let { counters, dashboard } = await JSON.parse(localStorage.getItem('configs'));
+    let { counters, dashboard, appearance } = await JSON.parse(localStorage.getItem('configs'));
+    if (appearance.logo)
+      this.logo = environment.api + appearance.logo;
+    this.website_name = appearance.website_name;
+  
+
 
     let inview = (() => {
       let { counters, dashboard } = JSON.parse(localStorage.getItem('configs'));

@@ -19,7 +19,7 @@ export class ValuesService {
     }
 
 
-    return await this.http.get(environment.api + 'values' + query).pipe(map((data: any) => {
+    return await this.http.get(environment.api + '/values' + query).pipe(map((data: any) => {
 
       data.hits = data.hits.map(element => { return { ...{ id: element._id }, ...element._source } })
       return data;
@@ -27,7 +27,7 @@ export class ValuesService {
   }
 
   async  post(data) {
-    return await this.http.post(environment.api + 'values', data).pipe(map((data: any) => {
+    return await this.http.post(environment.api + '/values', data).pipe(map((data: any) => {
       return data;
     })).toPromise();
   }

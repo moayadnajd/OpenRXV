@@ -14,22 +14,40 @@
 .save {
   float: right;
 }
-.icon-wrapper{
-    height: 600px;
-    position: fixed;
-    right: 0px;
-    .border{
-        height:100%;
-        padding: 0;
-    }
-    
+.icon-wrapper {
+  height: 600px;
+  position: fixed;
+  right: 0px;
+  .border {
+    height: 100%;
+    padding: 0;
+  }
 }
 
-.icon-holder{
-    height: 40% !important;
-    width: 100%!important;
-    padding: 0px;
-    display: block;
-    min-width: 100%;
-    float: left;
+.icon-holder {
+  height: 40% !important;
+  width: 100% !important;
+  padding: 0px;
+  display: block;
+  min-width: 100%;
+  float: left;
+}
+
+.drag-list.cdk-drop-list-dragging .drag-item:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+.drag-item:last-child {
+  border: none;
+}
+
+app-structure {
+  width: 100%;
+  float: left;
 }

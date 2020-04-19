@@ -16,9 +16,9 @@
         <div class="row">
             <div class="col-3 side-left">
                 <div class="border">
-                    <div class="content d-flex align-content-center flex-wrap">
-                        <app-filter *ngFor="let item of filters; let i = index;" (onDelete)="onFilterDelete($event,i)"
-                            (edited)="filtersEdited($event,i)" [configs]="item" class="w-100"></app-filter>
+                    <div cdkDropList (cdkDropListDropped)="dropFilter($event)" class="content drag-list d-flex align-content-center flex-wrap">
+                        <app-filter cdkDrag *ngFor="let item of filters; let i = index;" (onDelete)="onFilterDelete($event,i)"
+                            (edited)="filtersEdited($event,i)" [configs]="item" class="w-100 drag-item"></app-filter>
                     </div>
                     <button (click)="newFilter()" class="w-100" mat-button>
                         Add Filter
@@ -44,8 +44,8 @@
                     <div class="col-12 pb-2 content">
                         <div class="border">
                             <div class="row">
-                                <div class="col-12">
-                                    <app-structure (rowDeleted)="dashboardRawDeleted($event,i)"
+                                <div cdkDropList (cdkDropListDropped)="dropDashboard($event)" class="col-12 drag-list">
+                                    <app-structure  cdkDrag class="drag-item" (rowDeleted)="dashboardRawDeleted($event,i)"
                                         (onDelete)="onDashboardItemDelete($event,i)"
                                         (onAdd)="onAddDashboardComponent($event,i)" (edited)="dashboardEdited($event,i)"
                                         [grid]="item" *ngFor="let item of dashboard, let i = index"></app-structure>

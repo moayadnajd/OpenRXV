@@ -3,6 +3,7 @@ import { ComponentCounterConfigs, ComponentFilterConfigs, searchOptions, Compone
 import { SettingsService } from '../services/settings.service';
 import { MatDialog } from '@angular/material/dialog';
 import { GridComponent } from './components/grid/grid.component';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-design',
@@ -14,7 +15,7 @@ export class DesignComponent implements OnInit {
   counters: Array<any> = []
   filters: Array<any> = []
   dashboard: Array<any> = []
-  icons=[]
+  icons = []
   newRow(): void {
     const dialogRef = this.dialog.open(GridComponent, {
       width: '450px'
@@ -67,8 +68,13 @@ export class DesignComponent implements OnInit {
   counterEdited(value, index) {
     this.counters[index] = this.createCounter(value);
   }
-
-
+  dropDashboard(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.dashboard, event.previousIndex, event.currentIndex);
+    this.icons = this.dashboard.map(d => d[0]?.scroll?.icon);
+  }
+  dropFilter(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.filters, event.previousIndex, event.currentIndex);
+  }
   newFilter() {
     this.filters.push(this.createFilter({ source: null, placeholder: null, addInMainQuery: null }));
   }

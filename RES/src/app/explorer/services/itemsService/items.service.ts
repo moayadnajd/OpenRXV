@@ -21,12 +21,12 @@ export class ItemsService {
 
 
   async getShare(id: string) {
-    return await this.http.get(environment.api + 'share/' + id).pipe(map(data => data)).toPromise();
+    return await this.http.get(environment.api + '/share/' + id).pipe(map(data => data)).toPromise();
   }
 
   async saveShare(attr: any) {
     if (Object.keys(attr).length)
-      return '/shared/'+ await this.http.post(environment.api + 'share', attr).pipe(map((data: any) => data._id)).toPromise();
+      return '/shared/'+ await this.http.post(environment.api + '/share', attr).pipe(map((data: any) => data._id)).toPromise();
     else return ''
   }
 }

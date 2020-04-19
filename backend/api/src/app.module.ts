@@ -19,6 +19,10 @@ import { ScheduleModule } from '@nestjs/schedule';
       serveRoot:'/export/downloads',
       rootPath: join(__dirname, 'public/downloads'),
     }),
+    ServeStaticModule.forRoot({
+      serveRoot:'/images',
+      rootPath: join(__dirname, 'public/images'),
+    }),
     AuthModule,
     UsersModule,
     HarvesterModule,

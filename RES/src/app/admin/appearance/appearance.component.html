@@ -1,0 +1,50 @@
+<div class="row">
+    <div class="col-md-12 p-5">
+        <mat-card>
+            <mat-card-title>
+                Appearance
+                <button class="save" (click)="save()" color="primary" mat-raised-button>
+                    Save
+                    <mat-icon>save</mat-icon>
+                </button>
+                <hr>
+            </mat-card-title>
+            <mat-card-content>
+                <form [formGroup]="form">
+                    <div class="row">
+                        <div class="col-12">
+                            <div>
+                                <mat-form-field>
+                                    <mat-label>Website Name</mat-label>
+                                    <input matInput formControlName="website_name" placeholder="Website Name" required>
+                                </mat-form-field>
+                            </div>
+                            <div>
+                                <mat-form-field>
+                                    <mat-label>Primary Color</mat-label>
+                                    <input (colorPickerClose)="colorPickerClose($event)" [(colorPicker)]="color"
+                                        [value]="color" matInput formControlName="primary_color"
+                                        placeholder="Publications" required>
+                                    <button [style.background]="color" mat-icon-button matSuffix>
+                                        <mat-icon>brush</mat-icon>
+                                    </button>
+                                </mat-form-field>
+                            </div>
+                            <div class="file">
+                                <mat-label>Logo: </mat-label>
+                                <input *ngIf="!logo" type="file" (change)="logoChange($event)"
+                                    placeholder="Logo" required>
+                                <div *ngIf="logo" class="logo">
+                                    <button (click)="logo = null" color="warn" mat-icon-button>
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                    <img [src]="'http://localhost:3000'+logo" alt="logo">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

@@ -18,7 +18,7 @@ export class UsersService {
 
       query = '?' + querystring.stringify(obj)
     }
-    return this.http.get(environment.api + 'users' + query).pipe(map((data: any) => {
+    return this.http.get(environment.api + '/users' + query).pipe(map((data: any) => {
 
       data.hits = data.hits.map(element => { return { ...{ id: element._id }, ...element._source } })
 
@@ -34,7 +34,7 @@ export class UsersService {
     }
 
 
-    return await this.http.get(environment.api + 'users' + query).pipe(map((data: any) => {
+    return await this.http.get(environment.api + '/users' + query).pipe(map((data: any) => {
 
       data.hits = data.hits.map(element => { return { ...{ id: element._id }, ...element._source } })
       return data;
@@ -42,7 +42,7 @@ export class UsersService {
   }
 
   async  PostUser(data) {
-    return await this.http.post(environment.api + 'users', data).pipe(map((data: any) => {
+    return await this.http.post(environment.api + '/users', data).pipe(map((data: any) => {
       return data;
     })).toPromise();
   }

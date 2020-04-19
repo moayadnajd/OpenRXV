@@ -5,10 +5,13 @@ import { ValuesController } from './values/values.controller';
 import { SettingsController } from './settings/settings.controller';
 import { JsonFilesService } from './json-files/json-files.service';
 import { HarvesterModule } from 'src/harvester/harvester.module';
-
+import { MulterModule } from '@nestjs/platform-express';
+import { join } from 'path';
 @Module({
   controllers: [MetadataController, ValuesController, SettingsController],
-  imports:[SharedModule,HttpModule,HarvesterModule],
+  imports: [SharedModule, HttpModule, HarvesterModule, MulterModule.register({
+    dest: join(__dirname, '../public/uploads'),
+  })],
   providers: [JsonFilesService]
 })
-export class AdminModule {}
+export class AdminModule { }

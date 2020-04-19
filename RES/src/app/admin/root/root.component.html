@@ -1,18 +1,8 @@
 <ngx-loading-bar ref="http" [includeSpinner]="false"></ngx-loading-bar>
-<div class="row">
-  <div class="container-fluid">
-    <mat-toolbar color="primary" class="toolbar-style">
-      <mat-toolbar-row>
-        <img src="assets/AReS2.png" alt="AReS logo" class="nab-bar-images" />
-
-      </mat-toolbar-row>
-    </mat-toolbar>
-
-  </div>
-</div>
 <mat-drawer-container class="container-admin">
   <mat-drawer width="300px" mode="side" opened>
-
+    <h3 class="p-1 pt-2 text-center">OpenRXV</h3>
+    <hr class="mb-3">
     <mat-nav-list>
 
       <!-- <a mat-list-item routerLink="/admin" routerLinkActive="active" routerLinkActive="active"
@@ -25,8 +15,10 @@
         [routerLinkActiveOptions]="{exact: true}">Mapping Values</a>
       <a mat-list-item routerLink="/admin/setup" routerLinkActive="active" routerLinkActive="active"
         [routerLinkActiveOptions]="{exact: true}"> Settings </a>
-        <a mat-list-item routerLink="/admin/desgin" routerLinkActive="active" routerLinkActive="active"
+      <a mat-list-item routerLink="/admin/desgin" routerLinkActive="active" routerLinkActive="active"
         [routerLinkActiveOptions]="{exact: true}"> Design </a>
+      <a mat-list-item routerLink="/admin/appearance" routerLinkActive="active" routerLinkActive="active"
+        [routerLinkActiveOptions]="{exact: true}"> Appearance </a>
 
     </mat-nav-list>
   </mat-drawer>

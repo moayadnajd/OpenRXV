@@ -34,6 +34,8 @@ import { StructureComponent } from './design/components/structure/structure.comp
 import { FormDialogComponent } from './design/components/form-dialog/form-dialog.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { GridComponent } from './design/components/grid/grid.component';
+import { AppearanceComponent } from './appearance/appearance.component';
+import { ColorPickerModule } from 'ngx-color-picker';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -52,6 +54,7 @@ import { GridComponent } from './design/components/grid/grid.component';
     StructureComponent,
     FormDialogComponent,
     GridComponent,
+    AppearanceComponent,
   ],
   imports: [
     BrowserModule,
@@ -64,6 +67,7 @@ import { GridComponent } from './design/components/grid/grid.component';
     LoadingBarHttpClientModule,
     LoadingBarRouterModule,
     NgSelectModule,
+    ColorPickerModule
 
   ],
   providers: [{

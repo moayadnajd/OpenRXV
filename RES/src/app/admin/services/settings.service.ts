@@ -10,25 +10,25 @@ export class SettingsService {
 
   constructor(private http: HttpClient) { }
   async  save(data) {
-    return await this.http.post(environment.api + 'settings', data).pipe(map((data: any) => {
+    return await this.http.post(environment.api + '/settings', data).pipe(map((data: any) => {
       return data;
     })).toPromise();
   }
 
   async  saveExplorerSettings(data) {
-    return await this.http.post(environment.api + 'settings/explorer', data).pipe(map((data: any) => {
+    return await this.http.post(environment.api + '/settings/explorer', data).pipe(map((data: any) => {
       return data;
     })).toPromise();
   }
 
   async  readExplorerSettings() {
-    return await this.http.get(environment.api + 'settings/explorer').pipe(map((data: any) => {
+    return await this.http.get(environment.api + '/settings/explorer').pipe(map((data: any) => {
       return data;
     })).toPromise();
   }
 
   async  read() {
-    return await this.http.get(environment.api + 'settings').pipe(map((data: any) => {
+    return await this.http.get(environment.api + '/settings').pipe(map((data: any) => {
       return data;
     })).toPromise();
   }
@@ -36,10 +36,18 @@ export class SettingsService {
 
   async retreiveMetadata(linlk) {
 
-    return await this.http.get(environment.api + 'settings/autometa?link=' + linlk).pipe(map((data: any) => {
+    return await this.http.get(environment.api + '/settings/autometa?link=' + linlk).pipe(map((data: any) => {
       return data;
     })).toPromise();
 
+  }
+
+  async upload(file: File, name: string) {
+    let formdata = new FormData()
+    formdata.append('file', file)
+    return await this.http.post(environment.api + '/settings/upload/image/' + name, formdata).pipe(map((data: any) => {
+      return data.path;
+    })).toPromise();
   }
 
 }

@@ -1,0 +1,30 @@
+mat-card {
+  min-height: 900px;
+}
+
+.save {
+  float: right;
+}
+
+.file {
+  padding-top: 20px;
+  * {
+    float: left;
+  }
+  .logo {
+    position: relative;
+    width: 167px;
+    display: inline-block;
+    img {
+      width: 100%;
+      background-color: #ededed;
+    }
+    button {
+      position: absolute;
+      right: 0;
+      width: 24px;
+      height: 24px;
+      top: 0;
+    }
+  }
+}

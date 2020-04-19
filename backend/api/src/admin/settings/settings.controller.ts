@@ -1,9 +1,11 @@
-import { Controller, UseGuards, Post, Body, Get, HttpService, Query } from '@nestjs/common';
+import { Controller, UseGuards, Post, Body, Get, HttpService, Query, UseInterceptors, UploadedFile, Logger, Request, Param } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { JsonFilesService } from '../json-files/json-files.service';
 import { map } from 'rxjs/operators';
-import { RequestParams } from '@elastic/elasticsearch';
 import { HarvesterService } from 'src/harvester/services/harveter.service';
+import { FileInterceptor, MulterModule } from '@nestjs/platform-express'
+import { join } from 'path';
+import * as fs from 'fs';
 
 @Controller('settings')
 export class SettingsController {
@@ -320,7 +322,9 @@ export class SettingsController {
     @UseGuards(AuthGuard('jwt'))
     @Post('explorer')
     async  SaveExplorer(@Body() body: any) {
-        await this.jsonfielServoce.save(body, '../../../../config/explorer.json');
+        let tokeep = await this.jsonfielServoce.read('../../../../config/explorer.json')
+        let tosave = { ...tokeep, ...body };
+        await this.jsonfielServoce.save(tosave, '../../../../config/explorer.json');
         return { success: true }
     }
 
@@ -380,4 +384,15 @@ export class SettingsController {
         return data;
     }
 
+    @Post('upload/image/:name')
+    @UseInterceptors(FileInterceptor('file', {
+        preservePath: true, fileFilter: this.imageFileFilter, dest: join(__dirname, '../../public/images')
+    }))
+    async uploadFile(@UploadedFile() file, @Param('name') name: string) {
+        console.log(file)
+        let splited = file.originalname.split('.');
+        let response = join(__dirname, '../../public/images/') + name + '.' + splited[splited.length - 1];
+        await fs.renameSync(join(__dirname, '../../public/images/') + file.filename, response)
+        return { path: response.slice(response.indexOf('public/') + 6) };
+    }
 }

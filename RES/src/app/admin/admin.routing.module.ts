@@ -10,6 +10,7 @@ import { MappingValuesComponent } from './components/mapping-values/mapping-valu
 import { SetupComponent } from './components/setup/setup.component';
 import { SharedComponent } from './components/shared/shared.component';
 import { DesignComponent } from './design/design.component';
+import { AppearanceComponent } from './appearance/appearance.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -17,6 +18,7 @@ const routes: Routes = [
     path: 'admin', component: RootComponent, children: [
       { path: '', component: UsersComponent, canActivate: [AdminGuard] },
       { path: 'dashboard', component: DashboardComponent, canActivate: [AdminGuard] },
+      { path: 'appearance', component: AppearanceComponent, canActivate: [AdminGuard] },
       { path: 'users', component: UsersComponent, canActivate: [AdminGuard] },
       { path: 'shared', component: SharedComponent, canActivate: [AdminGuard] },
       { path: 'mapping-values', component: MappingValuesComponent, canActivate: [AdminGuard] },

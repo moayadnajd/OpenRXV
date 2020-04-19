@@ -1,4 +1,4 @@
-@import '../../scss/responsive.scss';
+@import "../../scss/responsive.scss";
 
 .mat-toolbar-row {
   // height: 80px !important;
@@ -49,4 +49,10 @@ button {
     max-width: $minMax !important;
     min-width: $minMax !important;
   }
+}
+
+.website_name {
+}
+.mat-drawer-container {
+  position: inherit !important;
 }
