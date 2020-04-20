@@ -87,7 +87,7 @@
 }
 // nouislider theming
 .noUi-connect {
-  background: map-get($customTheme, 900) !important;
+  background: map-get($customTheme, 200) !important;
 }
 
 $plant-primary: mat-palette($customTheme);

@@ -125,6 +125,11 @@ export class DesignComponent implements OnInit {
 
     if (obj.placeholder)
       temp['placeholder'] = obj.placeholder
+    if (obj.description)
+      temp['description'] = obj.description
+
+    if (obj.border)
+      temp['border'] = obj.border
 
     if (obj.source)
       temp['source'] = obj.source == 'total' ? obj.source : obj.source + '.keyword'

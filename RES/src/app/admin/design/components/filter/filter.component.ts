@@ -15,78 +15,111 @@ export class FilterComponent implements OnInit {
   dialogRef: MatDialogRef<any>
   form_data = [];
   icon: string;
-  iconText:string;
+  iconText: string;
   pre: any
-  restart() {
-    this.form_data = [
-      {
-        name: 'component',
-        label: 'Item Type',
-        type: 'select',
-        items: [
-          { name: "Label", value: "LabelComponent" },
-          { name: "Select", value: "SelectComponent" },
-          { name: "Search", value: "SearchComponent" },
-          { name: "Range", value: "RangeComponent" },
-        ],
-        onChange: (event) => {
-          if (event.name == 'Search') {
-            this.form_data.splice(1, 1)
-            this.form_data.splice(2, 2)
-          }
-          else {
-            if (this.pre && this.pre.name == "Search") {
-              this.restart()
-              this.dialogRef.close();
-              this.openDialog();
+  baseform = [
+    {
+      name: 'component',
+      label: 'Item Type',
+      type: 'select',
+      items: [
+        { name: "Label", value: "LabelComponent" },
+        { name: "Select", value: "SelectComponent" },
+        { name: "Search", value: "SearchComponent" },
+        { name: "Range", value: "RangeComponent" },
+      ],
+      required: true,
+      onChange: (event) => {
+        this.pre = event;
+        this.setFormDataOprions(event.value)
+        this.dialogRef.close();
+        this.openDialog();
+
+
+      },
+    }
+  ];
+
+
+  setFormDataOprions(value) {
+
+    switch (value) {
+      case 'SearchComponent':
+        this.form_data = [...this.baseform, ...
+          [
+            {
+              name: 'placeholder',
+              label: 'Placeholder',
+              type: 'text',
+              required: true,
             }
-          }
-
-          if (event.name == 'Label')
-            this.form_data.splice(2, 3)
-          else {
-            if (this.pre && this.pre.name == "Label") {
-              this.restart()
-              this.dialogRef.close();
-              this.openDialog();
+          ]
+        ]
+        break;
+      case 'LabelComponent':
+        this.form_data = [...this.baseform, ...
+          [
+            {
+              name: 'text',
+              label: 'Text',
+              type: 'textarea',
+              required: true,
+            },
+            {
+              name: 'border',
+              label: 'Border under label',
+              type: 'check',
+              required: true,
+            },
+            {
+              name: 'description',
+              label: 'Text',
+              type: 'textarea',
+              required: false,
             }
-          }
-          this.pre = event;
-        },
-        required: true,
-      },
-      {
-        ngIf: (event = null) => {
-          if (this.pre)
-            return this.pre.name == "Label" || event == "Label"
-          else
-            return false
-        },
-        name: 'text',
-        label: 'Text',
-        type: 'textarea',
-        required: false,
-      },
-      {
-        name: 'placeholder',
-        label: 'Placeholder',
-        type: 'text',
-        required: true,
-      },
-      {
-        name: 'source',
-        label: 'Data Source',
-        type: 'metadata',
-        required: true,
-      },
-      {
-        name: 'addInMainQuery',
-        label: 'Add the aggrigation in main query',
-        type: 'check',
-        required: true,
-      }];
-
-
+          ]
+        ]
+        break;
+      case 'RangeComponent':
+        this.form_data = [...this.baseform, ...
+          [
+            {
+              name: 'placeholder',
+              label: 'Placeholder',
+              type: 'text',
+              required: true,
+            }
+          ]
+        ]
+        break;
+      case 'SelectComponent':
+        this.form_data = [...this.baseform, ...
+          [
+            {
+              name: 'source',
+              label: 'Data Source',
+              type: 'metadata',
+              required: true,
+            },
+            {
+              name: 'placeholder',
+              label: 'Placeholder',
+              type: 'text',
+              required: true,
+            },
+            {
+              name: 'addInMainQuery',
+              label: 'Add the aggrigation in main query',
+              type: 'check',
+              required: true,
+            }
+          ]
+        ]
+        break;
+      default:
+        this.form_data = this.baseform;
+        break;
+    }
   }
 
   @Input() configs;
@@ -114,23 +147,23 @@ export class FilterComponent implements OnInit {
     this.iconText = iconsTexts[this.configs.component];
   }
   ngOnInit(): void {
-    this.restart()
-    if (this.configs.component == 'LabelComponent') {
-      this.form_data.splice(2, 3)
-      this.pre = { name: "Label", value: "LabelComponent" }
-    }
+    this.form_data = this.baseform;
     if (!this.configs.component) {
+
       this.openDialog();
 
-    } else
+    } else {
+      this.setFormDataOprions(this.configs.component)
       this.setIcon()
-
+    }
 
 
 
   }
 
   openDialog(): void {
+    if (this.pre)
+      this.configs.component = this.pre.value;
 
     this.dialogRef = this.dialog.open(FormDialogComponent, {
       width: '456px',

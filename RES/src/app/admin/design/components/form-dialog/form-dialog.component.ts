@@ -13,6 +13,7 @@ export class FormDialogComponent implements OnInit {
   form: FormGroup = new FormGroup({
     icon: new FormControl('')
   });
+  formControls = [];
   metadata = []
   constructor(
     private metadataService: MetadataService,
@@ -34,19 +35,17 @@ export class FormDialogComponent implements OnInit {
   }
   async ngOnInit() {
     let FormGroupControls: any = {};
-    console.log(this.data.configs);
     this.data.form_data.forEach(element => {
-      
       if (this.data.configs.componentConfigs[element.name] != null)
-        FormGroupControls[element.name] = new FormControl(this.data.configs.componentConfigs[element.name]);
+        FormGroupControls[element.name] = new FormControl(element.name == 'source' ? this.data.configs.componentConfigs[element.name].replace('.keyword', '') : this.data.configs.componentConfigs[element.name])
       else if (this.data.configs[element.name])
-        FormGroupControls[element.name] = new FormControl(this.data.configs[element.name]);
+        FormGroupControls[element.name] = new FormControl(this.data.configs[element.name])
       else
         FormGroupControls[element.name] = new FormControl(null);
     });
-    console.log(this.form)
     this.form = new FormGroup(FormGroupControls);
     this.metadata = await this.metadataService.get()
+    this.formControls = this.data.form_data;
 
   }
 

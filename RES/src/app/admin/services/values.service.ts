@@ -33,19 +33,19 @@ export class ValuesService {
   }
 
   async  put(id, data) {
-    return await this.http.put(environment.api + `values/${id}`, data).pipe(map((data: any) => {
+    return await this.http.put(environment.api + `/values/${id}`, data).pipe(map((data: any) => {
       return data;
     })).toPromise();
   }
 
   async  delete(id) {
-    return await this.http.delete(environment.api + `values/${id}`).pipe(map((data: any) => {
+    return await this.http.delete(environment.api + `/values/${id}`).pipe(map((data: any) => {
       return data;
     })).toPromise();
   }
 
   async  findOne(id) {
-    return await this.http.get(environment.api + `values/${id}`).pipe(map((data: any) => {
+    return await this.http.get(environment.api + `/values/${id}`).pipe(map((data: any) => {
       return data;
     })).toPromise();
   }

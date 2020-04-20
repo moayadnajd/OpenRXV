@@ -358,8 +358,8 @@ export class SettingsController {
     @Get('metadata')
     async  getMetadata() {
         let data = await this.jsonfielServoce.read('../../../../config/data.json');
-
-        return Array.from(new Set([].concat.apply([], data.repositories.map(d => [...d.schema, ...d.metadata]))));
+        var merged = [].concat.apply([], data.repositories.map(d => [...d.schema, ...d.metadata]));
+        return [... new Set(merged.map(d => d.disply_name))];
     }
 
     @UseGuards(AuthGuard('jwt'))

@@ -48,19 +48,19 @@ export class UsersService {
   }
 
   async  updateUser(id, data) {
-    return await this.http.put(environment.api + `users/${id}`, data).pipe(map((data: any) => {
+    return await this.http.put(environment.api + `/users/${id}`, data).pipe(map((data: any) => {
       return data;
     })).toPromise();
   }
 
   async  deleteUser(id) {
-    return await this.http.delete(environment.api + `users/${id}`).pipe(map((data: any) => {
+    return await this.http.delete(environment.api + `/users/${id}`).pipe(map((data: any) => {
       return data;
     })).toPromise();
   }
 
   async  getUser(id) {
-    return await this.http.get(environment.api + `users/${id}`).pipe(map((data: any) => {
+    return await this.http.get(environment.api + `/users/${id}`).pipe(map((data: any) => {
       return data;
     })).toPromise();
   }

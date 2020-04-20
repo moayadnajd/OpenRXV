@@ -11,7 +11,7 @@ export class MetadataService {
 
 
   async  get() {
-    return await this.http.get(environment.api + `settings/metadata`).pipe(map((data: any) => {
+    return await this.http.get(environment.api + `/settings/metadata`).pipe(map((data: any) => {
       return data;
     })).toPromise();
   }
