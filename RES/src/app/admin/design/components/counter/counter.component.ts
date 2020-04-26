@@ -32,7 +32,19 @@ export class CounterComponent implements OnInit {
       label: 'Tour Description',
       type: 'textarea',
       required: true
-    }
+    },
+    {
+      name: 'filter',
+      label: 'Value to filter the counter on',
+      type: 'text',
+      required: false
+    },
+    {
+      name: 'percentageFromTotal',
+      label: 'Show Percentage From Total',
+      type: 'check',
+      required: false
+    },
   ];
 
   @Input() configs;

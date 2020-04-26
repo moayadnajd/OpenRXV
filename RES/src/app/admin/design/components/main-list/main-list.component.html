@@ -1,0 +1,94 @@
+<div class="row">
+    <div class="col-12">
+        <form class="base" [formGroup]="listForm">
+            <p>
+                <mat-form-field class="base">
+                    <input type="text" matInput placeholder="Item title" required formControlName="title">
+                </mat-form-field>
+            </p>
+            <p>
+                <mat-form-field class="base">
+                    <input type="text" matInput placeholder="Item Description" required formControlName="description">
+                </mat-form-field>
+
+            </p>
+
+            <h5 class="pt-3">Tags</h5>
+            <hr>
+            <ng-container formArrayName="tags">
+                <form class="pl-2" *ngFor="let form of tagsControls; let i = index;" [formGroup]="form">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <mat-form-field>
+                                <input type="text" matInput placeholder="Data Source" required
+                                    formControlName="metadata">
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                            <mat-form-field>
+                                <input type="text" matInput placeholder="Tag Title" required
+                                    formControlName="disply_name">
+                            </mat-form-field>
+                        </div>
+                        <div *ngIf="i > 0" class="col-md-4">
+                            <button class="pull-right" (click)="delete('tags',i)" color="warn" mat-icon-button>
+                                <mat-icon aria-hidden="false" aria-label="delete">delete
+                                </mat-icon>
+                            </button>
+                        </div>
+                    </div>
+
+
+                </form>
+            </ng-container>
+            <div class="col-md-12 text-center">
+                <button class="float-left mb-2" (click)="AddNewdata(tagsControls,'tags')" mat-raised-button>
+                    New Tag
+                    <mat-icon aria-hidden="false" aria-label="add">add
+                    </mat-icon>
+                </button>
+            </div>
+            <h5>Sort By Options:</h5>
+            <hr>
+            <ng-container formArrayName="filterOptions">
+                <form class="pl-2" *ngFor="let form of filterOptions; let i = index;" [formGroup]="form">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <mat-form-field>
+                                <input type="text" matInput placeholder="Data Source" required formControlName="value">
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-3">
+                            <mat-form-field>
+                                <input type="text" matInput placeholder="Tag Title" required formControlName="display">
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-3">
+                            <mat-form-field>
+                                <input type="text" matInput placeholder="Sort" required formControlName="sort">
+                            </mat-form-field>
+                        </div>
+                        <div *ngIf="i > 0" class="col-md-3">
+                            <button class="pull-right" (click)="delete('filterOptions',i)" color="warn" mat-icon-button>
+                                <mat-icon aria-hidden="false" aria-label="delete">delete
+                                </mat-icon>
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+            </ng-container>
+            <div class="col-md-12 text-center">
+                <button class="float-left mb-2" (click)="AddNewdata(filterOptions,'options')" mat-raised-button>
+                    New Option
+                    <mat-icon aria-hidden="false" aria-label="add">add
+                    </mat-icon>
+                </button>
+            </div>
+
+            <button class="float-left" (click)="save()" color="primary" mat-raised-button>
+                Save
+            </button>
+        </form>
+    </div>
+</div>

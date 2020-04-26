@@ -4,6 +4,7 @@ import { SettingsService } from '../services/settings.service';
 import { MatDialog } from '@angular/material/dialog';
 import { GridComponent } from './components/grid/grid.component';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { SortComponent } from './components/sort/sort.component';
 
 @Component({
   selector: 'app-design',
@@ -15,7 +16,6 @@ export class DesignComponent implements OnInit {
   counters: Array<any> = []
   filters: Array<any> = []
   dashboard: Array<any> = []
-  icons = []
   newRow(): void {
     const dialogRef = this.dialog.open(GridComponent, {
       width: '450px'
@@ -26,19 +26,30 @@ export class DesignComponent implements OnInit {
         this.dashboard.push(result)
     });
   }
+
+  sortCounter() {
+    const dialogRef = this.dialog.open(SortComponent, {
+      data: this.counters,
+      width: '450px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result)
+        this.counters = result
+    });
+  }
   async ngOnInit() {
 
     let { counters, filters, dashboard } = await this.settingsService.readExplorerSettings()
     this.counters = counters;
     this.filters = filters;
     this.dashboard = dashboard;
-    this.icons = this.dashboard.map(d => d[0]?.scroll?.icon);
-    console.log(this.icons)
   }
 
   onAddDashboardComponent(index2, index) {
     console.log('onAddDashboardComponent', index2, index)
     this.dashboard[index][index2] = this.createDashboardItem({}, index, index2);
+
   }
   dashboardEdited(event, index) {
     this.dashboard[index][event.index] = this.createDashboardItem(event.result, index, event.index);
@@ -70,7 +81,6 @@ export class DesignComponent implements OnInit {
   }
   dropDashboard(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.dashboard, event.previousIndex, event.currentIndex);
-    this.icons = this.dashboard.map(d => d[0]?.scroll?.icon);
   }
   dropFilter(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.filters, event.previousIndex, event.currentIndex);
@@ -98,9 +108,20 @@ export class DesignComponent implements OnInit {
 
     if (obj.description)
       temp['description'] = obj.description
-
     if (obj.source)
       temp['source'] = obj.source == 'total' ? obj.source : obj.source
+    if (obj.source_x && obj.source_y) {
+      temp['source'] = [obj.source_x, obj.source_y + '.keyword'];
+      temp['source_y'] = obj.source_x;
+      temp['source_x'] = obj.source_y;
+      temp['id'] = obj.source_x + '_' + obj.source_y + '_' + index + '_' + index1
+    }
+
+    if (obj.content)
+      temp['content'] = obj.content;
+
+
+
     if (obj.source)
       temp['id'] = temp['source'] + '_' + index + '_' + index1
 
@@ -147,14 +168,34 @@ export class DesignComponent implements OnInit {
     }
   }
   createCounter(obj) {
+    let temp = {};
+
+
+    if (obj.title)
+      temp['title'] = obj.title;
+
+    if (obj.description)
+      temp['description'] = obj.description;
+
+    if (obj.source) {
+      temp['source'] = obj.source == 'total' ? obj.source : obj.source + '.keyword'
+
+      temp['id'] = 'counter_' + obj.source;
+      if (obj.filter) {
+        temp['id'] = 'counter_' + obj.source + obj.filter.replace(/\s/g, '');
+      }
+    }
+
+
+    if (obj.filter)
+      temp['filter'] = obj.filter
+
+    if (obj.percentageFromTotal)
+      temp['percentageFromTotal'] = obj.percentageFromTotal
+
     return {
       show: true,
-      componentConfigs: {
-        id: 'counter_' + obj.source,
-        title: obj.title,
-        source: obj.source ? obj.source == 'total' ? obj.source : obj.source + '.keyword' : null,
-        description: obj.description,
-      } as ComponentCounterConfigs,
+      componentConfigs: temp as ComponentCounterConfigs,
       scroll: {
         icon: 'dashboard',
       },

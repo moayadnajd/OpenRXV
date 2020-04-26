@@ -14,13 +14,17 @@ export class StructureComponent implements OnInit {
   @Output() onDelete: EventEmitter<boolean> = new EventEmitter()
   @Output() rowDeleted: EventEmitter<boolean> = new EventEmitter()
   class_names = []
+  currentIndex
   options = [
     { name: "Pie Chart", value: "PieComponent", icon: "pie_chart" },
-    { name: "Word Cloud", value: "WordcloudComponent", icon: "filter_drama" }
+    { name: "Word Cloud", value: "WordcloudComponent", icon: "filter_drama" },
+    { name: "World Map", value: "MapComponent", icon: "map" },
+    { name: "List", value: "ListComponent", icon: "list" },
+    { name: "Bars Chart", value: "BarComponent", icon: "bar_chart" },
+    { name: "Main Items list", value: "ItemsListComponent", icon: "view_list" }
   ]
   pre
-  dialogRef: MatDialogRef<any>
-  form_data = [
+  baseform = [
     {
       name: 'component',
       label: 'Compinent Type',
@@ -28,29 +32,15 @@ export class StructureComponent implements OnInit {
       items: this.options,
       onChange: (event) => {
         this.pre = event;
+        this.setFormDataOprions(event.value)
+        this.dialogRef.close();
+        this.openDialog(this.currentIndex);
       },
       required: true,
     },
-    {
-      name: 'title',
-      label: 'Title',
-      type: 'text',
-      required: true,
-    },
-    {
-      name: 'source',
-      label: 'Data Source',
-      type: 'metadata',
-      required: true,
-    },
-    {
-      name: 'description',
-      label: 'Tour Desctiption',
-      type: 'textarea',
-      required: true,
-    }
-
-  ];
+  ]
+  dialogRef: MatDialogRef<any>
+  form_data = [];
   @Input() grid;
 
   dialogReficons: MatDialogRef<any>
@@ -63,22 +53,106 @@ export class StructureComponent implements OnInit {
     {
       name: 'icon',
       label: 'Select Icon',
-      icons:true,
+      icons: true,
       type: 'select',
       items: icons_list.map(d => { return { name: d.name, value: d.name } }),
       onChange: (event) => {
-        this.pre = event;
+        // this.pre = event;
       },
       required: true,
     }
   ]
+
+  setFormDataOprions(value) {
+
+    switch (value) {
+      case 'BarComponent':
+        this.form_data = [...this.baseform, ...
+          [
+
+            {
+              name: 'title',
+              label: 'Title',
+              type: 'text',
+              required: true,
+            },
+            {
+              name: 'source_x',
+              label: 'Data Source x',
+              type: 'metadata',
+              required: true,
+            },
+            {
+              name: 'source_y',
+              label: 'Data Source y',
+              type: 'metadata',
+              required: true,
+            },
+            {
+              name: 'description',
+              label: 'Tour Desctiption',
+              type: 'textarea',
+              required: true,
+            }]
+        ]
+        break;
+
+      case 'ItemsListComponent':
+        this.form_data = [...this.baseform, ...
+          [
+
+            {
+              name: 'title',
+              label: 'Title',
+              type: 'text',
+              required: true,
+            },
+            {
+              name: 'description',
+              label: 'Tour Desctiption',
+              type: 'textarea',
+              required: true,
+            }]
+        ]
+        break;
+
+      default:
+        this.form_data = [...this.baseform, ...
+          [
+
+            {
+              name: 'title',
+              label: 'Title',
+              type: 'text',
+              required: true,
+            },
+            {
+              name: 'source',
+              label: 'Data Source',
+              type: 'metadata',
+              required: true,
+            },
+            {
+              name: 'description',
+              label: 'Tour Desctiption',
+              type: 'textarea',
+              required: true,
+            }]
+        ]
+        break;
+    }
+  }
   constructor(public dialog: MatDialog) { }
 
   ngOnInit(): void {
+
     this.grid.forEach((element, index) => {
       this.class_names[index] = element.class
     });
     this.iconConfigs.componentConfigs.icon = this.grid[0]?.scroll?.icon || null
+
+
+
   }
 
   addComponent(event) {
@@ -110,6 +184,17 @@ export class StructureComponent implements OnInit {
     this.rowDeleted.emit(true)
   }
 
+  contentChange(content, i) {
+    this.grid[i].componentConfigs['content'] = content
+    let cat = {
+      class: this.class_names[i],
+      component: this.grid[i].component,
+      ...this.grid[i].componentConfigs
+    }
+    console.log(cat)
+    this.edited.emit({ result: cat, index: i })
+  }
+
   setIcon() {
 
     this.dialogReficons = this.dialog.open(FormDialogComponent, {
@@ -134,7 +219,10 @@ export class StructureComponent implements OnInit {
   }
 
   openDialog(index): void {
-
+    if (this.pre)
+      this.grid[index].component = this.pre.value;
+    this.currentIndex = index;
+    this.setFormDataOprions(this.grid[index].component)
     this.dialogRef = this.dialog.open(FormDialogComponent, {
       width: '456px',
       data: { form_data: this.form_data, configs: this.grid[index] }
@@ -144,8 +232,11 @@ export class StructureComponent implements OnInit {
     this.dialogRef.afterClosed().subscribe(result => {
 
       if (result) {
+        if (this.grid[index].scroll)
+          result['scroll'] = this.grid[index].scroll
         result.class = this.class_names[index];
         this.edited.emit({ result, index })
+
       }
       else if (!this.grid[index].component)
         this.delete(index)

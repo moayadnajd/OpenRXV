@@ -36,6 +36,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { GridComponent } from './design/components/grid/grid.component';
 import { AppearanceComponent } from './appearance/appearance.component';
 import { ColorPickerModule } from 'ngx-color-picker';
+import { SortComponent } from './design/components/sort/sort.component';
+import { MainListComponent } from './design/components/main-list/main-list.component';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -55,6 +57,8 @@ import { ColorPickerModule } from 'ngx-color-picker';
     FormDialogComponent,
     GridComponent,
     AppearanceComponent,
+    SortComponent,
+    MainListComponent,
   ],
   imports: [
     BrowserModule,
