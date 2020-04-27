@@ -46,7 +46,7 @@ export class SettingsService {
     let formdata = new FormData()
     formdata.append('file', file)
     return await this.http.post(environment.api + '/settings/upload/image/' + name, formdata).pipe(map((data: any) => {
-      return data.path;
+      return data.location;
     })).toPromise();
   }
 

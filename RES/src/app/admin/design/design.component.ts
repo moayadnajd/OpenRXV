@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { GridComponent } from './components/grid/grid.component';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { SortComponent } from './components/sort/sort.component';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-design',
@@ -16,6 +17,28 @@ export class DesignComponent implements OnInit {
   counters: Array<any> = []
   filters: Array<any> = []
   dashboard: Array<any> = []
+  footer:any=null;
+  footerEditor = {
+    height: 500,
+    menubar: 'insert',
+    forced_root_block : 'div',
+    forced_root_block_attrs: {
+      'class': 'row'
+    },
+    images_upload_url: environment.api + '/settings/upload/image/random',
+    images_upload_base_path: environment.api,
+    plugins: [
+      'advlist autolink lists link image charmap print preview anchor',
+      'searchreplace visualblocks code fullscreen',
+      'insertdatetime media table paste code help wordcount',
+      'image code'
+    ],
+    toolbar:
+      'undo redo | formatselect | bold italic backcolor | \
+      alignleft aligncenter alignright alignjustify | \
+      bullist numlist outdent indent | removeformat | image | code'
+
+  }
   newRow(): void {
     const dialogRef = this.dialog.open(GridComponent, {
       width: '450px'
@@ -40,10 +63,11 @@ export class DesignComponent implements OnInit {
   }
   async ngOnInit() {
 
-    let { counters, filters, dashboard } = await this.settingsService.readExplorerSettings()
+    let { counters, filters, dashboard ,footer} = await this.settingsService.readExplorerSettings()
     this.counters = counters;
     this.filters = filters;
     this.dashboard = dashboard;
+    this.footer=footer
   }
 
   onAddDashboardComponent(index2, index) {
@@ -99,7 +123,7 @@ export class DesignComponent implements OnInit {
       this.counters.splice(i, 1);
   }
   async save() {
-    await this.settingsService.saveExplorerSettings({ counters: this.counters, filters: this.filters, dashboard: this.dashboard });
+    await this.settingsService.saveExplorerSettings({ counters: this.counters, filters: this.filters, dashboard: this.dashboard,footer:this.footer });
   }
   createDashboardItem(obj, index, index1) {
     let temp = {};

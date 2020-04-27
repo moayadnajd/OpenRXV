@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormGroup, FormControl, FormArray } from '@angular/forms';
+import { MetadataService } from 'src/app/admin/services/metadata.service';
 
 @Component({
   selector: 'app-main-list',
@@ -11,11 +12,14 @@ export class MainListComponent implements OnInit {
   @Input() content: any = null;
   tagsControls = [];
   filterOptions = [];
+  metadata = [];
   listForm: FormGroup = new FormGroup({
     title: new FormControl(''),
     description: new FormControl(''),
     identifierUri: new FormControl(''),
     altmetric: new FormControl(''),
+    tags: new FormArray([]),
+    filterOptions: new FormArray([])
   });
   baseFilterOptions(element = null) {
     return {
@@ -30,13 +34,14 @@ export class MainListComponent implements OnInit {
       disply_name: new FormControl(element ? element.disply_name : ''),
     }
   }
-  constructor() { }
+  constructor(private metadataService: MetadataService) { }
   save() {
     if (this.listForm.valid)
       this.edited.emit(this.listForm.value)
-    console.log(this.listForm.value);
   }
-  ngOnInit(): void {
+  async ngOnInit() {
+
+    this.metadata = await this.metadataService.get()
     console.log(this.content)
     if (this.content && this.content.tags)
       this.content.tags.forEach(element => {
@@ -55,28 +60,30 @@ export class MainListComponent implements OnInit {
 
     if (this.content)
       this.listForm.patchValue(this.content);
-
-
   }
   delete(type, index) {
     if (type == 'tags') {
       this.tagsControls.splice(index, 1)
-      this.listForm.removeControl('tags');
+      if (this.listForm.get('tags'))
+        this.listForm.removeControl('tags');
       this.listForm.addControl('tags', new FormArray(this.tagsControls))
     } else {
       this.filterOptions.splice(index, 1)
-      this.listForm.removeControl('filterOptions');
+      if (this.listForm.get('filterOptions'))
+        this.listForm.removeControl('filterOptions');
       this.listForm.addControl('filterOptions', new FormArray(this.filterOptions))
     }
   }
   AddNewdata(array, type) {
     if (type == 'tags') {
       this.tagsControls.push(new FormGroup(this.baseTags()))
-      this.listForm.removeControl('tags');
+      if (this.listForm.get('tags'))
+        this.listForm.removeControl('tags');
       this.listForm.addControl('tags', new FormArray(this.tagsControls))
     } else {
       this.filterOptions.push(new FormGroup(this.baseFilterOptions()))
-      this.listForm.removeControl('filterOptions');
+      if (this.listForm.get('filterOptions'))
+        this.listForm.removeControl('filterOptions');
       this.listForm.addControl('filterOptions', new FormArray(this.filterOptions))
     }
   }

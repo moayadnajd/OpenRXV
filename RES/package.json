@@ -33,6 +33,7 @@
     "@ngx-loading-bar/router": "^4.2.0",
     "@nicky-lenaers/ngx-scroll-to": "^3.0.1",
     "@thisissoon/angular-inviewport": "^4.2.2",
+    "@tinymce/tinymce-angular": "^3.5.0",
     "@types/xlsx": "0.0.36",
     "bodybuilder": "^2.2.21",
     "bootstrap": "^4.2.1",
@@ -51,6 +52,7 @@
     "ramda": "^0.27.0",
     "rxjs": "~6.5.4",
     "tinycolor2": "^1.4.1",
+    "tinymce": "^5.2.2",
     "tslib": "^1.10.0",
     "xlsx": "^0.15.6",
     "zone.js": "~0.10.2"

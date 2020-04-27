@@ -62,6 +62,7 @@ import { PieComponent } from './dashboard/components/pie/pie.component';
 import { WordcloudComponent } from './dashboard/components/wordcloud/wordcloud.component';
 import { MapComponent } from './dashboard/components/map/map.component';
 import { GetFirstImage } from './pipes/images.pipe';
+import { SafeHtmlPipe } from './pipes/safeHtml.pipe';
 import { LineComponent } from './dashboard/components/line/line.component';
 import { SimiCircleComponent } from './dashboard/components/simi-circle/simi-circle.component';
 import { BarComponent } from './dashboard/components/bar/bar.component';
@@ -101,6 +102,7 @@ import { MainListComponent } from './dashboard/components/list/main-list/main-li
     WordcloudComponent,
     MapComponent,
     GetFirstImage,
+    SafeHtmlPipe,
     LineComponent,
     SimiCircleComponent,
     BarComponent,

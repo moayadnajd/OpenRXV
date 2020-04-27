@@ -35,6 +35,7 @@ export class SetupComponent implements OnInit {
   repositories: FormArray = new FormArray([
     new FormGroup({
       name: new FormControl(),
+      icon: new FormControl(),
       startPage: new FormControl(),
       itemsEndPoint: new FormControl(),
       allCores: new FormControl(),
@@ -55,6 +56,8 @@ export class SetupComponent implements OnInit {
     await this.firstFormGroup.patchValue(data);
     await this.secondFormGroup.patchValue(data);
     data.repositories.forEach((element, repoindex) => {
+      if (element.icon)
+        this.logo[repoindex] = element.icon;
       if (repoindex > 0)
         this.AddNewRepo()
       if (element.metadata)
@@ -73,7 +76,16 @@ export class SetupComponent implements OnInit {
 
 
   }
+  logo = []
+  IconChange(event, index) {
+    console.log(index);
+    this.upload(event.target.files[0], this.repositories.at(index).get('name').value, index)
+  }
 
+  async upload(file: File, name: string, index = null) {
+    this.logo[index] = await this.settingService.upload(file, name)
+    this.repositories.at(index).get('icon').setValue(this.logo[index]);
+  }
   async submit() {
     if (this.firstFormGroup.valid && this.secondFormGroup.valid && this.repositories.valid) {
       let settings = { ...this.firstFormGroup.value, ...this.secondFormGroup.value, ...{ repositories: this.repositories.value } }
@@ -100,7 +112,7 @@ export class SetupComponent implements OnInit {
     });
     data.metadata.forEach(element => {
       let splited = element.split('.');
-      metadata.push(new FormGroup(this.baseSchema(element, (splited.join('_') as string).toLowerCase(), (splited[splited.length - 1] as string).toLowerCase().charAt(0).toUpperCase()+ (splited[splited.length - 1] as string).toLowerCase().slice(1))))
+      metadata.push(new FormGroup(this.baseSchema(element, (splited.join('_') as string).toLowerCase(), (splited[splited.length - 1] as string).toLowerCase().charAt(0).toUpperCase() + (splited[splited.length - 1] as string).toLowerCase().slice(1))))
     });
 
   }
@@ -109,6 +121,7 @@ export class SetupComponent implements OnInit {
     this.repositories.push(
       new FormGroup({
         name: new FormControl(),
+        icon: new FormControl(),
         startPage: new FormControl(),
         itemsEndPoint: new FormControl(),
         allCores: new FormControl(),

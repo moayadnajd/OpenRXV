@@ -102,6 +102,19 @@
                                         <mat-checkbox matInput formControlName="allCores">Run all Cores
                                         </mat-checkbox>
                                     </div>
+                                    <div class="col-12 pb-3">
+                                        <div class="file">
+                                            <mat-label>Repo Icon: </mat-label>
+                                            <input *ngIf="!logo[repoindex]" type="file" (change)="IconChange($event,repoindex)"
+                                                placeholder="Icon" required>
+                                            <div *ngIf="logo[repoindex]" class="logo">
+                                                <button (click)="logo[repoindex] = null" color="warn" mat-icon-button>
+                                                    <mat-icon>delete</mat-icon>
+                                                </button>
+                                                <img [src]="'http://localhost:3000'+logo[repoindex]" alt="logo">
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="col-12 p-5 pb-3">
                                         <mat-card class="w-100">
 

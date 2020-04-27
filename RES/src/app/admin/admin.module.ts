@@ -38,6 +38,7 @@ import { AppearanceComponent } from './appearance/appearance.component';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { SortComponent } from './design/components/sort/sort.component';
 import { MainListComponent } from './design/components/main-list/main-list.component';
+import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -71,14 +72,18 @@ import { MainListComponent } from './design/components/main-list/main-list.compo
     LoadingBarHttpClientModule,
     LoadingBarRouterModule,
     NgSelectModule,
-    ColorPickerModule
+    ColorPickerModule,
+    EditorModule
+
 
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptor,
     multi: true
-  }],
-  entryComponents: [FormComponent, ConfirmationComponent,ValuesForm,FormDialogComponent]
+  },
+  { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }
+  ],
+  entryComponents: [FormComponent, ConfirmationComponent, ValuesForm, FormDialogComponent]
 })
 export class AdminModule { }

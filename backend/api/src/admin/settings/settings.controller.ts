@@ -391,8 +391,12 @@ export class SettingsController {
     async uploadFile(@UploadedFile() file, @Param('name') name: string) {
         console.log(file)
         let splited = file.originalname.split('.');
+        if (name == 'random')
+            name = splited[0] + '-' + new Date().getTime();
+
+
         let response = join(__dirname, '../../public/images/') + name + '.' + splited[splited.length - 1];
         await fs.renameSync(join(__dirname, '../../public/images/') + file.filename, response)
-        return { path: response.slice(response.indexOf('public/') + 6) };
+        return { location: response.slice(response.indexOf('public/') + 6) };
     }
 }

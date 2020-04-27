@@ -1,6 +1,7 @@
 <article class="w-100 break-word">
   <a target="_blank" href="{{ source[content.identifierUri] }}" class="primary-text" rel="noopener">
-    <img [src]="'assets/' + source[content.icon] + 'Icon.jpg'" />
+    <!-- TODO -->
+    <img style="max-width: 30px;" [src]="baselink + '/images/'+source[content.icon] + '.png'" />
     <strong>
       {{ source[content.title] }}
     </strong>
