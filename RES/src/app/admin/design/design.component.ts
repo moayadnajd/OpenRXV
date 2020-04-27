@@ -117,8 +117,11 @@ export class DesignComponent implements OnInit {
       temp['id'] = obj.source_x + '_' + obj.source_y + '_' + index + '_' + index1
     }
 
-    if (obj.content)
+    if (obj.content) {
       temp['content'] = obj.content;
+      temp['content'].icon = 'repo';
+    }
+
 
 
 

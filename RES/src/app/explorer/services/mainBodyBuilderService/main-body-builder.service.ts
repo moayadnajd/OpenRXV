@@ -23,7 +23,7 @@ export class MainBodyBuilderService extends BuilderUtilities {
     super();
 
   }
- async start() {
+  async start() {
     await this.init();
     let { dashboard, counters, filters } = await this.configs();
     this.dashboardConfig = dashboard.flat(1);
@@ -135,28 +135,31 @@ export class MainBodyBuilderService extends BuilderUtilities {
 
   private buildRawOptions(): Array<string> {
     let rows: Array<string> = [];
-    // const { content } = this.dashboardConfig.find(
-    //   (curr: GeneralConfigs) =>
-    //     !!(curr.componentConfigs as ComponentDashboardConfigs).content
-    // ).componentConfigs as ComponentDashboardConfigs;
-   
-    // for (const key in content) {
-    //   if (content.hasOwnProperty(key)) {
-    //     if (typeof content[key] === 'string') {
-    //       rows = [...rows, content[key]];
-    //     } else if (
-    //       typeof content[key] === 'object' &&
-    //       !Array.isArray(content[key])
-    //     ) {
-    //       rows = [...rows, ...(Object.values(content[key]) as Array<string>)];
-    //     } else if (Array.isArray(content[key])) {
-    //       (content[key] as Array<SortOption>).forEach(({ value }: SortOption) =>
-    //         rows.push(value.replace('.keyword', '').replace('.score', ''))
-    //       );
-    //     }
-    //     // else is boolean
-    //   }
-    // }
+    const { content } = this.dashboardConfig.find(
+      (curr: GeneralConfigs) =>
+        !!(curr.componentConfigs as ComponentDashboardConfigs).content
+    ).componentConfigs as ComponentDashboardConfigs;
+
+    for (const key in content) {
+      if (content.hasOwnProperty(key)) {
+        if (typeof content[key] === 'string') {
+          rows = [...rows, content[key]];
+        } else if (
+          typeof content[key] === 'object' &&
+          !Array.isArray(content[key])
+        ) {
+          rows = [...rows, ...(Object.values(content[key]) as Array<string>)];
+        } else if (Array.isArray(content[key])) {
+          if (key == 'tags')
+            rows = [...rows, ...(content[key] as Array<any>).map(d => d.metadata)]
+          if (key == 'filterOptions')
+            (content[key] as Array<SortOption>).forEach(({ value }: SortOption) =>
+              rows.push(value.replace('.keyword', '').replace('.score', ''))
+            );
+        }
+        // else is boolean
+      }
+    }
     // bitstreams needed for the images
     // handle needed for the altmetric
     rows.push('thumbnail', 'handle', 'bitstreams', 'contributor', 'affiliation', 'language', 'country', 'region');

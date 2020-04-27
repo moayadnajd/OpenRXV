@@ -14,7 +14,8 @@ export class MainListComponent implements OnInit {
   listForm: FormGroup = new FormGroup({
     title: new FormControl(''),
     description: new FormControl(''),
-
+    identifierUri: new FormControl(''),
+    altmetric: new FormControl(''),
   });
   baseFilterOptions(element = null) {
     return {

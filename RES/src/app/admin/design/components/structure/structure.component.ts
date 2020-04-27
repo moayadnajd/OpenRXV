@@ -21,7 +21,7 @@ export class StructureComponent implements OnInit {
     { name: "World Map", value: "MapComponent", icon: "map" },
     { name: "List", value: "ListComponent", icon: "list" },
     { name: "Bars Chart", value: "BarComponent", icon: "bar_chart" },
-    { name: "Main Items list", value: "ItemsListComponent", icon: "view_list" }
+    { name: "Main Items list", value: "MainListComponent", icon: "view_list" }
   ]
   pre
   baseform = [
@@ -97,7 +97,7 @@ export class StructureComponent implements OnInit {
         ]
         break;
 
-      case 'ItemsListComponent':
+      case 'MainListComponent':
         this.form_data = [...this.baseform, ...
           [
 
@@ -188,6 +188,7 @@ export class StructureComponent implements OnInit {
     this.grid[i].componentConfigs['content'] = content
     let cat = {
       class: this.class_names[i],
+      scroll: this.grid[i].scroll,
       component: this.grid[i].component,
       ...this.grid[i].componentConfigs
     }

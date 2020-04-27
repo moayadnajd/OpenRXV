@@ -40,9 +40,9 @@ export class ListComponent extends ParentComponent implements OnInit {
   paginationAtt: PageEvent;
 
   constructor(
-    private readonly store: Store<fromStore.AppState>,
+    public readonly store: Store<fromStore.AppState>,
     public readonly scrollHelperService: ScrollHelperService,
-    private readonly cdr: ChangeDetectorRef
+    public readonly cdr: ChangeDetectorRef
   ) {
     super();
   }

@@ -70,6 +70,7 @@ import { ExportComponent } from './dashboard/components/list/export/export.compo
 import { ExplorerRoutingModule } from './explorer.routing.module';
 import { ShareComponent } from './share/share.component';
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { MainListComponent } from './dashboard/components/list/main-list/main-list.component';
 
 @NgModule({
   declarations: [
@@ -104,7 +105,8 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
     SimiCircleComponent,
     BarComponent,
     ExportComponent,
-    ShareComponent
+    ShareComponent,
+    MainListComponent
   ],
   imports: [
     BrowserAnimationsModule,
