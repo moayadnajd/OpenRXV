@@ -17,11 +17,11 @@ export class DesignComponent implements OnInit {
   counters: Array<any> = []
   filters: Array<any> = []
   dashboard: Array<any> = []
-  footer:any=null;
+  footer: any = null;
   footerEditor = {
     height: 500,
     menubar: 'insert',
-    forced_root_block : 'div',
+    forced_root_block: 'div',
     forced_root_block_attrs: {
       'class': 'row'
     },
@@ -63,11 +63,11 @@ export class DesignComponent implements OnInit {
   }
   async ngOnInit() {
 
-    let { counters, filters, dashboard ,footer} = await this.settingsService.readExplorerSettings()
+    let { counters, filters, dashboard, footer } = await this.settingsService.readExplorerSettings()
     this.counters = counters;
     this.filters = filters;
     this.dashboard = dashboard;
-    this.footer=footer
+    this.footer = footer
   }
 
   onAddDashboardComponent(index2, index) {
@@ -123,7 +123,7 @@ export class DesignComponent implements OnInit {
       this.counters.splice(i, 1);
   }
   async save() {
-    await this.settingsService.saveExplorerSettings({ counters: this.counters, filters: this.filters, dashboard: this.dashboard,footer:this.footer });
+    await this.settingsService.saveExplorerSettings({ counters: this.counters, filters: this.filters, dashboard: this.dashboard, footer: this.footer });
   }
   createDashboardItem(obj, index, index1) {
     let temp = {};
@@ -134,6 +134,10 @@ export class DesignComponent implements OnInit {
       temp['description'] = obj.description
     if (obj.source)
       temp['source'] = obj.source == 'total' ? obj.source : obj.source
+    if (obj.source)
+      temp['id'] = temp['source'] + '_' + index + '_' + index1
+
+
     if (obj.source_x && obj.source_y) {
       temp['source'] = [obj.source_x, obj.source_y + '.keyword'];
       temp['source_y'] = obj.source_x;
@@ -146,11 +150,11 @@ export class DesignComponent implements OnInit {
       temp['content'].icon = 'repo';
     }
 
+    if (obj.component == 'MainListComponent')
+      temp['id'] = 'main_list' + '_' + index + '_' + index1
 
 
 
-    if (obj.source)
-      temp['id'] = temp['source'] + '_' + index + '_' + index1
 
     var class_name = null
 
