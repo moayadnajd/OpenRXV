@@ -22,8 +22,6 @@ export class DashboardComponent implements OnInit {
   ngOn
   async ngOnInit() {
     this.Init();
-    this.setinterval()
-
   }
   ngOnDestroy() {
     this.clearInterval();
@@ -70,6 +68,9 @@ export class DashboardComponent implements OnInit {
     this.waiting_count = waiting_count
     if (active_count == 0 && waiting_count == 0 && this.refreshCounter > 3)
       this.clearInterval()
+
+    if (this.refreshCounter == 0)
+      this.setinterval()
 
     this.refreshCounter++;
   }
