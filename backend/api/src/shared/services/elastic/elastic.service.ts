@@ -56,6 +56,40 @@ export class ElasticService {
 
         return body._source;
     }
+
+    async findByTerm(term = '') {
+
+        let obj
+        if (term != '')
+            obj = {
+                "multi_match": {
+                    "query": term,
+                }
+            }
+        else
+            obj = {
+                match_all: {}
+            }
+
+        let { body } = await this.elasticsearchService.search({
+            index: this.index,
+            method: 'POST',
+            from: 0,
+            size: 9999,
+            body: {
+
+                "query": obj,
+                "sort": [
+                    {
+                        "created_at": {
+                            "order": "desc"
+                        }
+                    }
+                ]
+            }
+        });
+        return body.hits;
+    }
     async find(obj: Object = null) {
         if (obj)
             obj = { bool: { filter: { term: obj } } }

@@ -23,6 +23,18 @@ export class ValuesController {
     //     return values;
     // }
     @UseGuards(AuthGuard('jwt'))
+    @Get('term/:term')
+    async GetValues(@Param('term') term: any) {
+
+        return await this.elastic.findByTerm(term);
+
+    }
+    @UseGuards(AuthGuard('jwt'))
+    @Get('term/')
+    async GetValuesnull() {
+        return await this.elastic.findByTerm();
+    }
+    @UseGuards(AuthGuard('jwt'))
     @Post('')
     NewUser(@Body() body: any) {
         return this.elastic.add(body);

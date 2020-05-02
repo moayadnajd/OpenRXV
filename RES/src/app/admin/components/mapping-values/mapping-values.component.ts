@@ -5,6 +5,7 @@ import { ValuesService } from '../../services/values.service';
 import { ValuesForm } from './form/values-form.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationComponent } from '../confirmation/confirmation.component';
+import { async } from 'rxjs/internal/scheduler/async';
 
 @Component({
   selector: 'app-mapping-values',
@@ -15,12 +16,12 @@ export class MappingValuesComponent implements OnInit {
 
   constructor(private valuesService: ValuesService, public dialog: MatDialog) { }
 
-
+  term = ''
 
   openDialog(): void {
 
     const dialogRef = this.dialog.open(ValuesForm, {
-      disableClose: true ,
+      disableClose: true,
       width: '30%',
       data: null
     });
@@ -57,17 +58,35 @@ export class MappingValuesComponent implements OnInit {
     });
   }
 
-  displayedColumns: string[] = ['id', 'find', 'replace', 'created_at', 'actions'];
-  dataSource = new MatTableDataSource<any>([]);
+  displayedColumns: string[] = [ 'find', 'replace', 'created_at', 'actions'];
+  dataSource = new MatTableDataSource<Array<any>>([]);
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-
+  ngOnDestroy() {
+    clearTimeout(this.timeout);
+  }
   async ngOnInit() {
 
-    let mappingvalues = await this.valuesService.find();
-    this.dataSource = new MatTableDataSource<any>(mappingvalues.hits);
+    let mappingvalues = await this.valuesService.findByTerm(this.term);
+    this.dataSource = new MatTableDataSource<Array<any>>(mappingvalues.hits);
     this.dataSource.paginator = this.paginator;
   }
+  timeout = null;
+
+  searchChange() {
+    console.log('searchChange')
+    clearTimeout(this.timeout);
+    // Make a new timeout set to go off in 1000ms (1 second)
+    this.timeout = setTimeout(async () => {
+     
+      let data = await this.valuesService.findByTerm(this.term)
+      this.dataSource = new MatTableDataSource<Array<any>>(data.hits)
+      this.dataSource.paginator = this.paginator;
+    }, 1000);
+  }
+
+
+
 }
 
 
