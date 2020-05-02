@@ -5,7 +5,7 @@ import { Update } from '@elastic/elasticsearch/api/requestParams';
 export class ElasticService {
     index: string = 'users'
     constructor(public readonly elasticsearchService: ElasticsearchService) { }
-   
+
     async search(query) {
         const { body } = await this.elasticsearchService.search({
             index: 'items',
@@ -61,13 +61,17 @@ export class ElasticService {
             obj = { bool: { filter: { term: obj } } }
         else
             obj = {
+
                 "match_all": {}
             }
 
         let { body } = await this.elasticsearchService.search({
             index: this.index,
             method: 'POST',
+            from: 0,
+            size: 9999,
             body: {
+
                 "query": obj,
                 "sort": [
                     {

@@ -8,8 +8,8 @@ import { MetadataService } from 'src/app/admin/services/metadata.service';
   styleUrls: ['./main-list.component.scss']
 })
 export class MainListComponent implements OnInit {
-  @Output() edited: EventEmitter<any> = new EventEmitter()
-  @Input() content: any = null;
+  @Input() baseForm: FormGroup = null;
+  content
   tagsControls = [];
   filterOptions = [];
   metadata = [];
@@ -35,14 +35,11 @@ export class MainListComponent implements OnInit {
     }
   }
   constructor(private metadataService: MetadataService) { }
-  save() {
-    if (this.listForm.valid)
-      this.edited.emit(this.listForm.value)
-  }
-  async ngOnInit() {
 
+  async ngOnInit() {
+    if (this.baseForm.get('content'))
+      this.content = this.baseForm.get('content').value
     this.metadata = await this.metadataService.get()
-    console.log(this.content)
     if (this.content && this.content.tags)
       this.content.tags.forEach(element => {
         this.tagsControls.push(new FormGroup(this.baseTags(element)))
@@ -51,16 +48,20 @@ export class MainListComponent implements OnInit {
       this.content.filterOptions.forEach(element => {
         this.filterOptions.push(new FormGroup(this.baseFilterOptions(element)))
       });
-    if (this.tagsControls.length)
+
+    if (this.tagsControls.length) {
+      this.listForm.removeControl('tags');
       this.listForm.addControl('tags', new FormArray(this.tagsControls))
-
-    if (this.filterOptions.length)
+    }
+    if (this.filterOptions.length) {
+      this.listForm.removeControl('filterOptions');
       this.listForm.addControl('filterOptions', new FormArray(this.filterOptions))
-
-
-    if (this.content)
-      this.listForm.patchValue(this.content);
+    }
+    this.listForm.patchValue(this.content);
+    this.baseForm.removeControl('content')
+    this.baseForm.addControl('content', this.listForm);
   }
+
   delete(type, index) {
     if (type == 'tags') {
       this.tagsControls.splice(index, 1)
@@ -73,6 +74,10 @@ export class MainListComponent implements OnInit {
         this.listForm.removeControl('filterOptions');
       this.listForm.addControl('filterOptions', new FormArray(this.filterOptions))
     }
+
+    this.baseForm.removeControl('content')
+    this.baseForm.addControl('content', this.listForm);
+
   }
   AddNewdata(array, type) {
     if (type == 'tags') {
@@ -86,5 +91,9 @@ export class MainListComponent implements OnInit {
         this.listForm.removeControl('filterOptions');
       this.listForm.addControl('filterOptions', new FormArray(this.filterOptions))
     }
+
+    this.baseForm.removeControl('content')
+    this.baseForm.addControl('content', this.listForm);
+
   }
 }

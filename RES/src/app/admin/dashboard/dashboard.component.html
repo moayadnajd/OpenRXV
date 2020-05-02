@@ -1,7 +1,101 @@
-<div class="container">
-  <div class="row">
-    <div class="col-12">
-      <h1>Dashboard</h1>
-    </div>
+<div class="row">
+  <div class="col-md-12 pb-5">
+    <mat-card>
+      <mat-card-title>
+        Dashboard
+
+
+        <button style="float: right;" (click)="startIndex()" color="primary" mat-raised-button>
+          Start Index
+          <mat-icon>archive</mat-icon></button>
+
+        <button class="mr-2" style="float: right;" (click)="stopIndex()" color="warn" mat-raised-button>
+          Stop Index
+          <mat-icon>unarchive</mat-icon></button>
+
+        <button class="mr-2" style="float: right;" (click)="Init()" mat-raised-button>
+          Refresh
+          <mat-icon>refresh</mat-icon></button>
+      </mat-card-title>
+    </mat-card>
+  </div>
+</div>
+<div class="row">
+  <div class="d-flex w-100 justify-content-around">
+    <mat-card class="counter">
+      <mat-card-title>
+        {{ active_count }}
+      </mat-card-title>
+      <mat-card-subtitle>Active</mat-card-subtitle>
+    </mat-card>
+    <mat-card class="counter">
+      <mat-card-title>
+        {{ completed_count }}
+      </mat-card-title>
+      <mat-card-subtitle>Completed</mat-card-subtitle>
+    </mat-card>
+    <mat-card class="counter">
+      <mat-card-title>
+        {{ waiting_count }}
+      </mat-card-title>
+      <mat-card-subtitle>Waiting</mat-card-subtitle>
+    </mat-card>
+    <mat-card class="counter">
+      <mat-card-title>
+        {{ failed_count }}
+      </mat-card-title>
+      <mat-card-subtitle>Failed</mat-card-subtitle>
+    </mat-card>
+  </div>
+</div>
+
+
+<div class="row  pt-5">
+  <div class="col-6">
+    <mat-card>
+      <mat-card-title>
+        Completed
+      </mat-card-title>
+      <mat-card-content>
+        <app-info-table [data]="completed"></app-info-table>
+
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="col-6">
+    <mat-card>
+      <mat-card-title>
+        Active
+      </mat-card-title>
+      <mat-card-content>
+        <app-info-table [data]="active"></app-info-table>
+
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+<div class="row  pt-5">
+  <div class="col-6">
+    <mat-card>
+      <mat-card-title>
+        Waiting
+      </mat-card-title>
+      <mat-card-content>
+        <app-info-table [data]="waiting"></app-info-table>
+
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="col-6">
+    <mat-card>
+      <mat-card-title>
+        Failed
+      </mat-card-title>
+      <mat-card-content>
+        <app-info-table [data]="failed"></app-info-table>
+
+      </mat-card-content>
+    </mat-card>
   </div>
 </div>

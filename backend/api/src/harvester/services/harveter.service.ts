@@ -4,6 +4,7 @@ import { InjectQueue } from '@nestjs/bull';
 import { async } from 'rxjs/internal/scheduler/async';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { JsonFilesService } from 'src/admin/json-files/json-files.service';
+import { ValuesService } from 'src/shared/services/values.service';
 
 @Injectable()
 export class HarvesterService {
@@ -11,37 +12,58 @@ export class HarvesterService {
     constructor(
         public readonly elasticsearchService: ElasticsearchService,
         public readonly jsonFilesService: JsonFilesService,
+        public readonly valuesServes: ValuesService,
         @InjectQueue('fetch') private fetchQueue: Queue,
-        @InjectQueue('index') private indexQueue: Queue
     ) { }
+
+    async getInfo() {
+        let obj = {
+            active_count: 0,
+            waiting_count: 0,
+            completed_count: 0,
+            failed_count: 0,
+            active: [],
+            waiting: [],
+            completed: [],
+            failed: []
+
+        }
+        obj.active_count = await this.fetchQueue.getActiveCount()
+        obj.waiting_count = await this.fetchQueue.getWaitingCount()
+        obj.completed_count = await this.fetchQueue.getCompletedCount()
+        obj.failed_count = await this.fetchQueue.getFailedCount()
+
+        obj.active = await this.fetchQueue.getActive()
+        obj.waiting = await this.fetchQueue.getWaiting()
+        obj.completed = await this.fetchQueue.getCompleted()
+        obj.failed = await this.fetchQueue.getFailed()
+
+        return obj;
+    }
+
+    async getMappingValues() {
+
+        let data = await this.valuesServes.find();
+        let values = {}
+        data.hits.map(d => values[d._source.find] = d._source.replace)
+        return values;
+    }
+
     async stopHarvest() {
         this.logger.debug("Stopping Harvest")
-        await this.fetchQueue.pause();
-        await this.indexQueue.pause();
-        await this.fetchQueue.clean(0)
-        await this.indexQueue.clean(0)
-        await this.fetchQueue.clean(0, 'failed')
-        await this.fetchQueue.clean(0, 'wait')
-        await this.fetchQueue.clean(0, 'active')
-        await this.fetchQueue.clean(0, 'delayed')
-        await this.indexQueue.clean(0, 'failed')
-        return await this.indexQueue.clean(0, 'delayed')
-
+        await this.fetchQueue.empty();
+        return await this.fetchQueue.pause();
     }
     async startHarvest() {
         this.logger.debug("Starting Harvest")
         await this.fetchQueue.pause();
-        await this.indexQueue.pause();
-        await this.fetchQueue.clean(0)
-        await this.indexQueue.clean(0)
+        await this.fetchQueue.empty();
         await this.fetchQueue.clean(0, 'failed')
         await this.fetchQueue.clean(0, 'wait')
         await this.fetchQueue.clean(0, 'active')
         await this.fetchQueue.clean(0, 'delayed')
-        await this.indexQueue.clean(0, 'failed')
-        await this.indexQueue.clean(0, 'delayed')
+        await this.fetchQueue.clean(0, 'completed')
         await this.fetchQueue.resume();
-        await this.indexQueue.resume();
 
         let settings = await this.jsonFilesService.read('../../../../config/dataToUse.json');
         settings.repositories.forEach(repo => {

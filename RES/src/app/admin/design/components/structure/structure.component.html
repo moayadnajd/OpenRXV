@@ -40,8 +40,6 @@
                                 <div class="w-100">
                                     <mat-icon>{{ icon(item.component) }}</mat-icon>
                                 </div>
-                               
-                                <app-main-list [content]="item.componentConfigs.content" *ngIf="item.component == 'MainListComponent'"  (edited)="contentChange($event,i)"  ></app-main-list>
                             </mat-card-content>
 
                         </mat-card>

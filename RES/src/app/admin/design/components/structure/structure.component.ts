@@ -112,7 +112,15 @@ export class StructureComponent implements OnInit {
               label: 'Tour Desctiption',
               type: 'textarea',
               required: true,
-            }]
+            },
+            {
+              name: 'content',
+              label: 'Details',
+              type: 'content',
+              required: true,
+            }
+
+          ]
         ]
         break;
 
@@ -225,7 +233,7 @@ export class StructureComponent implements OnInit {
     this.currentIndex = index;
     this.setFormDataOprions(this.grid[index].component)
     this.dialogRef = this.dialog.open(FormDialogComponent, {
-      width: '456px',
+      width: this.grid[index].component == 'MainListComponent' ? '800px' :'456px',
       data: { form_data: this.form_data, configs: this.grid[index] }
     });
 

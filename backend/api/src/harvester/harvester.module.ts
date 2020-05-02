@@ -7,6 +7,7 @@ import { FetchConsumer } from './consumers/fetch.consumer';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { SharedModule } from 'src/shared/shared.module';
 import { JsonFilesService } from 'src/admin/json-files/json-files.service';
+import { HarvesterController } from './harvester/harvester.controller';
 @Module({
     providers: [TasksService, HarvesterService, FetchConsumer,JsonFilesService],
     exports: [HarvesterService],
@@ -27,22 +28,8 @@ import { JsonFilesService } from 'src/admin/json-files/json-files.service';
                 port: 6379,
             },
         }),
-        BullModule.registerQueue({
-            name: 'index',
-            limiter: {
-                max: 100,
-                duration: 9000
-            },
-            settings: {
-                retryProcessDelay: 10000
-            },
-
-            redis: {
-                host: 'localhost',
-                port: 6379,
-            },
-        }),
-    ]
+    ],
+    controllers: [HarvesterController]
 })
 export class HarvesterModule {
 

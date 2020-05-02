@@ -40,6 +40,8 @@ export class FormDialogComponent implements OnInit {
         FormGroupControls[element.name] = new FormControl(element.name == 'source' ? this.data.configs.componentConfigs[element.name].replace('.keyword', '') : this.data.configs.componentConfigs[element.name])
       else if (this.data.configs[element.name])
         FormGroupControls[element.name] = new FormControl(this.data.configs[element.name])
+      else if (this.data.configs[element.name])
+        FormGroupControls[element.name] = new FormControl(this.data.configs[element.name])
       else
         FormGroupControls[element.name] = new FormControl(null);
     });

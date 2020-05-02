@@ -1,6 +1,6 @@
 import { Controller, Post, Body, UseGuards, Get, Param, Delete, Query, Put } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import * as bcrypt from 'bcrypt';
+import { JsonFilesService } from '../json-files/json-files.service';
 import { ValuesService } from 'src/shared/services/values.service';
 function isEmpty(obj) {
     for (var prop in obj) {
@@ -13,21 +13,28 @@ function isEmpty(obj) {
 }
 @Controller('values')
 export class ValuesController {
-
-    constructor(private elastic: ValuesService) { }
+    constructor(private elastic: ValuesService, private jsonfielServoce: JsonFilesService) { }
+    // @Get('import/')
+    // async Import() {
+    //     let values = await this.jsonfielServoce.read('../../../../config/mapping.json')
+    //     Object.keys(values).forEach(async key => {
+    //         await this.elastic.add({ find: key, replace: values[key] });
+    //     })
+    //     return values;
+    // }
     @UseGuards(AuthGuard('jwt'))
     @Post('')
     NewUser(@Body() body: any) {
         return this.elastic.add(body);
     }
-
+    @UseGuards(AuthGuard('jwt'))
     @Get(':id')
     async  GetOneUser(@Param('id') id: string) {
         let user: any = await this.elastic.findOne(id);
         user['id'] = id;
         return user
     }
-    update
+    @UseGuards(AuthGuard('jwt'))
     @Delete(':id')
     DeleteOneUser(@Param('id') id: string) {
         return this.elastic.delete(id);
@@ -38,8 +45,10 @@ export class ValuesController {
     }
 
 
+
+    @UseGuards(AuthGuard('jwt'))
     @Get('')
-    async GetUsers(@Query() query: any) {
+    async GetVales(@Query() query: any) {
         let filters = null
 
         if (!isEmpty(query)) {
@@ -49,12 +58,7 @@ export class ValuesController {
             });
         }
 
-        let users = await this.elastic.find(filters);
-
-        users.hits.map((element: any) => {
-            delete element._source.password
-        })
-        return users;
+        return await this.elastic.find(filters);
 
     }
 

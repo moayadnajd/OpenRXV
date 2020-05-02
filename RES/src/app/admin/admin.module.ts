@@ -39,6 +39,7 @@ import { ColorPickerModule } from 'ngx-color-picker';
 import { SortComponent } from './design/components/sort/sort.component';
 import { MainListComponent } from './design/components/main-list/main-list.component';
 import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
+import { InfoTableComponent } from './dashboard/info-table/info-table.component';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -60,6 +61,7 @@ import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
     AppearanceComponent,
     SortComponent,
     MainListComponent,
+    InfoTableComponent,
   ],
   imports: [
     BrowserModule,

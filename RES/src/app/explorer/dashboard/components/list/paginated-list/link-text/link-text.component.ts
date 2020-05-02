@@ -10,8 +10,17 @@ import { environment } from 'src/environments/environment';
 })
 export class LinkTextComponent {
   objectKeys = Object.keys;
-  
+  appearance
   @Input() source: ESSource;
   @Input() content: PaginatedListConfigs;
   baselink = environment.api
+  constructor() {
+    let { appearance } = JSON.parse(localStorage.getItem('configs'));
+    this.appearance = appearance
+  }
+
+
+  getIcon(repo) {
+    return environment.api + this.appearance.icons[repo];
+  }
 }

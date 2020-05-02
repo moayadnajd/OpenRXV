@@ -1,4 +1,4 @@
-import { Processor, Process, OnQueueActive, InjectQueue } from '@nestjs/bull';
+import { Processor, Process, OnQueueActive, InjectQueue, OnGlobalQueueDrained, OnQueueResumed, OnGlobalQueueResumed } from '@nestjs/bull';
 import { Job, Queue } from 'bull';
 import { HttpService, Logger } from '@nestjs/common';
 import { map } from 'rxjs/operators';
@@ -11,6 +11,8 @@ import * as ISO from 'iso-3166-1';
 import * as moment from 'moment';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { ApiResponse } from '@elastic/elasticsearch';
+import { HarvesterService } from '../services/harveter.service';
+import e = require('express');
 
 
 let langISO = require('iso-639-1');
@@ -21,13 +23,13 @@ export class FetchConsumer {
     private logger = new Logger(FetchConsumer.name);
     constructor(private http: HttpService,
         public readonly elasticsearchService: ElasticsearchService,
+        private readonly harvesterService: HarvesterService,
         @InjectQueue('fetch') private fetchQueue: Queue,
     ) { }
 
     @Process('fetch')
     async transcode(job: Job<any>) {
         await job.progress(20);
-        this.logger.log('job.progress(20)');
         let offset = job.data.page * 50;
         let page = job.data.page + job.data.pipe
         let data: any = await this.http.get(job.data.repo.itemsEndPoint + 'items?expand=metadata,parentCommunityList' + '&limit=50&offset=' + offset).pipe(map((data: any) => data.data)).toPromise();
@@ -39,7 +41,7 @@ export class FetchConsumer {
         }
         else {
             job.progress(60);
-           // await this.fetchQueue.add('fetch', { page, pipe: job.data.pipe,repo:job.data.repo }, { attempts: 10 })
+            // await this.fetchQueue.add('fetch', { page, pipe: job.data.pipe,repo:job.data.repo }, { attempts: 10 })
             return this.index(job, data);
 
         }
@@ -54,7 +56,7 @@ export class FetchConsumer {
 
 
         let finaldata: Array<any> = [];
-       
+
 
         data.forEach((item: any) => {
             let formated = this.format(item, job.data.repo.schema);
@@ -131,9 +133,15 @@ export class FetchConsumer {
 
     mapIt(value: any, addOn = null): string {
 
-        value = addOn == "country" ? this.mapIsoToCountry(value) : value
-        value = addOn == "language" ? this.mapIsoToLang(value) : value
-
+        if (addOn) {
+            if (typeof value === 'string' || value instanceof String) {
+                let splited = <Array<string>>value.split(',')
+                if (addOn == "country")
+                    value = splited.map(d => this.mapIsoToCountry(d.trim().toLowerCase()));
+                if (addOn == "language")
+                    value = splited.map(d => this.mapIsoToLang(d.trim().toLowerCase()));
+            }
+        }
         return mapto[value] ? mapto[value] : value
     }
     getArrayOrValue(values: Array<any>) {
@@ -142,10 +150,13 @@ export class FetchConsumer {
         else
             return values[0]
     }
-    // @OnQueueActive()
-    // onActive(job: Job) {
-    //     console.log(
-    //         `Processing job ${job.id} of type ${job.name} with data ${JSON.stringify(job.data)}...`,
-    //     );
-    // }
+    @OnGlobalQueueDrained()
+    async onDrained(job: Job) {
+        await this.harvesterService.Reindex();
+    }
+
+    @OnGlobalQueueResumed()
+    async onResumed(job: Job) {
+        mapto = await this.harvesterService.getMappingValues()
+    }
 }

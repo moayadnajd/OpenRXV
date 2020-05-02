@@ -50,4 +50,22 @@ export class SettingsService {
     })).toPromise();
   }
 
+  async getHarvesterInfo() {
+    return await this.http.get(environment.api + '/harvester/info').pipe(map((data: any) => {
+      return data;
+    })).toPromise();
+  }
+
+  async startIndexing() {
+    return await this.http.get(environment.api + '/harvester/startindex').pipe(map((data: any) => {
+      return data;
+    })).toPromise();
+  }
+
+  async stopIndexing() {
+    return await this.http.get(environment.api + '/harvester/stopindex').pipe(map((data: any) => {
+      return data;
+    })).toPromise();
+  }
+
 }

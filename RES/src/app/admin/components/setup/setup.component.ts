@@ -23,11 +23,11 @@ export class SetupComponent implements OnInit {
     startOnFirstInit: new FormControl(),
   });
 
-  baseSchema(metadada = null, disply_name = null, disply_label = '') {
+  baseSchema(metadada = null, disply_name = null, addOn = null) {
     return {
       metadata: new FormControl(metadada),
       disply_name: new FormControl(disply_name),
-      disply_label: new FormControl(disply_label),
+      addOn: new FormControl(addOn),
     }
 
   }
