@@ -34,13 +34,16 @@ export class DashboardComponent implements OnInit {
   }
 
   clearInterval() {
-    if (this.interval != null)
+    if (this.interval != null){
       clearInterval(this.interval)
+      this.interval=null;
+    }
+     
+    console.log('clearInterval')
   }
 
-  async startIndex() {
-
-    await this.setttingService.startIndexing();
+  async startIndex(test = false) {
+    await this.setttingService.startIndexing(test);
     this.refreshCounter = 0
     this.Init()
 
@@ -66,7 +69,7 @@ export class DashboardComponent implements OnInit {
 
     this.waiting = waiting
     this.waiting_count = waiting_count
-    if (active_count == 0 && waiting_count == 0 && this.refreshCounter > 3)
+    if (active_count == 0 && waiting_count == 0 && this.refreshCounter >= 3)
       this.clearInterval()
 
     if (this.refreshCounter == 0)

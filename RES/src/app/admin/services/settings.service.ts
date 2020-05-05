@@ -27,6 +27,17 @@ export class SettingsService {
     })).toPromise();
   }
 
+  async  readPluginsSettings() {
+    return await this.http.get(environment.api + '/settings/plugins').pipe(map((data: any) => {
+      return data;
+    })).toPromise();
+  }
+
+  async writePluginsSettings(data) {
+    return await this.http.post(environment.api + '/settings/plugins', data).pipe(map((data: any) => {
+      return data;
+    })).toPromise();
+  }
   async  read() {
     return await this.http.get(environment.api + '/settings').pipe(map((data: any) => {
       return data;
@@ -56,8 +67,12 @@ export class SettingsService {
     })).toPromise();
   }
 
-  async startIndexing() {
-    return await this.http.get(environment.api + '/harvester/startindex').pipe(map((data: any) => {
+  async startIndexing(test) {
+    console.log(test);
+    let query = ''
+    if (test)
+      query = '?test=true'
+    return await this.http.get(environment.api + '/harvester/startindex' + query).pipe(map((data: any) => {
       return data;
     })).toPromise();
   }

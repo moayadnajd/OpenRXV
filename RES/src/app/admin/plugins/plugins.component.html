@@ -1,0 +1,20 @@
+<div class="row">
+    <div class="col-md-12 pb-5">
+        <mat-card>
+            <mat-card-title>
+                Plugins
+                <button class="save" (click)="save()" color="primary" mat-raised-button>
+                    Save
+                    <mat-icon>save</mat-icon>
+                </button>
+            </mat-card-title>
+            <mat-card-content>
+
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+    <div *ngFor="let plugin of plugins;let i = index;" class="col-md-12 pb-5">
+        <app-plugin (onEdit)="onEdited($event,plugin.name)" [plugin]="plugin"></app-plugin>
+    </div>
+</div>

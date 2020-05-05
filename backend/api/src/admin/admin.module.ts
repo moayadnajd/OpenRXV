@@ -9,7 +9,7 @@ import { MulterModule } from '@nestjs/platform-express';
 import { join } from 'path';
 @Module({
   controllers: [MetadataController, ValuesController, SettingsController],
-  imports: [SharedModule, HttpModule, HarvesterModule, MulterModule.register({
+  imports: [SharedModule, HarvesterModule, MulterModule.register({
     dest: join(__dirname, '../public/uploads'),
   })],
   providers: [JsonFilesService]

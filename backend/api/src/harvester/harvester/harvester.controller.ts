@@ -1,6 +1,7 @@
-import { Controller, UseGuards, Get } from '@nestjs/common';
+import { Controller, UseGuards, Get, Query } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { HarvesterService } from '../services/harveter.service';
+import { query } from 'express';
 
 @Controller('harvester')
 export class HarvesterController {
@@ -16,8 +17,8 @@ export class HarvesterController {
 
     @UseGuards(AuthGuard('jwt'))
     @Get('startindex')
-    async  StartIndex() {
-        return { message: Date(), start: await this.harvestService.startHarvest() }
+    async  StartIndex(@Query() query) {
+        return { message: Date(), start: await this.harvestService.startHarvest(query.test ? query.test : false) }
     }
     @UseGuards(AuthGuard('jwt'))
     @Get('stopindex')
@@ -29,5 +30,12 @@ export class HarvesterController {
     async  reIndex() {
         return { message: Date(), start: await this.harvestService.Reindex() }
     }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Get('plugins')
+    async  pluginsStart() {
+        return { message: Date(), start: await this.harvestService.pluginsStart() }
+    }
+
 
 }

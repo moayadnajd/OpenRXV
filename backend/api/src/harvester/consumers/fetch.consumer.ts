@@ -27,11 +27,12 @@ export class FetchConsumer {
         @InjectQueue('fetch') private fetchQueue: Queue,
     ) { }
 
-    @Process('fetch')
+    @Process({ name: 'fetch', concurrency: 2 })
     async transcode(job: Job<any>) {
         await job.progress(20);
         let offset = job.data.page * 50;
         let page = job.data.page + job.data.pipe
+        let test = job.data.test
         let data: any = await this.http.get(job.data.repo.itemsEndPoint + 'items?expand=metadata,parentCommunityList' + '&limit=50&offset=' + offset).pipe(map((data: any) => data.data)).toPromise();
         await job.progress(50);
         if (data.length == 0) {
@@ -41,7 +42,8 @@ export class FetchConsumer {
         }
         else {
             job.progress(60);
-            // await this.fetchQueue.add('fetch', { page, pipe: job.data.pipe,repo:job.data.repo }, { attempts: 10 })
+            if (test)
+                await this.fetchQueue.add('fetch', { page, pipe: job.data.pipe, repo: job.data.repo }, { attempts: 10 })
             return this.index(job, data);
 
         }
@@ -152,7 +154,8 @@ export class FetchConsumer {
     }
     @OnGlobalQueueDrained()
     async onDrained(job: Job) {
-        await this.harvesterService.Reindex();
+        this.logger.log("OnGlobalQueueDrained");
+        await this.harvesterService.pluginsStart();
     }
 
     @OnGlobalQueueResumed()

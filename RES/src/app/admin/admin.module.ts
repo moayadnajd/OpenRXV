@@ -40,6 +40,8 @@ import { SortComponent } from './design/components/sort/sort.component';
 import { MainListComponent } from './design/components/main-list/main-list.component';
 import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 import { InfoTableComponent } from './dashboard/info-table/info-table.component';
+import { PluginsComponent } from './plugins/plugins.component';
+import { PluginComponent } from './plugins/plugin/plugin.component';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -62,6 +64,8 @@ import { InfoTableComponent } from './dashboard/info-table/info-table.component'
     SortComponent,
     MainListComponent,
     InfoTableComponent,
+    PluginsComponent,
+    PluginComponent,
   ],
   imports: [
     BrowserModule,

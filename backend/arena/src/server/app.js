@@ -21,7 +21,7 @@ module.exports = function () {
 
   const defaultConfig = { queues: [] }
   defaultConfig.queues.push({
-    "name": "addOns",
+    "name": "plugins",
     "port": Config.redis.port,
     "host": Config.redis.host,
     "hostId": "RES"
@@ -39,6 +39,18 @@ module.exports = function () {
     "hostId": "RES"
   })
   
+  defaultConfig.queues.push({
+    "name": "wocat_technologies_fetch",
+    "port": Config.redis.port,
+    "host": Config.redis.host,
+    "hostId": "RES"
+  })
+  defaultConfig.queues.push({
+    "name": "wocat_technologies_index",
+    "port": Config.redis.port,
+    "host": Config.redis.host,
+    "hostId": "RES"
+  })
 
 
   const Queues = require('./queue');

@@ -13,6 +13,7 @@ export class HarvesterService {
         public readonly elasticsearchService: ElasticsearchService,
         public readonly jsonFilesService: JsonFilesService,
         public readonly valuesServes: ValuesService,
+        @InjectQueue('plugins') private pluginsQueue: Queue,
         @InjectQueue('fetch') private fetchQueue: Queue,
     ) { }
 
@@ -52,9 +53,14 @@ export class HarvesterService {
     async stopHarvest() {
         this.logger.debug("Stopping Harvest")
         await this.fetchQueue.empty();
+        await this.fetchQueue.clean(0, 'failed')
+        await this.fetchQueue.clean(0, 'wait')
+        await this.fetchQueue.clean(0, 'active')
+        await this.fetchQueue.clean(0, 'delayed')
+        await this.fetchQueue.clean(0, 'completed')
         return await this.fetchQueue.pause();
     }
-    async startHarvest() {
+    async startHarvest(test = false) {
         this.logger.debug("Starting Harvest")
         await this.fetchQueue.pause();
         await this.fetchQueue.empty();
@@ -68,12 +74,23 @@ export class HarvesterService {
         let settings = await this.jsonFilesService.read('../../../../config/dataToUse.json');
         settings.repositories.forEach(repo => {
             for (let i = 0; i < 4; i++) {
-                this.fetchQueue.add('fetch', { page: 1 + i, pipe: 4, repo, index: settings.index_alias }, { attempts: 10 })
+                this.fetchQueue.add('fetch', { test, page: 1 + i, pipe: 4, repo, index: settings.index_alias }, { attempts: 10 })
             }
         });
         return "started";
     }
+    async pluginsStart() {
+        let settings = await this.jsonFilesService.read('../../../../config/dataToUse.json');
+        let plugins: Array<any> = await this.jsonFilesService.read('../../../../config/plugins.json');
+        if (plugins.filter(plugin => plugin.value).length > 0)
+            for (let plugin of plugins) {
+                for (let param of plugin.value)
+                    await this.pluginsQueue.add(plugin.name, { ...param, page: 1, index: settings.index_alias }, { attempts: 10 })
+            }
+        else
+            this.Reindex()
 
+    }
     async Reindex() {
         let config = {
             temp_index: "items-temp",

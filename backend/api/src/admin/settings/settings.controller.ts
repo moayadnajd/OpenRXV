@@ -6,11 +6,33 @@ import { HarvesterService } from 'src/harvester/services/harveter.service';
 import { FileInterceptor, MulterModule } from '@nestjs/platform-express'
 import { join } from 'path';
 import * as fs from 'fs';
+import { readdirSync } from 'fs';
+
 
 @Controller('settings')
 export class SettingsController {
 
     constructor(private jsonfielServoce: JsonFilesService, private httpService: HttpService) { }
+    getDirectories = source => readdirSync(source, { withFileTypes: true }).filter(dirent => dirent.isDirectory()).map(dirent => dirent.name)
+    @UseGuards(AuthGuard('jwt'))
+    @Get('plugins')
+    async  plugins() {
+        let plugins = await this.getDirectories('./src/plugins');
+        let plugins_values = await this.jsonfielServoce.read('../../../../config/plugins.json')
+        let info = []
+        plugins.forEach(async plugin => {
+            let infor = await this.jsonfielServoce.read('../../../src/plugins/' + plugin + '/info.json')
+            infor['values'] = plugins_values.filter(plug => plug.name == plugin)[0].value
+            info.push(infor);
+        })
+        return info;
+    }
+
+    @Post('plugins')
+    async savePlugins(@Body() body: any) {
+        return await this.jsonfielServoce.save(body, '../../../../config/plugins.json');
+    }
+
 
     format(body: any) {
         let final = {};

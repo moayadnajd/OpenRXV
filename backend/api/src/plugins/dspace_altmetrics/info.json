@@ -1,0 +1,14 @@
+{
+    "name": "dspace_altmetrics",
+    "display_name": "DSpace Aletmetrics",
+    "description": "to get all aletmetrics data for specfic handle prefix",
+    "multiple": "true",
+    "params": [
+        {
+            "name": "handle_prefix",
+            "label": "Prefix",
+            "type": "text",
+            "required": true
+        }
+    ]
+}

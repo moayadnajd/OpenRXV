@@ -1,18 +1,18 @@
-import { Module, HttpModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 
 import { BullModule } from '@nestjs/bull';
 import { TasksService } from './services/tasks.service';
 import { HarvesterService } from './services/harveter.service';
 import { FetchConsumer } from './consumers/fetch.consumer';
-import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { SharedModule } from 'src/shared/shared.module';
 import { JsonFilesService } from 'src/admin/json-files/json-files.service';
 import { HarvesterController } from './harvester/harvester.controller';
+import { PluginsModule } from 'src/plugins/plugins.module';
+import { PluginsConsumer } from './consumers/plugins.consumer';
 @Module({
-    providers: [TasksService, HarvesterService, FetchConsumer,JsonFilesService],
+    providers: [TasksService, HarvesterService, FetchConsumer, PluginsConsumer, JsonFilesService],
     exports: [HarvesterService],
     imports: [
-        HttpModule,
         SharedModule,
         BullModule.registerQueue({
             name: 'fetch',
@@ -28,6 +28,7 @@ import { HarvesterController } from './harvester/harvester.controller';
                 port: 6379,
             },
         }),
+        PluginsModule,
     ],
     controllers: [HarvesterController]
 })
