@@ -125,8 +125,9 @@ export class DSpaceAltmetrics {
         if (this.timeout)
             clearTimeout(this.timeout)
         this.timeout = setTimeout(async () => {
-            this.logger.log("OnGlobalQueueDrained");
+             this.logger.log("OnGlobalQueueDrained");
             await await this.harvesterService.Reindex();
+            
         }, 60000)
 
     }

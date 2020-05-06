@@ -1,0 +1,14 @@
+{
+    "name": "mel_downloads_and_views",
+    "display_name": "MEL Downloads and views",
+    "description": "to get all MEL",
+    "multiple": "false",
+    "params": [
+        {
+            "name": "repo",
+            "label": "MEL repo Name",
+            "type": "text",
+            "required": true
+        }
+    ]
+}

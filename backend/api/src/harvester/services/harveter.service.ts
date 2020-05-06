@@ -73,13 +73,21 @@ export class HarvesterService {
 
         let settings = await this.jsonFilesService.read('../../../../config/dataToUse.json');
         settings.repositories.forEach(repo => {
-            for (let i = 0; i < 4; i++) {
+            for (let i = 0; i < 2; i++) {
                 this.fetchQueue.add('fetch', { test, page: 1 + i, pipe: 4, repo, index: settings.index_alias }, { attempts: 10 })
             }
         });
         return "started";
     }
     async pluginsStart() {
+        await this.pluginsQueue.pause();
+        await this.pluginsQueue.empty();
+        await this.pluginsQueue.clean(0, 'failed')
+        await this.pluginsQueue.clean(0, 'wait')
+        await this.pluginsQueue.clean(0, 'active')
+        await this.pluginsQueue.clean(0, 'delayed')
+        await this.pluginsQueue.clean(0, 'completed')
+        await this.pluginsQueue.resume();
         let settings = await this.jsonFilesService.read('../../../../config/dataToUse.json');
         let plugins: Array<any> = await this.jsonFilesService.read('../../../../config/plugins.json');
         if (plugins.filter(plugin => plugin.value).length > 0)

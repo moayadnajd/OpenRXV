@@ -15,13 +15,15 @@ export class PluginComponent implements OnInit {
   constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
-    if (this.plugin.values)
+
+    if (this.plugin.values.length)
       this.plugin.values.forEach(element => {
-        console.log(element)
         this.addNew(element)
       });
+    if (this.plugin.values.length == 0 && this.plugin.multiple == 'false')
+      this.addNew()
     this.formdata.valueChanges.subscribe(d => this.onEdit.emit(this.formdata))
-
+    this.onEdit.emit(this.formdata)
 
   }
 

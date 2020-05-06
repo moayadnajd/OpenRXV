@@ -11,7 +11,8 @@
                 <h5>Settings</h5>
             </div>
             <div class="col-3">
-                <button style="float: right;" (click)="addNew()" color="primary" mat-raised-button>
+                <button *ngIf="plugin.multiple == 'true'" style="float: right;" (click)="addNew()" color="primary"
+                    mat-raised-button>
                     Add New Instance
                     <mat-icon>add</mat-icon>
                 </button>
