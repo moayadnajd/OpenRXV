@@ -1,25 +1,26 @@
-import { InjectQueue, Processor, Process, OnGlobalQueueProgress, OnQueueDrained } from "@nestjs/bull";
+import { InjectQueue, Processor, Process, OnGlobalQueueProgress, OnQueueDrained, OnGlobalQueueDrained, OnGlobalQueueResumed } from "@nestjs/bull";
 import { Logger, HttpService } from "@nestjs/common";
 import { ElasticsearchService } from "@nestjs/elasticsearch";
 import { Queue, Job } from "bull";
 import { map } from "rxjs/operators";
+import { HarvesterService } from "src/harvester/services/harveter.service";
+import { async } from "rxjs/internal/scheduler/async";
 
 @Processor('plugins')
 export class DSpaceAltmetrics {
     private logger = new Logger(DSpaceAltmetrics.name);
-    handlesIds = null;
+    handlesIds: any = null;
     constructor(
         private http: HttpService,
         public readonly elasticsearchService: ElasticsearchService,
+        private readonly harvesterService: HarvesterService,
         @InjectQueue('plugins') private pluginQueue: Queue,
     ) { }
     @Process('dspace_altmetrics')
     async transcode(job: Job<any>) {
         let config = {
             temp_index: job.data.index + "-temp",
-            final_index: job.data.index + "-final",
             index_type: "item",
-            index_alias: job.data.index,
         }
         this.handlesIds = await this.generateCache(config.temp_index)
         let handle_prefix = job.data.handle_prefix;
@@ -60,30 +61,29 @@ export class DSpaceAltmetrics {
         }
     }
 
-    generateCache(index) {
-        return new Promise((resolve, reject) => {
-            if (this.handlesIds) {
-                resolve(this.handlesIds)
-                return;
-            }
-            let allRecords: any = [];
-            let total = 0;
+    async generateCache(index) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (this.handlesIds != null) {
+                    resolve(this.handlesIds)
+                    return;
+                }
+                let allRecords: any = [];
+                let total = 0;
+                let elastic_data = {
+                    index: index,
+                    body: {
+                        size: 500,
+                        _source: ["handle"],
+                        query: {
 
-            let elastic_data = {
-                index: index,
-                type: 'item',
-                body: {
-                    size: 500,
-                    _source: ["handle"],
-                    query: {
-                        "exists": { "field": "handle" }
-                    }
-                },
-                scroll: '10m'
-            };
-
-            this.elasticsearchService.search(elastic_data, function getMoreUntilDone(error, response: any) {
-                if (error == null) {
+                            "exists": { "field": "handle" }
+                        }
+                    },
+                    scroll: '10m'
+                };
+                let response3 = await this.elasticsearchService.search(elastic_data).catch(e => this.logger.error(e));
+                let getMoreUntilDone = async (response) => {
                     let handleID = response.body.hits.hits.map((d: any) => {
                         if (d._source.handle) {
                             let obj: any = {};
@@ -92,34 +92,48 @@ export class DSpaceAltmetrics {
                         }
 
                     })
+
                     allRecords = [...allRecords, ...handleID];
                     if (total === 0) {
                         total = response.body.hits.total;
                     }
                     if (response.body.hits.total !== allRecords.length) {
-                        this.elasticsearchService.scroll({
-                            scrollId: <string>response._scroll_id,
+                        let response2 = await this.elasticsearchService.scroll({
+                            scroll_id: <string>response.body._scroll_id,
                             scroll: '10m'
-                        }, getMoreUntilDone);
+                        }).catch(e => this.logger.error(e));
+                        getMoreUntilDone(response2)
                     } else {
                         let finalobj: any = {};
                         allRecords.forEach((element: any) => {
                             finalobj[Object.keys(element)[0]] = Object.values(element)[0]
                         });
-                        this.handlesIds = finalobj;
                         resolve(finalobj)
                     }
-                } else {
-                    reject(error);
                 }
-            });
+                getMoreUntilDone(response3)
+            } catch (e) {
+                this.logger.error(e)
+                reject(e);
+            }
         });
+    }
+    timeout
+    @OnGlobalQueueDrained()
+    async onDrained(job: Job) {
+       
+        if (this.timeout)
+            clearTimeout(this.timeout)
+        this.timeout = setTimeout(async () => {
+            this.logger.log("OnGlobalQueueDrained");
+            await await this.harvesterService.Reindex();
+        }, 60000)
 
     }
 
-    @OnQueueDrained()
-    async onDrained(job: Job) {
-        this.logger.log("OnQueueDrained");
+    @OnGlobalQueueResumed()
+    async onResumed(job: Job) {
+        this.timeout = undefined;
     }
 
 

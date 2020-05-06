@@ -84,8 +84,10 @@ export class HarvesterService {
         let plugins: Array<any> = await this.jsonFilesService.read('../../../../config/plugins.json');
         if (plugins.filter(plugin => plugin.value).length > 0)
             for (let plugin of plugins) {
-                for (let param of plugin.value)
+                for (let param of plugin.value) {
                     await this.pluginsQueue.add(plugin.name, { ...param, page: 1, index: settings.index_alias }, { attempts: 10 })
+                }
+
             }
         else
             this.Reindex()

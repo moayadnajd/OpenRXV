@@ -9,8 +9,8 @@ import { SharedModule } from './shared/shared.module';
 import { ExportModule } from './export/export.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-import { HarvesterModule } from './harvester/harvester.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { PluginsModule } from './plugins/plugins.module';
 @Module({
   imports: [ExplorerModule, AdminModule,
     SharedModule,
@@ -25,7 +25,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     }),
     AuthModule,
     UsersModule,
-    HarvesterModule,
+    PluginsModule,
     ScheduleModule.forRoot(),
   ],
   controllers: [AppController],

@@ -1,4 +1,4 @@
-import { Processor, Process, OnQueueActive, InjectQueue, OnGlobalQueueDrained, OnQueueResumed, OnGlobalQueueResumed } from '@nestjs/bull';
+import { Processor, Process, OnQueueActive, InjectQueue, OnGlobalQueueDrained, OnQueueResumed, OnGlobalQueueResumed, OnGlobalQueueCompleted } from '@nestjs/bull';
 import { Job, Queue } from 'bull';
 import { HttpService, Logger } from '@nestjs/common';
 import { map } from 'rxjs/operators';
@@ -13,6 +13,7 @@ import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { ApiResponse } from '@elastic/elasticsearch';
 import { HarvesterService } from '../services/harveter.service';
 import e = require('express');
+import { async } from 'rxjs/internal/scheduler/async';
 
 
 let langISO = require('iso-639-1');
@@ -21,6 +22,7 @@ let mapto: any = {};
 @Processor('fetch')
 export class FetchConsumer {
     private logger = new Logger(FetchConsumer.name);
+    timeout
     constructor(private http: HttpService,
         public readonly elasticsearchService: ElasticsearchService,
         private readonly harvesterService: HarvesterService,
@@ -31,9 +33,10 @@ export class FetchConsumer {
     async transcode(job: Job<any>) {
         await job.progress(20);
         let offset = job.data.page * 50;
+
         let page = job.data.page + job.data.pipe
         let test = job.data.test
-        let data: any = await this.http.get(job.data.repo.itemsEndPoint + 'items?expand=metadata,parentCommunityList' + '&limit=50&offset=' + offset).pipe(map((data: any) => data.data)).toPromise();
+        let data: any = await this.http.get(job.data.repo.itemsEndPoint + '/items?expand=metadata,parentCommunityList,bitstreams' + '&limit=50&offset=' + offset).pipe(map((data: any) => data.data)).toPromise();
         await job.progress(50);
         if (data.length == 0) {
             let error = new Error('no data exist on page ' + job.data.page + ' and offset ' + offset);
@@ -43,7 +46,7 @@ export class FetchConsumer {
         else {
             job.progress(60);
             if (test)
-                await this.fetchQueue.add('fetch', { page, pipe: job.data.pipe, repo: job.data.repo }, { attempts: 10 })
+                await this.fetchQueue.add('fetch', { page, pipe: job.data.pipe, repo: job.data.repo, index: job.data.index }, { attempts: 10 })
             return this.index(job, data);
 
         }
@@ -154,12 +157,18 @@ export class FetchConsumer {
     }
     @OnGlobalQueueDrained()
     async onDrained(job: Job) {
-        this.logger.log("OnGlobalQueueDrained");
-        await this.harvesterService.pluginsStart();
+        if (this.timeout)
+            clearTimeout(this.timeout)
+        this.timeout = setTimeout(async () => {
+            this.logger.log("OnGlobalQueueDrained");
+            await this.harvesterService.pluginsStart();
+        }, 60000)
+
     }
 
     @OnGlobalQueueResumed()
     async onResumed(job: Job) {
+        this.timeout = undefined;
         mapto = await this.harvesterService.getMappingValues()
     }
 }

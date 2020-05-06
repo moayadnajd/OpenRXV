@@ -22,7 +22,11 @@ export class SettingsController {
         let info = []
         plugins.forEach(async plugin => {
             let infor = await this.jsonfielServoce.read('../../../src/plugins/' + plugin + '/info.json')
-            infor['values'] = plugins_values.filter(plug => plug.name == plugin)[0].value
+            let values = plugins_values.filter(plug => plug.name == plugin)
+            if (values[0])
+                infor['values'] = values[0].value
+            else
+                infor['values'] = []
             info.push(infor);
         })
         return info;
@@ -77,7 +81,17 @@ export class SettingsController {
                     temp['addOn'] = item.addOn
                 schema.metadata.push(temp)
             })
-
+            schema['bitstreams'] = [
+                {
+                    "where": {
+                        "bundleName": "THUMBNAIL"
+                    },
+                    "value": {
+                        "retrieveLink": "thumbnail"
+                    },
+                    "prefix": repo.itemsEndPoint
+                }
+            ];
 
             final['repositories'].push({
                 name: repo.name,
