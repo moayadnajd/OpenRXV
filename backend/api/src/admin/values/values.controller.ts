@@ -16,7 +16,7 @@ export class ValuesController {
     constructor(private elastic: ValuesService, private jsonfielServoce: JsonFilesService) { }
     // @Get('import/')
     // async Import() {
-    //     let values = await this.jsonfielServoce.read('../../../../config/mapping.json')
+    //     let values = await this.jsonfielServoce.read('../../../data/mapping.json')
     //     Object.keys(values).forEach(async key => {
     //         await this.elastic.add({ find: key, replace: values[key] });
     //     })

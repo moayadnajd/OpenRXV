@@ -6,17 +6,11 @@ import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
   styleUrls: ['./footer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FooterComponent implements OnInit {
+export class FooterComponent  {
   footer: string = ''
   constructor(){
     let { footer } =  JSON.parse(localStorage.getItem('configs'))
     this.footer = footer;
   }
-  async ngOnInit() {
-   
-
   
-
-    console.log(this.footer);
-  }
 }

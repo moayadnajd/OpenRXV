@@ -18,7 +18,7 @@ export class SettingsController {
     @Get('plugins')
     async  plugins() {
         let plugins = await this.getDirectories('./src/plugins');
-        let plugins_values = await this.jsonfielServoce.read('../../../../config/plugins.json')
+        let plugins_values = await this.jsonfielServoce.read('../../../data/plugins.json')
         let info = []
         plugins.forEach(async plugin => {
             let infor = await this.jsonfielServoce.read('../../../src/plugins/' + plugin + '/info.json')
@@ -35,7 +35,7 @@ export class SettingsController {
 
     @Post('plugins')
     async savePlugins(@Body() body: any) {
-        return await this.jsonfielServoce.save(body, '../../../../config/plugins.json');
+        return await this.jsonfielServoce.save(body, '../../../data/plugins.json');
     }
 
 
@@ -110,8 +110,8 @@ export class SettingsController {
     @Post('')
     async  Save(@Body() body: any) {
 
-        await this.jsonfielServoce.save(body, '../../../../config/data.json');
-        await this.jsonfielServoce.save(this.format(body), '../../../../config/dataToUse.json');
+        await this.jsonfielServoce.save(body, '../../../data/data.json');
+        await this.jsonfielServoce.save(this.format(body), '../../../data/dataToUse.json');
 
         return { success: true }
     }
@@ -119,25 +119,30 @@ export class SettingsController {
     @UseGuards(AuthGuard('jwt'))
     @Post('explorer')
     async  SaveExplorer(@Body() body: any) {
-        let tokeep = await this.jsonfielServoce.read('../../../../config/explorer.json')
+        let tokeep = await this.jsonfielServoce.read('../../../data/explorer.json')
         let tosave = { ...tokeep, ...body };
-        await this.jsonfielServoce.save(tosave, '../../../../config/explorer.json');
+        await this.jsonfielServoce.save(tosave, '../../../data/explorer.json');
         return { success: true }
     }
 
     @Get('explorer')
     async  ReadExplorer() {
-        let settings = await this.jsonfielServoce.read('../../../../config/explorer.json');
-        let configs = await this.jsonfielServoce.read('../../../../config/data.json');
+        let settings = await this.jsonfielServoce.read('../../../data/explorer.json');
+        let configs = await this.jsonfielServoce.read('../../../data/data.json');
         let list_icons = {}
-        configs.repositories.map(d => [list_icons[d.name] = d.icon])
-        settings.appearance['icons'] = list_icons
-        return settings
+        if (configs.repositories) {
+            configs.repositories.map(d => [list_icons[d.name] = d.icon])
+            settings.appearance['icons'] = list_icons
+            return settings
+        } else
+            return {}
+
+
     }
     @UseGuards(AuthGuard('jwt'))
     @Get('')
     async  Read() {
-        return await this.jsonfielServoce.read('../../../../config/data.json');
+        return await this.jsonfielServoce.read('../../../data/data.json');
     }
 
 
@@ -145,7 +150,7 @@ export class SettingsController {
     @UseGuards(AuthGuard('jwt'))
     @Get('metadata')
     async  getMetadata() {
-        let data = await this.jsonfielServoce.read('../../../../config/data.json');
+        let data = await this.jsonfielServoce.read('../../../data/data.json');
         var merged = [].concat.apply([], data.repositories.map(d => [...d.schema, ...d.metadata]));
         return [... new Set(merged.map(d => d.disply_name))];
     }

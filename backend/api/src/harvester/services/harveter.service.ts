@@ -71,7 +71,7 @@ export class HarvesterService {
         await this.fetchQueue.clean(0, 'completed')
         await this.fetchQueue.resume();
 
-        let settings = await this.jsonFilesService.read('../../../../config/dataToUse.json');
+        let settings = await this.jsonFilesService.read('../../../data/dataToUse.json');
         settings.repositories.forEach(repo => {
             for (let i = 0; i < 2; i++) {
                 this.fetchQueue.add('fetch', { page: repo.startPage + i, pipe: 2, repo, index: settings.index_alias }, { attempts: 10 })
@@ -88,8 +88,8 @@ export class HarvesterService {
         await this.pluginsQueue.clean(0, 'delayed')
         await this.pluginsQueue.clean(0, 'completed')
         await this.pluginsQueue.resume();
-        let settings = await this.jsonFilesService.read('../../../../config/dataToUse.json');
-        let plugins: Array<any> = await this.jsonFilesService.read('../../../../config/plugins.json');
+        let settings = await this.jsonFilesService.read('../../../data/dataToUse.json');
+        let plugins: Array<any> = await this.jsonFilesService.read('../../../data/plugins.json');
         if (plugins.filter(plugin => plugin.value).length > 0)
             for (let plugin of plugins) {
                 for (let param of plugin.value) {

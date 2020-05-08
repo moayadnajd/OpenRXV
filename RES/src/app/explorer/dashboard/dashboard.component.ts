@@ -96,7 +96,6 @@ export class DashboardComponent implements OnInit {
   }
 
   onInViewportChange(inViewport: boolean, id: string): void {
-    console.log(id);
     const [realId, linkedWith] = id.split('.');
     if (
       this.oldViewState.has(realId) &&

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SettingsService } from '../admin/services/settings.service';
 
 import * as tinycolor from 'tinycolor2'
+import { Router } from '@angular/router';
 export interface Color {
   name: string;
   hex: string;
@@ -16,24 +17,25 @@ export class RootComponent implements OnInit {
   loadSettigs: boolean = false;
   constructor(
 
-    private readonly settingsService: SettingsService
+    private readonly settingsService: SettingsService,
+    private router: Router
   ) { }
   primaryColorPalette
   async ngOnInit() {
-    console.log("root init")
     let settings = await this.settingsService.readExplorerSettings();
     await localStorage.setItem('configs', JSON.stringify(settings))
+    if (!settings.counters && !settings.dashboard) {
+      this.router.navigate(['/admin']);
+    }
     this.loadSettigs = true
-
     if (settings.appearance.primary_color) {
       this.savePrimaryColor(settings.appearance.primary_color)
     }
   }
 
 
-  
+
   savePrimaryColor(color) {
-    console.log('savePrimaryColor', color)
     this.primaryColorPalette = computeColors(color);
     for (const color of this.primaryColorPalette) {
       const key1 = `--theme-primary-${color.name}`;
