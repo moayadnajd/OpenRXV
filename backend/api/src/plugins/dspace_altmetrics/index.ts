@@ -16,7 +16,7 @@ export class DSpaceAltmetrics {
         private readonly harvesterService: HarvesterService,
         @InjectQueue('plugins') private pluginQueue: Queue,
     ) { }
-    @Process('dspace_altmetrics')
+    @Process({ name: 'dspace_altmetrics', concurrency: 1 })
     async transcode(job: Job<any>) {
         let config = {
             temp_index: job.data.index + "-temp",
@@ -48,9 +48,10 @@ export class DSpaceAltmetrics {
                 })
 
                 if (page < Math.ceil(parseInt(data.query.total) / 100)) {
-                    await this.pluginQueue.add('dspace_altmetrics', { page: page + 1, handle_prefix, index: job.data.index })
+                    let newjob = await this.pluginQueue.add('dspace_altmetrics', { page: page + 1, handle_prefix, index: job.data.index })
                     await job.progress(100);
-                    return currentResult
+                    if (newjob)
+                        return currentResult
                 } else {
                     await job.progress(100);
                     return currentResult
@@ -121,13 +122,14 @@ export class DSpaceAltmetrics {
     timeout
     @OnGlobalQueueDrained()
     async onDrained(job: Job) {
-       
+
         if (this.timeout)
             clearTimeout(this.timeout)
         this.timeout = setTimeout(async () => {
-             this.logger.log("OnGlobalQueueDrained");
+            this.logger.log("OnGlobalQueueDrained");
+            this.handlesIds = null;
             await await this.harvesterService.Reindex();
-            
+
         }, 60000)
 
     }
@@ -135,6 +137,7 @@ export class DSpaceAltmetrics {
     @OnGlobalQueueResumed()
     async onResumed(job: Job) {
         this.timeout = undefined;
+
     }
 
 

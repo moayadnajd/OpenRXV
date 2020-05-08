@@ -17,8 +17,8 @@ export class HarvesterController {
 
     @UseGuards(AuthGuard('jwt'))
     @Get('startindex')
-    async  StartIndex(@Query() query) {
-        return { message: Date(), start: await this.harvestService.startHarvest(query.test ? query.test : false) }
+    async  StartIndex() {
+        return { message: Date(), start: await this.harvestService.startHarvest() }
     }
     @UseGuards(AuthGuard('jwt'))
     @Get('stopindex')

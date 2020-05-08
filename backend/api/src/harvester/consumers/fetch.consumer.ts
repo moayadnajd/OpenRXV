@@ -1,4 +1,4 @@
-import { Processor, Process, OnQueueActive, InjectQueue, OnGlobalQueueDrained, OnQueueResumed, OnGlobalQueueResumed, OnGlobalQueueCompleted } from '@nestjs/bull';
+import { Processor, Process, InjectQueue, OnGlobalQueueDrained, OnGlobalQueueResumed } from '@nestjs/bull';
 import { Job, Queue } from 'bull';
 import { HttpService, Logger } from '@nestjs/common';
 import { map } from 'rxjs/operators';
@@ -12,9 +12,6 @@ import * as moment from 'moment';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { ApiResponse } from '@elastic/elasticsearch';
 import { HarvesterService } from '../services/harveter.service';
-import e = require('express');
-import { async } from 'rxjs/internal/scheduler/async';
-
 
 let langISO = require('iso-639-1');
 let mapto: any = {};
@@ -29,14 +26,13 @@ export class FetchConsumer {
         @InjectQueue('fetch') private fetchQueue: Queue,
     ) { }
 
-    @Process({ name: 'fetch', concurrency: 2 })
+    @Process({ name: 'fetch' })
     async transcode(job: Job<any>) {
         await job.progress(20);
         let offset = job.data.page * 50;
 
         let page = job.data.page + job.data.pipe
-        let test = job.data.test
-        let data: any = await this.http.get(job.data.repo.itemsEndPoint + '/items?expand=metadata,parentCommunityList,bitstreams' + '&limit=50&offset=' + offset).pipe(map((data: any) => data.data)).toPromise();
+        let data: any = await this.http.get(job.data.repo.itemsEndPoint + '/items?expand=metadata,parentCommunityList,bitstreams' + '&limit=100&offset=' + offset).pipe(map((data: any) => data.data)).toPromise();
         await job.progress(50);
         if (data.length == 0) {
             let error = new Error('no data exist on page ' + job.data.page + ' and offset ' + offset);
@@ -45,10 +41,9 @@ export class FetchConsumer {
         }
         else {
             job.progress(60);
-            if (test)
-                await this.fetchQueue.add('fetch', { page, pipe: job.data.pipe, repo: job.data.repo, index: job.data.index }, { attempts: 10 })
-            return this.index(job, data);
-
+            let newjob = await this.fetchQueue.add('fetch', { page, pipe: job.data.pipe, repo: job.data.repo, index: job.data.index }, { attempts: 10 })
+            if (newjob)
+                return this.index(job, data);
         }
     }
     async index(job, data) {
@@ -85,6 +80,7 @@ export class FetchConsumer {
             body: finaldata
         });
         job.progress(90);
+
         resp.body.items.forEach((item: any) => {
             //item.index.status
             if (item.index.status != 200 && item.index.status != 201) {

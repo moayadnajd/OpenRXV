@@ -1,4 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-info-table',
@@ -7,11 +9,24 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class InfoTableComponent implements OnInit {
   displayedColumns: string[] = ['id', 'page', 'processedOn', 'repo', 'attemptsMade'];
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  @Input() data = []
-  constructor() { }
+  private _dataSource: MatTableDataSource<Array<any>> = new MatTableDataSource<Array<any>>([]);
 
-  ngOnInit(): void {
+  @Input('data') set dataSource(value: MatTableDataSource<Array<any>>) {
+    this._dataSource = value;
+    this._dataSource.paginator = this.paginator;
+  }
+  get dataSource() {
+    return this._dataSource
+  }
+
+  constructor() {
+
+  }
+
+  async ngOnInit() {
+
   }
 
 }

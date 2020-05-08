@@ -17,7 +17,7 @@ export class MELDowbloadsAndViews {
         private readonly harvesterService: HarvesterService,
         @InjectQueue('plugins') private pluginQueue: Queue,
     ) { }
-    @Process('mel_downloads_and_views')
+    @Process({ name: 'mel_downloads_and_views', concurrency: 1 })
     async transcode(job: Job<any>) {
         job.progress(20);
         let config = {
@@ -67,8 +67,9 @@ export class MELDowbloadsAndViews {
                     }).catch(e => job.moveToFailed(e));
                 });
                 job.progress(100);
-                await this.pluginQueue.add('mel_downloads_and_views', { index: job.data.index, scroll_id: scrollId, repo: job.data.repo })
-                return result
+                let newJob = await this.pluginQueue.add('mel_downloads_and_views', { index: job.data.index, scroll_id: scrollId, repo: job.data.repo })
+                if (newJob)
+                    return result
             } else {
                 await this.pluginQueue.add('mel_downloads_and_views', { index: job.data.index, scroll_id: scrollId, repo: job.data.repo }).then(() => {
                 }).catch(e => job.moveToFailed(e));

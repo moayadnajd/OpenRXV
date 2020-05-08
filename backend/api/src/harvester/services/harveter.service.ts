@@ -60,7 +60,7 @@ export class HarvesterService {
         await this.fetchQueue.clean(0, 'completed')
         return await this.fetchQueue.pause();
     }
-    async startHarvest(test = false) {
+    async startHarvest() {
         this.logger.debug("Starting Harvest")
         await this.fetchQueue.pause();
         await this.fetchQueue.empty();
@@ -74,7 +74,7 @@ export class HarvesterService {
         let settings = await this.jsonFilesService.read('../../../../config/dataToUse.json');
         settings.repositories.forEach(repo => {
             for (let i = 0; i < 2; i++) {
-                this.fetchQueue.add('fetch', { test, page: 1 + i, pipe: 4, repo, index: settings.index_alias }, { attempts: 10 })
+                this.fetchQueue.add('fetch', { page: repo.startPage + i, pipe: 2, repo, index: settings.index_alias }, { attempts: 10 })
             }
         });
         return "started";
@@ -134,6 +134,7 @@ export class HarvesterService {
         this.logger.debug("create final")
 
         await this.elasticsearchService.reindex({
+
             wait_for_completion: true,
             body: {
                 "conflicts": "proceed",
@@ -142,7 +143,7 @@ export class HarvesterService {
                 },
                 dest: { index: config.final_index }
             }
-        })
+        }, { requestTimeout: 2000000 })
         this.logger.debug("reindex to final")
 
 

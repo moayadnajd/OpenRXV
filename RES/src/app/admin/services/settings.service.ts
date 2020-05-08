@@ -67,12 +67,8 @@ export class SettingsService {
     })).toPromise();
   }
 
-  async startIndexing(test) {
-    console.log(test);
-    let query = ''
-    if (test)
-      query = '?test=true'
-    return await this.http.get(environment.api + '/harvester/startindex' + query).pipe(map((data: any) => {
+  async startIndexing() {
+    return await this.http.get(environment.api + '/harvester/startindex').pipe(map((data: any) => {
       return data;
     })).toPromise();
   }

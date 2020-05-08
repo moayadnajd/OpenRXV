@@ -1,0 +1,20 @@
+{
+    "name": "dspace_downloads_and_views",
+    "display_name": "DSpace Downloads and views",
+    "description": "To get all DSpace downloads and views",
+    "multiple": "true",
+    "params": [
+        {
+            "name": "repo",
+            "label": "Repo Name",
+            "type": "text",
+            "required": true
+        },
+        {
+            "name": "link",
+            "label": "Link to downloads and views endpoint",
+            "type": "text",
+            "required": true
+        }
+    ]
+}
