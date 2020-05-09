@@ -18,8 +18,8 @@ export class UsersController {
 
     constructor(private elastic: ElasticService) {
 
-        this.elastic.index='users';
-     }
+        this.elastic.index = 'users';
+    }
     @UseGuards(AuthGuard('jwt'))
     @Post('')
     NewUser(@Body() body: any) {
@@ -33,12 +33,16 @@ export class UsersController {
 
     @Get(':id')
     async  GetOneUser(@Param('id') id: string) {
-        let user: any = await this.elastic.findOne(id);
+        try {
+            let user: any = await this.elastic.findOne(id);
 
-        delete user.password
-        user['id'] = id;
+            delete user.password
+            user['id'] = id;
+            return user
+        } catch (e) {
+            return e.statusCode == 404 ? {} : e;
+        }
 
-        return user
     }
     update
     @Delete(':id')
@@ -53,22 +57,26 @@ export class UsersController {
 
     @Get('')
     async GetUsers(@Query() query: any) {
-        let filters = null
+        try {
+            let filters = null
 
-        if (!isEmpty(query)) {
-            filters = {}
-            Object.keys(query).forEach(key => {
-                filters[key + '.keyword'] = query[key];
-            });
+            if (!isEmpty(query)) {
+                filters = {}
+                Object.keys(query).forEach(key => {
+                    filters[key + '.keyword'] = query[key];
+                });
+            }
+
+            let users = await this.elastic.find(filters);
+
+            users.hits.map((element: any) => {
+                delete element._source.password
+            })
+            return users;
+        } catch (e) {
+            return e.statusCode == 404 ? {hits:[]} : e;
         }
-
-        let users = await this.elastic.find(filters);
-
-        users.hits.map((element: any) => {
-            delete element._source.password
-        })
-        return users;
-
     }
+
 
 }

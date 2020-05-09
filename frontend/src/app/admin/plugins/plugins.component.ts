@@ -22,7 +22,6 @@ export class PluginsComponent implements OnInit {
   }
 
   async save() {
-    if (Object.values(this.pluginsForms).filter((form: FormArray) => form.valid).length == Object.values(this.pluginsForms).length)
       await this.settingsService.writePluginsSettings(
         Object.values(this.pluginsForms).map(
           (form: FormArray, index) => {

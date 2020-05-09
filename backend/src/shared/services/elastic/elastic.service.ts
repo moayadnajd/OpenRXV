@@ -1,11 +1,55 @@
 import { Injectable } from '@nestjs/common';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { Update } from '@elastic/elasticsearch/api/requestParams';
+import { ApiResponse } from '@elastic/elasticsearch';
+import * as bcrypt from 'bcrypt';
 @Injectable()
 export class ElasticService {
     index: string = 'users'
     constructor(public readonly elasticsearchService: ElasticsearchService) { }
+    async startup() {
+        let values_exist: ApiResponse = await this.elasticsearchService.indices.exists({ index: "values" })
+        let users_exist: ApiResponse = await this.elasticsearchService.indices.exists({ index: "users" })
+        let shared_exist: ApiResponse = await this.elasticsearchService.indices.exists({ index: "shared" })
+        let items_final_exist: ApiResponse = await this.elasticsearchService.indices.exists({ index: "items-final" })
+        let items_temp_exist: ApiResponse = await this.elasticsearchService.indices.exists({ index: "items-temp" })
 
+        if (!items_final_exist.body)
+            await this.elasticsearchService.indices.create(({ index: "items-final" }));
+        if (!items_temp_exist.body)
+            await this.elasticsearchService.indices.create(({ index: "items-temp" }));
+        if (!shared_exist.body)
+            await this.elasticsearchService.indices.create(({ index: "shared" }));
+        if (!values_exist.body)
+            await this.elasticsearchService.indices.create(({ index: "values" }));
+
+        if (!users_exist.body) {
+            let body = {
+                name: "admin",
+                role: "Admin",
+                email: "admin",
+                password: 'admin'
+            }
+            const salt = bcrypt.genSaltSync(10);
+            const hash = bcrypt.hashSync(body.password, salt);
+            body.password = hash;
+            return this.add(body);
+        }
+
+        await this.elasticsearchService.indices.putSettings({
+            body: {
+                "index.blocks.read_only_allow_delete": false
+            }
+        })
+        await this.elasticsearchService.cluster.putSettings({
+            body: {
+                "transient": {
+                    "cluster.routing.allocation.disk.threshold_enabled": false
+                }
+            }
+        })
+
+    }
     async search(query) {
         const { body } = await this.elasticsearchService.search({
             index: 'items',
@@ -20,7 +64,6 @@ export class ElasticService {
         let { body } = await this.elasticsearchService.index({
             index: this.index,
             refresh: 'wait_for',
-            type: '_doc', // uncomment this line if you are using Elasticsearch ≤ 6
             body: item
         })
         return body;
@@ -29,7 +72,6 @@ export class ElasticService {
 
         let update: Update = {
             id,
-            type: '_doc',
             index: this.index,
             refresh: 'wait_for',
             body: { doc: item }
@@ -58,65 +100,67 @@ export class ElasticService {
     }
 
     async findByTerm(term = '') {
-
-        let obj
-        if (term != '')
-            obj = {
-                "multi_match": {
-                    "query": term,
-                }
-            }
-        else
-            obj = {
-                match_all: {}
-            }
-
-        let { body } = await this.elasticsearchService.search({
-            index: this.index,
-            method: 'POST',
-            from: 0,
-            size: 9999,
-            body: {
-
-                "query": obj,
-                "sort": [
-                    {
-                        "created_at": {
-                            "order": "desc"
-                        }
+        try {
+            let obj
+            if (term != '')
+                obj = {
+                    "multi_match": {
+                        "query": term,
                     }
-                ]
-            }
-        });
-        return body.hits;
+                }
+            else
+                obj = {
+                    match_all: {}
+                }
+            let { body } = await this.elasticsearchService.search({
+                index: this.index,
+                method: 'POST',
+                from: 0,
+                size: 9999,
+                body: {
+
+                    "query": obj,
+                    "sort": [
+                        {
+                            "created_at": {
+                                "order": "desc",
+                            }
+                        }
+                    ]
+                }
+            });
+            return body.hits;
+        } catch (e) {
+            return { "total": { "value": 0, "relation": "eq" }, "max_score": null, "hits": [] }
+        }
     }
     async find(obj: Object = null) {
-        if (obj)
-            obj = { bool: { filter: { term: obj } } }
-        else
-            obj = {
+        try {
+            if (obj)
+                obj = { bool: { filter: { term: obj } } }
+            else
+                obj = {
+                    "match_all": {}
+                }
 
-                "match_all": {}
-            }
-
-        let { body } = await this.elasticsearchService.search({
-            index: this.index,
-            method: 'POST',
-            from: 0,
-            size: 9999,
-            body: {
-
-                "query": obj,
-                "sort": [
-                    {
+            let { body } = await this.elasticsearchService.search({
+                index: this.index,
+                from: 0,
+                method: "POST",
+                size: 9999,
+                body: {
+                    "query": obj,
+                    "sort": {
                         "created_at": {
                             "order": "desc"
                         }
                     }
-                ]
-            }
-        });
-        return body.hits;
+                }
+            });
+            return body.hits;
+        } catch (e) {
+            return { "total": { "value": 0, "relation": "eq" }, "max_score": null, "hits": [] }
+        }
     }
 
 

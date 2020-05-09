@@ -41,6 +41,7 @@
     "highcharts": "8.0.4",
     "highcharts-angular": "^2.4.0",
     "jwt-decode": "^2.2.0",
+    "material-design-icons-iconfont": "^5.0.1",
     "ng2-nouislider": "^1.7.13",
     "ngx-color-picker": "^9.1.0",
     "ngx-loading": "^8.0.0",

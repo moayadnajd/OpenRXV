@@ -155,7 +155,7 @@ export const inViewFirstOne = (state: ItemsState) =>
   ).filter(({ viewState }: InView) => viewState.userSeesMe)[0] || [];
 
 export const totalState = (state: ItemsState) =>
-  state.data.hits ? state.data.hits.total : null;
+  state.data.hits ? state.data.hits.total.value : null;
 
 export const loadingStatus = (state: ItemsState) => state.loading;
 

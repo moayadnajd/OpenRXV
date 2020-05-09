@@ -52,13 +52,14 @@ export class HarvesterService {
 
     async stopHarvest() {
         this.logger.debug("Stopping Harvest")
+       
         await this.fetchQueue.empty();
         await this.fetchQueue.clean(0, 'failed')
         await this.fetchQueue.clean(0, 'wait')
         await this.fetchQueue.clean(0, 'active')
         await this.fetchQueue.clean(0, 'delayed')
-        await this.fetchQueue.clean(0, 'completed')
-        return await this.fetchQueue.pause();
+        return await this.fetchQueue.clean(0, 'completed')
+
     }
     async startHarvest() {
         this.logger.debug("Starting Harvest")
@@ -74,7 +75,7 @@ export class HarvesterService {
         let settings = await this.jsonFilesService.read('../../../data/dataToUse.json');
         settings.repositories.forEach(repo => {
             for (let i = 0; i < 2; i++) {
-                this.fetchQueue.add('fetch', { page: repo.startPage + i, pipe: 2, repo, index: settings.index_alias }, { attempts: 10 })
+                this.fetchQueue.add('fetch', { page: parseInt(repo.startPage) + i, pipe: 2, repo, index: settings.index_alias }, { attempts: 10 })
             }
         });
         return "started";

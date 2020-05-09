@@ -35,7 +35,9 @@ export interface AggregationsValue {
 export interface Hits {
   hits: hits[];
   max_score: number;
-  total: number;
+  total: {
+    value: number
+  };
 }
 
 /**

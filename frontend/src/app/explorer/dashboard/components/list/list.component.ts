@@ -98,8 +98,8 @@ export class ListComponent extends ParentComponent implements OnInit {
   }
 
   private initPagination(source: string, h: Hits): void {
-    if (h && h.total !== (this.paginationAtt && this.paginationAtt.length)) {
-      this.createPageEvent(h.total);
+    if (h && h.total.value !== (this.paginationAtt && this.paginationAtt.length)) {
+      this.createPageEvent(h.total.value);
     }
     this.isPaginatedList = this.shouldWePaginate(source);
     this.hits = h;
