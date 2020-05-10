@@ -28,22 +28,26 @@ export class FetchConsumer {
 
     @Process({ name: 'fetch' })
     async transcode(job: Job<any>) {
-        await job.progress(20);
-        let offset = job.data.page * 50;
-
-        let page = job.data.page + job.data.pipe
-        let data: any = await this.http.get(job.data.repo.itemsEndPoint + '/items?expand=metadata,parentCommunityList,bitstreams' + '&limit=100&offset=' + offset).pipe(map((data: any) => data.data)).toPromise();
-        await job.progress(50);
-        if (data.length == 0) {
-            let error = new Error('no data exist on page ' + job.data.page + ' and offset ' + offset);
-            error.name = "NoData"
-            await job.moveToFailed(error)
-        }
-        else {
-            job.progress(60);
-            let newjob = await this.fetchQueue.add('fetch', { page, pipe: job.data.pipe, repo: job.data.repo, index: job.data.index }, { attempts: 10 })
-            if (newjob)
-                return this.index(job, data);
+        try {
+            await job.progress(20);
+            let page = parseInt(job.data.page) + 1
+            let offset = (parseInt(job.data.page) - 1) * 100;
+            let url = job.data.repo.itemsEndPoint + '/items?expand=metadata,parentCommunityList,bitstreams' + '&limit=100&offset=' + offset;
+            let data: any = await this.http.get(url).pipe(map((data: any) => data.data)).toPromise();
+            await job.progress(50);
+            if (Array.isArray(data) && data.length == 0) {
+                await job.moveToCompleted("done", true);
+                return "done"
+            }
+            else {
+                job.progress(60);
+                let newjob = await this.fetchQueue.add('fetch', { page, pipe: job.data.pipe, repo: job.data.repo, index: job.data.index }, { attempts: 3 })
+                if (newjob)
+                    return this.index(job, data);
+            }
+        } catch (e) {
+            job.moveToFailed(e, true)
+            return e;
         }
     }
     async index(job, data) {
@@ -69,7 +73,7 @@ export class FetchConsumer {
                     formated['year'] = formated.date.split("-")[0]
             }
             formated['repo'] = job.data.repo.name;
-            finaldata.push({ index: { _index: config.temp_index, _type: config.index_type, _id: job.data.repo.name + "_" + formated.id } });
+            finaldata.push({ index: { _index: config.temp_index } });
             finaldata.push(formated);
         });
 
@@ -87,12 +91,13 @@ export class FetchConsumer {
                 let error = new Error('error update or create item ' + item.index._id);
                 error.stack = JSON.stringify(item);
                 job.moveToFailed(error);
+                return error
             }
         })
 
         job.progress(100);
 
-        return resp.body.items;
+        return resp;
     }
 
 
@@ -153,13 +158,8 @@ export class FetchConsumer {
     }
     @OnGlobalQueueDrained()
     async onDrained(job: Job) {
-        if (this.timeout)
-            clearTimeout(this.timeout)
-        this.timeout = setTimeout(async () => {
-            this.logger.log("OnGlobalQueueDrained");
-            await this.harvesterService.pluginsStart();
-        }, 60000)
-
+        this.logger.log("OnGlobalQueueDrained");
+        await this.harvesterService.pluginsStart();
     }
 
     @OnGlobalQueueResumed()

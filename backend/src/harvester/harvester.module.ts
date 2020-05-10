@@ -14,12 +14,11 @@ import { HarvesterController } from './harvester/harvester.controller';
         SharedModule,
         BullModule.registerQueue({
             name: 'fetch',
-            limiter: {
-                max: 100,
-                duration: 9000
-            },
             settings: {
-                retryProcessDelay: 10000
+                lockDuration: 10000,
+                retryProcessDelay: 10000,
+                maxStalledCount: 0,
+                drainDelay: 10000
             },
             redis: {
                 host: 'localhost',
@@ -28,14 +27,12 @@ import { HarvesterController } from './harvester/harvester.controller';
         }),
         BullModule.registerQueue({
             name: 'plugins',
-            limiter: {
-                max: 100,
-                duration: 9000
-            },
             settings: {
-                retryProcessDelay: 10000
+                lockDuration: 10000,
+                retryProcessDelay: 10000,
+                maxStalledCount: 0,
+                drainDelay: 5000
             },
-
             redis: {
                 host: 'localhost',
                 port: 6379,

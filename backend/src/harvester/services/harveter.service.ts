@@ -52,14 +52,8 @@ export class HarvesterService {
 
     async stopHarvest() {
         this.logger.debug("Stopping Harvest")
-       
-        await this.fetchQueue.empty();
-        await this.fetchQueue.clean(0, 'failed')
         await this.fetchQueue.clean(0, 'wait')
-        await this.fetchQueue.clean(0, 'active')
-        await this.fetchQueue.clean(0, 'delayed')
-        return await this.fetchQueue.clean(0, 'completed')
-
+        return await this.fetchQueue.clean(0, 'active')
     }
     async startHarvest() {
         this.logger.debug("Starting Harvest")
@@ -74,9 +68,7 @@ export class HarvesterService {
 
         let settings = await this.jsonFilesService.read('../../../data/dataToUse.json');
         settings.repositories.forEach(repo => {
-            for (let i = 0; i < 2; i++) {
-                this.fetchQueue.add('fetch', { page: parseInt(repo.startPage) + i, pipe: 2, repo, index: settings.index_alias }, { attempts: 10 })
-            }
+                this.fetchQueue.add('fetch', { page: parseInt(repo.startPage), repo, index: settings.index_alias }, { attempts: 3 })
         });
         return "started";
     }
@@ -91,7 +83,8 @@ export class HarvesterService {
         await this.pluginsQueue.resume();
         let settings = await this.jsonFilesService.read('../../../data/dataToUse.json');
         let plugins: Array<any> = await this.jsonFilesService.read('../../../data/plugins.json');
-        if (plugins.filter(plugin => plugin.value).length > 0)
+        console.log(plugins.filter(plugin => plugin.value.length > 0));
+        if (plugins.filter(plugin => plugin.value.length > 0).length > 0)
             for (let plugin of plugins) {
                 for (let param of plugin.value) {
                     await this.pluginsQueue.add(plugin.name, { ...param, page: 1, index: settings.index_alias }, { attempts: 10 })

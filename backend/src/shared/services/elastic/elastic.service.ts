@@ -51,12 +51,16 @@ export class ElasticService {
 
     }
     async search(query) {
-        const { body } = await this.elasticsearchService.search({
-            index: 'items',
-            method: 'POST',
-            body: query
-        });
-        return body;
+        try {
+            const { body } = await this.elasticsearchService.search({
+                index: 'items',
+                method: 'POST',
+                body: query
+            });
+            return body;
+        } catch (e) {
+            return e
+        }
     }
 
     async add(item) {

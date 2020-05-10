@@ -170,10 +170,12 @@ export class MainBodyBuilderService extends BuilderUtilities {
     const { sort, value } = this.hitsAttributes;
     b.sort('_score', {
       "order": "desc"
-    }).sort(value ? value : 'date', {
-      mode: 'max',
-      order: sort ? sort : 'desc'
     }).from(from);
+    if (sort && value)
+      b.sort(value, {
+        mode: 'max',
+        order: sort
+      })
 
     this.addRawOptions(b);
   }
