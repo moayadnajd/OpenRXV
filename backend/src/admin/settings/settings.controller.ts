@@ -23,7 +23,6 @@ export class SettingsController {
         plugins.forEach(async plugin => {
             let infor = await this.jsonfielServoce.read('../../../src/plugins/' + plugin + '/info.json')
             let values = plugins_values.filter(plug => plug.name == plugin)
-            console.log(plugins_values);
             if (values[0])
                 infor['values'] = values[0].value
             else

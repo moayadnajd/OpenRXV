@@ -37,7 +37,7 @@ export class ExportService {
         fileName: `${fileName}.${type}`,
         path: '/downloads',
         per_doc_size: 2000,
-        total: hits.total
+        total: hits.total.value
       };
 
       let filePath: string;

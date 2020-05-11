@@ -1,17 +1,19 @@
 <mat-card *ngIf="plugin">
     <mat-card-title>
         {{plugin.display_name}}
+        <mat-checkbox [labelPosition]="'before'" (change)="activeChange()" style="float: right;" [(ngModel)]="active">Active</mat-checkbox>
     </mat-card-title>
     <mat-card-subtitle>
         {{plugin.description}}
     </mat-card-subtitle>
     <mat-card-content>
         <div class="row">
-            <div class="col-9">
+            <div class="col-10">
                 <h5>Settings</h5>
+
             </div>
-            <div class="col-3">
-                <button *ngIf="plugin.multiple == 'true'" style="float: right;" (click)="addNew()" color="primary"
+            <div class="col-2">
+                <button *ngIf="plugin.multiple == 'true' && active" style="float: right;" (click)="addNew()" color="primary"
                     mat-raised-button>
                     Add New Instance
                     <mat-icon>add</mat-icon>
@@ -76,7 +78,7 @@
                             </ng-container>
                         </div>
                         <div class="col-1">
-                            <button (click)="delete(i)" class="card-actions" color="warn" mat-icon-button>
+                            <button *ngIf="plugin.multiple == 'true'" (click)="delete(i)" class="card-actions" color="warn" mat-icon-button>
                                 <mat-icon>delete</mat-icon>
                             </button>
                         </div>

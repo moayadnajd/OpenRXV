@@ -22,12 +22,13 @@ export class PluginsComponent implements OnInit {
   }
 
   async save() {
-      await this.settingsService.writePluginsSettings(
-        Object.values(this.pluginsForms).map(
-          (form: FormArray, index) => {
-            let obj = {}; obj['name'] = Object.keys(this.pluginsForms)[index]; obj['value'] = form.value; return obj
-          })
-      );
+    let final = Object.values(this.pluginsForms).filter((data: any) => data.active).filter((data: any) => data.form.valid)
+    await this.settingsService.writePluginsSettings(
+      final.map(
+        (data: any) => {
+          let obj = {}; obj['name'] = data.name; obj['value'] = data.form.value; return obj
+        })
+    );
   }
 
 }

@@ -10,20 +10,33 @@ import { FormGroup, FormControl, FormArray, FormBuilder } from '@angular/forms';
 export class PluginComponent implements OnInit {
   @Input() plugin: any = null;
   formdata: FormArray = new FormArray([]);
+  active: boolean = false;
   @Output() onEdit: EventEmitter<any> = new EventEmitter();
 
   constructor(private fb: FormBuilder) { }
+  activeChange() {
+    if (!this.active)
+      this.formdata = new FormArray([]);
+    else if (this.active && this.plugin.multiple == 'false' && this.plugin.values.length == 0)
+      this.addNew()
 
+    this.sendValue()
+  }
+
+  sendValue() {
+    this.onEdit.emit({ name: this.plugin.name, active: this.active, form: this.formdata })
+  }
   ngOnInit(): void {
 
-    if (this.plugin.values.length)
+    if (this.plugin.values.length) {
+      this.active = true
       this.plugin.values.forEach(element => {
         this.addNew(element)
       });
-    if (this.plugin.values.length == 0 && this.plugin.multiple == 'false')
-      this.addNew()
-    this.formdata.valueChanges.subscribe(d => this.onEdit.emit(this.formdata))
-    this.onEdit.emit(this.formdata)
+    }
+
+    this.formdata.valueChanges.subscribe(d => this.sendValue())
+    this.sendValue()
 
   }
 

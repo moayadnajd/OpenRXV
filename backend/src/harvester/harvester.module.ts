@@ -7,8 +7,9 @@ import { FetchConsumer } from './consumers/fetch.consumer';
 import { SharedModule } from 'src/shared/shared.module';
 import { JsonFilesService } from 'src/admin/json-files/json-files.service';
 import { HarvesterController } from './harvester/harvester.controller';
+import { PluginsConsumer } from './consumers/plugins.consumer';
 @Module({
-    providers: [TasksService, HarvesterService, FetchConsumer, JsonFilesService],
+    providers: [TasksService, HarvesterService, FetchConsumer, JsonFilesService,PluginsConsumer],
     exports: [HarvesterService, SharedModule, BullModule],
     imports: [
         SharedModule,
@@ -27,11 +28,12 @@ import { HarvesterController } from './harvester/harvester.controller';
         }),
         BullModule.registerQueue({
             name: 'plugins',
+
             settings: {
                 lockDuration: 10000,
-                retryProcessDelay: 10000,
+                retryProcessDelay: 5000,
+                drainDelay: 9000,
                 maxStalledCount: 0,
-                drainDelay: 5000
             },
             redis: {
                 host: 'localhost',

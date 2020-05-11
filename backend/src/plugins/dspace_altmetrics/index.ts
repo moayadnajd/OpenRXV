@@ -1,10 +1,9 @@
-import { InjectQueue, Processor, Process, OnGlobalQueueProgress, OnQueueDrained, OnGlobalQueueDrained, OnGlobalQueueResumed } from "@nestjs/bull";
+import { InjectQueue, Processor, Process } from "@nestjs/bull";
 import { Logger, HttpService } from "@nestjs/common";
 import { ElasticsearchService } from "@nestjs/elasticsearch";
 import { Queue, Job } from "bull";
 import { map } from "rxjs/operators";
 import { HarvesterService } from "src/harvester/services/harveter.service";
-import { async } from "rxjs/internal/scheduler/async";
 
 @Processor('plugins')
 export class DSpaceAltmetrics {
@@ -22,9 +21,12 @@ export class DSpaceAltmetrics {
             temp_index: job.data.index + "-temp",
             index_type: "item",
         }
+        let page = job.data.page;
+        if (page == 1)
+            this.handlesIds = null;
         this.handlesIds = await this.generateCache(config.temp_index)
         let handle_prefix = job.data.handle_prefix;
-        let page = job.data.page;
+
         job.progress(20);
         let Allindexing: Array<any> = []
         let data: any = await this.http.get("https://api.altmetric.com/v1/citations/at?num_results=100&handle_prefix=" + handle_prefix + "&page=" + page).pipe(map((data: any) => data.data)).toPromise();
@@ -36,7 +38,7 @@ export class DSpaceAltmetrics {
                     mentions: element.cited_by_accounts_count
                 }
                 if (this.handlesIds[element.handle]) {
-                    Allindexing.push({ update: { _index: config.temp_index, _type: 'item', _id: this.handlesIds[element.handle] } });
+                    Allindexing.push({ update: { _index: config.temp_index, _id: this.handlesIds[element.handle] } });
                     Allindexing.push({ "doc": { altmetric } });
                 }
             });
@@ -70,7 +72,6 @@ export class DSpaceAltmetrics {
                     return;
                 }
                 let allRecords: any = [];
-                let total = 0;
                 let elastic_data = {
                     index: index,
                     body: {
@@ -95,10 +96,7 @@ export class DSpaceAltmetrics {
                     })
 
                     allRecords = [...allRecords, ...handleID];
-                    if (total === 0) {
-                        total = response.body.hits.total;
-                    }
-                    if (response.body.hits.total !== allRecords.length) {
+                    if (response.body.hits.total.value !== allRecords.length) {
                         let response2 = await this.elasticsearchService.scroll({
                             scroll_id: <string>response.body._scroll_id,
                             scroll: '10m'
@@ -119,26 +117,4 @@ export class DSpaceAltmetrics {
             }
         });
     }
-    timeout
-    @OnGlobalQueueDrained()
-    async onDrained(job: Job) {
-
-        if (this.timeout)
-            clearTimeout(this.timeout)
-        this.timeout = setTimeout(async () => {
-            this.logger.log("OnGlobalQueueDrained");
-            this.handlesIds = null;
-            await await this.harvesterService.Reindex();
-
-        }, 60000)
-
-    }
-
-    @OnGlobalQueueResumed()
-    async onResumed(job: Job) {
-        this.timeout = undefined;
-
-    }
-
-
 }

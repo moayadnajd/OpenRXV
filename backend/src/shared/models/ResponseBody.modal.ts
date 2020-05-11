@@ -16,7 +16,9 @@ export interface Shards {
 }
 
 export interface Hits {
-  total: number;
+  total: {
+    value:number
+  };
   max_score: number;
   hits: Array<InnterHits>;
 }
