@@ -9,6 +9,7 @@ import * as _ from 'underscore';
 import * as ISO from 'iso-3166-1';
 
 import * as moment from 'moment';
+(moment as any).suppressDeprecationWarnings = true;
 import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { ApiResponse } from '@elastic/elasticsearch';
 import { HarvesterService } from '../services/harveter.service';
@@ -65,12 +66,16 @@ export class FetchConsumer {
         data.forEach((item: any) => {
             let formated = this.format(item, job.data.repo.schema);
 
-            if (formated.date) {
-                if (_.isArray(formated.date))
-                    formated.date = formated.date[0];
-                formated.date = moment(new Date(formated.date)).format('YYYY-MM-DD')
-                if (!formated['year'])
-                    formated['year'] = formated.date.split("-")[0]
+            if (job.data.repo.years) {
+                let spleted = job.data.repo.years.split(/_(.+)/)
+
+                if (formated[spleted[1]]) {
+                    if (typeof formated[spleted[1]] === 'string')
+                        formated[job.data.repo.years] = formated[spleted[1]].split("-")[0]
+                    if (Array.isArray(formated[spleted[1]]) && typeof formated[spleted[1]][0] === 'string')
+                        formated[job.data.repo.years] = formated[spleted[1]][0].split("-")[0]
+                }
+
             }
             formated['repo'] = job.data.repo.name;
             finaldata.push({ index: { _index: config.temp_index } });
@@ -85,12 +90,12 @@ export class FetchConsumer {
         });
         job.progress(90);
 
-        resp.body.items.forEach((item: any) => {
+        resp.body.items.forEach((item: any, index: number) => {
             //item.index.status
             if (item.index.status != 200 && item.index.status != 201) {
-                let error = new Error('error update or create item ' + item.index._id);
+                let error = new Error('error update or create item ' + finaldata[index].id);
                 error.stack = JSON.stringify(item);
-                job.moveToFailed(error);
+                job.moveToFailed(error, true);
                 return error
             }
         })
@@ -141,11 +146,21 @@ export class FetchConsumer {
 
         if (addOn) {
             if (typeof value === 'string' || value instanceof String) {
-                let splited = <Array<string>>value.split(',')
                 if (addOn == "country")
-                    value = splited.map(d => this.mapIsoToCountry(d.trim().toLowerCase()));
+                    value = value.split(',').map(d => this.mapIsoToCountry(d.trim().toLowerCase()));
                 if (addOn == "language")
-                    value = splited.map(d => this.mapIsoToLang(d.trim().toLowerCase()));
+                    value = value.split(',').map(d => this.mapIsoToLang(d.trim().toLowerCase()));
+                if (addOn == "date") {
+                    if (_.isArray(value))
+                        value = value[0];
+                    try {
+                        value = moment(value).format('YYYY-MM-DD')
+                        if (!moment(value).isValid())
+                            value = null
+                    } catch (e) {
+                        value = null;
+                    }
+                }
             }
         }
         return mapto[value] ? mapto[value] : value

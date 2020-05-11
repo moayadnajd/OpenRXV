@@ -28,17 +28,26 @@ export class SetupComponent implements OnInit {
       metadata: new FormControl(metadada),
       disply_name: new FormControl(disply_name),
       addOn: new FormControl(addOn),
+
     }
 
   }
 
+  selectFormat(index, value) {
+    if (this.repositories.at(index).get('years').value == value)
+      this.repositories.at(index).get('years').reset()
+   
+  }
+
   repositories: FormArray = new FormArray([
     new FormGroup({
+      years: new FormControl(),
       name: new FormControl(),
       icon: new FormControl(),
       startPage: new FormControl(),
       itemsEndPoint: new FormControl(),
       allCores: new FormControl(),
+
       schema: new FormArray([
         new FormGroup(this.baseSchema())
       ]),
@@ -108,11 +117,11 @@ export class SetupComponent implements OnInit {
     metadata.clear();
     data.base.forEach(element => {
       let splited = element.split('.');
-      schema.push(new FormGroup(this.baseSchema(element, (splited.join('_') as string).toLowerCase(), (splited[splited.length - 1] as string).toLowerCase().charAt(0).toUpperCase() + (splited[splited.length - 1] as string).toLowerCase().slice(1))))
+      schema.push(new FormGroup(this.baseSchema(element, (splited.join('_') as string).toLowerCase())))
     });
     data.metadata.forEach(element => {
       let splited = element.split('.');
-      metadata.push(new FormGroup(this.baseSchema(element, (splited.join('_') as string).toLowerCase(), (splited[splited.length - 1] as string).toLowerCase().charAt(0).toUpperCase() + (splited[splited.length - 1] as string).toLowerCase().slice(1))))
+      metadata.push(new FormGroup(this.baseSchema(element, (splited.join('_') as string).toLowerCase())))
     });
 
   }

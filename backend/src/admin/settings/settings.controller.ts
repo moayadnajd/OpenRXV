@@ -95,6 +95,7 @@ export class SettingsController {
 
             final['repositories'].push({
                 name: repo.name,
+                years: repo.years,
                 type: "Dspace",
                 startPage: repo.startPage,
                 itemsEndPoint: repo.itemsEndPoint,
@@ -151,7 +152,7 @@ export class SettingsController {
     async  getMetadata() {
         let data = await this.jsonfielServoce.read('../../../data/data.json');
         var merged = [].concat.apply([], data.repositories.map(d => [...d.schema, ...d.metadata]));
-        return [... new Set(merged.map(d => d.disply_name))];
+        return [...new Set(merged.map(d => d.disply_name)), ...data.repositories.map(d => d.years)];
     }
 
     @UseGuards(AuthGuard('jwt'))
@@ -178,7 +179,7 @@ export class SettingsController {
 
     @Post('upload/image/:name')
     @UseInterceptors(FileInterceptor('file', {
-        preservePath: true, fileFilter: this.imageFileFilter, dest: join(__dirname, '../../public/images')
+        preservePath: true, fileFilter: this.imageFileFilter, dest: join(__dirname, '../../../data/files/images')
     }))
     async uploadFile(@UploadedFile() file, @Param('name') name: string) {
         console.log(file)
@@ -187,8 +188,8 @@ export class SettingsController {
             name = splited[0] + '-' + new Date().getTime();
 
 
-        let response = join(__dirname, '../../public/images/') + name + '.' + splited[splited.length - 1];
-        await fs.renameSync(join(__dirname, '../../public/images/') + file.filename, response)
-        return { location: response.slice(response.indexOf('public/') + 6) };
+        let response = join(__dirname, '../../../data/files/images/') + name + '.' + splited[splited.length - 1];
+        await fs.renameSync(join(__dirname, '../../../data/files/images/') + file.filename, response)
+        return { location: response.slice(response.indexOf('files/') + 6) };
     }
 }

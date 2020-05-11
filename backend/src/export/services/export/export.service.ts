@@ -85,7 +85,7 @@ export class ExportService {
 
   private resolvePath(file: string, download?: boolean): string {
     return download
-      ? path.resolve(__dirname, `../../../public/downloads/${file}`)
+      ? path.resolve(__dirname, `../../../../data/files/downloads/${file}`)
       : path.resolve(__dirname, `../template-files/${file}`);
   }
 

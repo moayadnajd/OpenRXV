@@ -84,6 +84,12 @@ export class FilterComponent implements OnInit {
         this.form_data = [...this.baseform, ...
           [
             {
+              name: 'source',
+              label: 'Data Source',
+              type: 'metadata',
+              required: true,
+            },
+            {
               name: 'placeholder',
               label: 'Placeholder',
               type: 'text',

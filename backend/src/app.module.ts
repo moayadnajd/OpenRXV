@@ -17,11 +17,11 @@ import { PluginsModule } from './plugins/plugins.module';
     ExportModule,
     ServeStaticModule.forRoot({
       serveRoot:'/export/downloads',
-      rootPath: join(__dirname, 'public/downloads'),
+      rootPath: join(__dirname, '../data/files/downloads'),
     }),
     ServeStaticModule.forRoot({
       serveRoot:'/images',
-      rootPath: join(__dirname, 'public/images'),
+      rootPath: join(__dirname, '../data/files/images'),
     }),
     AuthModule,
     UsersModule,

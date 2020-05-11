@@ -10,7 +10,7 @@ import { join } from 'path';
 @Module({
   controllers: [MetadataController, ValuesController, SettingsController],
   imports: [SharedModule, HarvesterModule, MulterModule.register({
-    dest: join(__dirname, '../public/uploads'),
+    dest: join(__dirname, '../../data/files'),
   })],
   providers: [JsonFilesService]
 })

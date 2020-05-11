@@ -19,7 +19,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "copy:assets": "mkdir -p 'dist/export/services/template-files/' && mkdir -p  dist/public/downloads/ &&  cp -r 'src/export/services/template-files/' 'dist/export/services/template-files/'"
+    "copy:assets": "mkdir -p 'dist/export/services/template-files/' && mkdir -p  data/files/downloads/ &&  cp -r 'src/export/services/template-files/' 'dist/export/services/template-files/'"
   },
   "dependencies": {
     "@elastic/elasticsearch": "^7.6.1",
