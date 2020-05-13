@@ -42,12 +42,7 @@ export class MapComponent extends ParentChart implements OnInit {
   private setOptions(buckets: Array<Bucket>): Highcharts.Options {
     return {
       chart: {
-        map: mapWorld,
-        animation: false
-      },
-      boost: {
-        enabled: true,
-        useGPUTranslations: true
+        map: mapWorld
       },
       mapNavigation: {
         enabled: true,
@@ -70,14 +65,12 @@ export class MapComponent extends ParentChart implements OnInit {
       },
       series: [
         {
-          type: 'map',
           data: buckets.map((b: Bucket) => [
             getCountryCode(b.key),
             b.doc_count
           ]),
           mapData: mapWorld,
-          showInLegend: true,
-          showInNavigator: true,
+          showInLegend: false,
           cursor: 'pointer',
           enableMouseTracking: true,
           allowPointSelect: true,
