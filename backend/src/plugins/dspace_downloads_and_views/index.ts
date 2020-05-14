@@ -13,12 +13,6 @@ export class DSpaceDowbloadsAndViews {
     ) { }
     @Process({ name: 'dspace_downloads_and_views', concurrency: 1 })
     async transcode(job: Job<any>) {
-        let config = {
-            temp_index: job.data.index + "-temp",
-            final_index: job.data.index + "-final",
-            index_type: "item",
-            index_alias: job.data.index,
-        }
         let link = job.data.link;
         let page = job.data.page;
         job.progress(20);
@@ -35,11 +29,11 @@ export class DSpaceDowbloadsAndViews {
                     score: parseInt(stat.views) + parseInt(stat.downloads)
                 };
                 //TODO: CGSPACE_ must change 
-                toUpdateIndexes.push({ update: { _index: config.temp_index, _type: config.index_type, _id: job.data.repo + "_" + stat.id } });
+                toUpdateIndexes.push({ update: { _index: process.env.OPENRXV_TEMP_INDEX, _id: job.data.repo + "_" + stat.id } });
                 toUpdateIndexes.push({ "doc": { numbers } })
             });
             job.progress(70);
-            let newJob = await this.pluginQueue.add('dspace_downloads_and_views', { page: page + 1, link, index: job.data.index, repo: job.data.repo })
+            let newJob = await this.pluginQueue.add('dspace_downloads_and_views', { page: page + 1, link, repo: job.data.repo })
             let currentResult = await await this.elasticsearchService.bulk({
                 refresh: 'wait_for',
                 body: toUpdateIndexes

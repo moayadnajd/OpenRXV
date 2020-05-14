@@ -20,10 +20,6 @@ export class MELDowbloadsAndViews {
     @Process({ name: 'mel_downloads_and_views', concurrency: 1 })
     async transcode(job: Job<any>) {
         job.progress(20);
-        let config = {
-            temp_index: job.data.index + "-temp",
-            index_type: "item",
-        }
         let batch;
         let scrollId
         if (job.data.scroll_id) {
@@ -31,7 +27,7 @@ export class MELDowbloadsAndViews {
             scrollId = job.data.scroll_id
         } else {
             batch = await this.elasticsearchService.search({
-                index: config.temp_index,
+                index: process.env.OPENRXV_TEMP_INDEX,
                 scroll: '5m',
                 body: { size: 100, query: { match: { 'repo.keyword': job.data.repo } } }
             })
@@ -49,7 +45,7 @@ export class MELDowbloadsAndViews {
                     let dspace_id = publicationsToUpdate.find((p: any) => p._source.id == stat.dspace_item_id)._id;
                     if (dspace_id) {
                         finaldata.push(
-                            { "update": { "_id": dspace_id, "_type": config.index_type, "_index": config.temp_index } }
+                            { "update": { "_id": dspace_id, "_index": process.env.OPENRXV_TEMP_INDEX } }
                         )
                         finaldata.push({ "doc": { numbers: { views: parseInt(stat.views), downloads: parseInt(stat.downloads), score: parseInt(stat.views) + parseInt(stat.downloads) } } })
 
@@ -62,16 +58,16 @@ export class MELDowbloadsAndViews {
                     refresh: 'wait_for',
                     body: finaldata
                 }).catch(async (err: Error) => {
-                    await this.pluginQueue.add('mel_downloads_and_views', { index: job.data.index, scroll_id: scrollId, repo: job.data.repo }).then(() => {
+                    await this.pluginQueue.add('mel_downloads_and_views', {  scroll_id: scrollId, repo: job.data.repo }).then(() => {
                         job.moveToFailed(err)
                     }).catch(e => job.moveToFailed(e));
                 });
                 job.progress(100);
-                let newJob = await this.pluginQueue.add('mel_downloads_and_views', { index: job.data.index, scroll_id: scrollId, repo: job.data.repo })
+                let newJob = await this.pluginQueue.add('mel_downloads_and_views', {  scroll_id: scrollId, repo: job.data.repo })
                 if (newJob)
                     return result
             } else {
-                await this.pluginQueue.add('mel_downloads_and_views', { index: job.data.index, scroll_id: scrollId, repo: job.data.repo }).then(() => {
+                await this.pluginQueue.add('mel_downloads_and_views', {  scroll_id: scrollId, repo: job.data.repo }).then(() => {
                 }).catch(e => job.moveToFailed(e));
             }
         } else {

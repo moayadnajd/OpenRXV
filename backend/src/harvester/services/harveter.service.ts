@@ -68,7 +68,7 @@ export class HarvesterService {
 
         let settings = await this.jsonFilesService.read('../../../data/dataToUse.json');
         settings.repositories.forEach(repo => {
-                this.fetchQueue.add('fetch', { page: parseInt(repo.startPage), repo, index: settings.index_alias }, { attempts: 3 })
+                this.fetchQueue.add('fetch', { page: parseInt(repo.startPage), repo }, { attempts: 3 })
         });
         return "started";
     }
@@ -96,19 +96,12 @@ export class HarvesterService {
 
     }
     async Reindex() {
-        let config = {
-            temp_index: "items-temp",
-            final_index: "items-final",
-            index_type: "item",
-            index_alias: "items",
-        }
         this.logger.debug("reindex function is called")
-
         await this.elasticsearchService.indices.updateAliases({
             body: {
                 actions: [
-                    { remove: { index: config.final_index, alias: 'items' } },
-                    { add: { index: config.temp_index, alias: 'items' } }
+                    { remove: { index: process.env.OPENRXV_FINAL_INDEX, alias: process.env.OPENRXV_ALIAS } },
+                    { add: { index: process.env.OPENRXV_TEMP_INDEX, alias: process.env.OPENRXV_ALIAS } }
                 ]
             }
         })
@@ -116,13 +109,13 @@ export class HarvesterService {
         this.logger.debug("updateAliases final to tmep")
 
         await this.elasticsearchService.indices.delete({
-            index: config.final_index,
+            index: process.env.OPENRXV_FINAL_INDEX,
             ignore_unavailable: true
         })
         this.logger.debug("delete final")
 
         await this.elasticsearchService.indices.create({
-            index: config.final_index,
+            index: process.env.OPENRXV_FINAL_INDEX,
 
         })
         this.logger.debug("create final")
@@ -133,9 +126,9 @@ export class HarvesterService {
             body: {
                 "conflicts": "proceed",
                 source: {
-                    index: config.temp_index
+                    index: process.env.OPENRXV_TEMP_INDEX
                 },
-                dest: { index: config.final_index }
+                dest: { index: process.env.OPENRXV_FINAL_INDEX }
             }
         }, { requestTimeout: 2000000 })
         this.logger.debug("reindex to final")
@@ -144,8 +137,8 @@ export class HarvesterService {
         await this.elasticsearchService.indices.updateAliases({
             body: {
                 actions: [
-                    { remove: { index: config.temp_index, alias: 'items' } },
-                    { add: { index: config.final_index, alias: 'items' } }
+                    { remove: { index: process.env.OPENRXV_TEMP_INDEX, alias: process.env.OPENRXV_ALIAS } },
+                    { add: { index: process.env.OPENRXV_FINAL_INDEX, alias: process.env.OPENRXV_ALIAS } }
                 ]
             }
         })
@@ -153,13 +146,13 @@ export class HarvesterService {
         this.logger.debug("updateAliases temp to final")
 
         await this.elasticsearchService.indices.delete({
-            index: config.temp_index,
+            index: process.env.OPENRXV_TEMP_INDEX,
             ignore_unavailable: true
         })
         this.logger.debug("delete temp")
 
         await this.elasticsearchService.indices.create({
-            index: config.temp_index,
+            index: process.env.OPENRXV_TEMP_INDEX,
         })
 
         this.logger.debug("create temp")

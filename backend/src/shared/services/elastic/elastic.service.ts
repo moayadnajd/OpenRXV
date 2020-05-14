@@ -5,19 +5,19 @@ import { ApiResponse } from '@elastic/elasticsearch';
 import * as bcrypt from 'bcrypt';
 @Injectable()
 export class ElasticService {
-    index: string = 'users'
+    index: string = 'openrxv-users'
     constructor(public readonly elasticsearchService: ElasticsearchService) { }
     async startup() {
         let values_exist: ApiResponse = await this.elasticsearchService.indices.exists({ index: "values" })
         let users_exist: ApiResponse = await this.elasticsearchService.indices.exists({ index: "users" })
         let shared_exist: ApiResponse = await this.elasticsearchService.indices.exists({ index: "shared" })
-        let items_final_exist: ApiResponse = await this.elasticsearchService.indices.exists({ index: "items-final" })
-        let items_temp_exist: ApiResponse = await this.elasticsearchService.indices.exists({ index: "items-temp" })
+        let items_final_exist: ApiResponse = await this.elasticsearchService.indices.exists({ index: process.env.OPENRXV_FINAL_INDEX })
+        let items_temp_exist: ApiResponse = await this.elasticsearchService.indices.exists({ index: process.env.OPENRXV_TEMP_INDEX })
 
         if (!items_final_exist.body)
-            await this.elasticsearchService.indices.create(({ index: "items-final" }));
+            await this.elasticsearchService.indices.create(({ index: process.env.OPENRXV_FINAL_INDEX }));
         if (!items_temp_exist.body)
-            await this.elasticsearchService.indices.create(({ index: "items-temp" }));
+            await this.elasticsearchService.indices.create(({ index: process.env.OPENRXV_TEMP_INDEX }));
         if (!shared_exist.body)
             await this.elasticsearchService.indices.create(({ index: "shared" }));
         if (!values_exist.body)
@@ -53,7 +53,7 @@ export class ElasticService {
     async search(query) {
         try {
             const { body } = await this.elasticsearchService.search({
-                index: 'items',
+                index: process.env.OPENRXV_ALIAS,
                 method: 'POST',
                 body: query
             });
@@ -180,7 +180,7 @@ export class ElasticService {
                 });
             } else {
                 scrollSearch = await this.elasticsearchService.search({
-                    index: 'items',
+                    index: process.env.OPENRXV_ALIAS,
                     scroll: '10m',
                     method: 'POST',
                     body: { ...q }

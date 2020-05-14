@@ -40,19 +40,6 @@ export class SettingsController {
 
     format(body: any) {
         let final = {};
-        final['temp_index'] = `${body.index_name}-temp`
-        final['final_index'] = `${body.index_name}-final`
-        final['index_type'] = `${body.index_name}`
-        final['index_alias'] = body.index_name
-        final['elasticsearch'] = {
-            host: body.elasticsearch
-        }
-        final['redis'] = {
-            host: body.redis,
-            port: 6379
-        }
-        final['cron'] = body.cron
-        final['startOnFirstInit'] = body.startOnFirstInit;
         final['repositories'] = []
         body.repositories.forEach(repo => {
 

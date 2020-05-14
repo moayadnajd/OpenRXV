@@ -11,16 +11,19 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { PluginsModule } from './plugins/plugins.module';
+import { ConfigModule } from '@nestjs/config';
 @Module({
-  imports: [ExplorerModule, AdminModule,
+  imports: [
     SharedModule,
+    ExplorerModule,
+    AdminModule,
     ExportModule,
     ServeStaticModule.forRoot({
-      serveRoot:'/export/downloads',
+      serveRoot: '/export/downloads',
       rootPath: join(__dirname, '../data/files/downloads'),
     }),
     ServeStaticModule.forRoot({
-      serveRoot:'/images',
+      serveRoot: '/images',
       rootPath: join(__dirname, '../data/files/images'),
     }),
     AuthModule,

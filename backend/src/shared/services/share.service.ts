@@ -4,7 +4,7 @@ import { ElasticsearchService } from '@nestjs/elasticsearch';
 import * as hash from 'object-hash';
 @Injectable()
 export class ShareService extends ElasticService {
-    index: string = 'shared'
+    index: string = 'openrxv-shared'
     constructor(public readonly elasticsearchService: ElasticsearchService) {
 
         super(elasticsearchService)

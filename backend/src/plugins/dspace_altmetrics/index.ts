@@ -17,14 +17,10 @@ export class DSpaceAltmetrics {
     ) { }
     @Process({ name: 'dspace_altmetrics', concurrency: 1 })
     async transcode(job: Job<any>) {
-        let config = {
-            temp_index: job.data.index + "-temp",
-            index_type: "item",
-        }
         let page = job.data.page;
         if (page == 1)
             this.handlesIds = null;
-        this.handlesIds = await this.generateCache(config.temp_index)
+        this.handlesIds = await this.generateCache(process.env.OPENRXV_TEMP_INDEX)
         let handle_prefix = job.data.handle_prefix;
 
         job.progress(20);
@@ -38,7 +34,7 @@ export class DSpaceAltmetrics {
                     mentions: element.cited_by_accounts_count
                 }
                 if (this.handlesIds[element.handle]) {
-                    Allindexing.push({ update: { _index: config.temp_index, _id: this.handlesIds[element.handle] } });
+                    Allindexing.push({ update: { _index: process.env.OPENRXV_TEMP_INDEX, _id: this.handlesIds[element.handle] } });
                     Allindexing.push({ "doc": { altmetric } });
                 }
             });
@@ -50,7 +46,7 @@ export class DSpaceAltmetrics {
                 })
 
                 if (page < Math.ceil(parseInt(data.query.total) / 100)) {
-                    let newjob = await this.pluginQueue.add('dspace_altmetrics', { page: page + 1, handle_prefix, index: job.data.index })
+                    let newjob = await this.pluginQueue.add('dspace_altmetrics', { page: page + 1, handle_prefix })
                     await job.progress(100);
                     if (newjob)
                         return currentResult

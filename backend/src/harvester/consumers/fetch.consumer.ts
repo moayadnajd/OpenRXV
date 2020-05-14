@@ -42,7 +42,7 @@ export class FetchConsumer {
             }
             else {
                 job.progress(60);
-                let newjob = await this.fetchQueue.add('fetch', { page, pipe: job.data.pipe, repo: job.data.repo, index: job.data.index }, { attempts: 3 })
+                let newjob = await this.fetchQueue.add('fetch', { page, pipe: job.data.pipe, repo: job.data.repo }, { attempts: 3 })
                 if (newjob)
                     return this.index(job, data);
             }
@@ -52,14 +52,7 @@ export class FetchConsumer {
         }
     }
     async index(job, data) {
-        let config = {
-            temp_index: job.data.index + "-temp",
-            final_index: job.data.index + "-final",
-            index_type: "item",
-            index_alias: job.data.index,
-        }
-
-
+ 
         let finaldata: Array<any> = [];
 
 
@@ -78,7 +71,7 @@ export class FetchConsumer {
 
             }
             formated['repo'] = job.data.repo.name;
-            finaldata.push({ index: { _index: config.temp_index } });
+            finaldata.push({ index: { _index: process.env.OPENRXV_TEMP_INDEX } });
             finaldata.push(formated);
         });
 

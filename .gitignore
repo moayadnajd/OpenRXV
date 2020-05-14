@@ -1,2 +1,4 @@
 # Ignore macOS Finder settings
 .DS_Store
+backend/.env
+backend/package-lock.json

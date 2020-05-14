@@ -5,11 +5,13 @@ import { MetadataService } from './services/metadata.service';
 import { ValuesService } from './services/values.service';
 import { ShareService } from './services/share.service';
 import { StartupService } from './services/startup/startup.service';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
     imports: [
+        ConfigModule.forRoot(),
         ElasticsearchModule.register({
-            node: 'http://localhost:9200',
+            node: process.env.ELASTICSEARCH_HOST,
         }),
         HttpModule
     ],

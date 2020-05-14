@@ -13,15 +13,6 @@ import { split } from 'ramda';
 export class SetupComponent implements OnInit {
 
   isLinear = true;
-  firstFormGroup: FormGroup = new FormGroup({
-    elasticsearch: new FormControl(''),
-    redis: new FormControl(''),
-  });
-  secondFormGroup: FormGroup = new FormGroup({
-    index_name: new FormControl(''),
-    cron: new FormControl(''),
-    startOnFirstInit: new FormControl(),
-  });
 
   baseSchema(metadada = null, disply_name = null, addOn = null) {
     return {
@@ -62,8 +53,6 @@ export class SetupComponent implements OnInit {
   async ngOnInit() {
 
     let data = await this.settingService.read()
-    await this.firstFormGroup.patchValue(data);
-    await this.secondFormGroup.patchValue(data);
     data.repositories.forEach((element, repoindex) => {
       if (element.icon)
         this.logo[repoindex] = element.icon;
@@ -96,12 +85,11 @@ export class SetupComponent implements OnInit {
     this.repositories.at(index).get('icon').setValue(this.logo[index]);
   }
   async submit() {
-    if (this.firstFormGroup.valid && this.secondFormGroup.valid && this.repositories.valid) {
-      let settings = { ...this.firstFormGroup.value, ...this.secondFormGroup.value, ...{ repositories: this.repositories.value } }
+    if (this.repositories.valid) {
+      let settings = { repositories: this.repositories.value }
       await this.settingService.save(settings);
       this.toastr.success('Settings have been saved successfully');
     }
-
   }
 
   async getMetadata(index) {
