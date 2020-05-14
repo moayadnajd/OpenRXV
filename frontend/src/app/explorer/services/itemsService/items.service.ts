@@ -12,7 +12,7 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ItemsService {
-  private readonly api_end_point: string = environment.endPoint;
+  private readonly api_end_point: string = environment.api+'/search';
   constructor(private http: HttpClient) { }
 
   getItems(query: ElasticsearchQuery): Observable<ElasticsearchResponse> {

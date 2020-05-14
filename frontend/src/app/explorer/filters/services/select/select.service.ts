@@ -15,7 +15,7 @@ import { BodyBuilderService } from '../bodyBuilder/body-builder.service';
 @Injectable()
 export class SelectService {
   private source: string;
-  private readonly api_end_point: string = environment.endPoint;
+  private readonly api_end_point: string = environment.api+'/search';
   total: number;
   subjetData: Subject<Bucket[]>;
   constructor(

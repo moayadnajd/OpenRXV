@@ -47,7 +47,7 @@ export class ExportComponent implements OnInit {
   ) {
     this.installing = false;
     this.indexToToggleLoaded = 0;
-    this.exportPoint = environment.exportPoint;
+    this.exportPoint = environment.api+'/export';
     this.forceEnd = false;
     this.part = 1;
   }

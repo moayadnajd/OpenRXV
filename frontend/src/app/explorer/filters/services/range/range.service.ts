@@ -21,7 +21,7 @@ import * as fromStore from '../../../store';
 export class RangeService {
   private store: Store<fromStore.ItemsState>;
   private source: string;
-  private readonly api_end_point: string = environment.endPoint;
+  private readonly api_end_point: string = environment.api+'/search';
   constructor(
     private readonly http: HttpClient,
     private readonly bodyBuilderService: BodyBuilderService

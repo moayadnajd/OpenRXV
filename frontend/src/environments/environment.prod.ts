@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  endPoint: '/explorer/api/search',
-  exportPoint: '/explorer/api/exports'
+  api: '/explorer/api',
+  domain_name: 'http://demo.openrxv.org/explorer',
 };

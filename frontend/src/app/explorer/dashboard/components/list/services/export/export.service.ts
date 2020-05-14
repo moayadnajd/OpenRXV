@@ -12,7 +12,7 @@ import { hits } from 'src/app/explorer/filters/services/interfaces';
 
 @Injectable()
 export class ExportService {
-  private readonly api_end_export_point: string = environment.exportPoint;
+  private readonly api_end_export_point: string = environment.api+'/export';
   constructor(private readonly http: HttpClient) { }
 
   export(d: DataForExporter): Observable<ExporterResponse> {
