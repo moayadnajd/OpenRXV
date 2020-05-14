@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "install_and_run": "npm i && npm run copy:assets && npm run build && npm run start:prod",
+    "install_and_run": "npm i && cp example.env .env &&  npm run copy:assets && npm run build && npm run start:prod",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -20,7 +20,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "copy:assets": "cp example.env .env && mkdir -p 'dist/export/services/template-files/' && mkdir -p  data/files/downloads/ &&  cp -r 'src/export/services/template-files/' 'dist/export/services/template-files/'"
+    "copy:assets": "mkdir -p 'dist/export/services/template-files/' && mkdir -p  data/files/downloads/ &&  cp -r 'src/export/services/template-files/' 'dist/export/services/template-files/'"
   },
   "dependencies": {
     "@elastic/elasticsearch": "^7.6.1",

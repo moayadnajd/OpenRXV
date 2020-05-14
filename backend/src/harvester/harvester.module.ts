@@ -8,10 +8,12 @@ import { SharedModule } from 'src/shared/shared.module';
 import { JsonFilesService } from 'src/admin/json-files/json-files.service';
 import { HarvesterController } from './harvester/harvester.controller';
 import { PluginsConsumer } from './consumers/plugins.consumer';
+import { ConfigModule } from '@nestjs/config';
 @Module({
-    providers: [TasksService, HarvesterService, FetchConsumer, JsonFilesService,PluginsConsumer],
+    providers: [TasksService, HarvesterService, FetchConsumer, JsonFilesService, PluginsConsumer],
     exports: [HarvesterService, SharedModule, BullModule],
     imports: [
+        ConfigModule.forRoot(),
         SharedModule,
         BullModule.registerQueue({
             name: 'fetch',
@@ -22,8 +24,8 @@ import { PluginsConsumer } from './consumers/plugins.consumer';
                 drainDelay: 10000
             },
             redis: {
-                host: 'localhost',
-                port: 6379,
+                host: process.env.REDIS_HOST,
+                port: parseInt(process.env.REDIS_PORT)
             },
         }),
         BullModule.registerQueue({
@@ -36,8 +38,8 @@ import { PluginsConsumer } from './consumers/plugins.consumer';
                 maxStalledCount: 0,
             },
             redis: {
-                host: 'localhost',
-                port: 6379,
+                host: process.env.REDIS_HOST,
+                port: parseInt(process.env.REDIS_PORT)
             },
         }),
     ],
