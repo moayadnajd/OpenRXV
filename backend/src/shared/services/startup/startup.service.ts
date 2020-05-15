@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { ElasticService } from '../elastic/elastic.service';
+import { JsonFilesService } from 'src/admin/json-files/json-files.service';
 
 @Injectable()
 export class StartupService {
-    constructor(private elsticsearch: ElasticService) {
+    constructor(private elsticsearch: ElasticService,
+        private jsonfileservice: JsonFilesService
+    ) {
         console.log("ElasticService ------------- init");
-       this.elsticsearch.startup();
+        this.elsticsearch.startup();
+        this.jsonfileservice.startup();
     }
 }

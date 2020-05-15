@@ -6,6 +6,7 @@ import { ValuesService } from './services/values.service';
 import { ShareService } from './services/share.service';
 import { StartupService } from './services/startup/startup.service';
 import { ConfigModule } from '@nestjs/config';
+import { JsonFilesService } from 'src/admin/json-files/json-files.service';
 
 @Module({
     imports: [
@@ -15,9 +16,9 @@ import { ConfigModule } from '@nestjs/config';
         }),
         HttpModule
     ],
-    providers: [ElasticService, MetadataService,ValuesService,ShareService,StartupService],
+    providers: [ElasticService, MetadataService,ValuesService,ShareService,StartupService , JsonFilesService],
 
-    exports: [ElasticsearchModule, ElasticService, MetadataService,ValuesService,ShareService,HttpModule]
+    exports: [ElasticsearchModule, ElasticService, MetadataService,ValuesService,ShareService,HttpModule,JsonFilesService]
 })
 export class SharedModule {
 

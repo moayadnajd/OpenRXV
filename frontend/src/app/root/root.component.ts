@@ -3,6 +3,7 @@ import { SettingsService } from '../admin/services/settings.service';
 
 import * as tinycolor from 'tinycolor2'
 import { Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 export interface Color {
   name: string;
   hex: string;
@@ -16,7 +17,7 @@ export interface Color {
 export class RootComponent implements OnInit {
   loadSettigs: boolean = false;
   constructor(
-
+    private titleService: Title,
     private readonly settingsService: SettingsService,
     private router: Router
   ) { }
@@ -24,13 +25,16 @@ export class RootComponent implements OnInit {
   async ngOnInit() {
     let settings = await this.settingsService.readExplorerSettings();
     await localStorage.setItem('configs', JSON.stringify(settings))
-    if (!settings.counters && !settings.dashboard) {
+    if (!settings.counters && !settings.dashboard || settings.dashboard.length == 0){
       this.router.navigate(['/admin']);
     }
     this.loadSettigs = true
     if (settings.appearance.primary_color) {
       this.savePrimaryColor(settings.appearance.primary_color)
+      this.titleService.setTitle( settings.appearance.website_name );
     }
+    
+
   }
 
 
