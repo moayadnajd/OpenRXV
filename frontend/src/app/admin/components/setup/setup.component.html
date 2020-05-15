@@ -52,7 +52,7 @@
                                         <button (click)="logo[repoindex] = null" color="warn" mat-icon-button>
                                             <mat-icon>delete</mat-icon>
                                         </button>
-                                        <img [src]="'http://localhost:3000'+logo[repoindex]" alt="logo">
+                                        <img [src]="src(logo[repoindex])" alt="logo">
                                     </div>
                                 </div>
                             </div>

@@ -4,6 +4,7 @@ import { SettingsService } from '../../services/settings.service';
 import { async } from '@angular/core/testing';
 import { ToastrService } from 'ngx-toastr';
 import { split } from 'ramda';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-setup',
@@ -27,7 +28,7 @@ export class SetupComponent implements OnInit {
   selectFormat(index, value) {
     if (this.repositories.at(index).get('years').value == value)
       this.repositories.at(index).get('years').reset()
-   
+
   }
 
   repositories: FormArray = new FormArray([
@@ -79,7 +80,9 @@ export class SetupComponent implements OnInit {
     console.log(index);
     this.upload(event.target.files[0], this.repositories.at(index).get('name').value, index)
   }
-
+  src(value) {
+   return environment.api +'/'+ value
+  }
   async upload(file: File, name: string, index = null) {
     this.logo[index] = await this.settingService.upload(file, name)
     this.repositories.at(index).get('icon').setValue(this.logo[index]);

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { SettingsService } from '../services/settings.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-appearance',
@@ -16,7 +17,9 @@ export class AppearanceComponent implements OnInit {
     logo: new FormControl('')
   })
   constructor(private settingsService: SettingsService) { }
-
+  src(value) {
+    return environment.api + '/' + value;
+  }
   async ngOnInit() {
     let { appearance } = await this.settingsService.readExplorerSettings();
     this.form.patchValue(appearance)
