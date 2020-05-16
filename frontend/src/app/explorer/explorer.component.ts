@@ -82,7 +82,7 @@ export class ExplorerComponent implements OnInit {
   async ngOnInit() {
     let { counters, dashboard, appearance } = await JSON.parse(localStorage.getItem('configs'));
     if (appearance.logo)
-      this.logo = environment.api + appearance.logo;
+      this.logo = environment.api +'/'+ appearance.logo;
     this.website_name = appearance.website_name;
   
 
