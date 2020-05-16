@@ -25,8 +25,8 @@ export class DesignComponent implements OnInit {
     forced_root_block_attrs: {
       'class': 'row'
     },
-    images_upload_url: environment.api + '/settings/upload/image/random',
-    images_upload_base_path: environment.api,
+    images_upload_url: environment.api + '/settings/upload/image',
+    images_upload_base_path: environment.api+'/',
     plugins: [
       'advlist autolink lists link image charmap print preview anchor',
       'searchreplace visualblocks code fullscreen',

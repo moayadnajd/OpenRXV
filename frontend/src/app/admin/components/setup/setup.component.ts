@@ -78,13 +78,13 @@ export class SetupComponent implements OnInit {
   logo = []
   IconChange(event, index) {
     console.log(index);
-    this.upload(event.target.files[0], this.repositories.at(index).get('name').value, index)
+    this.upload(event.target.files[0], index)
   }
   src(value) {
    return environment.api +'/'+ value
   }
-  async upload(file: File, name: string, index = null) {
-    this.logo[index] = await this.settingService.upload(file, name)
+  async upload(file: File, index = null) {
+    this.logo[index] = await this.settingService.upload(file)
     this.repositories.at(index).get('icon').setValue(this.logo[index]);
   }
   async submit() {

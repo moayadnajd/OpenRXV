@@ -106,20 +106,33 @@ export class SettingsController {
     @UseGuards(AuthGuard('jwt'))
     @Post('explorer')
     async  SaveExplorer(@Body() body: any) {
-        let tokeep = await this.jsonfielServoce.read('../../../data/explorer.json')
-        let tosave = { ...tokeep, ...body };
-        await this.jsonfielServoce.save(tosave, '../../../data/explorer.json');
+        await this.jsonfielServoce.save(body, '../../../data/explorer.json');
         return { success: true }
     }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Post('appearance')
+    async  SaveAppearance(@Body() body: any) {
+        await this.jsonfielServoce.save(body, '../../../data/appearance.json');
+        return { success: true }
+    }
+
+    @Get('appearance')
+    async  ReadAppearance() {
+        return await this.jsonfielServoce.read('../../../data/appearance.json');
+    }
+
 
     @Get('explorer')
     async  ReadExplorer() {
         let settings = await this.jsonfielServoce.read('../../../data/explorer.json');
         let configs = await this.jsonfielServoce.read('../../../data/data.json');
+        let appearance = await this.jsonfielServoce.read('../../../data/appearance.json');
+        settings['appearance'] = appearance
         let list_icons = {}
         if (configs.repositories) {
             configs.repositories.map(d => [list_icons[d.name] = d.icon])
-            settings.appearance['icons'] = list_icons
+            settings['appearance']['icons'] = list_icons
             return settings
         } else
             return {}
@@ -166,15 +179,14 @@ export class SettingsController {
         return data;
     }
 
-    @Post('upload/image/:name')
+    @Post('upload/image')
     @UseInterceptors(FileInterceptor('file', {
         preservePath: true, fileFilter: this.imageFileFilter, dest: join(__dirname, '../../../data/files/images')
     }))
-    async uploadFile(@UploadedFile() file, @Param('name') name: string) {
+    async uploadFile(@UploadedFile() file) {
         console.log(file)
         let splited = file.originalname.split('.');
-        if (name == 'random')
-            name = splited[0] + '-' + new Date().getTime();
+        let name = splited[0] + '-' + new Date().getTime();
 
 
         let response = join(__dirname, '../../../data/files/images/') + name + '.' + splited[splited.length - 1];

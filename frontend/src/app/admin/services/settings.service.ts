@@ -21,6 +21,18 @@ export class SettingsService {
     })).toPromise();
   }
 
+  
+  async  readAppearanceSettings() {
+    return await this.http.get(environment.api + '/settings/appearance').pipe(map((data: any) => {
+      return data;
+    })).toPromise();
+  }
+  async  saveAppearanceSettings(data) {
+    return await this.http.post(environment.api + '/settings/appearance', data).pipe(map((data: any) => {
+      return data;
+    })).toPromise();
+  }
+
   async  readExplorerSettings() {
     return await this.http.get(environment.api + '/settings/explorer').pipe(map((data: any) => {
       return data;
@@ -53,10 +65,10 @@ export class SettingsService {
 
   }
 
-  async upload(file: File, name: string) {
+  async upload(file: File) {
     let formdata = new FormData()
     formdata.append('file', file)
-    return await this.http.post(environment.api + '/settings/upload/image/' + name, formdata).pipe(map((data: any) => {
+    return await this.http.post(environment.api + '/settings/upload/image/', formdata).pipe(map((data: any) => {
       return data.location;
     })).toPromise();
   }

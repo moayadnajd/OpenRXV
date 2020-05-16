@@ -21,7 +21,7 @@ export class AppearanceComponent implements OnInit {
     return environment.api + '/' + value;
   }
   async ngOnInit() {
-    let { appearance } = await this.settingsService.readExplorerSettings();
+    let appearance = await this.settingsService.readAppearanceSettings();
     this.form.patchValue(appearance)
     this.color = appearance.primary_color;
     this.logo = appearance.logo;
@@ -35,15 +35,15 @@ export class AppearanceComponent implements OnInit {
     console.log(this.color, this.form.value)
     this.form.controls.logo.setValue(this.logo);
     if (this.form.valid)
-      await this.settingsService.saveExplorerSettings({ appearance: this.form.value });
+      await this.settingsService.saveAppearanceSettings(this.form.value);
   }
 
   logoChange(event) {
-    this.upload(event.target.files[0], 'logo')
+    this.upload(event.target.files[0])
   }
 
-  async upload(file: File, name: string) {
-    this.logo = await this.settingsService.upload(file, name)
+  async upload(file: File) {
+    this.logo = await this.settingsService.upload(file)
     this.form.controls.logo.setValue(this.logo);
   }
 

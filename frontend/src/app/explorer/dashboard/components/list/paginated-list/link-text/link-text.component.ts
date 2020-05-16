@@ -21,6 +21,6 @@ export class LinkTextComponent {
 
 
   getIcon(repo) {
-    return environment.api + this.appearance.icons[repo];
+    return environment.api +'/'+ this.appearance.icons[repo];
   }
 }
