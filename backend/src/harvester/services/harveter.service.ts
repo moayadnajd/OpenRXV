@@ -52,6 +52,7 @@ export class HarvesterService {
 
     async stopHarvest() {
         this.logger.debug("Stopping Harvest")
+        await this.fetchQueue.pause();
         await this.fetchQueue.clean(0, 'wait')
         return await this.fetchQueue.clean(0, 'active')
     }
