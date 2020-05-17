@@ -52,7 +52,7 @@ export class FetchConsumer {
         }
     }
     async index(job, data) {
- 
+
         let finaldata: Array<any> = [];
 
 
@@ -147,7 +147,7 @@ export class FetchConsumer {
                     if (_.isArray(value))
                         value = value[0];
                     try {
-                        value = moment(value).format('YYYY-MM-DD')
+                        value = moment(new Date(value)).format('YYYY-MM-DD')
                         if (!moment(value).isValid())
                             value = null
                     } catch (e) {
