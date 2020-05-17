@@ -20,11 +20,8 @@ export class DesignComponent implements OnInit {
   footer: any = null;
   footerEditor = {
     height: 500,
-    menubar: 'insert',
     forced_root_block: 'div',
-    forced_root_block_attrs: {
-      'class': 'row'
-    },
+    relative_urls : false,
     images_upload_url: environment.api + '/settings/upload/image',
     images_upload_base_path: environment.api + '/',
     plugins: [
@@ -33,10 +30,7 @@ export class DesignComponent implements OnInit {
       'insertdatetime media table paste code help wordcount',
       'image code'
     ],
-    toolbar:
-      'undo redo | formatselect | bold italic backcolor | \
-      alignleft aligncenter alignright alignjustify | \
-      bullist numlist outdent indent | removeformat | image | code'
+    toolbar: 'code| undo redo | bold italic underline strikethrough | forecolor backcolor casechange permanentpen formatpainter removeformat |fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist checklist | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
 
   }
   newRow(): void {
