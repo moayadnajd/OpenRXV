@@ -18,7 +18,6 @@ export class PluginsComponent implements OnInit {
 
   onEdited(event, name) {
     this.pluginsForms[name] = event;
-    console.log(this.pluginsForms);
   }
 
   async save() {

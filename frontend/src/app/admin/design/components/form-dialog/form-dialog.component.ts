@@ -21,7 +21,7 @@ export class FormDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   onNoClick(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
   submit() {
     let names_exist: Array<string> = this.data.form_data.map(d => d.name)
@@ -31,7 +31,6 @@ export class FormDialogComponent implements OnInit {
     })
     if (this.form.valid)
       this.dialogRef.close(this.form.value);
-    console.log(this.form.controls)
   }
   async ngOnInit() {
     let FormGroupControls: any = {};

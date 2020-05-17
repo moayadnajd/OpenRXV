@@ -77,7 +77,6 @@ export class SetupComponent implements OnInit {
   }
   logo = []
   IconChange(event, index) {
-    console.log(index);
     this.upload(event.target.files[0], index)
   }
   src(value) {

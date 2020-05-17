@@ -81,7 +81,6 @@ export class SearchComponent extends ParentComponent implements OnInit {
     } else {
       this.bodyBuilderService.setAggAttributes = this.searchTerm;
     }
-    console.log(this.searchTerm);
     this.dispatchActions();
   }
   private subtoToQuery(source): void {

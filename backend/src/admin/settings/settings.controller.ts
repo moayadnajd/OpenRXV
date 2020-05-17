@@ -184,11 +184,8 @@ export class SettingsController {
         preservePath: true, fileFilter: this.imageFileFilter, dest: join(__dirname, '../../../data/files/images')
     }))
     async uploadFile(@UploadedFile() file) {
-        console.log(file)
         let splited = file.originalname.split('.');
         let name = splited[0] + '-' + new Date().getTime();
-
-
         let response = join(__dirname, '../../../data/files/images/') + name + '.' + splited[splited.length - 1];
         await fs.renameSync(join(__dirname, '../../../data/files/images/') + file.filename, response)
         return { location: response.slice(response.indexOf('files/') + 6) };

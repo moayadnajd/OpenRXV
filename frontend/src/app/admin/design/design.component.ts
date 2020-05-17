@@ -26,7 +26,7 @@ export class DesignComponent implements OnInit {
       'class': 'row'
     },
     images_upload_url: environment.api + '/settings/upload/image',
-    images_upload_base_path: environment.api+'/',
+    images_upload_base_path: environment.api + '/',
     plugins: [
       'advlist autolink lists link image charmap print preview anchor',
       'searchreplace visualblocks code fullscreen',
@@ -71,25 +71,21 @@ export class DesignComponent implements OnInit {
   }
 
   onAddDashboardComponent(index2, index) {
-    console.log('onAddDashboardComponent', index2, index)
     this.dashboard[index][index2] = this.createDashboardItem({}, index, index2);
 
   }
   dashboardEdited(event, index) {
     this.dashboard[index][event.index] = this.createDashboardItem(event.result, index, event.index);
-    console.log(this.dashboard);
   }
 
   filtersEdited(value, index) {
     this.filters[index] = this.createFilter(value);
   }
   onFilterDelete(bool, i) {
-    // console.log("deleted", bool)
     if (bool)
       this.filters.splice(i, 1);
   }
   dashboardRawDeleted(bool, index) {
-    console.log('dashboardRawDeleted')
     if (bool)
       this.dashboard.splice(index, 1);
   }
@@ -118,7 +114,6 @@ export class DesignComponent implements OnInit {
   }
 
   onCounterDelete(bool, i) {
-    console.log("deleted", bool)
     if (bool)
       this.counters.splice(i, 1);
   }
@@ -140,8 +135,8 @@ export class DesignComponent implements OnInit {
 
     if (obj.source_x && obj.source_y) {
       temp['source'] = [obj.source_x, obj.source_y + '.keyword'];
-      temp['source_y'] = obj.source_x;
-      temp['source_x'] = obj.source_y;
+      temp['source_y'] = obj.source_y;
+      temp['source_x'] = obj.source_x;
       temp['id'] = obj.source_x + '_' + obj.source_y + '_' + index + '_' + index1
     }
 

@@ -28,7 +28,7 @@ export class BodyBuilderService {
   constructor(private readonly mainBodyBuilderService: MainBodyBuilderService) {
     this.reset = new Subject();
     this.from = 0;
-  this.mainBodyBuilderService.start();
+    this.mainBodyBuilderService.start();
   }
 
   get shouldReset(): Subject<ResetOptions> {
@@ -45,6 +45,7 @@ export class BodyBuilderService {
 
   set setAggAttributes(
     queryAttribute:
+      any 
       | string
       | QueryYearAttribute
       | QuerySearchAttribute

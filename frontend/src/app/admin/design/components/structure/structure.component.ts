@@ -164,7 +164,6 @@ export class StructureComponent implements OnInit {
   }
 
   addComponent(event) {
-    console.log('emit', event)
     this.onAdd.emit(event)
     this.openDialog(event)
   }
@@ -184,7 +183,6 @@ export class StructureComponent implements OnInit {
   }
 
   delete(index) {
-    console.log('delete', index)
     this.onDelete.emit(index)
   }
 
@@ -200,7 +198,6 @@ export class StructureComponent implements OnInit {
       component: this.grid[i].component,
       ...this.grid[i].componentConfigs
     }
-    console.log(cat)
     this.edited.emit({ result: cat, index: i })
   }
 
@@ -233,12 +230,13 @@ export class StructureComponent implements OnInit {
     this.currentIndex = index;
     this.setFormDataOprions(this.grid[index].component)
     this.dialogRef = this.dialog.open(FormDialogComponent, {
-      width: this.grid[index].component == 'MainListComponent' ? '800px' :'456px',
+      width: this.grid[index].component == 'MainListComponent' ? '800px' : '456px',
       data: { form_data: this.form_data, configs: this.grid[index] }
     });
 
 
     this.dialogRef.afterClosed().subscribe(result => {
+      console.log(this.class_names);
 
       if (result) {
         if (this.grid[index].scroll)
@@ -247,8 +245,11 @@ export class StructureComponent implements OnInit {
         this.edited.emit({ result, index })
 
       }
-      else if (!this.grid[index].component)
+      else if (result === false) {
+        this.edited.emit({ result: { class: this.class_names[index] }, index })
         this.delete(index)
+      }
+
 
     });
   }

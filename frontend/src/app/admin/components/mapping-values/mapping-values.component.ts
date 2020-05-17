@@ -74,7 +74,6 @@ export class MappingValuesComponent implements OnInit {
   timeout = null;
 
   searchChange() {
-    console.log('searchChange')
     clearTimeout(this.timeout);
     // Make a new timeout set to go off in 1000ms (1 second)
     this.timeout = setTimeout(async () => {

@@ -54,7 +54,6 @@ export class ExportService {
         res.json(response);
       }
     } catch (error) {
-      console.error(error);
       throw new Error(error);
     }
   }
@@ -78,7 +77,6 @@ export class ExportService {
         return filePath;
       });
     } catch (error) {
-      console.error(error);
       throw new Error(error);
     }
   }
@@ -107,7 +105,6 @@ export class ExportService {
         );
       })
       .catch(() => {
-        console.error(`Error creating ${fileName}.${type}`);
         res.status(500).json({ message: 'Something went wrong' });
       });
   }

@@ -154,7 +154,6 @@ export class ExplorerComponent implements OnInit {
   }
 
   private mapConfigsToTour(): IStepOption[] {
-    console.log(this.countersConfig, this.dashboardConfig)
     return [...tourConfig, ...this.countersConfig, ...this.dashboardConfig]
       .filter(({ show }: GeneralConfigs) => show)
       .map(({ componentConfigs, tour }: GeneralConfigs) => {

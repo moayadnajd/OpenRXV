@@ -7,7 +7,6 @@ export class StartupService {
     constructor(private elsticsearch: ElasticService,
         private jsonfileservice: JsonFilesService
     ) {
-        console.log("ElasticService ------------- init");
         this.elsticsearch.startup();
         this.jsonfileservice.startup();
     }

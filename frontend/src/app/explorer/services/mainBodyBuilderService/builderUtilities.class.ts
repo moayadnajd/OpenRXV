@@ -13,9 +13,9 @@ import {
 } from 'src/app/explorer/filters/services/interfaces';
 
 export class BuilderUtilities {
-  protected dashboardConfig=[]
-  protected countersConfig=[]
-  protected filtersConfig=[]
+  protected dashboardConfig = []
+  protected countersConfig = []
+  protected filtersConfig = []
   async configs() {
     let configs = await JSON.parse(localStorage.getItem('configs'));
     return configs;
@@ -67,7 +67,7 @@ export class BuilderUtilities {
   }
 
   protected addSpecificfield(key: string, b: bodybuilder.Bodybuilder): void {
-    if (key === 'year.keyword') {
+    if (this.aggAttributes[key].gte && this.aggAttributes[key].lte) {
       const years = {
         gte: this.aggAttributes[key].gte,
         lte: this.aggAttributes[key].lte,

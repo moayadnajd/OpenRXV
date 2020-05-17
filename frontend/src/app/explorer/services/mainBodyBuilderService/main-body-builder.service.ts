@@ -58,9 +58,6 @@ export class MainBodyBuilderService extends BuilderUtilities {
     } else if ('fuzziness' in queryAttribute) {
       // QuerySearchAttribute
       this.aggAttributes['_all'] = queryAttribute as QuerySearchAttribute;
-    } else if ('gte' in queryAttribute) {
-      // range
-      this.aggAttributes['year.keyword'] = queryAttribute as QueryYearAttribute;
     } else {
       const objectKey: string = Object.keys(queryAttribute)[0];
       if (queryAttribute[objectKey].length === 0) {

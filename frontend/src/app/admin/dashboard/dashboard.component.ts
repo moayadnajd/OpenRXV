@@ -39,8 +39,6 @@ export class DashboardComponent implements OnInit {
       clearInterval(this.interval)
       this.interval=null;
     }
-     
-    console.log('clearInterval')
   }
 
   async startIndex() {

@@ -203,8 +203,11 @@ export interface QuerySearchAttribute {
  *   the main query*
  */
 export interface QueryYearAttribute {
-  gte: number;
-  lte: number;
+  source: string;
+  range: {
+    gte: number;
+    lte: number;
+  }
 }
 
 /**

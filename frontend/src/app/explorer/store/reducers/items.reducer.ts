@@ -105,6 +105,9 @@ export function reducer(
       };
     }
     case actions.ActionTypes.updateYears: {
+
+console.log(state.data.aggregations);
+
       return {
         ...state,
         data: {

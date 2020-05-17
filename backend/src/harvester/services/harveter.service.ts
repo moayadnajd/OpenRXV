@@ -84,7 +84,6 @@ export class HarvesterService {
         await this.pluginsQueue.resume();
         let settings = await this.jsonFilesService.read('../../../data/dataToUse.json');
         let plugins: Array<any> = await this.jsonFilesService.read('../../../data/plugins.json');
-        console.log(plugins.filter(plugin => plugin.value.length > 0));
         if (plugins.filter(plugin => plugin.value.length > 0).length > 0)
             for (let plugin of plugins) {
                 for (let param of plugin.value) {

@@ -49,9 +49,7 @@ export class MELDowbloadsAndViews {
                         )
                         finaldata.push({ "doc": { numbers: { views: parseInt(stat.views), downloads: parseInt(stat.downloads), score: parseInt(stat.views) + parseInt(stat.downloads) } } })
 
-                    } else {
-                        //console.log('could not map item ID: ' + stat.dspace_item_id)
-                    }
+                    } 
                 })
                 job.progress(80);
                 let result = await this.elasticsearchService.bulk({

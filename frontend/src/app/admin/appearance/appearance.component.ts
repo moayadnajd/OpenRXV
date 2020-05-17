@@ -27,12 +27,10 @@ export class AppearanceComponent implements OnInit {
     this.logo = appearance.logo;
   }
   colorPickerClose(event) {
-    console.log(event, this.color)
     this.form.get('primary_color').setValue(event);
 
   }
   async save() {
-    console.log(this.color, this.form.value)
     this.form.controls.logo.setValue(this.logo);
     if (this.form.valid)
       await this.settingsService.saveAppearanceSettings(this.form.value);

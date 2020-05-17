@@ -21,11 +21,11 @@ import * as fromStore from '../../../store';
 export class RangeService {
   private store: Store<fromStore.ItemsState>;
   private source: string;
-  private readonly api_end_point: string = environment.api+'/search';
+  private readonly api_end_point: string = environment.api + '/search';
   constructor(
     private readonly http: HttpClient,
     private readonly bodyBuilderService: BodyBuilderService
-  ) {}
+  ) { }
 
   set sourceVal(s: string) {
     this.source = s;
@@ -84,11 +84,13 @@ export class RangeService {
     bq.size = bq.size ? bq.size : 10;
     bq.source = this.source;
     let q = this.bodyBuilderService.yearsBuildquery(bq);
-     return q;
+    return q;
   }
 
-  addAttributeToMainQuery(range: QueryYearAttribute): bodybuilder.Bodybuilder {
-    this.bodyBuilderService.setAggAttributes = range;
+  addAttributeToMainQuery(range): bodybuilder.Bodybuilder {
+    let obj = {};
+    obj[this.source] = range;
+    this.bodyBuilderService.setAggAttributes = obj;
     return this.bodyBuilderService.buildMainQuery();
   }
 

@@ -48,7 +48,7 @@ export class RangeComponent extends ParentComponent implements OnInit {
     this.shouldReset();
     this.loading$ = this.store.select(fromStore.getLoadingStatus);
     this.subToOrOperator();
-    
+
   }
 
   onYearSliderChange(): void {
@@ -57,7 +57,7 @@ export class RangeComponent extends ParentComponent implements OnInit {
       {
         gte: min,
         lte: max
-      } as QueryYearAttribute
+      }
     );
     this.rangeService.resetNotification({ min, max });
     this.store.dispatch(new fromStore.SetQuery(query.build()));
@@ -92,6 +92,7 @@ export class RangeComponent extends ParentComponent implements OnInit {
   }
 
   private shouldReset(): void {
+    const { source } = this.componentConfigs as ComponentFilterConfigs;
     /**
      * we will not get the years
      * when the user changes the range
@@ -102,7 +103,7 @@ export class RangeComponent extends ParentComponent implements OnInit {
         // make the min and max as the first time
         if (
           Object.keys(this.rangeService.getAggAttributes).length === 1 &&
-          this.rangeService.getAggAttributes['year.keyword']
+          this.rangeService.getAggAttributes[source]
         ) {
           this.disabled = false;
           this.min = this.firstMin;

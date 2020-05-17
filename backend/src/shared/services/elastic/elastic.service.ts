@@ -188,7 +188,6 @@ export class ElasticService {
             }
             return scrollSearch;
         } catch (error) {
-            console.error(error);
             throw new Error(error);
         }
     }
