@@ -236,7 +236,6 @@ export class StructureComponent implements OnInit {
 
 
     this.dialogRef.afterClosed().subscribe(result => {
-      console.log(this.class_names);
 
       if (result) {
         if (this.grid[index].scroll)
