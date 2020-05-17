@@ -8,6 +8,7 @@ import { MatPaginator } from '@angular/material/paginator';
   styleUrls: ['./info-table.component.scss']
 })
 export class InfoTableComponent implements OnInit {
+  @Input() plugin: boolean = false;
   displayedColumns: string[] = ['id', 'page', 'processedOn', 'repo', 'attemptsMade'];
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
@@ -26,6 +27,8 @@ export class InfoTableComponent implements OnInit {
   }
 
   async ngOnInit() {
+    if(this.plugin)
+    this.displayedColumns = ['id', 'page','processedOn', 'name', 'attemptsMade'];
 
   }
 

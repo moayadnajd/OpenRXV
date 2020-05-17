@@ -1,4 +1,4 @@
-import { Module, HttpModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { MetadataController } from './metadata/metadata.controller';
 import { SharedModule } from 'src/shared/shared.module';
 import { ValuesController } from './values/values.controller';

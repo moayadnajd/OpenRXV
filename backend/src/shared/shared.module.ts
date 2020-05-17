@@ -14,11 +14,11 @@ import { JsonFilesService } from 'src/admin/json-files/json-files.service';
         ElasticsearchModule.register({
             node: process.env.ELASTICSEARCH_HOST,
         }),
-        HttpModule
+        HttpModule.register({ headers: { 'User-agent': 'OpenRXV' } })
     ],
-    providers: [ElasticService, MetadataService,ValuesService,ShareService,StartupService , JsonFilesService],
+    providers: [ElasticService, MetadataService, ValuesService, ShareService, StartupService, JsonFilesService],
 
-    exports: [ElasticsearchModule, ElasticService, MetadataService,ValuesService,ShareService,HttpModule,JsonFilesService]
+    exports: [ElasticsearchModule, ElasticService, MetadataService, ValuesService, ShareService, HttpModule, JsonFilesService]
 })
 export class SharedModule {
 

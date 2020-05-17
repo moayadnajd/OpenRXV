@@ -11,13 +11,20 @@ export class DashboardComponent implements OnInit {
 
   constructor(private setttingService: SettingsService) { }
   completed_count = 0
-  completed = new MatTableDataSource<Array<any>>([])
   active_count = 0;
   waiting_count = 0;
   failed_count = 0;
-  active = new MatTableDataSource<Array<any>>([])
-  waiting = new MatTableDataSource<Array<any>>([]);
   failed = new MatTableDataSource<Array<any>>([]);
+  completed = new MatTableDataSource<Array<any>>([])
+
+  plugins_completed_count = 0
+  plugins_active_count = 0;
+  plugins_waiting_count = 0;
+  plugins_failed_count = 0;
+  plugins_failed = new MatTableDataSource<Array<any>>([]);
+  plugins_completed = new MatTableDataSource<Array<any>>([])
+
+
   interval = null
   refreshCounter = 0;
   ngOn
@@ -35,9 +42,9 @@ export class DashboardComponent implements OnInit {
   }
 
   clearInterval() {
-    if (this.interval != null){
+    if (this.interval != null) {
       clearInterval(this.interval)
-      this.interval=null;
+      this.interval = null;
     }
   }
 
@@ -56,24 +63,25 @@ export class DashboardComponent implements OnInit {
 
   async Init() {
 
-    let { completed_count, active_count, failed_count, waiting_count, waiting, completed, active, failed } = await this.setttingService.getHarvesterInfo();
-    this.completed = completed
-    this.completed = new MatTableDataSource<Array<any>>(completed)
+    let { completed_count, active_count, failed_count, waiting_count, completed, failed, plugins_completed_count, plugins_active_count, plugins_failed_count, plugins_waiting_count, plugins_completed, plugins_failed } = await this.setttingService.getHarvesterInfo();
+
     this.completed_count = completed_count
-
-    this.active_count = active_count
-    this.active = active
-    this.active = new MatTableDataSource<Array<any>>(active)
-    
-
-    this.failed = failed
-    this.failed = new MatTableDataSource<Array<any>>(failed)
     this.failed_count = failed_count
-
-    this.waiting = waiting
-    this.waiting = new MatTableDataSource<Array<any>>(waiting)
     this.waiting_count = waiting_count
-    if (active_count == 0 && waiting_count == 0 && this.refreshCounter >= 3)
+    this.active_count = active_count
+
+    this.completed = new MatTableDataSource<Array<any>>(completed)
+    this.failed = new MatTableDataSource<Array<any>>(failed)
+
+    this.plugins_completed_count = plugins_completed_count
+    this.plugins_failed_count = plugins_failed_count
+    this.plugins_waiting_count = plugins_waiting_count
+    this.plugins_active_count = plugins_active_count
+
+    this.plugins_completed = new MatTableDataSource<Array<any>>(plugins_completed)
+    this.plugins_failed = new MatTableDataSource<Array<any>>(plugins_failed)
+
+    if (plugins_active_count == 0 && plugins_waiting_count == 0 && active_count == 0 && waiting_count == 0 && this.refreshCounter >= 3)
       this.clearInterval()
 
     if (this.refreshCounter == 0)

@@ -23,21 +23,29 @@ export class HarvesterService {
             waiting_count: 0,
             completed_count: 0,
             failed_count: 0,
-            active: [],
-            waiting: [],
+            plugins_active_count: 0,
+            plugins_waiting_count: 0,
+            plugins_completed_count: 0,
+            plugins_failed_count: 0,
             completed: [],
-            failed: []
+            failed: [],
+            plugins_completed: [],
+            plugins_failed: []
 
         }
         obj.active_count = await this.fetchQueue.getActiveCount()
         obj.waiting_count = await this.fetchQueue.getWaitingCount()
         obj.completed_count = await this.fetchQueue.getCompletedCount()
         obj.failed_count = await this.fetchQueue.getFailedCount()
-
-        obj.active = await this.fetchQueue.getActive()
-        obj.waiting = await this.fetchQueue.getWaiting()
         obj.completed = await this.fetchQueue.getCompleted()
         obj.failed = await this.fetchQueue.getFailed()
+
+        obj.plugins_active_count = await this.pluginsQueue.getActiveCount()
+        obj.plugins_waiting_count = await this.pluginsQueue.getWaitingCount()
+        obj.plugins_completed_count = await this.pluginsQueue.getCompletedCount()
+        obj.plugins_failed_count = await this.pluginsQueue.getFailedCount()
+        obj.plugins_completed = await this.pluginsQueue.getCompleted()
+        obj.plugins_failed = await this.pluginsQueue.getFailed()
 
         return obj;
     }
@@ -69,7 +77,7 @@ export class HarvesterService {
 
         let settings = await this.jsonFilesService.read('../../../data/dataToUse.json');
         settings.repositories.forEach(repo => {
-                this.fetchQueue.add('fetch', { page: parseInt(repo.startPage), repo }, { attempts: 3 })
+            this.fetchQueue.add('fetch', { page: parseInt(repo.startPage), repo }, { attempts: 3 })
         });
         return "started";
     }

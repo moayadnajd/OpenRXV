@@ -21,36 +21,37 @@
   </div>
 </div>
 <div class="row">
-  <div class="d-flex w-100 justify-content-around">
-    <mat-card class="counter">
-      <mat-card-title>
-        {{ active_count }}
-      </mat-card-title>
-      <mat-card-subtitle>Active</mat-card-subtitle>
-    </mat-card>
-    <mat-card class="counter">
-      <mat-card-title>
-        {{ completed_count }}
-      </mat-card-title>
-      <mat-card-subtitle>Completed</mat-card-subtitle>
-    </mat-card>
-    <mat-card class="counter">
-      <mat-card-title>
-        {{ waiting_count }}
-      </mat-card-title>
-      <mat-card-subtitle>Waiting</mat-card-subtitle>
-    </mat-card>
-    <mat-card class="counter">
-      <mat-card-title>
-        {{ failed_count }}
-      </mat-card-title>
-      <mat-card-subtitle>Failed</mat-card-subtitle>
-    </mat-card>
+  <div class="col-12">
+    <h3>Repositories</h3>
   </div>
-</div>
-
-
-<div class="row  pt-5">
+  <div class="col-12 pb-3">
+    <div class="d-flex w-100 justify-content-around">
+      <mat-card class="counter">
+        <mat-card-title>
+          {{ active_count }}
+        </mat-card-title>
+        <mat-card-subtitle>Active</mat-card-subtitle>
+      </mat-card>
+      <mat-card class="counter">
+        <mat-card-title>
+          {{ completed_count }}
+        </mat-card-title>
+        <mat-card-subtitle>Completed</mat-card-subtitle>
+      </mat-card>
+      <mat-card class="counter">
+        <mat-card-title>
+          {{ waiting_count }}
+        </mat-card-title>
+        <mat-card-subtitle>Waiting</mat-card-subtitle>
+      </mat-card>
+      <mat-card class="counter">
+        <mat-card-title>
+          {{ failed_count }}
+        </mat-card-title>
+        <mat-card-subtitle>Failed</mat-card-subtitle>
+      </mat-card>
+    </div>
+  </div>
   <div class="col-6">
     <mat-card>
       <mat-card-title>
@@ -58,31 +59,6 @@
       </mat-card-title>
       <mat-card-content>
         <app-info-table [data]="completed"></app-info-table>
-
-      </mat-card-content>
-    </mat-card>
-  </div>
-  <div class="col-6">
-    <mat-card>
-      <mat-card-title>
-        Active
-      </mat-card-title>
-      <mat-card-content>
-        <app-info-table [data]="active"></app-info-table>
-
-      </mat-card-content>
-    </mat-card>
-  </div>
-</div>
-
-<div class="row  pt-5">
-  <div class="col-6">
-    <mat-card>
-      <mat-card-title>
-        Waiting
-      </mat-card-title>
-      <mat-card-content>
-        <app-info-table [data]="waiting"></app-info-table>
 
       </mat-card-content>
     </mat-card>
@@ -98,4 +74,61 @@
       </mat-card-content>
     </mat-card>
   </div>
+
+</div>
+<div class="row pt-3">
+  <div class="col-12">
+    <h3>Plugins</h3>
+  </div>
+  <div class="col-12 pb-3">
+    <div class="d-flex w-100 justify-content-around">
+      <mat-card class="counter">
+        <mat-card-title>
+          {{ plugins_active_count }}
+        </mat-card-title>
+        <mat-card-subtitle>Active</mat-card-subtitle>
+      </mat-card>
+      <mat-card class="counter">
+        <mat-card-title>
+          {{ plugins_completed_count }}
+        </mat-card-title>
+        <mat-card-subtitle>Completed</mat-card-subtitle>
+      </mat-card>
+      <mat-card class="counter">
+        <mat-card-title>
+          {{ plugins_waiting_count }}
+        </mat-card-title>
+        <mat-card-subtitle>Waiting</mat-card-subtitle>
+      </mat-card>
+      <mat-card class="counter">
+        <mat-card-title>
+          {{ plugins_failed_count }}
+        </mat-card-title>
+        <mat-card-subtitle>Failed</mat-card-subtitle>
+      </mat-card>
+    </div>
+  </div>
+  <div class="col-6">
+    <mat-card>
+      <mat-card-title>
+        Completed
+      </mat-card-title>
+      <mat-card-content>
+        <app-info-table [plugin]="true" [data]="plugins_completed"></app-info-table>
+
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="col-6">
+    <mat-card>
+      <mat-card-title>
+        Failed
+      </mat-card-title>
+      <mat-card-content>
+        <app-info-table [plugin]="true" [data]="plugins_failed"></app-info-table>
+
+      </mat-card-content>
+    </mat-card>
+  </div>
+
 </div>
