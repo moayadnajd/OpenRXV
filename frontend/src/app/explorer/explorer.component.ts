@@ -11,7 +11,6 @@ import {
   ComponentDashboardConfigs,
   Tour,
 } from 'src/app/explorer/configs/generalConfig.interface';
-import { tourConfig } from 'src/app/explorer/configs/tour';
 import { orAndToolTip } from 'src/app/explorer/configs/tooltips';
 import { ScreenSizeService } from 'src/app/explorer/services/screenSize/screen-size.service';
 import { ItemsService } from './services/itemsService/items.service';
@@ -38,6 +37,7 @@ export class ExplorerComponent implements OnInit {
   primaryColor
   countersConfig = []
   dashboardConfig = []
+  tourConfig = []
   readonly orAndToolTip: string;
   private prevenetMouseOnNav: boolean;
   options: any = {
@@ -80,15 +80,14 @@ export class ExplorerComponent implements OnInit {
 
 
   async ngOnInit() {
-    let { counters, dashboard, appearance } = await JSON.parse(localStorage.getItem('configs'));
+    let { counters, dashboard, appearance, welcome } = await JSON.parse(localStorage.getItem('configs'));
     if (appearance.logo)
-      this.logo = environment.api +'/'+ appearance.logo;
+      this.logo = environment.api + '/' + appearance.logo;
     this.website_name = appearance.website_name;
-  
+
 
 
     let inview = (() => {
-      let { counters, dashboard } = JSON.parse(localStorage.getItem('configs'));
       // creating the state dynamically
       const obj = Object.create(null);
       Object.values([counters[0], ...dashboard.flat(1)]).forEach(
@@ -111,6 +110,7 @@ export class ExplorerComponent implements OnInit {
 
     this.countersConfig = counters;
     this.dashboardConfig = dashboard.flat(1);
+    this.tourConfig = [welcome];
     this.loading$ = this.store.select(fromStore.getLoadingStatus);
 
 
@@ -154,7 +154,8 @@ export class ExplorerComponent implements OnInit {
   }
 
   private mapConfigsToTour(): IStepOption[] {
-    return [...tourConfig, ...this.countersConfig, ...this.dashboardConfig]
+
+    return [...this.tourConfig, ...this.countersConfig, ...this.dashboardConfig]
       .filter(({ show }: GeneralConfigs) => show)
       .map(({ componentConfigs, tour }: GeneralConfigs) => {
         const { description, title, id } = componentConfigs as

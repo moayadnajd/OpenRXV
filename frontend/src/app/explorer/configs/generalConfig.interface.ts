@@ -3,6 +3,7 @@ import { Bucket } from 'src/app/explorer/filters/services/interfaces';
 export interface Tour {
   id: string;
   description: string;
+  text:string;
   title: string;
 }
 

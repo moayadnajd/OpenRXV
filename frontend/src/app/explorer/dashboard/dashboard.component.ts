@@ -3,7 +3,6 @@ import { Store } from '@ngrx/store';
 import * as fromStore from '../store';
 import { SetQuery } from '../store';
 import { BodyBuilderService } from '../filters/services/bodyBuilder/body-builder.service';
-import { tourConfig } from 'src/app/explorer/configs/tour';
 import { ESHttpError } from 'src/app/explorer/store/actions/actions.interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackComponent } from './representationalComponents/snack/snack.component';
@@ -24,7 +23,7 @@ import { SettingsService } from 'src/app/admin/services/settings.service';
 export class DashboardComponent implements OnInit {
   dashboardConfig: Array<GeneralConfigs> = [];
   countersConfig: Array<GeneralConfigs> = [];
-  tourConfig = tourConfig;
+  tourConfig: Array<GeneralConfigs> = [];
   oldViewState: Map<string, boolean>;
 
   constructor(
@@ -41,9 +40,10 @@ export class DashboardComponent implements OnInit {
   }
   async getCounters() {
     let settings = await this.settingsService.readExplorerSettings();
-    this.dashboardConfig =  settings.dashboard.flat(1)
-
-    await localStorage.setItem('configs', JSON.stringify(settings ))
+    this.dashboardConfig = settings.dashboard.flat(1)
+    this.tourConfig = [settings.welcome]
+  
+    await localStorage.setItem('configs', JSON.stringify(settings))
     this.countersConfig = settings.counters;
     [this.countersConfig[0], ...this.dashboardConfig].forEach(
       ({ componentConfigs }: GeneralConfigs) =>

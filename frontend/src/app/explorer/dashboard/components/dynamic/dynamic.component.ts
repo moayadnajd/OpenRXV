@@ -25,9 +25,7 @@ export class DynamicComponent implements OnInit {
     if (factoryClass) {
       const factory = this.resolver.resolveComponentFactory(factoryClass);
       const compRef = this.vcRef.createComponent(factory);
-      if (this.comp !== 'WelcomeComponent') {
-        compRef.instance.componentConfigs = this.componentConfigs;
-      }
+      compRef.instance.componentConfigs = this.componentConfigs;
     }
   }
 }
