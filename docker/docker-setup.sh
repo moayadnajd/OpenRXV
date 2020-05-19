@@ -14,8 +14,6 @@ sudo apt-get -y update;
 
 sudo apt-get -y install docker-ce docker-ce-cli containerd.io
 
-sudo docker run hello-world
-
 sudo usermod -aG docker $USER
 
 newgrp docker 
