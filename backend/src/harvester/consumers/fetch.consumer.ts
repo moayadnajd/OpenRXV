@@ -109,14 +109,15 @@ export class FetchConsumer {
                             filter((d: any) => d[Object.keys(subItem.where)[0]] == subItem.where[Object.keys(subItem.where)[0]])
                             .map((d: any) => subItem.prefix ? subItem.prefix + this.mapIt(d[Object.keys(subItem.value)[0]], subItem.addOn ? subItem.addOn : null) : this.mapIt(d[Object.keys(subItem.value)[0]], subItem.addOn ? subItem.addOn : null))
                         if (values.length)
-                            finalValues[subItem.value[Object.keys(subItem.value)[0]]] = this.getArrayOrValue(values)
+                            finalValues[subItem.value[Object.keys(subItem.value)[0]]] = this.setValue(finalValues[subItem.value[Object.keys(subItem.value)[0]]], this.getArrayOrValue(values))
+
                     })
                 }
                 else if (_.isObject(item)) {
                     if (_.isArray(json[index])) {
                         let values = this.getArrayOrValue(json[index].map((d: any) => this.mapIt(d[Object.keys(item)[0]])))
                         if (values)
-                            finalValues[<string>Object.values(item)[0]] = values
+                            finalValues[<string>Object.values(item)[0]] = this.setValue(finalValues[<string>Object.values(item)[0]], values)
                     }
                 }
                 else
@@ -125,6 +126,16 @@ export class FetchConsumer {
         })
         return finalValues;
 
+    }
+    setValue(oldvalue, value) {
+        if (_.isArray(oldvalue) && _.isArray(value))
+            return [...oldvalue, ...value];
+        else if (_.isArray(oldvalue) && !_.isArray(value)) {
+            oldvalue.push(value);
+            return oldvalue
+        }
+        else
+            return value
     }
 
     capitalizeFirstLetter(string: string) {
