@@ -3,8 +3,6 @@ services:
   elasticsearch_7:
       image: elasticsearch:7.6.2
       container_name: elasticsearch_7
-      volumes:
-        - ./esData_7:/usr/share/elasticsearch/data
       ports:
         - 127.0.0.1:9200:9200
         - 127.0.0.1:9300:9300
@@ -16,10 +14,10 @@ services:
     build: angularBuild
     restart: always
     volumes:
-       - ../RES:/frontend
+       - ../frontend:/frontend
        - ./default.conf:/etc/nginx/sites-available/default 
     ports:
-       - 127.0.0.1:80:80
+       - 80:80
     depends_on:
        - elasticsearch_7
     links:
