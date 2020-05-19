@@ -1,6 +1,7 @@
 version: '3.1'
 services:
   elasticsearch_7:
+      user: $USER
       image: elasticsearch:7.6.2
       container_name: elasticsearch_7
       restart: always
