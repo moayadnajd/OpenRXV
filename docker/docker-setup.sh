@@ -1,4 +1,7 @@
 #!/bin/bash
+
+set +e
+
 sudo apt-get -y update 
 
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
