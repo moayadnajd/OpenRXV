@@ -10,7 +10,7 @@ services:
       environment:
         - discovery.type=single-node 
       volumes:
-        - ./esData_7:/usr/share/elasticsearch/data:rwx            
+        - ./esData_7:/usr/share/elasticsearch/data:rw            
   angular_nginx:
     container_name: angular_nginx 
     image: angular_nginx
