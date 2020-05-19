@@ -3,11 +3,14 @@ services:
   elasticsearch_7:
       image: elasticsearch:7.6.2
       container_name: elasticsearch_7
+      restart: always
       ports:
         - 127.0.0.1:9200:9200
         - 127.0.0.1:9300:9300
       environment:
-        - discovery.type=single-node           
+        - discovery.type=single-node 
+      volumes:
+        - ./esData_7:/usr/share/elasticsearch/data:rwx            
   angular_nginx:
     container_name: angular_nginx 
     image: angular_nginx
