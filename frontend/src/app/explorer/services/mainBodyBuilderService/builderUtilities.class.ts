@@ -107,49 +107,24 @@ export class BuilderUtilities {
     const mainQuerySources: Array<string> = Array.from(
       new Set([
         ...this.getSourcesFromConfigs(this.dashboardConfig),
-        ...this.getSourcesFromConfigs(this.filtersConfig, true),
-        ...this.getSourcesFromConfigs(this.countersConfig, true),
+        ...this.getSourcesFromConfigs(this.countersConfig),
       ])
     );
     // I'm assuming  that this will always will have 'status'
     mainQuerySources.forEach((key: string) =>
-      key.includes('status')
-        ? arr.push(
-          {
-            source: `${key}.keyword`,
-            buckets: key,
-            filter: this.openLimitedAcc[0],
-          },
-          {
-            source: `${key}.keyword`,
-            buckets: key,
-            filter: this.openLimitedAcc[1],
-          }
-        )
-        : arr.push({ source: `${key}.keyword`, buckets: key })
+      arr.push({ source: `${key}.keyword`, buckets: key })
     );
     return arr;
   }
 
   private getSourcesFromConfigs(
     configs: Array<GeneralConfigs>,
-    filterBasedOnAddInMainQuery: boolean = false
   ): Array<string> {
     return [
-      ...(filterBasedOnAddInMainQuery
-        ? configs
-          .filter(
-            ({ componentConfigs }: GeneralConfigs) =>
-              (componentConfigs as any).addInMainQuery
-          )
-          .map(
-            ({ componentConfigs }: GeneralConfigs) =>
-              (componentConfigs as any).source
-          )
-        : configs.map(
-          ({ componentConfigs }: GeneralConfigs) =>
-            (componentConfigs as any).source
-        )),
+      ...(configs.map(
+        ({ componentConfigs }: GeneralConfigs) =>
+          (componentConfigs as any).source
+      )),
     ]
       .map((s: string | Array<string>) =>
         !Array.isArray(s) && s ? s.replace('.keyword', '') : undefined
@@ -189,7 +164,13 @@ export class BuilderUtilities {
     this.querySourceBucketsFilter.forEach((qb: QueryBlock) => {
       const { buckets, source } = qb;
       const size = this.getSize(buckets);
-      b.aggregation('terms', this.buildTermRules(size, source), `${buckets}`);
+      console.log(buckets);
+
+      b.aggregation('terms', this.buildTermRules(size, source), `${buckets}`, (a) => {
+        return a.aggregation('terms', this.buildTermRules(10, source), 'related')
+      })
+
+
     });
   }
 

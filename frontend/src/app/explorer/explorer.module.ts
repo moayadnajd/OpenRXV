@@ -72,6 +72,7 @@ import { ExplorerRoutingModule } from './explorer.routing.module';
 import { ShareComponent } from './share/share.component';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MainListComponent } from './dashboard/components/list/main-list/main-list.component';
+import { WheelComponent } from './dashboard/components/wheel/wheel.component';
 
 @NgModule({
   declarations: [
@@ -99,6 +100,7 @@ import { MainListComponent } from './dashboard/components/list/main-list/main-li
     TagsComponent,
     SnackComponent,
     PieComponent,
+    WheelComponent,
     WordcloudComponent,
     MapComponent,
     GetFirstImage,
@@ -162,6 +164,7 @@ import { MainListComponent } from './dashboard/components/list/main-list/main-li
     WelcomeComponent,
     SnackComponent,
     PieComponent,
+    WheelComponent,
     WordcloudComponent,
     MapComponent,
     LineComponent,

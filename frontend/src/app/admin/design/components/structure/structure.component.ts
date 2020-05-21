@@ -21,6 +21,7 @@ export class StructureComponent implements OnInit {
     { name: "World Map", value: "MapComponent", icon: "map" },
     { name: "List", value: "ListComponent", icon: "list" },
     { name: "Bars Chart", value: "BarComponent", icon: "bar_chart" },
+    { name: "Dependency Wheel", value: "WheelComponent", icon: "group_work" },
     { name: "Main Items list", value: "MainListComponent", icon: "view_list" }
   ]
   pre

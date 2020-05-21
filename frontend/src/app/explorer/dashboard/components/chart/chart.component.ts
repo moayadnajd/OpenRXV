@@ -12,13 +12,19 @@ import { Observable } from 'rxjs';
 import * as Highcharts from 'highcharts';
 import wordCloudModule from 'highcharts/modules/wordcloud';
 import ExportingModule from 'highcharts/modules/exporting';
+import DependencyWheelModule from 'highcharts/modules/dependency-wheel';
+import HC_sankey from 'highcharts/modules/sankey';
 import BoostModule from 'highcharts/modules/boost';
 import MapModule from 'highcharts/modules/map';
 import { ComponentLookup } from '../dynamic/lookup.registry';
+
 wordCloudModule(Highcharts);
 ExportingModule(Highcharts);
 MapModule(Highcharts);
 BoostModule(Highcharts);
+HC_sankey(Highcharts); 
+DependencyWheelModule(Highcharts);
+
 @ComponentLookup('ChartComponent')
 @Component({
   selector: 'app-chart',
