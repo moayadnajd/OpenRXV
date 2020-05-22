@@ -14,7 +14,6 @@ export class WelcomeComponent implements OnInit {
   constructor(private readonly tourService: TourService) { }
 
   ngOnInit(): void {
-    console.log(this.componentConfigs)
     this.tourService.start$.subscribe(
       (inso: INgxmStepOption) => (this.tourStarted = true)
     );

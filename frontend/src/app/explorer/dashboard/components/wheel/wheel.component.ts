@@ -38,7 +38,6 @@ export class WheelComponent extends ParentChart implements OnInit {
   private setOptions(buckets: Array<Bucket>): any {
 
     let data = buckets.map((b: Bucket) => (b.related.buckets.filter(d => b.key != d.key).map(d => [b.key.substr(0, 50), d.key.substr(0, 50), d.doc_count]))).flat(1)
-    console.log(data);
     return {
     
       accessibility: {

@@ -110,7 +110,6 @@ export class BuilderUtilities {
         ...this.getSourcesFromConfigs(this.countersConfig),
       ])
     );
-    console.log(mainQuerySources)
     mainQuerySources.forEach(({ source, is_related }: any) =>
       arr.push({ is_related, source: `${source}.keyword`, buckets: source })
     );
@@ -122,7 +121,7 @@ export class BuilderUtilities {
     configs: Array<GeneralConfigs>,
   ): Array<any> {
     return [...
-      configs.map(({ componentConfigs }: GeneralConfigs) => {
+      configs.filter(({ componentConfigs }: GeneralConfigs) => !Array.isArray((componentConfigs as any).source)).map(({ componentConfigs }: GeneralConfigs) => {
         return {
           is_related: (componentConfigs as any).related ? (componentConfigs as any).related : false,
           source: (componentConfigs as any).source ? (componentConfigs as any).source.replace('.keyword', '') : undefined
@@ -161,7 +160,6 @@ export class BuilderUtilities {
   private addAggregationsForCharts(b: bodybuilder.Bodybuilder): void {
     this.querySourceBucketsFilter.forEach((qb: QueryBlock) => {
       const { buckets, source, is_related } = qb;
-      console.log(buckets, source, is_related);
       if (is_related === true)
         b.aggregation('terms', this.buildTermRules(10, source), `related_${buckets}`, (a) => {
           return a.aggregation('terms', this.buildTermRules(10, source), 'related')
