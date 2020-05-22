@@ -170,7 +170,7 @@ export class DesignComponent implements OnInit {
           tour: true
         }
         obj.componentConfigs['id'] = 'welcome',
-        obj.componentConfigs['text'] = this.welcome_text;
+          obj.componentConfigs['text'] = this.welcome_text;
         this.welcome = obj
       }
 
@@ -196,6 +196,9 @@ export class DesignComponent implements OnInit {
       temp['description'] = obj.description
     if (obj.source)
       temp['source'] = obj.source == 'total' ? obj.source : obj.source
+
+
+
     if (obj.source)
       temp['id'] = temp['source'] + '_' + index + '_' + index1
 
@@ -215,7 +218,8 @@ export class DesignComponent implements OnInit {
     if (obj.component == 'MainListComponent')
       temp['id'] = 'main_list' + '_' + index + '_' + index1
 
-
+    if (obj.component == 'WheelComponent')
+      temp['related'] = true
 
 
     var class_name = null
