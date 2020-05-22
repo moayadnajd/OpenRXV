@@ -70,7 +70,7 @@ export class ChartMathodsService extends ChartHelper {
       this.processArraySorces();
     } else {
       this.store
-        .select(fromStore.getBuckets, this.cc.source)
+        .select(fromStore.getBuckets, this.cc.related ? 'related_' + this.cc.source : this.cc.source)
         .subscribe((b: Bucket[]) => this.goBuildDataSeries.emit(b));
     }
     this.loadingHits$ = this.store.select(fromStore.getLoadingOnlyHits);

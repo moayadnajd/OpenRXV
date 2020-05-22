@@ -219,6 +219,7 @@ export interface QueryYearAttribute {
  */
 export interface QueryBlock {
   source: string;
+  is_related?:boolean;
   buckets: string;
   filter?: string;
 }

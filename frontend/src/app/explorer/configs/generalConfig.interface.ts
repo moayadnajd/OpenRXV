@@ -28,6 +28,7 @@ export interface ComponentDashboardConfigs {
   description: string;
   source: string | Array<string>;
   content?: PaginatedListConfigs;
+  related?:boolean;
 }
 
 export interface ComponentCounterConfigs {

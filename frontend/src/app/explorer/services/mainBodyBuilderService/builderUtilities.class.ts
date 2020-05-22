@@ -110,26 +110,24 @@ export class BuilderUtilities {
         ...this.getSourcesFromConfigs(this.countersConfig),
       ])
     );
-    // I'm assuming  that this will always will have 'status'
-    mainQuerySources.forEach((key: string) =>
-      arr.push({ source: `${key}.keyword`, buckets: key })
+    console.log(mainQuerySources)
+    mainQuerySources.forEach(({ source, is_related }: any) =>
+      arr.push({ is_related, source: `${source}.keyword`, buckets: source })
     );
+
     return arr;
   }
 
   private getSourcesFromConfigs(
     configs: Array<GeneralConfigs>,
-  ): Array<string> {
-    return [
-      ...(configs.map(
-        ({ componentConfigs }: GeneralConfigs) =>
-          (componentConfigs as any).source
-      )),
-    ]
-      .map((s: string | Array<string>) =>
-        !Array.isArray(s) && s ? s.replace('.keyword', '') : undefined
-      )
-      .filter((d: string | undefined) => d);
+  ): Array<any> {
+    return [...
+      configs.map(({ componentConfigs }: GeneralConfigs) => {
+        return {
+          is_related: (componentConfigs as any).related ? (componentConfigs as any).related : false,
+          source: (componentConfigs as any).source ? (componentConfigs as any).source.replace('.keyword', '') : undefined
+        }
+      })]
   }
 
   private addCounterAttrToMainQuery(
@@ -162,27 +160,17 @@ export class BuilderUtilities {
 
   private addAggregationsForCharts(b: bodybuilder.Bodybuilder): void {
     this.querySourceBucketsFilter.forEach((qb: QueryBlock) => {
-      const { buckets, source } = qb;
-      const size = this.getSize(buckets);
-      console.log(buckets);
-
-      b.aggregation('terms', this.buildTermRules(size, source), `${buckets}`, (a) => {
-        return a.aggregation('terms', this.buildTermRules(10, source), 'related')
-      })
-
-
+      const { buckets, source, is_related } = qb;
+      console.log(buckets, source, is_related);
+      if (is_related === true)
+        b.aggregation('terms', this.buildTermRules(10, source), `related_${buckets}`, (a) => {
+          return a.aggregation('terms', this.buildTermRules(10, source), 'related')
+        })
+      else
+        b.aggregation('terms', this.buildTermRules(1000, source), `${buckets}`)
     });
   }
 
-  private getSize(buckets: string): number {
-    return buckets.includes('affiliation') || buckets.includes('author')
-      ? 20
-      : this.checkWordcloud(buckets);
-  }
-
-  private checkWordcloud(buckets: string): number {
-    return buckets.includes('subject') ? 50 : 1000;
-  }
 
   private buildTermRules(size: number, source: string): object {
     return {
