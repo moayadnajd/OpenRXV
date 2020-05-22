@@ -44,6 +44,13 @@ export class PackedBubbleComponent extends ParentChart implements OnInit {
         })
       }
     }).flat(1)
+
+    let sorted = data.map(d => d.data.map(b => b.value)).flat(1).sort((a, b) => {
+      return a - b
+    })
+
+    let min = sorted[0];
+    let max = sorted.reduce((a, b) => a + b) / sorted.length;
     return {
       chart: {
         type: 'packedbubble',
@@ -54,10 +61,10 @@ export class PackedBubbleComponent extends ParentChart implements OnInit {
       },
       plotOptions: {
         packedbubble: {
-          minSize: '30%',
-          maxSize: '120%',
-          zMin: 0,
-          zMax: 1000,
+          minSize: '50%',
+          maxSize: '150%',
+          zMin: min,
+          zMax: max,
           layoutAlgorithm: {
             splitSeries: false,
             gravitationalConstant: 0.02
