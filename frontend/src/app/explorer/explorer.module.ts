@@ -74,6 +74,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MainListComponent } from './dashboard/components/list/main-list/main-list.component';
 import { WheelComponent } from './dashboard/components/wheel/wheel.component';
 import { PackedBubbleComponent } from './dashboard/components/packed-bubble/packed-bubble.component';
+import { PackedBubbleSplitComponent } from './dashboard/components/packed-bubble-split/packed-bubble-split.component';
 
 @NgModule({
   declarations: [
@@ -103,6 +104,7 @@ import { PackedBubbleComponent } from './dashboard/components/packed-bubble/pack
     PieComponent,
     WheelComponent,
     PackedBubbleComponent,
+    PackedBubbleSplitComponent,
     WordcloudComponent,
     MapComponent,
     GetFirstImage,
@@ -168,6 +170,7 @@ import { PackedBubbleComponent } from './dashboard/components/packed-bubble/pack
     PieComponent,
     WheelComponent,
     PackedBubbleComponent,
+    PackedBubbleSplitComponent,
     WordcloudComponent,
     MapComponent,
     LineComponent,

@@ -23,6 +23,7 @@ export class StructureComponent implements OnInit {
     { name: "Bars Chart", value: "BarComponent", icon: "bar_chart" },
     { name: "Dependency Wheel", value: "WheelComponent", icon: "group_work" },
     { name: "Packed Bubble", value: "PackedBubbleComponent", icon: "bubble_chart" },
+    { name: "Packed Bubble Split", value: "PackedBubbleSplitComponent", icon: "bubble_chart" },
     { name: "Main Items list", value: "MainListComponent", icon: "view_list" }
   ]
   pre
