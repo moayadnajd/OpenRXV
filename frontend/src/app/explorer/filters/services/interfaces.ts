@@ -222,6 +222,8 @@ export interface QueryBlock {
   is_related?:boolean;
   buckets: string;
   filter?: string;
+  size?: number;
+  agg_on?:string;
 }
 
 /**

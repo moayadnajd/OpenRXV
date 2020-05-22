@@ -201,6 +201,11 @@ export class DesignComponent implements OnInit {
 
     if (obj.source)
       temp['id'] = temp['source'] + '_' + index + '_' + index1
+    if (obj.size)
+      temp['size'] = obj.size
+
+    if (obj.agg_on)
+      temp['agg_on'] = obj.agg_on
 
 
     if (obj.source_x && obj.source_y) {
@@ -218,7 +223,7 @@ export class DesignComponent implements OnInit {
     if (obj.component == 'MainListComponent')
       temp['id'] = 'main_list' + '_' + index + '_' + index1
 
-    if (obj.component == 'WheelComponent')
+    if (obj.component == 'WheelComponent' || obj.component == 'PackedBubbleComponent')
       temp['related'] = true
 
 

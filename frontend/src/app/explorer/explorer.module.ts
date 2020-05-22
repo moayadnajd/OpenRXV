@@ -73,6 +73,7 @@ import { ShareComponent } from './share/share.component';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MainListComponent } from './dashboard/components/list/main-list/main-list.component';
 import { WheelComponent } from './dashboard/components/wheel/wheel.component';
+import { PackedBubbleComponent } from './dashboard/components/packed-bubble/packed-bubble.component';
 
 @NgModule({
   declarations: [
@@ -101,6 +102,7 @@ import { WheelComponent } from './dashboard/components/wheel/wheel.component';
     SnackComponent,
     PieComponent,
     WheelComponent,
+    PackedBubbleComponent,
     WordcloudComponent,
     MapComponent,
     GetFirstImage,
@@ -165,6 +167,7 @@ import { WheelComponent } from './dashboard/components/wheel/wheel.component';
     SnackComponent,
     PieComponent,
     WheelComponent,
+    PackedBubbleComponent,
     WordcloudComponent,
     MapComponent,
     LineComponent,

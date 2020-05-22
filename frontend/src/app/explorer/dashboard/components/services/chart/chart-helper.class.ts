@@ -32,7 +32,7 @@ export class ChartHelper {
       enabled: true,
       layout: 'horizontal',
       floating: this.chartType === 'map',
-      align: this.chartType === 'pie' ? 'right' : 'center',
+      align: this.chartType === 'pie' || this.chartType === 'packed-bubble' ? 'right' : 'center',
       verticalAlign:
         this.chartType === 'map' || this.chartType === 'column'
           ? 'bottom'

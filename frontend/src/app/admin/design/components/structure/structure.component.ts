@@ -22,6 +22,7 @@ export class StructureComponent implements OnInit {
     { name: "List", value: "ListComponent", icon: "list" },
     { name: "Bars Chart", value: "BarComponent", icon: "bar_chart" },
     { name: "Dependency Wheel", value: "WheelComponent", icon: "group_work" },
+    { name: "Packed Bubble", value: "PackedBubbleComponent", icon: "bubble_chart" },
     { name: "Main Items list", value: "MainListComponent", icon: "view_list" }
   ]
   pre
@@ -39,6 +40,20 @@ export class StructureComponent implements OnInit {
       },
       required: true,
     },
+    {
+      name: 'size',
+      label: 'Number of results',
+      type: 'number',
+      required: false,
+    },
+    {
+      name: 'agg_on',
+      label: 'Values from source leave empty for items count',
+      type: 'metadata',
+      required: false,
+    },
+
+
   ]
   dialogRef: MatDialogRef<any>
   form_data = [];
@@ -125,6 +140,30 @@ export class StructureComponent implements OnInit {
         ]
         break;
 
+      case 'MainListComponent':
+        this.form_data = [...this.baseform, ...
+          [
+
+            {
+              name: 'title',
+              label: 'Title',
+              type: 'text',
+              required: true,
+            },
+            {
+              name: 'source',
+              label: 'Data Source',
+              type: 'metadata',
+              required: true,
+            },
+            {
+              name: 'description',
+              label: 'Tour Desctiption',
+              type: 'textarea',
+              required: true,
+            }]
+        ]
+        break;
       default:
         this.form_data = [...this.baseform, ...
           [

@@ -110,8 +110,8 @@ export class BuilderUtilities {
         ...this.getSourcesFromConfigs(this.countersConfig),
       ])
     );
-    mainQuerySources.forEach(({ source, is_related }: any) =>
-      arr.push({ is_related, source: `${source}.keyword`, buckets: source })
+    mainQuerySources.forEach(({ source, is_related, size, agg_on }: any) =>
+      arr.push({ size, is_related, source: `${source}.keyword`, agg_on: agg_on ? `${agg_on}.keyword` : undefined, buckets: source })
     );
 
     return arr;
@@ -124,7 +124,9 @@ export class BuilderUtilities {
       configs.filter(({ componentConfigs }: GeneralConfigs) => !Array.isArray((componentConfigs as any).source)).map(({ componentConfigs }: GeneralConfigs) => {
         return {
           is_related: (componentConfigs as any).related ? (componentConfigs as any).related : false,
-          source: (componentConfigs as any).source ? (componentConfigs as any).source.replace('.keyword', '') : undefined
+          source: (componentConfigs as any).source ? (componentConfigs as any).source.replace('.keyword', '') : undefined,
+          agg_on: (componentConfigs as any).agg_on ? (componentConfigs as any).agg_on.replace('.keyword', '') : undefined,
+          size: (componentConfigs as any).size ? (componentConfigs as any).size : 10000
         }
       })]
   }
@@ -159,13 +161,13 @@ export class BuilderUtilities {
 
   private addAggregationsForCharts(b: bodybuilder.Bodybuilder): void {
     this.querySourceBucketsFilter.forEach((qb: QueryBlock) => {
-      const { buckets, source, is_related } = qb;
+      const { size, buckets, source, is_related, agg_on } = qb;
       if (is_related === true)
-        b.aggregation('terms', this.buildTermRules(10, source), `related_${buckets}`, (a) => {
-          return a.aggregation('terms', this.buildTermRules(10, source), 'related')
+        b.aggregation('terms', this.buildTermRules(size, source), `related_${buckets}`, (a) => {
+          return a.aggregation('terms', this.buildTermRules(size, agg_on ? agg_on : source), 'related')
         })
       else
-        b.aggregation('terms', this.buildTermRules(1000, source), `${buckets}`)
+        b.aggregation('terms', this.buildTermRules(size, source), `${buckets}`)
     });
   }
 
