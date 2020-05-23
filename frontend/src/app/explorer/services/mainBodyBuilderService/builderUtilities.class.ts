@@ -34,6 +34,10 @@ export class BuilderUtilities {
   constructor() {
 
   }
+
+  resetAttributes() {
+    this.aggAttributes = Object.create(null);
+  }
   async init() {
 
     let { dashboard, counters, filters } = await this.configs();

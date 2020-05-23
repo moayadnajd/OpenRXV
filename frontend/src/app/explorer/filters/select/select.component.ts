@@ -42,7 +42,7 @@ export class SelectComponent extends ParentComponent implements OnInit {
     private readonly selectService: SelectService,
     private readonly store: Store<fromStore.AppState>,
     private readonly bodyBuilderService: BodyBuilderService
-    
+
   ) {
     super();
     this.filterOptions = [];
@@ -64,8 +64,10 @@ export class SelectComponent extends ParentComponent implements OnInit {
           }
       });
 
-      if (!filters.filter(element => element[source]).length)
+      if (!filters.filter(element => element[source]).length) {
         this.selectedOptions = [];
+        this.doNotChange = false;
+      }
 
     });
   }

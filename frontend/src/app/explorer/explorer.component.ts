@@ -18,6 +18,7 @@ import { ShareComponent } from './share/share.component';
 import { MatDialog } from '@angular/material/dialog';
 import { environment } from 'src/environments/environment';
 import { InViewState } from './store/reducers/items.reducer';
+import { SetQuery } from './store';
 
 
 @Component({
@@ -139,7 +140,13 @@ export class ExplorerComponent implements OnInit {
   }
 
   refresh(): void {
-    window.location.reload();
+    this.mainBodyBuilderService.resetAttributes()
+    setTimeout(() => {
+      this.store.dispatch(
+        new SetQuery(this.mainBodyBuilderService.buildMainQuery(0).build())
+      );
+    }, 100);
+
   }
 
   startTour(): void {

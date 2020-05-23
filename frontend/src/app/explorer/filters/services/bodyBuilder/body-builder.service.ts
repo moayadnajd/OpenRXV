@@ -42,10 +42,9 @@ export class BodyBuilderService {
     | QueryFilterAttribute {
     return this.mainBodyBuilderService.getAggAttributes;
   }
-
   set setAggAttributes(
     queryAttribute:
-      any 
+      any
       | string
       | QueryYearAttribute
       | QuerySearchAttribute
