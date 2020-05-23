@@ -83,37 +83,6 @@ export class StructureComponent implements OnInit {
   setFormDataOprions(value) {
 
     switch (value) {
-      case 'BarComponent':
-        this.form_data = [...this.baseform, ...
-          [
-
-            {
-              name: 'title',
-              label: 'Title',
-              type: 'text',
-              required: true,
-            },
-            {
-              name: 'source_x',
-              label: 'Data Source x',
-              type: 'metadata',
-              required: true,
-            },
-            {
-              name: 'source_y',
-              label: 'Data Source y',
-              type: 'metadata',
-              required: true,
-            },
-            {
-              name: 'description',
-              label: 'Tour Desctiption',
-              type: 'textarea',
-              required: true,
-            }]
-        ]
-        break;
-
       case 'MainListComponent':
         this.form_data = [...this.baseform, ...
           [

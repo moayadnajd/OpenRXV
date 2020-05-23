@@ -6,17 +6,9 @@ import {
 } from '@angular/core';
 import { ParentChart } from '../parent-chart';
 import { ChartMathodsService } from '../services/chartCommonMethods/chart-mathods.service';
-import {
-  ResetCaller,
-  BuildQueryObj,
-  ElasticsearchQuery
-} from 'src/app/explorer/filters/services/interfaces';
+import { Bucket } from 'src/app/explorer/filters/services/interfaces';
 import { RangeService } from 'src/app/explorer/filters/services/range/range.service';
-import { Store } from '@ngrx/store';
-import * as fromStore from '../../../store';
 import { BarService } from './services/bar/bar.service';
-import { UpdateCallerBarChart } from '../list/paginated-list/filter-paginated-list/types.interface';
-import { map } from 'rxjs/operators';
 import { ComponentLookup } from '../dynamic/lookup.registry';
 
 @ComponentLookup('BarComponent')
@@ -28,87 +20,50 @@ import { ComponentLookup } from '../dynamic/lookup.registry';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BarComponent extends ParentChart implements OnInit {
-  chart: Highcharts.Chart;
-
   constructor(
     cms: ChartMathodsService,
-    private readonly rangeService: RangeService,
-    private readonly store: Store<fromStore.AppState>,
-    public readonly barService: BarService,
     private readonly cdr: ChangeDetectorRef
   ) {
     super(cms);
-    this.rangeService.storeVal = this.store;
   }
 
-  ngOnInit() {
-    const {
-      source: [firstBarFilterSource, secondBarFilterSource],
-      source
-    } = this.componentConfigs;
-    this.rangeService.sourceVal = (source as Array<string>).reduce(
-      (prev: string, curr: string) => (curr.includes('year') ? curr : undefined)
-    );
-    this.init('column', this.getYears.bind(this));
-    this.barService.init(
-      this.rangeService,
-      this.store
-        .select(fromStore.getQueryFromBody)
-        .pipe(map((query: object) => !!query)),
-      firstBarFilterSource,
-      secondBarFilterSource
-    );
-    this.buildOptions.subscribe(
-      this.barService.yearsComposer(this.rangeService.sourceVal)
-    );
-    this.barService.setChartOptinos.subscribe(
-      (series: Array<Highcharts.SeriesColumnOptions>) => {
-        if (series) {
-          this.chartOptions = this.setOptions(series);
-          if (this.chart) {
-            this.updateChart();
-          }
-        }
-        this.cdr.detectChanges();
+  ngOnInit(): void {
+    this.init('column');
+    this.buildOptions.subscribe((buckets: Array<Bucket>) => {
+      if (buckets) {
+        this.chartOptions = this.setOptions(buckets);
       }
-    );
-  }
-
-  handleChartInstance(e: Highcharts.Chart): void {
-    this.chart = e;
-  }
-
-  onChange(val: Array<string | number>): void {
-    this.barService.getData(UpdateCallerBarChart.BarChartNgSelect);
-  }
-
-  private getYears(caller?: ResetCaller): void {
-    const qb: BuildQueryObj = {
-      size: 100000
-    };
-    this.rangeService
-      .getYears(this.rangeService.buildquery(qb).build() as ElasticsearchQuery)
-      .subscribe();
-  }
-
-  private updateChart(): void {
-    this.chart.update(
-      {
-        ...this.chartOptions,
-        series: [...this.chartOptions.series]
-      },
-      true,
-      true,
-      true
-    );
+      this.cdr.detectChanges();
+    });
   }
 
   private setOptions(
-    series: Array<Highcharts.SeriesColumnOptions>
+    buckets: Array<Bucket>
   ): Highcharts.Options {
+    let categories = []
+    buckets.forEach((b: Bucket) => {
+      b.related.buckets.forEach(d => {
+        if (categories.indexOf(d.key.substr(0, 50)) == -1)
+          categories.push(d.key.substr(0, 50))
+      })
+    })
+
+    let data = buckets.map((b: Bucket) => {
+      let data = []
+      categories.forEach((e, i) => {
+        let found: Array<any> = b.related.buckets.filter(d => d.key.substr(0, 50) == e)
+        if (found.length)
+          data[i] = found[0].doc_count
+        else
+          data[i] = 0
+      })
+      return {
+        name: b.key, data
+      }
+    }).flat(1)
     return {
       chart: { type: 'column' },
-      xAxis: { type: 'category', crosshair: true },
+      xAxis: { categories, crosshair: true },
       boost: {
         enabled: true,
         useGPUTranslations: true
@@ -129,7 +84,7 @@ export class BarComponent extends ParentChart implements OnInit {
         shared: true,
         useHTML: true
       },
-      series: [...series],
+      series: data,
       ...this.cms.commonProperties()
     };
   }
