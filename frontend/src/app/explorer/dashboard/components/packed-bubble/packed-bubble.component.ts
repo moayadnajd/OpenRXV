@@ -54,6 +54,11 @@ export class PackedBubbleComponent extends ParentChart implements OnInit {
     return {
       chart: {
         type: 'packedbubble',
+        animation: false,
+      },
+      boost: {
+        enabled: true,
+        useGPUTranslations: true,
       },
       tooltip: {
         useHTML: true,
@@ -75,7 +80,7 @@ export class PackedBubbleComponent extends ParentChart implements OnInit {
             filter: {
               property: 'y',
               operator: '>',
-              value: 250
+              value: max
             },
             style: {
               color: 'black',

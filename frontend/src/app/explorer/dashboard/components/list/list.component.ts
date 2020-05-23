@@ -77,20 +77,20 @@ export class ListComponent extends ParentComponent implements OnInit {
   }
 
   private subToDataFromStore(): void {
-    const { source } = this.componentConfigs as ComponentDashboardConfigs;
+    const { source, size } = this.componentConfigs as ComponentDashboardConfigs;
     this.shouldWePaginate(source as string)
       ? this.store.select(fromStore.getHits).subscribe((h: Hits) => {
-          this.initPagination(source as string, h);
-          this.cdr.detectChanges();
-          this.expandOrStay(this.safeCheckLength(h && h.hits));
-        })
+        this.initPagination(source as string, h);
+        this.cdr.detectChanges();
+        this.expandOrStay(this.safeCheckLength(h && h.hits));
+      })
       : this.store
-          .select(fromStore.getBuckets, source)
-          .subscribe((b: Bucket[]) => {
-            this.listData = b;
-            this.cdr.detectChanges();
-            this.expandOrStay(this.safeCheckLength(b));
-          });
+        .select(fromStore.getBuckets, size ? size + '_' + source : '10000_' + source)
+        .subscribe((b: Bucket[]) => {
+          this.listData = b;
+          this.cdr.detectChanges();
+          this.expandOrStay(this.safeCheckLength(b));
+        });
     this.store.select(fromStore.getLoadingOnlyHits).subscribe((b: boolean) => {
       this.loadingHits = b;
       this.cdr.detectChanges();

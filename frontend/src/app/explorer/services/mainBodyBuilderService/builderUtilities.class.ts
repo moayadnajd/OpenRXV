@@ -126,7 +126,7 @@ export class BuilderUtilities {
           is_related: (componentConfigs as any).related ? (componentConfigs as any).related : false,
           source: (componentConfigs as any).source ? (componentConfigs as any).source.replace('.keyword', '') : undefined,
           agg_on: (componentConfigs as any).agg_on ? (componentConfigs as any).agg_on.replace('.keyword', '') : undefined,
-          size: (componentConfigs as any).size ? (componentConfigs as any).size : 10000
+          size: (componentConfigs as any).size ? parseInt((componentConfigs as any).size) : 10000
         }
       })]
   }
@@ -163,11 +163,11 @@ export class BuilderUtilities {
     this.querySourceBucketsFilter.forEach((qb: QueryBlock) => {
       const { size, buckets, source, is_related, agg_on } = qb;
       if (is_related === true)
-        b.aggregation('terms', this.buildTermRules(size, source), `related_${buckets}`, (a) => {
+        b.aggregation('terms', this.buildTermRules(size, source), `${size}_related_${buckets}`, (a) => {
           return a.aggregation('terms', this.buildTermRules(size, agg_on ? agg_on : source), 'related')
         })
       else
-        b.aggregation('terms', this.buildTermRules(size, source), `${buckets}`)
+        b.aggregation('terms', this.buildTermRules(size, source), `${size}_${buckets}`)
     });
   }
 
