@@ -75,6 +75,8 @@ import { MainListComponent } from './dashboard/components/list/main-list/main-li
 import { WheelComponent } from './dashboard/components/wheel/wheel.component';
 import { PackedBubbleComponent } from './dashboard/components/packed-bubble/packed-bubble.component';
 import { PackedBubbleSplitComponent } from './dashboard/components/packed-bubble-split/packed-bubble-split.component';
+import { DateRangeComponent } from './filters/date-range/date-range.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @NgModule({
   declarations: [
@@ -106,6 +108,7 @@ import { PackedBubbleSplitComponent } from './dashboard/components/packed-bubble
     PackedBubbleComponent,
     PackedBubbleSplitComponent,
     WordcloudComponent,
+    DateRangeComponent,
     MapComponent,
     GetFirstImage,
     SafeHtmlPipe,
@@ -138,6 +141,7 @@ import { PackedBubbleSplitComponent } from './dashboard/components/packed-bubble
     }),
     MatInputModule,
     MatButtonModule,
+    MatDatepickerModule,
     MatListModule,
     HighchartsChartModule,
     ScrollingModule,
@@ -171,6 +175,7 @@ import { PackedBubbleSplitComponent } from './dashboard/components/packed-bubble
     WheelComponent,
     PackedBubbleComponent,
     PackedBubbleSplitComponent,
+    DateRangeComponent,
     WordcloudComponent,
     MapComponent,
     LineComponent,

@@ -79,6 +79,12 @@ export class RangeService {
       )
     );
   }
+  getMaxAndMin(
+    query: ElasticsearchQuery,
+    force: boolean = false
+  ): any {
+    return this.httpGetMinAndMax(query)
+  }
 
   buildquery(bq: BuildQueryObj): bodybuilder.Bodybuilder {
     bq.size = bq.size ? bq.size : 10;
@@ -86,6 +92,15 @@ export class RangeService {
     let q = this.bodyBuilderService.yearsBuildquery(bq);
     return q;
   }
+
+  buildminmaxquery(bq: BuildQueryObj): bodybuilder.Bodybuilder {
+    bq.size = bq.size ? bq.size : 10;
+    bq.source = this.source;
+    let q = this.bodyBuilderService.buildMinMaxQuery(bq);
+    return q;
+  }
+
+
 
   addAttributeToMainQuery(range): bodybuilder.Bodybuilder {
     let obj = {};
@@ -109,6 +124,21 @@ export class RangeService {
       ),
       map((d: ElasticsearchResponse) =>
         d.aggregations[this.source].buckets.map((year: Bucket) => +year.key)
+      )
+    );
+  }
+
+  private httpGetMinAndMax(query: ElasticsearchQuery) {
+    return this.http.post(this.api_end_point, query).pipe(
+      tap((res: ElasticsearchResponse) =>
+        this.store.dispatch(new fromStore.GetDataSuccess(res, false))
+      ),
+      map((d: ElasticsearchResponse) => {
+        let obj = {};
+        obj[`min_${this.source}`] = d.aggregations[`min_${this.source}`]
+        obj[`max_${this.source}`] = d.aggregations[`max_${this.source}`]
+        return obj;
+      }
       )
     );
   }

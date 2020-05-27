@@ -27,6 +27,7 @@ export class FilterComponent implements OnInit {
         { name: "Select", value: "SelectComponent" },
         { name: "Search", value: "SearchComponent" },
         { name: "Range", value: "RangeComponent" },
+        { name: "Date Range", value: "DateRangeComponent" },
       ],
       required: true,
       onChange: (event) => {
@@ -81,6 +82,24 @@ export class FilterComponent implements OnInit {
         ]
         break;
       case 'RangeComponent':
+        this.form_data = [...this.baseform, ...
+          [
+            {
+              name: 'source',
+              label: 'Data Source',
+              type: 'metadata',
+              required: true,
+            },
+            {
+              name: 'placeholder',
+              label: 'Placeholder',
+              type: 'text',
+              required: true,
+            }
+          ]
+        ]
+        break;
+        case 'DateRangeComponent':
         this.form_data = [...this.baseform, ...
           [
             {

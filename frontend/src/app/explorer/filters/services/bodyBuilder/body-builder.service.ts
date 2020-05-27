@@ -78,6 +78,16 @@ export class BodyBuilderService {
     );
   }
 
+  buildMinMaxQuery(bq: BuildQueryObj): bodybuilder.Bodybuilder {
+    bq.size = bq.size ? bq.size : 10;
+    return this.addQueryAttributes(
+      this.addMinMaxAggreigation(
+        bodybuilder().size(0), // no need for the hits
+        bq
+      )
+    );
+  }
+
   buildMainQuery(from: number = 10): bodybuilder.Bodybuilder {
     this.from = from === 10 ? this.from : from;
     return this.mainBodyBuilderService.buildMainQuery(this.from);
@@ -105,6 +115,21 @@ export class BodyBuilderService {
       this.addInclude(term, termRules);
     }
     return query.aggregation('terms', termRules, source);
+  }
+
+  public addMinMaxAggreigation(
+    query: bodybuilder.Bodybuilder,
+    qb: BuildQueryObj
+  ): bodybuilder.Bodybuilder {
+    const { source } = qb;
+
+    const termRules: any = {
+      field: source,
+
+    };
+    query.aggregation('min', termRules, `min_${source}`);
+    query.aggregation('max', termRules, `max_${source}`);
+    return query;
   }
 
   private addInclude(term: string, termRules: AggsRules): void {
