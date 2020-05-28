@@ -94,6 +94,8 @@ export class SearchComponent extends ParentComponent implements OnInit {
           else if (key == source && type == 0)
             this.searchTerm = element[key];
       });
+      if (!filters.filter(element => element[source]).length)
+        this.searchTerm = ''
     });
   }
   private checkTypeThenDelete() {

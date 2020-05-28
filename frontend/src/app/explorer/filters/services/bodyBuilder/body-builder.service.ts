@@ -63,7 +63,7 @@ export class BodyBuilderService {
   yearsBuildquery(bq: BuildQueryObj) {
     bq.size = bq.size ? bq.size : 0;
     return this.addAggreigation(
-      bodybuilder().size(0), // no need for the hits
+      this.buildMainQuery().size(0), // no need for the hits
       bq
     );
 

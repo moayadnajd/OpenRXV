@@ -2,16 +2,9 @@
 <!-- the nouislider need to have range, min & max from the start -->
 <!-- so i will render it when we have these values -->
 <ng-container *ngIf="range; else loading">
-  <nouislider
-    (change)="onYearSliderChange()"
-    [tooltips]="[true, true]"
-    [min]="min"
-    [connect]="true"
-    [max]="max"
-    [(ngModel)]="range"
-    [step]="1"
-    [disabled]="disabled"
-  >
+  <mat-label>{{ componentConfigs.placeholder }}</mat-label>
+  <nouislider class="pb-4" (change)="onYearSliderChange()" [tooltips]="[true, true]" [min]="min" [connect]="true"
+    [max]="max" [(ngModel)]="range" [step]="1" [config]="config"  [disabled]="disabled">
   </nouislider>
 </ng-container>
 <ng-template #loading>

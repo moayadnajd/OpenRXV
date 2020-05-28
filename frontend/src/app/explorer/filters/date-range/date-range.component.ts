@@ -81,6 +81,10 @@ export class DateRangeComponent extends ParentComponent implements OnInit {
     let { source } = this.componentConfigs as ComponentFilterConfigs;
     source = source.replace('.keyword', '');
     this.rangeService.sourceVal = source
+    this.subtoToQuery(source)
+  }
+
+  getMinMaxValues(source) {
     const qb: BuildQueryObj = {
       size: 100000
     };
@@ -97,7 +101,6 @@ export class DateRangeComponent extends ParentComponent implements OnInit {
           this.toMinDate = n[`min_${source}`].value_as_string
         }// some queries will return empty array
       );
-    this.subtoToQuery(source)
   }
 
   private subtoToQuery(source): void {
@@ -112,8 +115,7 @@ export class DateRangeComponent extends ParentComponent implements OnInit {
       });
 
       if (!filters.filter(element => element[source]).length) {
-        this.fromDate = null
-        this.toDate = null
+        this.getMinMaxValues(source)
       }
 
     });

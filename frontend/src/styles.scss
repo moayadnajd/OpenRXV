@@ -193,3 +193,8 @@ app-paginated-list app-tags {
   }
   
 }
+
+.noUi-horizontal .noUi-tooltip{
+  top: 120% !important;
+  bottom: unset !important;
+}
