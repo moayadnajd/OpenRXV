@@ -113,8 +113,6 @@ export class ExplorerComponent implements OnInit {
     this.dashboardConfig = dashboard.flat(1);
     this.tourConfig = [welcome];
     this.loading$ = this.store.select(fromStore.getLoadingStatus);
-
-
   }
 
   onMouseMove(event: MouseEvent): void {
@@ -129,7 +127,7 @@ export class ExplorerComponent implements OnInit {
   }
 
   openNavAndDisableIgnoreMouseEvent(): void {
-    this.openAndRender('side');
+    this.openAndRender('over');
     this.prevenetMouseOnNav = true;
     this.sidenav.closedStart.subscribe(() => (this.prevenetMouseOnNav = false));
   }
@@ -142,10 +140,11 @@ export class ExplorerComponent implements OnInit {
   refresh(): void {
     this.mainBodyBuilderService.resetAttributes()
     setTimeout(() => {
+     
       this.store.dispatch(
         new SetQuery(this.mainBodyBuilderService.buildMainQuery(0).build())
       );
-    }, 100);
+    }, 300);
 
   }
 

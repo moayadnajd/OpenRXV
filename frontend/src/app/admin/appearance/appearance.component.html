@@ -30,7 +30,13 @@
                                     </button>
                                 </mat-form-field>
                             </div>
-                            <div class="file">
+                            <div class="w-100">
+                                <mat-form-field>
+                                    <mat-label>Google Analytics Tracking Code </mat-label>
+                                    <input matInput formControlName="tracking_code" placeholder="Tracking Code">
+                                </mat-form-field>
+                            </div>
+                            <div class="file w-100">
                                 <mat-label>Logo: </mat-label>
                                 <input *ngIf="!logo" type="file" (change)="logoChange($event)"
                                     placeholder="Logo" required>
@@ -41,6 +47,7 @@
                                     <img [src]="src(logo)" alt="logo">
                                 </div>
                             </div>
+                            
                         </div>
                     </div>
                 </form>

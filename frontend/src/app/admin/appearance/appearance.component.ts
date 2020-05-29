@@ -14,7 +14,8 @@ export class AppearanceComponent implements OnInit {
   form: FormGroup = new FormGroup({
     primary_color: new FormControl(this.color),
     website_name: new FormControl(''),
-    logo: new FormControl('')
+    logo: new FormControl(''),
+    tracking_code:new FormControl('')
   })
   constructor(private settingsService: SettingsService) { }
   src(value) {

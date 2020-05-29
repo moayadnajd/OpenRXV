@@ -116,13 +116,15 @@ export class DateRangeComponent extends ParentComponent implements OnInit {
 
       if (!filters.filter(element => element[source]).length) {
         this.getMinMaxValues(source)
+        this.fromDate = null
+        this.toDate = null
       }
 
     });
   }
 
   dateChange(type) {
-    if (this.toDate) {
+    if (this.toDate && this.fromDate) {
       const query: bodybuilder.Bodybuilder = this.rangeService.addAttributeToMainQuery(
         {
           gte: moment(new Date(this.fromDate)).format('YYYY-MM-DD'),
@@ -132,6 +134,10 @@ export class DateRangeComponent extends ParentComponent implements OnInit {
       this.rangeService.resetNotification({ min: this.fromDate, max: this.toDate });
       this.store.dispatch(new fromStore.SetQuery(query.build()));
 
+    } else if (type == 'from' && this.fromDate && !this.toDate) {
+      this.toMinDate = this.fromDate
+    } else if (type == 'to' && this.toDate && !this.fromDate) {
+      this.fromMaxDate = this.toDate
     }
 
   }

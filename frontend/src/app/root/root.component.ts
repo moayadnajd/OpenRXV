@@ -2,13 +2,22 @@ import { Component, OnInit } from '@angular/core';
 import { SettingsService } from '../admin/services/settings.service';
 
 import * as tinycolor from 'tinycolor2'
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { Title } from '@angular/platform-browser';
+
+import { get } from 'scriptjs';
+import { any } from 'ramda';
 export interface Color {
   name: string;
   hex: string;
   darkContrast: boolean;
 }
+
+declare let gtag: Function;
+declare let window: any;
+declare let dataLayer:any;
+
+
 @Component({
   selector: 'app-root',
   templateUrl: './root.component.html',
@@ -20,24 +29,49 @@ export class RootComponent implements OnInit {
     private titleService: Title,
     private readonly settingsService: SettingsService,
     private router: Router
-  ) { }
+  ) {
+
+  }
+
   primaryColorPalette
   async ngOnInit() {
+    
     let settings = await this.settingsService.readExplorerSettings();
     await localStorage.setItem('configs', JSON.stringify(settings))
-    if (!settings.counters && !settings.dashboard || settings.dashboard.length == 0){
+    if (!settings.counters && !settings.dashboard || settings.dashboard.length == 0) {
       this.router.navigate(['/admin']);
     }
     this.loadSettigs = true
     if (settings.appearance.primary_color) {
       this.savePrimaryColor(settings.appearance.primary_color)
-      this.titleService.setTitle( settings.appearance.website_name );
+      this.titleService.setTitle(settings.appearance.website_name);
     }
-    
+
+    if (settings.appearance.tracking_code) {
+      this.setupGoogleAnalytics(settings.appearance.tracking_code);
+    }
+
 
   }
 
-
+  setupGoogleAnalytics(tracking_code) {
+    get(`https://www.googletagmanager.com/gtag/js?id=${tracking_code}`, () => {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(param,param2,param3=null){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', tracking_code);
+      this.router.events.subscribe(event => {
+        if (event instanceof NavigationEnd) {
+          gtag('config', tracking_code,
+            {
+              'page_path': event.urlAfterRedirects
+            }
+          );
+        }
+      }
+      )
+    });
+  }
 
   savePrimaryColor(color) {
     this.primaryColorPalette = computeColors(color);
