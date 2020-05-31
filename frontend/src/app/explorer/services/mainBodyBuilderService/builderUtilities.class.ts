@@ -21,7 +21,6 @@ export class BuilderUtilities {
     return configs;
   }
   private querySourceBucketsFilter: QueryBlock[];
-  private openLimitedAcc: string[];
   protected aggAttributes:
     | QueryYearAttribute
     | QuerySearchAttribute
@@ -45,7 +44,6 @@ export class BuilderUtilities {
     this.countersConfig = counters;
     this.filtersConfig = filters;
 
-    this.openLimitedAcc = this.extractOpenLimitedAccessFilter();
     this.querySourceBucketsFilter = this.convertEnumToQueryBlock();
     this.aggAttributes = Object.create(null);
     this.hitsAttributes = Object.create(null) as SortOption;
@@ -114,8 +112,8 @@ export class BuilderUtilities {
         ...this.getSourcesFromConfigs(this.countersConfig),
       ])
     );
-    mainQuerySources.forEach(({ source, is_related, size, agg_on }: any) =>
-      arr.push({ size, is_related, source: `${source}.keyword`, agg_on: agg_on ? `${agg_on}.keyword` : undefined, buckets: source })
+    mainQuerySources.forEach(({ type, source, is_related, size, agg_on }: any) =>
+      arr.push({ type, size, is_related, source: `${source}.keyword`, agg_on: agg_on ? `${agg_on}.keyword` : undefined, buckets: source })
     );
 
     return arr;
@@ -127,6 +125,7 @@ export class BuilderUtilities {
     return [...
       configs.filter(({ componentConfigs }: GeneralConfigs) => !Array.isArray((componentConfigs as any).source)).map(({ componentConfigs }: GeneralConfigs) => {
         return {
+          type: (componentConfigs as any).type ? (componentConfigs as any).type : 'cardinality',
           is_related: (componentConfigs as any).related ? (componentConfigs as any).related : false,
           source: (componentConfigs as any).source ? (componentConfigs as any).source.replace('.keyword', '') : undefined,
           agg_on: (componentConfigs as any).agg_on ? (componentConfigs as any).agg_on.replace('.keyword', '') : undefined,
@@ -139,13 +138,23 @@ export class BuilderUtilities {
     qb: QueryBlock,
     b: bodybuilder.Bodybuilder
   ): void {
-    const { filter, source } = qb; // filter comes from this.convertEnumToQueryBlock
-    if (!filter) {
+    console.log(qb);
+    const { filter, source, type } = qb; // filter comes from this.convertEnumToQueryBlock
+    if (!filter && type == 'cardinality') {
       b.aggregation(
         'cardinality',
         {
           field: source,
           precision_threshold: 40000,
+        },
+        source
+      );
+    } else if (!filter && type != 'cardinality') {
+      b.aggregation(
+        type,
+        {
+          field: source.replace('.keyword', ''),
+          missing: 0
         },
         source
       );

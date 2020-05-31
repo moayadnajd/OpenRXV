@@ -223,6 +223,7 @@ export interface QueryBlock {
   buckets: string;
   filter?: string;
   size?: number;
+  type?:string;
   agg_on?:string;
 }
 

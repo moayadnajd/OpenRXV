@@ -17,10 +17,24 @@ export class LinkTextComponent {
   constructor() {
     let { appearance } = JSON.parse(localStorage.getItem('configs'));
     this.appearance = appearance
+
+  }
+
+
+  tags(value: string) {
+
+    let splited = value.split('.')
+    console.log(splited);
+    if (splited.length > 1 && this.source[splited[0]] && this.source[splited[0]][splited[1]])
+      return this.source[splited[0]][splited[1]];
+    else if (this.source[splited[0]])
+      return this.source[value];
+    else
+      return false
   }
 
 
   getIcon(repo) {
-    return environment.api +'/'+ this.appearance.icons[repo];
+    return environment.api + '/' + this.appearance.icons[repo];
   }
 }

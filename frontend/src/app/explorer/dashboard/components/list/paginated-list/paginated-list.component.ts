@@ -56,6 +56,7 @@ export class PaginatedListComponent implements OnInit {
 
   ngOnInit(): void {
     this.resetPaginationWhenQueryChanges();
+    console.log(this.content)
   }
 
   changePage(e: PageEvent): void {

@@ -291,6 +291,8 @@ export class DesignComponent implements OnInit {
 
     if (obj.filter)
       temp['filter'] = obj.filter
+      if (obj.type)
+      temp['type'] = obj.type
 
     if (obj.percentageFromTotal)
       temp['percentageFromTotal'] = obj.percentageFromTotal

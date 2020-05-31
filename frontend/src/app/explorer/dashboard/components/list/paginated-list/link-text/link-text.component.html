@@ -10,9 +10,9 @@
   </p>
   <section class="publication-text">
     <ng-container *ngFor="let tag of content.tags; let i = index">
-      <ng-container *ngIf="source[tag.metadata]">
-        <app-tags [ngClass]="{ 'simulate-p-tag': i === 0 || i === 1 }" [key]="tag.metadata" [label]="tag.disply_name"
-          [labelData]="source[tag.metadata]"></app-tags>
+      <ng-container *ngIf="tags(tag.metadata)">
+        <app-tags [ngClass]="{ 'simulate-p-tag': i === 0 || i === 1 }"  [label]="tag.disply_name"
+          [labelData]="tags(tag.metadata)"></app-tags>
       </ng-container>
     </ng-container>
   </section>

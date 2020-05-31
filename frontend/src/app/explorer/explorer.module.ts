@@ -77,6 +77,8 @@ import { PackedBubbleComponent } from './dashboard/components/packed-bubble/pack
 import { PackedBubbleSplitComponent } from './dashboard/components/packed-bubble-split/packed-bubble-split.component';
 import { DateRangeComponent } from './filters/date-range/date-range.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
@@ -127,6 +129,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     NgSelectModule,
     PortalModule,
     MatSidenavModule,
+    MatSelectModule,
+    MatFormFieldModule,
     MatExpansionModule,
     MatCardModule,
     MatToolbarModule,

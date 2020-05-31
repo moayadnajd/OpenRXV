@@ -28,6 +28,13 @@ export class CounterComponent implements OnInit {
       required: true
     },
     {
+      name: 'type',
+      label: 'Type',
+      type: 'select',
+      items: [{ name: "Count of distinct values", value: "cardinality" },{ name: "Sums up numeric values", value: "sum" },{ name: "Computes the average of numeric values", value: "avg" }],
+      required: true
+    },
+    {
       name: 'description',
       label: 'Tour Description',
       type: 'textarea',
@@ -48,7 +55,7 @@ export class CounterComponent implements OnInit {
   ];
 
   @Input() configs;
- 
+
   delete() {
     this.onDelete.emit(true)
   }

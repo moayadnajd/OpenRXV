@@ -1,23 +1,5 @@
-<ng-container *ngIf="typeofData === 'altmetric'">
-  <b class="muted-text"> {{ label }}: </b>
-  <span class="primary-text"> {{ labelData.score }} </span>
-</ng-container>
 
-<ng-container *ngIf="typeofData === 'numbers'">
-  <ng-container *ngIf="labelData.downloads > 0">
-    <b class="muted-text"> Downloads: </b>
-    <span class="primary-text"> {{ labelData.downloads }} </span>
-  </ng-container>
-  <ng-container *ngIf="labelData.downloads > 0 && labelData.views > 0">
-    |
-  </ng-container>
-  <ng-container *ngIf="labelData.views > 0">
-    <b class="muted-text"> Views: </b>
-    <span class="primary-text"> {{ labelData.views }} </span>
-  </ng-container>
-</ng-container>
-
-<ng-container *ngIf="typeofData === 'normalText'">
+<ng-container>
   <b class="muted-text"> {{ label }}: </b>
   <span class="primary-text"> {{ labelData }} </span>
 </ng-container>
