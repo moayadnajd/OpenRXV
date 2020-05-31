@@ -2,17 +2,20 @@
   <mat-toolbar-row>
     <img *ngIf="logo" [src]="logo" [attr.alt]="website_name" class="nab-bar-images" />
     <span class="website_name" *ngIf="!logo">{{website_name}}</span>
-    <button mat-icon-button aria-label="refresh page button" class="end" (click)="openNavAndDisableIgnoreMouseEvent()">
+    <button matTooltip="Open Filters drawer"  mat-icon-button  aria-label="refresh page button" class="end"
+      (click)="openNavAndDisableIgnoreMouseEvent()">
       <mat-icon>search</mat-icon>
     </button>
-    <button mat-icon-button (click)="refresh()" aria-label="refresh page button">
+    <button matTooltip="Rest All Filters" mat-icon-button (click)="refresh()" aria-label="refresh page button">
       <mat-icon>loop</mat-icon>
     </button>
-    <button *ngIf="!isSmall" mat-icon-button (click)="startTour()" aria-label="refresh page button">
+    <button matTooltip="Take a tour" *ngIf="!isSmall" mat-icon-button (click)="startTour()"
+      aria-label="refresh page button">
       <mat-icon>contact_support</mat-icon>
     </button>
 
-    <button *ngIf="!isSmall" mat-icon-button (click)="share()" aria-label="refresh page button">
+    <button [matTooltip]="'Share '+website_name+' and your search results with others'" *ngIf="!isSmall" mat-icon-button
+      (click)="share()" aria-label="refresh page button">
       <mat-icon>share</mat-icon>
     </button>
   </mat-toolbar-row>

@@ -79,6 +79,7 @@ import { DateRangeComponent } from './filters/date-range/date-range.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -131,6 +132,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatSidenavModule,
     MatSelectModule,
     MatFormFieldModule,
+    MatTooltipModule,
     MatExpansionModule,
     MatCardModule,
     MatToolbarModule,

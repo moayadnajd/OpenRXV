@@ -138,7 +138,6 @@ export class BuilderUtilities {
     qb: QueryBlock,
     b: bodybuilder.Bodybuilder
   ): void {
-    console.log(qb);
     const { filter, source, type } = qb; // filter comes from this.convertEnumToQueryBlock
     if (!filter && type == 'cardinality') {
       b.aggregation(
