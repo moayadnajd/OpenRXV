@@ -30,12 +30,12 @@ export class StructureComponent implements OnInit {
   baseform = [
     {
       name: 'component',
-      label: 'Compinent Type',
+      label: 'Component Type',
       type: 'select',
       items: this.options,
       onChange: (event) => {
         this.pre = event;
-        this.setFormDataOprions(event.value)
+        this.setFormDataOptions(event.value)
         this.dialogRef.close();
         this.openDialog(this.currentIndex);
       },
@@ -47,15 +47,28 @@ export class StructureComponent implements OnInit {
       type: 'number',
       required: false,
     },
-    {
-      name: 'agg_on',
-      label: 'Values from source leave empty for items count',
-      type: 'metadata',
-      required: false,
-    },
-
 
   ]
+
+  secondForm = [{
+    name: 'component',
+    label: 'Component Type',
+    type: 'select',
+    items: this.options,
+    onChange: (event) => {
+      this.pre = event;
+      this.setFormDataOptions(event.value)
+      this.dialogRef.close();
+      this.openDialog(this.currentIndex);
+    },
+    required: true,
+  },
+  {
+    name: 'size',
+    label: 'Number of results',
+    type: 'number',
+    required: false,
+  },]
   dialogRef: MatDialogRef<any>
   form_data = [];
   @Input() grid;
@@ -80,82 +93,65 @@ export class StructureComponent implements OnInit {
     }
   ]
 
-  setFormDataOprions(value) {
 
+  setFormDataOptions(value) {
     switch (value) {
-      case 'MainListComponent':
-        this.form_data = [...this.baseform, ...
-          [
+      case 'BarComponent':
+      case 'PackedBubbleComponent':
+      case 'PackedBubbleSplitComponent':
+        this.form_data = [...this.baseform, ...[{
+          name: 'title',
+          label: 'Title',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'source',
+          label: 'Data Source',
+          type: 'metadata',
+          required: true,
+        },
+        {
+          name: 'description',
+          label: 'Tour Desctiption',
+          type: 'textarea',
+          required: true,
+        }]]
 
-            {
-              name: 'title',
-              label: 'Title',
-              type: 'text',
-              required: true,
-            },
-            {
-              name: 'description',
-              label: 'Tour Desctiption',
-              type: 'textarea',
-              required: true,
-            },
-            {
-              name: 'content',
-              label: 'Details',
-              type: 'content',
-              required: true,
-            }
 
-          ]
-        ]
+
+
         break;
 
-      case 'MainListComponent':
-        this.form_data = [...this.baseform, ...
-          [
-
-            {
-              name: 'title',
-              label: 'Title',
-              type: 'text',
-              required: true,
-            },
-            {
-              name: 'source',
-              label: 'Data Source',
-              type: 'metadata',
-              required: true,
-            },
-            {
-              name: 'description',
-              label: 'Tour Desctiption',
-              type: 'textarea',
-              required: true,
-            }]
-        ]
-        break;
       default:
-        this.form_data = [...this.baseform, ...
-          [
+        console.log('not entered')
+        this.form_data = [...this.baseform,
+        ...[{
+          name: 'agg_on',
+          label: 'Values from source leave empty for items count',
+          type: 'metadata',
+          required: false,
+        },
+        ...[
 
-            {
-              name: 'title',
-              label: 'Title',
-              type: 'text',
-              required: true,
-            },
-            {
-              name: 'source',
-              label: 'Data Source',
-              type: 'metadata',
-              required: true,
-            },
-            {
-              name: 'description',
-              label: 'Tour Desctiption',
-              type: 'textarea',
-              required: true,
-            }]
+          {
+            name: 'title',
+            label: 'Title',
+            type: 'text',
+            required: true,
+          },
+          {
+            name: 'source',
+            label: 'Data Source',
+            type: 'metadata',
+            required: true,
+          },
+          {
+            name: 'description',
+            label: 'Tour Desctiption',
+            type: 'textarea',
+            required: true,
+          }],]
         ]
         break;
     }
@@ -238,7 +234,7 @@ export class StructureComponent implements OnInit {
     if (this.pre)
       this.grid[index].component = this.pre.value;
     this.currentIndex = index;
-    this.setFormDataOprions(this.grid[index].component)
+    this.setFormDataOptions(this.grid[index].component)
     this.dialogRef = this.dialog.open(FormDialogComponent, {
       width: this.grid[index].component == 'MainListComponent' ? '800px' : '456px',
       data: { form_data: this.form_data, configs: this.grid[index] }
