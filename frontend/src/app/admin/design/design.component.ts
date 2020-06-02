@@ -118,7 +118,7 @@ export class DesignComponent implements OnInit {
     moveItemInArray(this.filters, event.previousIndex, event.currentIndex);
   }
   newFilter() {
-    this.filters.push(this.createFilter({ source: null, placeholder: null, addInMainQuery: null }));
+    this.filters.push(this.createFilter({ source: null, placeholder: null }));
   }
 
   newCounter() {
@@ -257,9 +257,6 @@ export class DesignComponent implements OnInit {
     if (obj.source)
       temp['source'] = obj.source == 'total' ? obj.source : obj.source + '.keyword'
 
-    if (obj.addInMainQuery)
-      temp['addInMainQuery'] = obj.addInMainQuery
-
     if (obj.component == "SearchComponent")
       temp['type'] = searchOptions.allSearch
 
@@ -291,7 +288,7 @@ export class DesignComponent implements OnInit {
 
     if (obj.filter)
       temp['filter'] = obj.filter
-      if (obj.type)
+    if (obj.type)
       temp['type'] = obj.type
 
     if (obj.percentageFromTotal)
