@@ -56,7 +56,6 @@ export interface ComponentFilterConfigs {
   source: string;
   placeholder: string;
   expandPosition?: 'top' | 'bottom';
-  addInMainQuery?: boolean;
 }
 
 export interface SortOption {

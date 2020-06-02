@@ -131,12 +131,6 @@ export class FilterComponent implements OnInit {
               label: 'Placeholder',
               type: 'text',
               required: true,
-            },
-            {
-              name: 'addInMainQuery',
-              label: 'Add the aggrigation in main query',
-              type: 'check',
-              required: true,
             }
           ]
         ]
