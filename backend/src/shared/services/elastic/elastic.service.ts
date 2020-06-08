@@ -8,6 +8,7 @@ export class ElasticService {
     index: string = 'openrxv-users'
     constructor(public readonly elasticsearchService: ElasticsearchService) { }
     async startup() {
+
         let values_exist: ApiResponse = await this.elasticsearchService.indices.exists({ index: "openrxv-values" })
         let users_exist: ApiResponse = await this.elasticsearchService.indices.exists({ index: "openrxv-users" })
         let shared_exist: ApiResponse = await this.elasticsearchService.indices.exists({ index: "openrxv-shared" })
@@ -23,6 +24,20 @@ export class ElasticService {
         if (!values_exist.body)
             await this.elasticsearchService.indices.create(({ index: "openrxv-values" }));
 
+
+        await this.elasticsearchService.cluster.putSettings({
+            body: {
+                "transient": {
+                    "cluster.routing.allocation.disk.threshold_enabled": false
+                }
+            }
+        })
+        await this.elasticsearchService.indices.putSettings({
+            body: {
+                "index.blocks.read_only_allow_delete": null
+            }
+        })
+
         if (!users_exist.body) {
             let body = {
                 name: "admin",
@@ -33,21 +48,10 @@ export class ElasticService {
             const salt = bcrypt.genSaltSync(10);
             const hash = bcrypt.hashSync(body.password, salt);
             body.password = hash;
-            return this.add(body);
+            await this.add(body);
         }
 
-        await this.elasticsearchService.indices.putSettings({
-            body: {
-                "index.blocks.read_only_allow_delete": false
-            }
-        })
-        await this.elasticsearchService.cluster.putSettings({
-            body: {
-                "transient": {
-                    "cluster.routing.allocation.disk.threshold_enabled": false
-                }
-            }
-        })
+
 
     }
     async search(query) {
