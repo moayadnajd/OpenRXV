@@ -31,13 +31,14 @@ export class ExportController {
     @Post('import')
     @UseInterceptors(FileInterceptor('file', {
         fileFilter: (req: any, file: any, cb: any) => {
-            if (file.mimetype.match(/\/(vnd.ms-excel|vnd.openxmlformats-officedocument.spreadsheetml.sheet)$/)) {
-                // Allow storage of file
-                cb(null, true);
-            } else {
-                // Reject file
-                cb(new HttpException(`Unsupported file type  ${file.mimetype}`, HttpStatus.BAD_REQUEST), false);
-            }
+            cb(null, true);
+            // if (file.mimetype.match(/\/(vnd.ms-excel|vnd.openxmlformats-officedocument.spreadsheetml.sheet)$/)) {
+            //     // Allow storage of file
+            //     cb(null, true);
+            // } else {
+            //     // Reject file
+            //     cb(new HttpException(`Unsupported file type  ${file.mimetype}`, HttpStatus.BAD_REQUEST), false);
+            // }
         },
         storage: diskStorage({
             destination: (req: any, file: any, cb: any) => {
