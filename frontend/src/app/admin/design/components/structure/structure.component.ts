@@ -24,7 +24,9 @@ export class StructureComponent implements OnInit {
     { name: "Dependency Wheel", value: "WheelComponent", icon: "group_work" },
     { name: "Packed Bubble", value: "PackedBubbleComponent", icon: "bubble_chart" },
     { name: "Packed Bubble Split", value: "PackedBubbleSplitComponent", icon: "bubble_chart" },
-    { name: "Main Items list", value: "MainListComponent", icon: "view_list" }
+    { name: "Main Items list", value: "MainListComponent", icon: "view_list" },
+    { name: "Column with rotated labels", value: 'SingleBarComponent', icon: 'bar_chart' },
+    { name: "Line", value: 'LineComponent', icon: 'bar_chart' }
   ]
   pre
   baseform = [
@@ -49,26 +51,6 @@ export class StructureComponent implements OnInit {
     },
 
   ]
-
-  secondForm = [{
-    name: 'component',
-    label: 'Component Type',
-    type: 'select',
-    items: this.options,
-    onChange: (event) => {
-      this.pre = event;
-      this.setFormDataOptions(event.value)
-      this.dialogRef.close();
-      this.openDialog(this.currentIndex);
-    },
-    required: true,
-  },
-  {
-    name: 'size',
-    label: 'Number of results',
-    type: 'number',
-    required: false,
-  },]
   dialogRef: MatDialogRef<any>
   form_data = [];
   @Input() grid;
@@ -92,13 +74,13 @@ export class StructureComponent implements OnInit {
       required: true,
     }
   ]
-
-
   setFormDataOptions(value) {
     switch (value) {
-      case 'BarComponent':
-      case 'PackedBubbleComponent':
-      case 'PackedBubbleSplitComponent':
+      case 'PieComponent':
+      case 'WordcloudComponent':
+      case 'MapComponent':
+      case 'ListComponent':
+      case 'WheelComponent':
         this.form_data = [...this.baseform, ...[{
           name: 'title',
           label: 'Title',
@@ -117,14 +99,36 @@ export class StructureComponent implements OnInit {
           type: 'textarea',
           required: true,
         }]]
+        break;
 
+      case 'MainListComponent':
+        this.form_data = [...this.baseform, ...
+          [
 
+            {
+              name: 'title',
+              label: 'Title',
+              type: 'text',
+              required: true,
+            },
+            {
+              name: 'description',
+              label: 'Tour Desctiption',
+              type: 'textarea',
+              required: true,
+            },
+            {
+              name: 'content',
+              label: 'Details',
+              type: 'content',
+              required: true,
+            }
 
-
+          ]
+        ]
         break;
 
       default:
-        console.log('not entered')
         this.form_data = [...this.baseform,
         ...[{
           name: 'agg_on',

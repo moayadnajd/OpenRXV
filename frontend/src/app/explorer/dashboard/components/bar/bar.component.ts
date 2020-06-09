@@ -34,7 +34,7 @@ export class BarComponent extends ParentChart implements OnInit {
         this.chartOptions = this.setOptions(buckets);
       }
       this.cdr.detectChanges();
-    });
+    }); 
   }
 
   private setOptions(
