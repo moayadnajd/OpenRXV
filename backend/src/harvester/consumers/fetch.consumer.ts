@@ -32,8 +32,8 @@ export class FetchConsumer {
         try {
             await job.progress(20);
             let page = parseInt(job.data.page) + 1
-            let offset = (parseInt(job.data.page) - 1) * 100;
-            let url = job.data.repo.itemsEndPoint + '/items?expand=metadata,parentCommunityList,parentCollectionList,bitstreams' + '&limit=100&offset=' + offset;
+            let offset = (parseInt(job.data.page) - 1) * 50;
+            let url = job.data.repo.itemsEndPoint + '/items?expand=metadata,parentCommunityList,parentCollectionList,bitstreams' + '&limit=50&offset=' + offset;
             let data: any = await this.http.get(url).pipe(map((data: any) => data.data)).toPromise();
             await job.progress(50);
             if (Array.isArray(data) && data.length == 0) {

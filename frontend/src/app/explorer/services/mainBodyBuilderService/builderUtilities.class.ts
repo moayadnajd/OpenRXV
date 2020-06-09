@@ -129,7 +129,7 @@ export class BuilderUtilities {
           is_related: (componentConfigs as any).related ? (componentConfigs as any).related : false,
           source: (componentConfigs as any).source ? (componentConfigs as any).source.replace('.keyword', '') : undefined,
           agg_on: (componentConfigs as any).agg_on ? (componentConfigs as any).agg_on.replace('.keyword', '') : undefined,
-          size: (componentConfigs as any).size ? parseInt((componentConfigs as any).size) : 10000
+          size: (componentConfigs as any).size ? parseInt((componentConfigs as any).size) : 1000
         }
       })]
   }

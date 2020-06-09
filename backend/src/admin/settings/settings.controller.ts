@@ -1,18 +1,18 @@
-import { Controller, UseGuards, Post, Body, Get, HttpService, Query, UseInterceptors, UploadedFile, Logger, Request, Param } from '@nestjs/common';
+import { Controller, UseGuards, Post, Body, Get, HttpService, Query, UseInterceptors, UploadedFile, Logger, Request, Param, HttpException, HttpStatus } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { JsonFilesService } from '../json-files/json-files.service';
 import { map } from 'rxjs/operators';
-import { HarvesterService } from 'src/harvester/services/harveter.service';
-import { FileInterceptor, MulterModule } from '@nestjs/platform-express'
+import { FileInterceptor } from '@nestjs/platform-express'
 import { join } from 'path';
-import * as fs from 'fs';
 import { readdirSync } from 'fs';
-
+import { diskStorage } from 'multer'
+import { extname } from 'path'
+import { ElasticsearchService } from '@nestjs/elasticsearch';
 
 @Controller('settings')
 export class SettingsController {
 
-    constructor(private jsonfielServoce: JsonFilesService, private httpService: HttpService) { }
+    constructor(private jsonfielServoce: JsonFilesService, private httpService: HttpService, private elastic: ElasticsearchService) { }
     getDirectories = source => readdirSync(source, { withFileTypes: true }).filter(dirent => dirent.isDirectory()).map(dirent => dirent.name)
     @UseGuards(AuthGuard('jwt'))
     @Get('plugins')
@@ -150,11 +150,23 @@ export class SettingsController {
     @UseGuards(AuthGuard('jwt'))
     @Get('metadata')
     async  getMetadata() {
-        let data = await this.jsonfielServoce.read('../../../data/data.json');
-        var merged = [].concat.apply([], data.repositories.map(d => [...d.schema, ...d.metadata]));
-        return [...new Set(merged.map(d => d.disply_name)), ...data.repositories.map(d => {
-            if (d.years) return d.years
-        })];
+
+        try {
+
+
+            let mappings = await this.elastic.indices.getMapping({
+                index: process.env.OPENRXV_FINAL_INDEX
+            })
+
+            return Object.keys(mappings.body[process.env.OPENRXV_FINAL_INDEX].mappings.properties)
+        } catch (e) {
+            let data = await this.jsonfielServoce.read('../../../data/data.json');
+            var merged = [].concat.apply([], data.repositories.map(d => [...d.schema, ...d.metadata]));
+            return [...new Set(merged.map(d => d.disply_name)), ...data.repositories.map(d => {
+                if (d.years) return d.years
+            })];
+        }
+
     }
 
     @UseGuards(AuthGuard('jwt'))
@@ -181,13 +193,25 @@ export class SettingsController {
 
     @Post('upload/image')
     @UseInterceptors(FileInterceptor('file', {
-        preservePath: true, fileFilter: this.imageFileFilter, dest: join(__dirname, '../../../data/files/images')
+        fileFilter: (req: any, file: any, cb: any) => {
+            if (file.mimetype.match(/\/(jpg|jpeg|png|gif)$/)) {
+                // Allow storage of file
+                cb(null, true);
+            } else {
+                // Reject file
+                cb(new HttpException(`Unsupported file type ${extname(file.originalname)}`, HttpStatus.BAD_REQUEST), false);
+            }
+        },
+        storage: diskStorage({
+            destination: join(__dirname, '../../../data/files/images')
+            , filename: (req, file, cb) => {
+                const randomName = file.originalname.replace(`${extname(file.originalname)}`, '') + '-' + Array(5).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('')
+                cb(null, `${randomName}${extname(file.originalname)}`)
+            }
+        })
     }))
     async uploadFile(@UploadedFile() file) {
-        let splited = file.originalname.split('.');
-        let name = splited[0] + '-' + new Date().getTime();
-        let response = join(__dirname, '../../../data/files/images/') + name + '.' + splited[splited.length - 1];
-        await fs.renameSync(join(__dirname, '../../../data/files/images/') + file.filename, response)
-        return { location: response.slice(response.indexOf('files/') + 6) };
+
+        return { location: `images/${file.filename}` };
     }
 }
