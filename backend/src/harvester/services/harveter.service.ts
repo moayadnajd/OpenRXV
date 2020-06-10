@@ -296,12 +296,15 @@ export class HarvesterService {
                             } else
                                 primaryTrack[(col.value as string)] = finaldata.length + 1
                             Object.keys(CRPS).forEach(crp => {
-                                if (CRPS[crp].indexOf(col.value) != -1)
+                                if (CRPS[crp].indexOf(col.value) != -1) {
                                     if (formated['CRP'])
                                         formated['CRP'].push(crp);
                                     else
                                         formated['CRP'] = [crp];
+                                }
                             })
+                            if(!formated['CRP'])
+                            formated['CRP']=["SRF Related"]
                         }
                         formated[schema[col_num]] = col_num != 22 ? this.extractValues(col.value) : col.value
                     })
