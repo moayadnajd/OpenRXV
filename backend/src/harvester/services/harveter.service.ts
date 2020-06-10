@@ -291,7 +291,7 @@ export class HarvesterService {
                     row.eachCell({ includeEmpty: true }, (col, col_num) => {
 
                         if (schema[col_num] == "DOI") {
-                            col.value = col.value ? col.value : 'NODOI/' + row_num
+                            col.value = col.value ? col.value : 'NODOI/' +worksheet.name + row_num
                             formated["DOI_STATUS"] = col.value ? "Yes" : 'No'
                             if (primaryTrack[(col.value as string)]) {
                                 exist = col.value
