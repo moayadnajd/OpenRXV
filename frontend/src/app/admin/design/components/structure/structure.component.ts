@@ -161,17 +161,16 @@ export class StructureComponent implements OnInit {
     }
   }
   constructor(public dialog: MatDialog) { }
-oldcomponent=[];
+
+  oldcomponent = [];
+
   ngOnInit(): void {
 
     this.grid.forEach((element, index) => {
-
       this.class_names[index] = element.class
-      this.oldcomponent[index]=element.component
+      this.oldcomponent[index] = element.component
     });
     this.iconConfigs.componentConfigs.icon = this.grid[0]?.scroll?.icon || null
-
-
   }
 
   addComponent(event) {
@@ -239,11 +238,12 @@ oldcomponent=[];
 
     if (this.pre)
       this.grid[index].component = this.pre.value;
+
     this.currentIndex = index;
     this.setFormDataOptions(this.grid[index].component)
     this.dialogRef = this.dialog.open(FormDialogComponent, {
       width: this.grid[index].component == 'MainListComponent' ? '800px' : '456px',
-      data: { form_data: Object.create(this.form_data) , configs: Object.create(this.grid[index]) }
+      data: { form_data: Object.create(this.form_data), configs: Object.create(this.grid[index]) }
     });
 
 
@@ -254,15 +254,13 @@ oldcomponent=[];
         if (this.grid[index].scroll)
           result['scroll'] = this.grid[index].scroll
         result.class = this.class_names[index];
-        this.oldcomponent[index]=result.component
+        this.oldcomponent[index] = result.component
         this.edited.emit({ result, index })
       }
       else if (result === false) {
-        this.pre=null;
-        this.grid[index].component = this.oldcomponent[index];     
+        this.pre = null;
+        this.grid[index].component = this.oldcomponent[index];
       }
-
-
     });
   }
 }
