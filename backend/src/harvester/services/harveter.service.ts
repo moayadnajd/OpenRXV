@@ -283,16 +283,15 @@ export class HarvesterService {
         }
         let finaldata = [];
         let primaryTrack = {}
-        workbook.eachSheet((worksheet, id) => {
+        workbook.eachSheet((worksheet) => {
             worksheet.eachRow((row, row_num) => {
                 if (row_num > 1) {
                     let formated = {}
                     let exist = null;
                     row.eachCell({ includeEmpty: true }, (col, col_num) => {
-
                         if (schema[col_num] == "DOI") {
-                            col.value = col.value ? col.value : 'NODOI/' +worksheet.name + row_num
                             formated["DOI_STATUS"] = col.value ? "Yes" : 'No'
+                            col.value = col.value ? col.value : 'NODOI/' + worksheet.name + row_num
                             if (primaryTrack[(col.value as string)]) {
                                 exist = col.value
                             } else
@@ -308,8 +307,8 @@ export class HarvesterService {
                             if (!formated['CRP'])
                                 formated['CRP'] = ["SRF Related"]
                         }
-                        if (col.value)
-                            formated[schema[col_num]] = col_num != 22 ? this.extractValues(col.value) : col.value
+
+                        formated[schema[col_num]] = col_num != 22 ? this.extractValues(col.value) : col.value
                     })
                     if (exist != null) {
                         let temp = finaldata[primaryTrack[exist]]
@@ -337,7 +336,7 @@ export class HarvesterService {
     }
 
     extractValues(value) {
-        if (value.split) {
+        if (value && value.split) {
             let splited = value.split(';')
             if (splited.length > 1)
                 return splited.map(d => this.mapto[d.trim()] ? this.mapto[d.trim()] : d.trim())
