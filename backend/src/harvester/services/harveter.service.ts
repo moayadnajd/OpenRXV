@@ -5,10 +5,14 @@ import { async } from 'rxjs/internal/scheduler/async';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { JsonFilesService } from 'src/admin/json-files/json-files.service';
 import { ValuesService } from 'src/shared/services/values.service';
-
+import * as ExcelJs from 'exceljs';
+import { ApiResponse } from '@elastic/elasticsearch';
+import { join } from 'path';
+import { CRPS } from './crps';
 @Injectable()
 export class HarvesterService {
     private readonly logger = new Logger(HarvesterService.name);
+    mapto: {}
     constructor(
         public readonly elasticsearchService: ElasticsearchService,
         public readonly jsonFilesService: JsonFilesService,
@@ -124,7 +128,13 @@ export class HarvesterService {
 
         await this.elasticsearchService.indices.create({
             index: process.env.OPENRXV_FINAL_INDEX,
-
+            body: {
+                settings: {
+                    mapping: {
+                        ignore_malformed: true
+                    }
+                }
+            }
         })
         this.logger.debug("create final")
 
@@ -161,12 +171,175 @@ export class HarvesterService {
 
         await this.elasticsearchService.indices.create({
             index: process.env.OPENRXV_TEMP_INDEX,
+            body: {
+                settings: {
+                    mapping: {
+                        ignore_malformed: true
+                    }
+                }
+            }
         })
 
         this.logger.debug("create temp")
 
         this.logger.debug("Index All Done ");
 
+    }
+    async  getCRPS() {
+        let reg = new RegExp(/(?<=\/)10\..*/)
+        const workbook = new ExcelJs.Workbook();
+        let finalData = {};
+        let doc = await workbook.xlsx.readFile(join(__dirname, '../../../data/files/imported/Publications_20200520_MA_SJ_1F.xlsx'));
+        doc.getWorksheet('AR 2019').eachRow((row, row_num) => {
+            if (row_num > 1) {
+                if (row.getCell(17).text != '' && row.getCell(17).text != null && row.getCell(18).text != 'NA') {
+                    let formated = reg.exec(row.getCell(17).text.split('?')[0])
+                    if (formated && formated[0] && formated[0] != null)
+                        if (finalData[row.getCell(1).text])
+                            finalData[row.getCell(1).text].push(formated[0])
+                        else
+                            finalData[row.getCell(1).text] = [formated[0]]
+                }
+            }
+        })
+        return finalData;
+    }
+
+    async ImportExcleFile(path) {
+        const workbook = new ExcelJs.Workbook();
+        await workbook.xlsx.readFile(path);
+
+
+        this.mapto = await this.getMappingValues()
+
+        let schema = {
+            "1": "Publication Type",
+            "2": "Authors",
+            "3": "Book Authors",
+            "4": "Editors",
+            "5": "Book Group Authors",
+            "6": "Author Full Name",
+            "7": "Book Authors Full Name",
+            "8": "Group Authors",
+            "9": "Document Title",
+            "10": "Publication Name",
+            "11": "Book Series Title",
+            "12": "Book Series Subtitle",
+            "13": "Language",
+            "14": "Document Type",
+            "15": "Conference Title",
+            "16": "Conference Date",
+            "17": "Conference Location",
+            "18": "Conference Sponsors",
+            "19": "Conference Host",
+            "20": "Author Keywords",
+            "21": "Keywords Plus®",
+            "22": "Abstract",
+            "23": "Author Address",
+            "24": "Reprint Address",
+            "25": "E mail Address",
+            "26": "ResearcherID Number",
+            "27": "ORCID Identifier",
+            "28": "Funding Agency / Grant Number",
+            "29": "Funding Text",
+            "30": "Cited References",
+            "31": "Cited Reference Count",
+            "32": "Core Collection Times Cited Count",
+            "33": "Total Times Cited Count",
+            "34": "Usage Count (Last 180 Days)",
+            "35": "Usage Count (Since 2013)",
+            "36": "Publisher",
+            "37": "Publisher City",
+            "38": "Publisher Address",
+            "39": "ISSN",
+            "40": "eISSN",
+            "41": "ISBN",
+            "42": "Character Source Abbreviation",
+            "43": "ISO Source Abbreviation",
+            "44": "Publication Date",
+            "45": "Year Published",
+            "46": "Volume",
+            "47": "Issue",
+            "48": "Part Number",
+            "49": "Supplement",
+            "50": "SI",
+            "51": "Meeting Abstract",
+            "52": "Beginning Page",
+            "53": "Ending Page",
+            "54": "Article Number",
+            "55": "DOI",
+            "56": "Book Digital Object Identifier (DOI)",
+            "57": "Early access date",
+            "58": "Page Count",
+            "59": "Web of Science Categories",
+            "60": "Research Areas",
+            "61": "Document Delivery Number",
+            "62": "Accession Number",
+            "63": "PubMed ID",
+            "64": "Open Access Indicator",
+            "65": "ESI Highly Cited Paper",
+            "66": "ESI Hot Paper",
+            "67": "Date this report was generated"
+        }
+        let finaldata = [];
+        let primaryTrack = {}
+        workbook.eachSheet((worksheet) => {
+            worksheet.eachRow((row, row_num) => {
+                if (row_num > 1) {
+                    let formated = {}
+                    let exist = null;
+                    row.eachCell((col, col_num) => {
+                        if (schema[col_num] == "DOI") {
+                            col.value = col.value ? col.value : 'NODOI/' + row_num
+                            if (primaryTrack[(col.value as string)]) {
+                                exist = col.value
+                            } else
+                                primaryTrack[(col.value as string)] = finaldata.length + 1
+                            Object.keys(CRPS).forEach(crp => {
+                                if (CRPS[crp].indexOf(col.value) != -1)
+                                    if (formated['CRP'])
+                                        formated['CRP'].push(crp);
+                                    else
+                                        formated['CRP'] = [crp];
+                            })
+                        }
+                        formated[schema[col_num]] = col_num != 22 ? this.extractValues(col.value) : col.value
+                    })
+                    if (exist != null) {
+                        let temp = finaldata[primaryTrack[exist]]
+                        if (Array.isArray(temp.organization))
+                            temp.organization.push(worksheet.name)
+                        else
+                            temp.organization = [temp.organization, worksheet.name]
+
+                        finaldata[primaryTrack[exist]] = temp
+                    } else {
+                        formated['organization'] = this.mapto[worksheet.name] ? this.mapto[worksheet.name] : worksheet.name;
+                        finaldata.push({ index: { _index: process.env.OPENRXV_TEMP_INDEX } });
+                        finaldata.push(formated);
+                    }
+                }
+            })
+        })
+
+        let resp: ApiResponse = await this.elasticsearchService.bulk({
+            refresh: 'wait_for',
+            body: finaldata
+        });
+
+        return resp
+    }
+
+    extractValues(value) {
+        if (value.split) {
+            let splited = value.split(';')
+            if (splited.length > 1)
+                return splited.map(d => this.mapto[d.trim()] ? this.mapto[d.trim()] : d.trim())
+            else
+                return this.mapto[splited[0].trim()] ? this.mapto[splited[0].trim()] : splited[0].trim()
+        }
+        else
+            return this.mapto[value] ? this.mapto[value] : value;
     }
 
 }

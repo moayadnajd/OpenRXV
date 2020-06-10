@@ -16,9 +16,30 @@ export class ElasticService {
         let items_temp_exist: ApiResponse = await this.elasticsearchService.indices.exists({ index: process.env.OPENRXV_TEMP_INDEX })
 
         if (!items_final_exist.body)
-            await this.elasticsearchService.indices.create(({ index: process.env.OPENRXV_FINAL_INDEX }));
+            await this.elasticsearchService.indices.create(({
+                index: process.env.OPENRXV_FINAL_INDEX,
+                body: {
+                    settings: {
+                        index: {
+                            mapping:{
+                                ignore_malformed: true
+                            }
+                           
+                        }
+                    }
+                }
+            })).catch(e=>console.log(JSON.stringify(e)));
         if (!items_temp_exist.body)
-            await this.elasticsearchService.indices.create(({ index: process.env.OPENRXV_TEMP_INDEX }));
+            await this.elasticsearchService.indices.create(({
+                index: process.env.OPENRXV_TEMP_INDEX,
+                body: {
+                    settings: {
+                        mapping:{
+                            ignore_malformed: true
+                        }
+                    }
+                }
+            }));
         if (!shared_exist.body)
             await this.elasticsearchService.indices.create(({ index: "openrxv-shared" }));
         if (!values_exist.body)
