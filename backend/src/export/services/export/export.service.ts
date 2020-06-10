@@ -103,7 +103,7 @@ export class ExportService {
           let formated = {}
           let exist = null;
           row.eachCell((col, col_num) => {
-            if (schema[col_num] == "DI") {
+            if (schema[col_num] == "DOI") {
               if (primaryTrack[(col.value as string)]) {
                 exist = col.value
               } else
@@ -117,6 +117,7 @@ export class ExportService {
               temp.organization.push(worksheet.name)
             else
               temp.organization = [temp.organization, worksheet.name]
+
             finaldata[primaryTrack[exist]] = temp
           } else {
             formated['organization'] = worksheet.name;
