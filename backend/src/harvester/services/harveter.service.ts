@@ -339,9 +339,9 @@ export class HarvesterService {
         if (value && value.split) {
             let splited = value.split(';')
             if (splited.length > 1)
-                return splited.map(d => this.mapto[d.trim()] ? this.mapto[d.trim()] : d.trim())
+                return splited.map(d => this.mapto[d] ? this.mapto[d] : d.trim())
             else
-                return this.mapto[splited[0].trim()] ? this.mapto[splited[0].trim()] : splited[0].trim()
+                return this.mapto[splited[0]] ? this.mapto[splited[0]] : splited[0].trim()
         }
         else
             return this.mapto[value] ? this.mapto[value] : value;
