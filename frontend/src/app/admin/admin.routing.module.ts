@@ -12,6 +12,9 @@ import { SharedComponent } from './components/shared/shared.component';
 import { DesignComponent } from './design/design.component';
 import { AppearanceComponent } from './appearance/appearance.component';
 import { PluginsComponent } from './plugins/plugins.component';
+import { ReportingComponent } from './reporting/reporting.component';
+
+
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -25,7 +28,8 @@ const routes: Routes = [
       { path: 'mapping-values', component: MappingValuesComponent, canActivate: [AdminGuard] },
       { path: 'setup', component: SetupComponent, canActivate: [AdminGuard] },
       { path: 'plugins', component: PluginsComponent, canActivate: [AdminGuard] },
-      { path: 'desgin', component: DesignComponent, canActivate: [AdminGuard] }
+      { path: 'desgin', component: DesignComponent, canActivate: [AdminGuard] },
+      { path: 'reporting', component: ReportingComponent, canActivate: [AdminGuard] },
 
     ]
   },

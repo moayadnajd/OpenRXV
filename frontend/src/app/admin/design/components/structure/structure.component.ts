@@ -235,7 +235,6 @@ export class StructureComponent implements OnInit {
   }
 
   openDialog(index): void {
-
     if (this.pre)
       this.grid[index].component = this.pre.value;
 
@@ -245,9 +244,6 @@ export class StructureComponent implements OnInit {
       width: this.grid[index].component == 'MainListComponent' ? '800px' : '456px',
       data: { form_data: Object.create(this.form_data), configs: Object.create(this.grid[index]) }
     });
-
-
-
 
     this.dialogRef.afterClosed().subscribe(result => {
       if (result) {

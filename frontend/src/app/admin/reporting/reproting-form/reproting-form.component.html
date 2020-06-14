@@ -1,0 +1,41 @@
+<div class="container">
+    <h1>Report</h1>
+    <mat-form-field class="w-100">
+        <mat-label>Title</mat-label>
+        <input matInput value={{formValues.title}} [(ngModel)]="formValues.title">
+    </mat-form-field>
+    <br>
+
+
+    <div class="file w-100">
+        <mat-label>File </mat-label>
+        <input *ngIf="!formValues.file" type="file" name='file' id='file' (change)="fileChange($event)" placeholder="file"
+            required>
+            <label>{{formValues.file}}</label>
+        <div *ngIf="formValues.file">
+            <button (click)="removeFile()" color="warn" mat-icon-button>
+                <mat-icon>delete</mat-icon>
+            </button>
+            <label>{{file}}</label>
+        </div>
+    </div>
+    <br>
+
+    <mat-form-field  class="w-100">
+        <mat-label>File Type</mat-label>
+        <mat-select [(ngModel)]="formValues.fileType">
+            <mat-option value="Exel">Exel</mat-option>
+            <mat-option value="PDF">PDF</mat-option>
+            <mat-option value="Word" >Word</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <div class="closure">
+        <button mat-raised-button color="warn" class="btn-close" (click)="closeForm()">
+            <mat-icon>close</mat-icon> close
+        </button>
+        <button mat-raised-button color="primary" (click)='saveForm()'>
+            <mat-icon>check</mat-icon> Save
+        </button>
+    </div>
+</div>

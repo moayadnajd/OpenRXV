@@ -1,4 +1,4 @@
-import { Controller, UseGuards, Post, Body, Get, HttpService, Query, UseInterceptors, UploadedFile, Logger, Request, Param } from '@nestjs/common';
+import { Controller, UseGuards, Post, Body, Get, HttpService, Query, UseInterceptors, UploadedFile, Logger, Request, Param,Res } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { JsonFilesService } from '../json-files/json-files.service';
 import { map } from 'rxjs/operators';
@@ -189,5 +189,33 @@ export class SettingsController {
         let response = join(__dirname, '../../../data/files/images/') + name + '.' + splited[splited.length - 1];
         await fs.renameSync(join(__dirname, '../../../data/files/images/') + file.filename, response)
         return { location: response.slice(response.indexOf('files/') + 6) };
+    }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Post('reportings')
+    async  SaveReports(@Body() body: any) {
+        await this.jsonfielServoce.save(body, '../../../data/reports.json');
+        return { success: true }
+    }
+
+    @Get('reports')
+    async  ReadReports() {
+        return await this.jsonfielServoce.read('../../../data/reports.json');
+    }
+    @Post('upload/file')
+    @UseInterceptors(FileInterceptor('file', {
+        preservePath: true, fileFilter: this.imageFileFilter, dest: join(__dirname, '../../../data/files/files')
+    }))
+    async uploadFile1(@UploadedFile() file) {
+        let splited = file.originalname.split('.');
+        let name = splited[0] + '-' + new Date().getTime();
+        let response = join(__dirname, '../../../data/files/files/') + name + '.' + splited[splited.length - 1];
+        await fs.renameSync(join(__dirname, '../../../data/files/files/') + file.filename, response)
+        return { location: response.slice(response.indexOf('files/') + 5) };
+    }
+
+    @Get('files/:fileName')
+    async downloadFile(@Param('fileName') fileName, @Res() res): Promise<any> {
+        return (res.sendFile(fileName, {root:'data/files/files'}))
     }
 }
