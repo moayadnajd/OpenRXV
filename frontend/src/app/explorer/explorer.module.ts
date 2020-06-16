@@ -80,6 +80,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { RotatedLablesComponent } from './dashboard/components/bar/rotated-lables/rotated-lables.component';
+
+
+
 
 @NgModule({
   declarations: [
@@ -120,7 +124,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     BarComponent,
     ExportComponent,
     ShareComponent,
-    MainListComponent
+    MainListComponent,
+    RotatedLablesComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -190,4 +195,4 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     ExportComponent
   ]
 })
-export class ExplorerModule {}
+export class ExplorerModule { }

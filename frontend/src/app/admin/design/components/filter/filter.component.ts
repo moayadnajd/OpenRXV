@@ -154,13 +154,15 @@ export class FilterComponent implements OnInit {
       SelectComponent: 'list',
       LabelComponent: 'label',
       SearchComponent: 'search',
-      RangeComponent: 'settings_ethernet'
+      RangeComponent: 'settings_ethernet',
+      DateRangeComponent:'date_range'
     }
     let iconsTexts = {
       SelectComponent: 'Select',
       LabelComponent: 'Label',
       SearchComponent: 'Search',
-      RangeComponent: 'Range'
+      RangeComponent: 'Range',
+      DateRangeComponent: 'Date Range'
     }
     this.icon = icons[this.configs.component]
     this.iconText = iconsTexts[this.configs.component];

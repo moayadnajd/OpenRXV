@@ -25,8 +25,6 @@ export class JsonFilesService {
     }
 
     async read(name) {
-
-
         return jsonfile.readFileSync(join(__dirname, name))
 
     }
