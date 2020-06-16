@@ -9,9 +9,9 @@
 
     <div class="file w-100">
         <mat-label>File </mat-label>
-        <input *ngIf="!formValues.file" type="file" name='file' id='file' (change)="fileChange($event)" placeholder="file"
-            required>
-            <label>{{formValues.file}}</label>
+        <input *ngIf="!formValues.file" type="file" name='file' id='file' (change)="fileChange($event)"
+            placeholder="file" required>
+        <label>{{formValues.file}}</label>
         <div *ngIf="formValues.file">
             <button (click)="removeFile()" color="warn" mat-icon-button>
                 <mat-icon>delete</mat-icon>
@@ -21,21 +21,18 @@
     </div>
     <br>
 
-    <mat-form-field  class="w-100">
+    <mat-form-field class="w-100">
         <mat-label>File Type</mat-label>
         <mat-select [(ngModel)]="formValues.fileType">
             <mat-option value="Exel">Exel</mat-option>
             <mat-option value="PDF">PDF</mat-option>
-            <mat-option value="Word" >Word</mat-option>
+            <mat-option value="Word">Word</mat-option>
         </mat-select>
     </mat-form-field>
 
-    <div class="closure">
-        <button mat-raised-button color="warn" class="btn-close" (click)="closeForm()">
-            <mat-icon>close</mat-icon> close
+    <div mat-dialog-actions align="end">
+        <button type="button" mat-raised-button color="warn" (click)="closeForm()">Close<mat-icon>close</mat-icon>
         </button>
-        <button mat-raised-button color="primary" (click)='saveForm()'>
-            <mat-icon>check</mat-icon> Save
-        </button>
+        <button type="button" color="primary" (keyup.enter)="saveForm()" (click)="saveForm()" mat-raised-button>Save
+            <mat-icon>done</mat-icon></button>
     </div>
-</div>

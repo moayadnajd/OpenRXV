@@ -225,7 +225,7 @@ export class StructureComponent implements OnInit {
           if (index == 0)
             element['scroll'] = { icon: result.icon }
           else
-            element['scroll'] = { linkedWith: this.grid[0].componentConfigs.id }
+            element['scroll'] = { icon: result.icon }
         });
 
       }

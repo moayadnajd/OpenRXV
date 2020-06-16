@@ -10,49 +10,49 @@ import { Observable } from 'rxjs';
 export class SettingsService {
 
   constructor(private http: HttpClient) { }
-  async  save(data) {
+  async save(data) {
     return await this.http.post(environment.api + '/settings', data).pipe(map((data: any) => {
       return data;
     })).toPromise();
   }
 
-  async  saveExplorerSettings(data) {
+  async saveExplorerSettings(data) {
     return await this.http.post(environment.api + '/settings/explorer', data).pipe(map((data: any) => {
       return data;
     })).toPromise();
   }
 
   
-  async  readAppearanceSettings() {
+  async readAppearanceSettings() {
     return await this.http.get(environment.api + '/settings/appearance').pipe(map((data: any) => {
       return data;
     })).toPromise();
   }
-  async  saveAppearanceSettings(data) {
+  async saveAppearanceSettings(data) {
     return await this.http.post(environment.api + '/settings/appearance', data).pipe(map((data: any) => {
       return data;
     })).toPromise();
   }
 
-  async  saveReportsSettings(data) {
+  async saveReportsSettings(data) {
     console.log(data)
     return await this.http.post(environment.api + '/settings/reportings', data).pipe(map((data: any) => {
       return data;
     })).toPromise();
   }
-  async  readReports() {
+  async readReports() {
     return await this.http.get(environment.api + '/settings/reports').pipe(map((data: any) => {
       return data;
     })).toPromise();
   }
 
-  async  readExplorerSettings() {
+  async readExplorerSettings() {
     return await this.http.get(environment.api + '/settings/explorer').pipe(map((data: any) => {
       return data;
     })).toPromise();
   }
 
-  async  readPluginsSettings() {
+  async readPluginsSettings() {
     return await this.http.get(environment.api + '/settings/plugins').pipe(map((data: any) => {
       return data;
     })).toPromise();
@@ -63,7 +63,7 @@ export class SettingsService {
       return data;
     })).toPromise();
   }
-  async  read() {
+  async read() {
     return await this.http.get(environment.api + '/settings').pipe(map((data: any) => {
       return data;
     })).toPromise();
@@ -95,7 +95,7 @@ export class SettingsService {
   }
   async getFile(file) {
     this.http.get(environment.api + '/settings/file' + file).subscribe(data => {
-    return data;
+      return data;
     })
   }
   async getHarvesterInfo() {
