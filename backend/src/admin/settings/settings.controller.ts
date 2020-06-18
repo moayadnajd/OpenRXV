@@ -152,9 +152,7 @@ export class SettingsController {
     async  getMetadata() {
         let data = await this.jsonfielServoce.read('../../../data/data.json');
         var merged = [].concat.apply([], data.repositories.map(d => [...d.schema, ...d.metadata]));
-        return [...new Set(merged.map(d => d.disply_name)), ...data.repositories.map(d => {
-            if (d.years) return d.years
-        })];
+        return [...new Set(merged.map(d => d.disply_name)), ...data.repositories.filter(d=> d.years).map(d => d.years )];
     }
 
     @UseGuards(AuthGuard('jwt'))
