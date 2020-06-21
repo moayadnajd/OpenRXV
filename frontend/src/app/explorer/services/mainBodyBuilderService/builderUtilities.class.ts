@@ -112,8 +112,8 @@ export class BuilderUtilities {
         ...this.getSourcesFromConfigs(this.countersConfig),
       ])
     );
-    mainQuerySources.forEach(({ type, source, is_related, size, agg_on }: any) =>
-      arr.push({ type, size, is_related, source: `${source}.keyword`, agg_on: agg_on ? `${agg_on}.keyword` : undefined, buckets: source })
+    mainQuerySources.forEach(({ filter,type, source, is_related, size, agg_on }: any) =>
+      arr.push({ filter,type, size, is_related, source: `${source}.keyword`, agg_on: agg_on ? `${agg_on}.keyword` : undefined, buckets: source })
     );
 
     return arr;
@@ -125,6 +125,7 @@ export class BuilderUtilities {
     return [...
       configs.filter(({ componentConfigs }: GeneralConfigs) => !Array.isArray((componentConfigs as any).source)).map(({ componentConfigs }: GeneralConfigs) => {
         return {
+          filter: (componentConfigs as any).filter ? (componentConfigs as any).filter : false,
           type: (componentConfigs as any).type ? (componentConfigs as any).type : 'cardinality',
           is_related: (componentConfigs as any).related ? (componentConfigs as any).related : false,
           source: (componentConfigs as any).source ? (componentConfigs as any).source.replace('.keyword', '') : undefined,
