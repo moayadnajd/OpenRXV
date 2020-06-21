@@ -10,7 +10,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 export class SafeHtmlPipe implements PipeTransform {
     icons(value) {
 
-        const regex = /(?<=ICONS:)\w*/gm;
+        const regex = /[\n\r].*ICONS:\s*([^\n\ ]*)/gm;
         let matches;
         while ((matches = regex.exec(value)) !== null) {
             // This is necessary to avoid infinite loops with zero-width matches
