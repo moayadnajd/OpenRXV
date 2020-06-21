@@ -226,14 +226,13 @@ export class DesignComponent implements OnInit {
     if (obj.component == 'WheelComponent' || obj.component == 'BarComponent' || obj.component == 'PackedBubbleComponent' || obj.component == 'PackedBubbleSplitComponent')
       temp['related'] = true
 
-
-    var class_name = null
+    var class_name: null;
 
     if (typeof obj.class == 'string')
       class_name = obj.class
 
     return {
-      class: class_name + ' no-side-padding',
+      class: this.dashboard[index][index1].class + ' no-side-padding',
       show: true,
       component: obj.component ? obj.component : null,
       componentConfigs: temp as ComponentFilterConfigs,
