@@ -2,7 +2,6 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormDialogComponent } from '../form-dialog/form-dialog.component';
-import { searchOptions, ComponentSearchConfigs, ComponentFilterConfigs } from 'src/app/explorer/configs/generalConfig.interface';
 
 @Component({
   selector: 'app-filter',
@@ -33,10 +32,8 @@ export class FilterComponent implements OnInit {
       onChange: (event) => {
         this.pre = event;
         this.setFormDataOprions(event.value)
-        this.dialogRef.close();
+        this.dialogRef.close(true);
         this.openDialog();
-
-
       },
     }
   ];
@@ -99,7 +96,7 @@ export class FilterComponent implements OnInit {
           ]
         ]
         break;
-        case 'DateRangeComponent':
+      case 'DateRangeComponent':
         this.form_data = [...this.baseform, ...
           [
             {
@@ -155,7 +152,7 @@ export class FilterComponent implements OnInit {
       LabelComponent: 'label',
       SearchComponent: 'search',
       RangeComponent: 'settings_ethernet',
-      DateRangeComponent:'date_range'
+      DateRangeComponent: 'date_range'
     }
     let iconsTexts = {
       SelectComponent: 'Select',
@@ -181,21 +178,32 @@ export class FilterComponent implements OnInit {
 
 
   }
+  editFilter: any = false;
+  edit() {
+    this.editFilter = Object.assign({}, this.configs)
+    this.openDialog()
+  }
 
   openDialog(): void {
-    if (this.pre)
+    if (this.pre) {
       this.configs.component = this.pre.value;
+    }
 
     this.dialogRef = this.dialog.open(FormDialogComponent, {
       width: '456px',
       data: { form_data: this.form_data, configs: this.configs }
     });
 
-
     this.dialogRef.afterClosed().subscribe(result => {
-      if (result)
-        this.edited.emit(result)
-
+      if (result != true) {
+        if (result && result != true)
+          this.edited.emit(result)
+        if (!result && !this.editFilter)
+          this.delete()
+        else if (this.editFilter != false && !result) {
+          this.edited.emit({ ...this.editFilter.componentConfigs, component: this.editFilter.component })
+        }
+      }
     });
   }
 

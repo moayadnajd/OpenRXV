@@ -23,8 +23,9 @@ export class FormDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   onNoClick(value): void {
+    this.dialogRef.close(false)
 
-    this.dialogRef.close(false);
+
   }
   submit(value) {
     let names_exist: Array<string> = this.data.form_data.map(d => d.name)

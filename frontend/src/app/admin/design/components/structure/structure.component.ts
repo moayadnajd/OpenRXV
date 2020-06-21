@@ -43,12 +43,7 @@ export class StructureComponent implements OnInit {
       },
       required: true,
     },
-    {
-      name: 'size',
-      label: 'Number of results',
-      type: 'number',
-      required: false,
-    },
+   
 
   ]
   dialogRef: MatDialogRef<any>
@@ -94,6 +89,12 @@ export class StructureComponent implements OnInit {
           required: true,
         },
         {
+          name: 'size',
+          label: 'Number of results',
+          type: 'number',
+          required: false,
+        },
+        {
           name: 'description',
           label: 'Tour Desctiption',
           type: 'textarea',
@@ -118,6 +119,12 @@ export class StructureComponent implements OnInit {
               required: true,
             },
             {
+              name: 'size',
+              label: 'Number of results',
+              type: 'number',
+              required: false,
+            },
+            {
               name: 'content',
               label: 'Details',
               type: 'content',
@@ -130,12 +137,7 @@ export class StructureComponent implements OnInit {
 
       default:
         this.form_data = [...this.baseform,
-        ...[{
-          name: 'agg_on',
-          label: 'Values from source leave empty for items count',
-          type: 'metadata',
-          required: false,
-        },
+        ...[
         ...[
 
           {
@@ -151,11 +153,25 @@ export class StructureComponent implements OnInit {
             required: true,
           },
           {
+            name: 'size',
+            label: 'Number of results',
+            type: 'number',
+            required: true,
+          },
+          {
+            name: 'agg_on',
+            label: 'Values from source leave empty for items count',
+            type: 'metadata',
+            required: false,
+          },
+          
+          {
             name: 'description',
             label: 'Tour Desctiption',
             type: 'textarea',
             required: true,
-          }],]
+          }],
+        ]
         ]
         break;
     }
