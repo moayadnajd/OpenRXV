@@ -108,10 +108,11 @@ export const getAggregation = createSelector(
     // loading is false
     if (items.aggregations !== undefined) {
       return (
-        items.aggregations[sourceFilter.source] ||
         items.aggregations[
-          sourceFilter.source.concat(`_${sourceFilter.filter}`) // limited & open access !
+        sourceFilter.source.concat(`_${sourceFilter.filter}`) // limited & open access !
         ]
+        ||
+        items.aggregations[sourceFilter.source]
       );
     }
   }
