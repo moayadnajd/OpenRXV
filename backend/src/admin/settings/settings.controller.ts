@@ -1,4 +1,4 @@
-import { Controller, UseGuards, Post, Body, Get, HttpService, Query, UseInterceptors, UploadedFile, Logger, Request, Param,Res } from '@nestjs/common';
+import { Controller, UseGuards, Post, Body, Get, HttpService, Query, UseInterceptors, UploadedFile, Logger, Request, Param, Res } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { JsonFilesService } from '../json-files/json-files.service';
 import { map } from 'rxjs/operators';
@@ -16,7 +16,7 @@ export class SettingsController {
     getDirectories = source => readdirSync(source, { withFileTypes: true }).filter(dirent => dirent.isDirectory()).map(dirent => dirent.name)
     @UseGuards(AuthGuard('jwt'))
     @Get('plugins')
-    async  plugins() {
+    async plugins() {
         let plugins = await this.getDirectories('./src/plugins');
         let plugins_values = await this.jsonfielServoce.read('../../../data/plugins.json')
         let info = []
@@ -95,7 +95,7 @@ export class SettingsController {
     }
     @UseGuards(AuthGuard('jwt'))
     @Post('')
-    async  Save(@Body() body: any) {
+    async Save(@Body() body: any) {
 
         await this.jsonfielServoce.save(body, '../../../data/data.json');
         await this.jsonfielServoce.save(this.format(body), '../../../data/dataToUse.json');
@@ -105,26 +105,26 @@ export class SettingsController {
 
     @UseGuards(AuthGuard('jwt'))
     @Post('explorer')
-    async  SaveExplorer(@Body() body: any) {
+    async SaveExplorer(@Body() body: any) {
         await this.jsonfielServoce.save(body, '../../../data/explorer.json');
         return { success: true }
     }
 
     @UseGuards(AuthGuard('jwt'))
     @Post('appearance')
-    async  SaveAppearance(@Body() body: any) {
+    async SaveAppearance(@Body() body: any) {
         await this.jsonfielServoce.save(body, '../../../data/appearance.json');
         return { success: true }
     }
 
     @Get('appearance')
-    async  ReadAppearance() {
+    async ReadAppearance() {
         return await this.jsonfielServoce.read('../../../data/appearance.json');
     }
 
 
     @Get('explorer')
-    async  ReadExplorer() {
+    async ReadExplorer() {
         let settings = await this.jsonfielServoce.read('../../../data/explorer.json');
         let configs = await this.jsonfielServoce.read('../../../data/data.json');
         let appearance = await this.jsonfielServoce.read('../../../data/appearance.json');
@@ -141,7 +141,7 @@ export class SettingsController {
     }
     @UseGuards(AuthGuard('jwt'))
     @Get('')
-    async  Read() {
+    async Read() {
         return await this.jsonfielServoce.read('../../../data/data.json');
     }
 
@@ -149,7 +149,7 @@ export class SettingsController {
 
     @UseGuards(AuthGuard('jwt'))
     @Get('metadata')
-    async  getMetadata() {
+    async getMetadata() {
         let data = await this.jsonfielServoce.read('../../../data/data.json');
         var merged = [].concat.apply([], data.repositories.map(d => [...d.schema, ...d.metadata]));
         return [...new Set(merged.map(d => d.disply_name)), ...data.repositories.map(d => {
@@ -159,7 +159,7 @@ export class SettingsController {
 
     @UseGuards(AuthGuard('jwt'))
     @Get('autometa')
-    async  AutoMeta(@Query('link') link: string) {
+    async AutoMeta(@Query('link') link: string) {
         let data = await this.httpService.get(link + '/items?expand=metadata,parentCommunityList&limit=25').pipe(map((data: any) => {
             let merged = {
                 base: [],
@@ -193,13 +193,13 @@ export class SettingsController {
 
     @UseGuards(AuthGuard('jwt'))
     @Post('reportings')
-    async  SaveReports(@Body() body: any) {
+    async SaveReports(@Body() body: any) {
         await this.jsonfielServoce.save(body, '../../../data/reports.json');
         return { success: true }
     }
 
     @Get('reports')
-    async  ReadReports() {
+    async ReadReports() {
         return await this.jsonfielServoce.read('../../../data/reports.json');
     }
     @Post('upload/file')
@@ -216,6 +216,6 @@ export class SettingsController {
 
     @Get('files/:fileName')
     async downloadFile(@Param('fileName') fileName, @Res() res): Promise<any> {
-        return (res.sendFile(fileName, {root:'data/files/files'}))
+        return (res.sendFile(fileName, { root: 'data/files/files' }))
     }
 }

@@ -1,13 +1,22 @@
-<div class="container">
-    <h1>Report</h1>
+<h1 mat-dialog-title>Report</h1>
+
+<div mat-dialog-content>
     <mat-form-field class="w-100">
         <mat-label>Title</mat-label>
         <input matInput value={{formValues.title}} [(ngModel)]="formValues.title">
     </mat-form-field>
     <br>
+    <mat-form-field class="w-100">
+        <mat-label>File Type</mat-label>
+        <mat-select [(ngModel)]="formValues.fileType">
+            <mat-option value="xlsx">Exel</mat-option>
+            <mat-option value="pdf">PDF</mat-option>
+            <mat-option value="docx">Word</mat-option>
+        </mat-select>
+    </mat-form-field>
 
+    <div class="file w-100" *ngIf="formValues.fileType != 'xlsx' && formValues.fileType">
 
-    <div class="file w-100">
         <mat-label>File </mat-label>
         <input *ngIf="!formValues.file" type="file" name='file' id='file' (change)="fileChange($event)"
             placeholder="file" required>
@@ -19,20 +28,34 @@
             <label>{{file}}</label>
         </div>
     </div>
-    <br>
 
-    <mat-form-field class="w-100">
-        <mat-label>File Type</mat-label>
-        <mat-select [(ngModel)]="formValues.fileType">
-            <mat-option value="Exel">Exel</mat-option>
-            <mat-option value="PDF">PDF</mat-option>
-            <mat-option value="Word">Word</mat-option>
-        </mat-select>
-    </mat-form-field>
+    <div *ngIf='formValues.fileType =="xlsx" '>
+        <div *ngFor='let source of labels;  let i = index' class="row" style="align-items: center;">
+            <div class="col-md-4">
+                <ng-select [items]="metadata" [multiple]="false" [(ngModel)]='labels[i].metadata' placeholder="Source">
+                </ng-select>
+            </div>
+            <mat-form-field class="col-md-4">
+                <mat-label>Data Source Label</mat-label>
+                <input matInput [(ngModel)]='labels[i].label' placeholder="{{labels[i].metadata}} label">
 
-    <div mat-dialog-actions align="end">
-        <button type="button" mat-raised-button color="warn" (click)="closeForm()">Close<mat-icon>close</mat-icon>
-        </button>
-        <button type="button" color="primary" (keyup.enter)="saveForm()" (click)="saveForm()" mat-raised-button>Save
-            <mat-icon>done</mat-icon></button>
+            </mat-form-field>
+            <div>
+                <button mat-button (click)="deleteSource(i)">
+                    <mat-icon style="color: red;">delete</mat-icon>
+                </button>
+            </div>
+        </div>
+        <button type="button" mat-icon-button color="primary" (click)='add()'>
+            <mat-icon>add_box</mat-icon>
+        </button> Add Data source
+
     </div>
+</div>
+<div mat-dialog-actions align="end">
+
+    <button type="button" mat-raised-button color="warn" (click)="closeForm()">Close<mat-icon>close</mat-icon>
+    </button>
+    <button type="button" color="primary" (keyup.enter)="saveForm()" (click)="saveForm()" mat-raised-button>Save
+        <mat-icon>done</mat-icon></button>
+</div>
