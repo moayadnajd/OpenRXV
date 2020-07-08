@@ -3,7 +3,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { SettingsService } from "../../../admin/services/settings.service";
 import { FormDialogComponent } from '../../design/components/form-dialog/form-dialog.component';
 import { MetadataService } from '../../services/metadata.service';
-import { any } from 'ramda';
+import { FormGroup, FormControl } from '@angular/forms';
+
 @Component({
   selector: 'app-reproting-form',
   templateUrl: './reproting-form.component.html',
@@ -22,19 +23,34 @@ export class ReprotingFormComponent implements OnInit {
   initialForm
   metadata: any
   labels = []
+  profileForm = new FormGroup({
+    title: new FormControl(''),
+    fileType: new FormControl(''),
+    file: new FormControl('')
+  });
   async ngOnInit() {
+
+    this.profileForm.get('title').setValue(this.data.form_data.title)
+    this.profileForm.get('fileType').setValue(this.data.form_data.fileType)
+    this.profileForm.get('file').setValue(this.data.form_data.file)
     this.formValues = Object.assign({}, this.data.form_data)
+    console.log(this.formValues)
     this.initialForm = Object.getOwnPropertyDescriptors(this.data.form_data)
     this.metadata = await this.metadataService.get();
     if (this.data.form_data.fileType == 'xlsx')
       this.labels = this.formValues.tags
   }
   async saveForm() {
-    if (this.formValues.fileType == 'xlsx') this.formValues.file = this.formValues.title + '.xlsx'
-    if (this.data.index == -1) this.data.reports.push(this.formValues)
+    let formValues = this.profileForm.value
+    formValues.tags = this.labels
+
+    if (this.profileForm.value.fileType == 'xlsx') this.profileForm.value.file = this.profileForm.value.title + '.xlsx'
+    console.log(formValues)
+    if (this.data.index == -1) this.data.reports.push(formValues)
     else this.data.reports[this.data.index] = this.formValues
-    this.formValues.tags = this.labels
+
     this.saveDate()
+
   }
   add() {
     this.labels.push({ 'metadata': '', 'label': '' })
@@ -58,7 +74,7 @@ export class ReprotingFormComponent implements OnInit {
   }
 
   async upload(file: File) {
-    this.formValues.file = await this.settingsService.uploadFile(file)
+    this.profileForm.value.file = await this.settingsService.uploadFile(file)
   }
 
   saveDate() {
