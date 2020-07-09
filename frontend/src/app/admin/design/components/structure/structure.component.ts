@@ -262,16 +262,18 @@ export class StructureComponent implements OnInit {
     });
 
     this.dialogRef.afterClosed().subscribe(result => {
+ 
+      
       if (result) {
-        for (let index = 0; index < result.content.filterOptions.length; index++) {
-          if (result.content.filterOptions[index].textValue && !result.content.filterOptions[index].value.includes('.keyword')) {
-            result.content.filterOptions[index].value = result.content.filterOptions[index].value + ".keyword"
-          }
-          else if (!result.content.filterOptions[index].textValue) {
-            console.log('h')
-            result.content.filterOptions[index].value = result.content.filterOptions[index].value.replace('.keyword', '')
-          }
+        if(result.component == 'MainListComponent')
+      for (let index = 0; index < result.content.filterOptions.length; index++) {
+        if (result.content.filterOptions[index].textValue && !result.content.filterOptions[index].value.includes('.keyword')) {
+          result.content.filterOptions[index].value = result.content.filterOptions[index].value + ".keyword"
         }
+        else if (!result.content.filterOptions[index].textValue) {
+          result.content.filterOptions[index].value = result.content.filterOptions[index].value.replace('.keyword', '')
+        }
+      }
         if (this.grid[index].scroll)
           result['scroll'] = this.grid[index].scroll
         result.class = this.class_names[index];
