@@ -50,14 +50,14 @@ export class FilterPaginatedListComponent implements OnInit {
   }
 
   reverse(s: SortOption): void {
-    this.filterOptions = this.filterOptions.map((so: SortOption) => {
-      so.sort = s.value as 'asc' | 'desc';
-      return so;
+    this.filterOptions = this.filterOptions.map((sortOption: SortOption) => {
+      sortOption.sort = s.value as 'asc' | 'desc';
+      return sortOption;
     });
     this.onFilterChanged(this.selectedFilter);
   }
 
-  startExportingNow(type: FileType,file): void {
-    this.startExporting.emit({type,file});
+  startExportingNow(type: FileType, file): void {
+    this.startExporting.emit({ type, file });
   }
 }
