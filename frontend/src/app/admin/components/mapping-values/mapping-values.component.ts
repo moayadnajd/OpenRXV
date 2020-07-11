@@ -58,7 +58,7 @@ export class MappingValuesComponent implements OnInit {
     });
   }
 
-  displayedColumns: string[] = [ 'find', 'replace', 'created_at', 'actions'];
+  displayedColumns: string[] = ['find', 'replace', 'created_at', 'actions'];
   dataSource = new MatTableDataSource<Array<any>>([]);
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -77,7 +77,7 @@ export class MappingValuesComponent implements OnInit {
     clearTimeout(this.timeout);
     // Make a new timeout set to go off in 1000ms (1 second)
     this.timeout = setTimeout(async () => {
-     
+
       let data = await this.valuesService.findByTerm(this.term)
       this.dataSource = new MatTableDataSource<Array<any>>(data.hits)
       this.dataSource.paginator = this.paginator;
