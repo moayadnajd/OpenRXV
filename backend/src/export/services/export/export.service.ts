@@ -16,16 +16,22 @@ import * as PizZip from 'pizzip';
 import * as Docxtemplater from 'docxtemplater';
 import * as word2pdf from 'word2pdf-promises';
 
+const ExcelJS = require('exceljs');
 @Injectable()
 export class ExportService {
+  a
   async downloadFile(
     res: ExpressRes,
     { body: { hits, _scroll_id } }: ApiResponse<BodyResponse>,
     type: FileType,
-    part: number
+    part: number,
+    fileNameg: string,
+    file
   ): Promise<void> {
+
     try {
-      const fileName = `AReS-${part}-${v4()}`;
+      this.a = fileNameg;
+      const fileName = this.a
       if (hits.hits.length === 0) {
         res.json({ end: true });
         return;
@@ -34,7 +40,7 @@ export class ExportService {
       const response: ExporterResponse = {
         end: hits.hits.length === 0,
         scrollId: _scroll_id,
-        fileName: `${fileName}.${type}`,
+        fileName: `${this.a}`,
         path: '/downloads',
         per_doc_size: 2000,
         total: hits.total.value
@@ -43,9 +49,10 @@ export class ExportService {
       let filePath: string;
 
       if (type !== 'xlsx') {
-        filePath = await this.createDocx(fileName, hits);
+        filePath = await this.createDocx(fileNameg, hits);
       } else {
-        response.hits = hits.hits;
+        filePath = await this.createXlxs(fileNameg, hits, file);
+
       }
 
       if (type === 'pdf') {
@@ -61,7 +68,7 @@ export class ExportService {
   private async createDocx(fileName: string, hits: Hits): Promise<string> {
     try {
       const zip = new PizZip(
-        await fs.promises.readFile(this.resolvePath('exports-template.docx'), 'binary')
+        await fs.promises.readFile(this.resolvePath(fileName + ""), 'binary')
       );
       const doc = new Docxtemplater();
       doc.loadZip(zip);
@@ -70,7 +77,7 @@ export class ExportService {
       } as DocxData);
       doc.render();
       const buf = doc.getZip().generate({ type: 'nodebuffer' });
-      const filePath = this.resolvePath(`${fileName}.docx`, true);
+      const filePath = this.resolvePath(`${fileName}`, true);
       // const spinner = ora(`🚀 writing DOCX`).start();
       return fs.promises.writeFile(filePath, buf).then(() => {
         // spinner.succeed(`👾 we are done writing DOCX`).stop();
@@ -81,10 +88,38 @@ export class ExportService {
     }
   }
 
+  private async createXlxs(fileName: string, body, file) {
+
+    var workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('sheet', {
+      pageSetup: { paperSize: 20, orientation: 'landscape', fitToPage: true }
+    });
+    let columns = new Array();
+    for (let index = 0; index < file.tags.length; index++) {
+      columns.push({ header: `${file.tags[index].label}`, width: file.tags[index].metadata.length * 3 })
+    }
+    worksheet.columns = columns
+    const sourcesMetadata =
+      body.hits.map(({ _source }) => file.tags.map(tag => _source[tag.metadata]));
+    workbook.addWorksheet("My Sheet");
+    for (let index = 0; index < sourcesMetadata.length; index++) {
+      worksheet.getRow(index + 2).values = sourcesMetadata[index]
+
+    }
+    const filePath = this.resolvePath(`${file.title}`, true);
+
+    const buffer = await workbook.xlsx.writeBuffer();
+    fs.writeFile(filePath + '.xlsx', buffer, (err) => {
+      if (err) throw err;
+    });
+    return filePath;
+  }
+
+
   private resolvePath(file: string, download?: boolean): string {
     return download
       ? path.resolve(__dirname, `../../../../data/files/downloads/${file}`)
-      : path.resolve(__dirname, `../template-files/${file}`);
+      : path.resolve(__dirname, `../../../../data/files/${file}`);
   }
 
   private createPdf(

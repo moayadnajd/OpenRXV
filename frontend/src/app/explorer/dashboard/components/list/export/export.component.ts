@@ -22,6 +22,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class ExportComponent implements OnInit {
   @Input() type: FileType;
   @Input() query: Observable<ElasticsearchQuery>;
+  @Input() file: any
   forceEnd: boolean;
   installing: boolean;
   delegationArr: Array<ExportFilesModal>;
@@ -41,18 +42,18 @@ export class ExportComponent implements OnInit {
   }
 
   constructor(
-    private readonly exportService: ExportService,
+    private exportService: ExportService,
     private readonly dialog: MatDialog,
     private readonly snackBar: MatSnackBar
   ) {
     this.installing = false;
     this.indexToToggleLoaded = 0;
-    this.exportPoint = environment.api+'/export';
+    this.exportPoint = environment.api + '/export';
     this.forceEnd = false;
     this.part = 1;
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   prevent(e, efm: ExportFilesModal): void {
     if (!efm.loaded) {
@@ -60,7 +61,7 @@ export class ExportComponent implements OnInit {
     }
   }
 
-  markAsDownloaded({ name, fileName, loaded }: ExportFilesModal): void {
+  markAsDownloaded({ name, fileName, loaded }: any): void {
     let toDownload: ExportFilesModal;
     this.delegationArr = this.delegationArr.map((v: ExportFilesModal) => {
       if (name === v.name && v.loaded) {
@@ -69,13 +70,6 @@ export class ExportComponent implements OnInit {
       toDownload = { ...v };
       return v;
     });
-
-    if (this.type === 'xlsx' && loaded) {
-      this.exportService.downloadFile(
-        this.exportService.createXlsxFile(toDownload),
-        fileName
-      );
-    }
   }
 
   @HostListener('window:keyup.esc') onKeyUp(): void {
@@ -107,11 +101,13 @@ export class ExportComponent implements OnInit {
           type: this.type,
           scrollId: id,
           query: q,
-          part: this.part
+          part: this.part,
+          fileName: this.file.file,
+          file: this.file
         })
       )
     );
-
+    
     exporter.subscribe(this.subscriber.bind(this), (err: HttpErrorResponse) => {
       this.dialog.closeAll();
       this.snackBar.open(

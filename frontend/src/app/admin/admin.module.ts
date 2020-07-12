@@ -45,6 +45,7 @@ import { PluginComponent } from './plugins/plugin/plugin.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ReportingComponent } from './reporting/reporting.component';
 import { ReprotingFormComponent } from './reporting/reproting-form/reproting-form.component';
+import { DialogComponent } from './reporting/dialog/dialog.component';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -71,6 +72,7 @@ import { ReprotingFormComponent } from './reporting/reproting-form/reproting-for
     PluginComponent,
     ReportingComponent,
     ReprotingFormComponent,
+    DialogComponent,
     
   ],
   imports: [

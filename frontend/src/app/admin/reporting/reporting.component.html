@@ -14,25 +14,30 @@
             <span>
                 <mat-card class="tp-card">
                     <mat-card-header>
-                        <mat-card-title>{{report.title}}</mat-card-title>
-                        <mat-card-subtitle>{{report.fileType}}</mat-card-subtitle>
+
+                        <mat-card-title>{{report.title}} <mat-card-content>
+                                <h3>Type: {{report.fileType}}</h3>
+                            </mat-card-content>
+                        </mat-card-title>
+                        <mat-card-subtitle *ngFor="let tags of report.tags">
+                            <h4>{{tags.metadata }}</h4>
+                        </mat-card-subtitle>
                     </mat-card-header>
                     <mat-card-actions>
-                        <button mat-button (click)="clickMethod(report.title, i)">
-                            <mat-icon style="color: red;" >delete</mat-icon>
+                        <button mat-button (click)="delete(i)">
+                            <mat-icon style="color: red;">delete</mat-icon>
                         </button>
                         <button mat-button (click)='edit(i)'>
                             <mat-icon>edit</mat-icon>
                         </button>
-                  
-                        <a href="http://localhost:3000/settings{{report.file}}">
+                        <a href="http://localhost:3000/settings{{report.file}}" *ngIf='report.fileType != "xlsx"'>
                             <button mat-button (click)='getFile(i)'>
                                 <mat-icon>save_alt</mat-icon>
                             </button></a>
+
                     </mat-card-actions>
                 </mat-card>
             </span>
-
         </li>
     </ul>
 </div>

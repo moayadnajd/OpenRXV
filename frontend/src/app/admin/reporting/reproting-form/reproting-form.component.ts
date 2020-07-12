@@ -2,9 +2,9 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { SettingsService } from "../../../admin/services/settings.service";
 import { FormDialogComponent } from '../../design/components/form-dialog/form-dialog.component';
-import { ReportingComponent } from "../reporting.component";
-import { throwIfEmpty } from 'rxjs/operators';
-import { objectEach } from 'highcharts';
+import { MetadataService } from '../../services/metadata.service';
+import { FormGroup, FormControl } from '@angular/forms';
+
 @Component({
   selector: 'app-reproting-form',
   templateUrl: './reproting-form.component.html',
@@ -14,40 +14,53 @@ export class ReprotingFormComponent implements OnInit {
   openDialogs: MatDialogRef<any>;
   constructor(private settingsService: SettingsService,
     public dialogRef: MatDialogRef<FormDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { }
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private metadataService: MetadataService) { }
   preReport: any
   preform: any
   formValues: any
   file
-  a
-  ngOnInit(): void {
-    this.formValues = Object.assign(this.data.form_data)
-    this.a = Object.getOwnPropertyDescriptors(this.data.form_data)
+  initialForm
+  metadata: any
+  labels = []
+  profileForm = new FormGroup({
+    title: new FormControl(''),
+    fileType: new FormControl(''),
+    file: new FormControl('')
+  });
+  async ngOnInit() {
+
+    this.profileForm.get('title').setValue(this.data.form_data.title)
+    this.profileForm.get('fileType').setValue(this.data.form_data.fileType)
+    this.profileForm.get('file').setValue(this.data.form_data.file)
+    this.formValues = Object.assign({}, this.data.form_data)
+    console.log(this.formValues)
+    this.initialForm = Object.getOwnPropertyDescriptors(this.data.form_data)
+    this.metadata = await this.metadataService.get();
+    if (this.data.form_data.fileType == 'xlsx')
+      this.labels = this.formValues.tags
+  }
+  async saveForm() {
+    let formValues = this.profileForm.value
+    formValues.tags = this.labels
+
+    if (this.profileForm.value.fileType == 'xlsx') this.profileForm.value.file = this.profileForm.value.title + '.xlsx'
+    console.log(formValues)
+    if (this.data.index == -1) this.data.reports.push(formValues)
+    else this.data.reports[this.data.index] = this.formValues
+
+    this.saveDate()
 
   }
-  src(value) {
-    console.log(value)
-  }
-  onClick() {
-    console.log('upload works')
-  }
-
-  saveForm() {
-    if (this.data.index == -1)
-      this.data.reports.push(this.formValues)
-    else {
-      this.data.reports[this.data.index] = this.formValues
-    }
-    this.settingsService.saveReportsSettings(this.data.reports);
-    this.dialogRef.close(this.formValues)
-
+  add() {
+    this.labels.push({ 'metadata': '', 'label': '' })
   }
 
 
   closeForm() {
-    this.formValues.title = this.a.title.value
-    this.formValues.file = this.a.file.value
-    this.formValues.fileType = this.a.fileType.value
+    this.formValues.title = this.initialForm.title.value
+    this.formValues.file = this.initialForm.file.value
+    this.formValues.fileType = this.initialForm.fileType.value
     this.data.reports[this.data.index] = this.formValues
     this.dialogRef.close()
   }
@@ -61,8 +74,14 @@ export class ReprotingFormComponent implements OnInit {
   }
 
   async upload(file: File) {
-
-    this.formValues.file = await this.settingsService.uploadFile(file)
+    this.profileForm.value.file = await this.settingsService.uploadFile(file)
   }
 
+  saveDate() {
+    this.settingsService.saveReportsSettings(this.data.reports);
+    this.dialogRef.close(this.formValues)
+  }
+  deleteSource(index) {
+    this.labels.splice(index, 1)
+  }
 }

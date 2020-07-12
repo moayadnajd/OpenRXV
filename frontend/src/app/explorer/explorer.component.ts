@@ -19,7 +19,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { environment } from 'src/environments/environment';
 import { InViewState } from './store/reducers/items.reducer';
 import { SetQuery } from './store';
-
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'explorer-root',
@@ -39,6 +39,8 @@ export class ExplorerComponent implements OnInit {
   countersConfig = []
   dashboardConfig = []
   tourConfig = []
+  currenRoute: any;
+  currentUrl: string;
   readonly orAndToolTip: string;
   private prevenetMouseOnNav: boolean;
   options: any = {
@@ -47,7 +49,7 @@ export class ExplorerComponent implements OnInit {
     top: 0,
   };
   async share() {
-    this.openDialog(environment.domain_name + await this.itemsService.saveShare(this.mainBodyBuilderService.getAggAttributes));
+    this.openDialog(this.currentUrl + await this.itemsService.saveShare(this.mainBodyBuilderService.getAggAttributes));
   }
   get isSmall(): boolean {
     return this.screenSizeService.isSmallScreen;
@@ -60,6 +62,7 @@ export class ExplorerComponent implements OnInit {
     private readonly screenSizeService: ScreenSizeService,
     private readonly itemsService: ItemsService,
     public dialog: MatDialog,
+    private readonly currentRouter: Router
   ) {
     this.orOperator = false;
     this.orAndToolTip = orAndToolTip;
@@ -86,6 +89,8 @@ export class ExplorerComponent implements OnInit {
       this.logo = environment.api + '/' + appearance.logo;
     this.website_name = appearance.website_name;
 
+    this.currenRoute = Object.getOwnPropertyDescriptors(this.currentRouter)
+    this.currentUrl = this.currenRoute.location.value._platformLocation.location.href
 
 
     let inview = (() => {
@@ -140,7 +145,7 @@ export class ExplorerComponent implements OnInit {
   refresh(): void {
     this.mainBodyBuilderService.resetAttributes()
     setTimeout(() => {
-     
+
       this.store.dispatch(
         new SetQuery(this.mainBodyBuilderService.buildMainQuery(0).build())
       );

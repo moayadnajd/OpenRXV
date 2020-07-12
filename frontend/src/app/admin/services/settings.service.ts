@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +34,6 @@ export class SettingsService {
   }
 
   async saveReportsSettings(data) {
-    console.log(data)
     return await this.http.post(environment.api + '/settings/reportings', data).pipe(map((data: any) => {
       return data;
     })).toPromise();

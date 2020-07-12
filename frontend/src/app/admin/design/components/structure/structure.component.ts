@@ -43,7 +43,7 @@ export class StructureComponent implements OnInit {
       },
       required: true,
     },
-   
+
 
   ]
   dialogRef: MatDialogRef<any>
@@ -138,39 +138,39 @@ export class StructureComponent implements OnInit {
       default:
         this.form_data = [...this.baseform,
         ...[
-        ...[
+          ...[
 
-          {
-            name: 'title',
-            label: 'Title',
-            type: 'text',
-            required: true,
-          },
-          {
-            name: 'source',
-            label: 'Data Source',
-            type: 'metadata',
-            required: true,
-          },
-          {
-            name: 'size',
-            label: 'Number of results',
-            type: 'number',
-            required: true,
-          },
-          {
-            name: 'agg_on',
-            label: 'Values from source leave empty for items count',
-            type: 'metadata',
-            required: false,
-          },
-          
-          {
-            name: 'description',
-            label: 'Tour Desctiption',
-            type: 'textarea',
-            required: true,
-          }],
+            {
+              name: 'title',
+              label: 'Title',
+              type: 'text',
+              required: true,
+            },
+            {
+              name: 'source',
+              label: 'Data Source',
+              type: 'metadata',
+              required: true,
+            },
+            {
+              name: 'size',
+              label: 'Number of results',
+              type: 'number',
+              required: true,
+            },
+            {
+              name: 'agg_on',
+              label: 'Values from source leave empty for items count',
+              type: 'metadata',
+              required: false,
+            },
+
+            {
+              name: 'description',
+              label: 'Tour Desctiption',
+              type: 'textarea',
+              required: true,
+            }],
         ]
         ]
         break;
@@ -262,7 +262,18 @@ export class StructureComponent implements OnInit {
     });
 
     this.dialogRef.afterClosed().subscribe(result => {
+ 
+      
       if (result) {
+        if(result.component == 'MainListComponent')
+      for (let index = 0; index < result.content.filterOptions.length; index++) {
+        if (result.content.filterOptions[index].textValue && !result.content.filterOptions[index].value.includes('.keyword')) {
+          result.content.filterOptions[index].value = result.content.filterOptions[index].value + ".keyword"
+        }
+        else if (!result.content.filterOptions[index].textValue) {
+          result.content.filterOptions[index].value = result.content.filterOptions[index].value.replace('.keyword', '')
+        }
+      }
         if (this.grid[index].scroll)
           result['scroll'] = this.grid[index].scroll
         result.class = this.class_names[index];
