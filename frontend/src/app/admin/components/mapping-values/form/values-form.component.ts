@@ -34,7 +34,7 @@ export class ValuesForm implements OnInit {
     if (this.data) {
       let temp = this.data;
       delete temp.created_at
-      delete temp.id
+      // delete temp.id
       this.form.setValue(this.data);
     }
   }

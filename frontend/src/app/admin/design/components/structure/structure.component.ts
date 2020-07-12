@@ -257,7 +257,7 @@ export class StructureComponent implements OnInit {
     this.currentIndex = index;
     this.setFormDataOptions(this.grid[index].component)
     this.dialogRef = this.dialog.open(FormDialogComponent, {
-      width: this.grid[index].component == 'MainListComponent' ? '800px' : '456px',
+      width: this.grid[index].component == 'MainListComponent' ? '1100px' : '456px',
       data: { form_data: Object.create(this.form_data), configs: Object.create(this.grid[index]) }
     });
 

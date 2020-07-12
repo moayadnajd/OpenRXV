@@ -3,6 +3,8 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { ReprotingFormComponent } from "./reproting-form/reproting-form.component";
 import { DialogComponent } from "./dialog/dialog.component";
 import { SettingsService } from '../services/settings.service';
+import { MetadataService } from '../services/metadata.service';
+import { DocComponent } from "./doc/doc.component";
 @Component({
   selector: 'app-reporting',
   templateUrl: './reporting.component.html',
@@ -15,11 +17,17 @@ export class ReportingComponent implements OnInit {
   confirmation = false
   dialogRef: MatDialogRef<any>
 
-  constructor(private settingsService: SettingsService, public dialog: MatDialog) { }
+  metadata: any;
+  constructor(
+    private settingsService: SettingsService,
+    public dialog: MatDialog,
+    private metadataService: MetadataService
+  ) { }
 
   async ngOnInit() {
     this.reports = await this.settingsService.readReports()
     this.dataSource = await this.settingsService.retreiveMetadata
+    this.metadata = await this.metadataService.get();
   }
 
   newReport() {
@@ -53,6 +61,18 @@ export class ReportingComponent implements OnInit {
       height: "550px"
     });
   }
+  copyMessage(val: string) {
+    const selBox = document.createElement('textarea');
+    selBox.value = val ;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
+  }
 
+  showDoc(){
+    let dialogRef = this.dialog.open(DocComponent,{width:'1300px'})
+  }
 
 }

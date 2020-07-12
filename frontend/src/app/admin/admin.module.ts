@@ -46,6 +46,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ReportingComponent } from './reporting/reporting.component';
 import { ReprotingFormComponent } from './reporting/reproting-form/reproting-form.component';
 import { DialogComponent } from './reporting/dialog/dialog.component';
+import { DocComponent } from './reporting/doc/doc.component';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -73,6 +74,7 @@ import { DialogComponent } from './reporting/dialog/dialog.component';
     ReportingComponent,
     ReprotingFormComponent,
     DialogComponent,
+    DocComponent,
     
   ],
   imports: [

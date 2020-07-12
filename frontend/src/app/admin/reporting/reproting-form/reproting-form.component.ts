@@ -34,7 +34,6 @@ export class ReprotingFormComponent implements OnInit {
     this.profileForm.get('fileType').setValue(this.data.form_data.fileType)
     this.profileForm.get('file').setValue(this.data.form_data.file)
     this.formValues = Object.assign({}, this.data.form_data)
-    console.log(this.formValues)
     this.initialForm = Object.getOwnPropertyDescriptors(this.data.form_data)
     this.metadata = await this.metadataService.get();
     if (this.data.form_data.fileType == 'xlsx')
@@ -45,7 +44,6 @@ export class ReprotingFormComponent implements OnInit {
     formValues.tags = this.labels
 
     if (this.profileForm.value.fileType == 'xlsx') this.profileForm.value.file = this.profileForm.value.title + '.xlsx'
-    console.log(formValues)
     if (this.data.index == -1) this.data.reports.push(formValues)
     else this.data.reports[this.data.index] = this.formValues
 
