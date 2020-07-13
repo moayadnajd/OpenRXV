@@ -141,7 +141,7 @@ export class BuilderUtilities {
     b: bodybuilder.Bodybuilder
   ): void {
     const { filter, source, type } = qb; // filter comes from this.convertEnumToQueryBlock
-    if (!filter && type == 'cardinality' && source !='total.keyword' ) {
+    if (!filter && type == 'cardinality' && source != 'total.keyword') {
       b.aggregation(
         'cardinality',
         {
@@ -150,7 +150,7 @@ export class BuilderUtilities {
         },
         source
       );
-    } else if (!filter && type && type != 'cardinality' && source !='total.keyword' ) {
+    } else if (!filter && type && type != 'cardinality' && source != 'total.keyword') {
       b.aggregation(
         type,
         {
@@ -158,6 +158,16 @@ export class BuilderUtilities {
           missing: 0
         },
         source
+      );
+    } else if (filter && type != 'cardinality' && source != 'total.keyword') {
+      const obj = Object.create(null);
+      obj[source] = filter;
+      b.aggregation(
+        'filter',
+        {
+          term: obj,
+        },
+        `${source}_${filter}`
       );
     }
 
