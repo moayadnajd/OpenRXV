@@ -66,6 +66,7 @@ export class BuilderUtilities {
     this.querySourceBucketsFilter.forEach((qb: QueryBlock) =>
       this.addCounterAttrToMainQuery(qb, b)
     );
+    this.addAggregationsForCharts(b);
   }
 
   protected addSpecificfield(key: string, b: bodybuilder.Bodybuilder): void {
@@ -112,8 +113,8 @@ export class BuilderUtilities {
         ...this.getSourcesFromConfigs(this.countersConfig),
       ])
     );
-    mainQuerySources.forEach(({ filter,type, source, is_related, size, agg_on }: any) =>
-      arr.push({ filter,type, size, is_related, source: `${source}.keyword`, agg_on: agg_on ? `${agg_on}.keyword` : undefined, buckets: source })
+    mainQuerySources.forEach(({ filter, type, source, is_related, size, agg_on }: any) =>
+      arr.push({ filter, type, size, is_related, source: `${source}.keyword`, agg_on: agg_on ? `${agg_on}.keyword` : undefined, buckets: source })
     );
 
     return arr;
@@ -123,10 +124,10 @@ export class BuilderUtilities {
     configs: Array<GeneralConfigs>,
   ): Array<any> {
     return [...
-      configs.filter(({ componentConfigs }: GeneralConfigs) => !Array.isArray((componentConfigs as any).source)).map(({ componentConfigs }: GeneralConfigs) => {
+      configs.filter(({ componentConfigs }: GeneralConfigs) => !Array.isArray((componentConfigs as any).source || (componentConfigs as any).source)).map(({ componentConfigs }: GeneralConfigs) => {
         return {
           filter: (componentConfigs as any).filter ? (componentConfigs as any).filter : false,
-          type: (componentConfigs as any).type ? (componentConfigs as any).type : 'cardinality',
+          type: (componentConfigs as any).type,
           is_related: (componentConfigs as any).related ? (componentConfigs as any).related : false,
           source: (componentConfigs as any).source ? (componentConfigs as any).source.replace('.keyword', '') : undefined,
           agg_on: (componentConfigs as any).agg_on ? (componentConfigs as any).agg_on.replace('.keyword', '') : undefined,
@@ -140,7 +141,7 @@ export class BuilderUtilities {
     b: bodybuilder.Bodybuilder
   ): void {
     const { filter, source, type } = qb; // filter comes from this.convertEnumToQueryBlock
-    if (!filter && type == 'cardinality') {
+    if (!filter && type == 'cardinality' && source !='total.keyword' ) {
       b.aggregation(
         'cardinality',
         {
@@ -149,7 +150,7 @@ export class BuilderUtilities {
         },
         source
       );
-    } else if (!filter && type != 'cardinality') {
+    } else if (!filter && type && type != 'cardinality' && source !='total.keyword' ) {
       b.aggregation(
         type,
         {
@@ -158,23 +159,13 @@ export class BuilderUtilities {
         },
         source
       );
-    } else {
-      const obj = Object.create(null);
-      obj[source] = filter;
-      b.aggregation(
-        'filter',
-        {
-          term: obj,
-        },
-        `${source}_${filter}`
-      );
     }
-    this.addAggregationsForCharts(b);
+
   }
 
   private addAggregationsForCharts(b: bodybuilder.Bodybuilder): void {
-    this.querySourceBucketsFilter.forEach((qb: QueryBlock) => {
-      const { size, buckets, source, is_related, agg_on } = qb;
+    this.querySourceBucketsFilter.filter(d => !d.type).forEach((qb: QueryBlock) => {
+      const { size, buckets, source, is_related, agg_on, type } = qb;
       if (is_related === true)
         b.aggregation('terms', this.buildTermRules(size, source), `${size}_related_${buckets}`, (a) => {
           return a.aggregation('terms', this.buildTermRules(size, agg_on ? agg_on : source), 'related')
