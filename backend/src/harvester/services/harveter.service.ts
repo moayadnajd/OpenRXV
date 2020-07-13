@@ -90,14 +90,12 @@ export class HarvesterService {
         await this.pluginsQueue.clean(0, 'delayed')
         await this.pluginsQueue.clean(0, 'completed')
         await this.pluginsQueue.resume();
-        let settings = await this.jsonFilesService.read('../../../data/dataToUse.json');
         let plugins: Array<any> = await this.jsonFilesService.read('../../../data/plugins.json');
         if (plugins.filter(plugin => plugin.value.length > 0).length > 0)
             for (let plugin of plugins) {
                 for (let param of plugin.value) {
-                    await this.pluginsQueue.add(plugin.name, { ...param, page: 1, index: settings.index_alias }, { attempts: 10 })
+                    await this.pluginsQueue.add(plugin.name, { ...param, page: 1, index: process.env.OPENRXV_TEMP_INDEX }, { attempts: 10 })
                 }
-
             }
         else
             this.Reindex()
