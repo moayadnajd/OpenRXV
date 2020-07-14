@@ -26,9 +26,9 @@ export class ExportService {
     type: FileType,
     part: number,
     fileNameg: string,
-    file
+    file,
+    query
   ): Promise<void> {
-
     try {
       this.a = fileNameg;
       const fileName = this.a
@@ -49,7 +49,7 @@ export class ExportService {
       let filePath: string;
 
       if (type !== 'xlsx') {
-        filePath = await this.createDocx(fileNameg, hits);
+        filePath = await this.createDocx(fileNameg, hits, query);
       } else {
         filePath = await this.createXlxs(fileNameg, hits, file);
 
@@ -65,7 +65,34 @@ export class ExportService {
     }
   }
 
-  private async createDocx(fileName: string, hits: Hits): Promise<string> {
+  private async createDocx(fileName: string, hits: Hits, query: any): Promise<string> {
+    let sort = query.sort[0]._score.order
+    let select = '';
+    let search = '';
+    let sortBy = "score"
+    let dateObj = new Date()
+    let currentDate = dateObj.toDateString()
+    if (query.sort.length != 1) {
+      sortBy = Object.getOwnPropertyNames(query.sort[1])[0].replace('.keyword', "")
+      sort = query.sort[1][`${Object.getOwnPropertyNames(query.sort[1])[0]}`].order
+    }
+
+    if (query.query != undefined) {
+      if (query.query.hasOwnProperty('query_string'))
+        search = query.query.query_string.query;
+      if (query.query.hasOwnProperty('bool')) {
+        if (query.query.bool.filter.hasOwnProperty('term'))
+          select = JSON.stringify(query.query.bool.filter.term).replace(/[^A-Za-z,: ]/g, "").replace("keyword", "")
+        if (query.query.bool.hasOwnProperty('must'))
+          search = query.query.bool.must.query_string.query
+        if (query.query.bool.filter.hasOwnProperty('bool')) {
+          query.query.bool.filter.bool.must.map(a => { select = select + JSON.stringify(a.term).replace(/[^A-Za-z,: ]/g, "").replace("keyword", " ") + ", " })
+          if (query.query.bool.filter.bool.must.hasOwnProperty('query_string')) {
+            search = query.query.bool.must.query_string.query
+          }
+        }
+      }
+    }
     try {
       const zip = new PizZip(
         await fs.promises.readFile(this.resolvePath(fileName + ""), 'binary')
@@ -73,7 +100,13 @@ export class ExportService {
       const doc = new Docxtemplater();
       doc.loadZip(zip);
       doc.setData({
-        publications: this.mapDataToDocxTemplate(hits.hits)
+        publications: this.mapDataToDocxTemplate(hits.hits),
+        date: currentDate,
+        searchQuery: search ? "search term: " + search + "," : "",
+        selectQuery: select ? select.replace(/:/g, '= ') : "",
+        sortingType: sort,
+        sortedBy: sortBy,
+        total: hits.total.value
       } as DocxData);
       doc.render();
       const buf = doc.getZip().generate({ type: 'nodebuffer' });
@@ -159,7 +192,8 @@ export class ExportService {
       contributor_crp: _source.crp,
       identifier_uri: _source.uri,
       type: _source.type,
-      isMELSPACE: _source.repo === 'MELSPACE'
+      isMELSPACE: _source.repo === 'MELSPACE',
+      handle: _source.handle,
     }));
   }
 }
