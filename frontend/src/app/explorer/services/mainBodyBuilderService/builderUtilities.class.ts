@@ -159,7 +159,7 @@ export class BuilderUtilities {
         },
         source
       );
-    } else if (filter && type != 'cardinality' && source != 'total.keyword') {
+    } else if (filter && type && source != 'total.keyword') {
       const obj = Object.create(null);
       obj[source] = filter;
       b.aggregation(
