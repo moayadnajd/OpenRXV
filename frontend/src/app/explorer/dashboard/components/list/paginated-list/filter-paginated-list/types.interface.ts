@@ -46,7 +46,8 @@ export interface DataForExporter {
   query: ElasticsearchQuery;
   part: number;
   fileName: string,
-  file:any
+  file:any,
+  webSiteName:string
 }
 
 export interface ExportFilesModal {
