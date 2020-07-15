@@ -16,7 +16,12 @@ export class HarvesterService {
         @InjectQueue('plugins') private pluginsQueue: Queue,
         @InjectQueue('fetch') private fetchQueue: Queue,
     ) { }
+    async getInfoById(id) {
 
+        let job = await this.fetchQueue.getJob(id)
+        console.log(id,job);
+        return job;
+    }
     async getInfo() {
         let obj = {
             active_count: 0,
@@ -37,15 +42,15 @@ export class HarvesterService {
         obj.waiting_count = await this.fetchQueue.getWaitingCount()
         obj.completed_count = await this.fetchQueue.getCompletedCount()
         obj.failed_count = await this.fetchQueue.getFailedCount()
-        obj.completed = await this.fetchQueue.getCompleted()
-        obj.failed = await this.fetchQueue.getFailed()
+        obj.completed = await this.fetchQueue.getCompleted(0, 10)
+        obj.failed = await this.fetchQueue.getFailed(0, 10)
 
         obj.plugins_active_count = await this.pluginsQueue.getActiveCount()
         obj.plugins_waiting_count = await this.pluginsQueue.getWaitingCount()
         obj.plugins_completed_count = await this.pluginsQueue.getCompletedCount()
         obj.plugins_failed_count = await this.pluginsQueue.getFailedCount()
-        obj.plugins_completed = await this.pluginsQueue.getCompleted()
-        obj.plugins_failed = await this.pluginsQueue.getFailed()
+        obj.plugins_completed = await this.pluginsQueue.getCompleted(0, 10)
+        obj.plugins_failed = await this.pluginsQueue.getFailed(0, 10)
 
         return obj;
     }
