@@ -91,7 +91,7 @@ export class ExplorerComponent implements OnInit {
 
     this.currenRoute = Object.getOwnPropertyDescriptors(this.currentRouter)
     this.currentUrl = this.currenRoute.location.value._platformLocation.location.href
-
+    this.currentUrl = this.currentUrl.slice(0, this.currentUrl.length - 1)
 
     let inview = (() => {
       // creating the state dynamically
