@@ -16,6 +16,7 @@ import * as PizZip from 'pizzip';
 import * as Docxtemplater from 'docxtemplater';
 import * as word2pdf from 'word2pdf-promises';
 import * as libre from 'libreoffice-convert'
+import { async } from 'rxjs/internal/scheduler/async';
 const ExcelJS = require('exceljs');
 @Injectable()
 export class ExportService {
@@ -49,26 +50,22 @@ export class ExportService {
       let filePath: string;
 
       if (type == 'docx') {
-        filePath = await this.createDocx(fileNameg, hits, query,part);
-
+        filePath = await this.createDocx(fileNameg, hits, query, part);
       } else if (type == 'xlsx') {
         filePath = await this.createXlxs(hits, file, part);
-        response.fileName = filePath
-        res.json(response)
+      } else if (type === 'pdf') {
+        filePath = await this.createPdf(await this.createDocx(fileNameg, hits, query, part), fileName, type, res, response, part) as string;
       }
 
-      if (type === 'pdf') {
-        this.createPdf(filePath, fileName, type, res, response);
-      } else {
+      if (filePath)
         response.fileName = filePath
-        res.json(response)
-      }
+      res.json(response)
     } catch (error) {
       throw new Error(error);
     }
   }
 
-  private async createDocx(fileName: string, hits: Hits, query: any,part): Promise<string> {
+  private async createDocx(fileName: string, hits: Hits, query: any, part): Promise<string> {
     let sort = query.sort[0]._score.order
     let select = '';
     let search = '';
@@ -161,24 +158,33 @@ export class ExportService {
       : path.resolve(__dirname, `../../../../data/files/${file}`);
   }
 
-  private createPdf(
+  private async createPdf(
     filePath: string,
     fileName: string,
     type: FileType,
     res: ExpressRes,
-    response: object
-  ): void {
+    response: object,
+    part
+  ) {
     // const spinner = ora(`🔭 converting to PDF`).start();
     // Read file
-    const file = fs.readFileSync(filePath);
+    var d = new Date();
+    var milliS = d.getTime()
+    const file = fs.readFileSync(this.resolvePath(filePath, true));
+    return await new Promise((resolve, rejet) => {
+      libre.convert(file, type, undefined, async (err, done) => {
+        if (err) {
+          rejet(err)
+          console.log(`Error converting file: ${err}`);
+        }
+        let filename = `ARes-${milliS}-${part}.${type}`;
+        // Here in done you have pdf file which you can save or transfer in another stream
+        await fs.writeFileSync(this.resolvePath(filename, true), done);
+        resolve(filename)
+      });
+    })
     // Convert it to pdf format with undefined filter (see Libreoffice doc about filter)
-    libre.convert(file, type, undefined, (err, done) => {
-      if (err) {
-        console.log(`Error converting file: ${err}`);
-      }
-      // Here in done you have pdf file which you can save or transfer in another stream
-      fs.writeFileSync(this.resolvePath(`${fileName}.${type}`, true), done);
-    });
+
   }
 
   private mapDataToDocxTemplate(
