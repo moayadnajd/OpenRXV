@@ -28,7 +28,8 @@ export class ExportService {
     part: number,
     fileNameg: string,
     file,
-    query
+    query,
+    websiteName
   ): Promise<void> {
     try {
       this.a = fileNameg;
@@ -50,11 +51,11 @@ export class ExportService {
       let filePath: string;
 
       if (type == 'docx') {
-        filePath = await this.createDocx(fileNameg, hits, query, part);
+        filePath = await this.createDocx(fileNameg, hits, query, part,websiteName);
       } else if (type == 'xlsx') {
-        filePath = await this.createXlxs(hits, file, part);
+        filePath = await this.createXlxs(hits, file, part,websiteName);
       } else if (type === 'pdf') {
-        filePath = await this.createPdf(await this.createDocx(fileNameg, hits, query, part), fileName, type, res, response, part) as string;
+        filePath = await this.createPdf(await this.createDocx(fileNameg, hits, query, part,websiteName), fileName, type, res, response, part,websiteName) as string;
       }
 
       if (filePath)
@@ -65,7 +66,7 @@ export class ExportService {
     }
   }
 
-  private async createDocx(fileName: string, hits: Hits, query: any, part): Promise<string> {
+  private async createDocx(fileName: string, hits: Hits, query: any, part,websiteName): Promise<string> {
     let sort = query.sort[0]._score.order
     let select = '';
     let search = '';
@@ -112,18 +113,18 @@ export class ExportService {
       const buf = doc.getZip().generate({ type: 'nodebuffer' });
       var d = new Date();
       var milliS = d.getTime()
-      const filePath = this.resolvePath(`ARes-${milliS}-${part}.docx`, true);
+      const filePath = this.resolvePath(`${websiteName}-${milliS}-${part}.docx`, true);
       // const spinner = ora(`🚀 writing DOCX`).start();
       return fs.promises.writeFile(filePath, buf).then(() => {
         // spinner.succeed(`👾 we are done writing DOCX`).stop();
-        return `ARes-${milliS}-${part}.docx`
+        return `${websiteName}-${milliS}-${part}.docx`
       });
     } catch (error) {
       throw new Error(error);
     }
   }
 
-  private async createXlxs(body, file, part) {
+  private async createXlxs(body, file, part,websiteName) {
 
     var workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('sheet', {
@@ -143,12 +144,12 @@ export class ExportService {
     }
     var d = new Date();
     var milliS = d.getTime()
-    const filePath = this.resolvePath(`ARes-${milliS}-${part}`, true);
+    const filePath = this.resolvePath(`${websiteName}-${milliS}-${part}`, true);
     const buffer = await workbook.xlsx.writeBuffer();
     fs.writeFile(filePath + ".xlsx", buffer, (err) => {
       if (err) throw err;
     });
-    return `ARes-${milliS}-${part}` + ".xlsx";
+    return `${websiteName}-${milliS}-${part}` + ".xlsx";
   }
 
 
@@ -164,7 +165,8 @@ export class ExportService {
     type: FileType,
     res: ExpressRes,
     response: object,
-    part
+    part,
+    websiteName
   ) {
     // const spinner = ora(`🔭 converting to PDF`).start();
     // Read file
@@ -177,7 +179,7 @@ export class ExportService {
           rejet(err)
           console.log(`Error converting file: ${err}`);
         }
-        let filename = `ARes-${milliS}-${part}.${type}`;
+        let filename = `${websiteName}-${milliS}-${part}.${type}`;
         // Here in done you have pdf file which you can save or transfer in another stream
         await fs.writeFileSync(this.resolvePath(filename, true), done);
         resolve(filename)

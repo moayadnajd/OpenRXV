@@ -4,6 +4,7 @@ import { SettingsService } from "../../../admin/services/settings.service";
 import { FormDialogComponent } from '../../design/components/form-dialog/form-dialog.component';
 import { MetadataService } from '../../services/metadata.service';
 import { FormGroup, FormControl } from '@angular/forms';
+import { title } from 'process';
 
 @Component({
   selector: 'app-reproting-form',
@@ -40,11 +41,10 @@ export class ReprotingFormComponent implements OnInit {
       this.labels = this.formValues.tags
   }
   async saveForm() {
-    let formValues = this.profileForm.value
-    formValues.tags = this.labels
-
+    this.formValues = this.profileForm.value
+    this.formValues.tags = this.labels
     if (this.profileForm.value.fileType == 'xlsx') this.profileForm.value.file = this.profileForm.value.title + '.xlsx'
-    if (this.data.index == -1) this.data.reports.push(formValues)
+    if (this.data.index == -1) this.data.reports.push(this.formValues)
     else this.data.reports[this.data.index] = this.formValues
 
     this.saveDate()
