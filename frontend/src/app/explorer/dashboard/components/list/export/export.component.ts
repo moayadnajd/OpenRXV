@@ -32,6 +32,7 @@ export class ExportComponent implements OnInit {
   part: number;
 
   get finishedExporting(): boolean {
+    console.log(this.delegationArr)
     if (!this.delegationArr) {
       return false;
     }

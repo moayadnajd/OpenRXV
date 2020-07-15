@@ -48,24 +48,27 @@ export class ExportService {
 
       let filePath: string;
 
-      if (type !== 'xlsx') {
-        filePath = await this.createDocx(fileNameg, hits, query);
-      } else {
-        filePath = await this.createXlxs(fileNameg, hits, file);
+      if (type == 'docx') {
+        filePath = await this.createDocx(fileNameg, hits, query,part);
 
+      } else if (type == 'xlsx') {
+        filePath = await this.createXlxs(hits, file, part);
+        response.fileName = filePath
+        res.json(response)
       }
 
       if (type === 'pdf') {
         this.createPdf(filePath, fileName, type, res, response);
       } else {
-        res.json(response);
+        response.fileName = filePath
+        res.json(response)
       }
     } catch (error) {
       throw new Error(error);
     }
   }
 
-  private async createDocx(fileName: string, hits: Hits, query: any): Promise<string> {
+  private async createDocx(fileName: string, hits: Hits, query: any,part): Promise<string> {
     let sort = query.sort[0]._score.order
     let select = '';
     let search = '';
@@ -95,7 +98,7 @@ export class ExportService {
     }
     try {
       const zip = new PizZip(
-        await fs.promises.readFile(this.resolvePath(fileName + ""), 'binary')
+        await fs.promises.readFile(this.resolvePath(fileName + "", false), 'binary')
       );
       const doc = new Docxtemplater();
       doc.loadZip(zip);
@@ -110,18 +113,20 @@ export class ExportService {
       } as DocxData);
       doc.render();
       const buf = doc.getZip().generate({ type: 'nodebuffer' });
-      const filePath = this.resolvePath(`${fileName}`, true);
+      var d = new Date();
+      var milliS = d.getTime()
+      const filePath = this.resolvePath(`ARes-${milliS}-${part}.docx`, true);
       // const spinner = ora(`🚀 writing DOCX`).start();
       return fs.promises.writeFile(filePath, buf).then(() => {
         // spinner.succeed(`👾 we are done writing DOCX`).stop();
-        return filePath;
+        return `ARes-${milliS}-${part}.docx`
       });
     } catch (error) {
       throw new Error(error);
     }
   }
 
-  private async createXlxs(fileName: string, body, file) {
+  private async createXlxs(body, file, part) {
 
     var workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('sheet', {
@@ -139,13 +144,14 @@ export class ExportService {
       worksheet.getRow(index + 2).values = sourcesMetadata[index]
 
     }
-    const filePath = this.resolvePath(`${file.title}`, true);
-
+    var d = new Date();
+    var milliS = d.getTime()
+    const filePath = this.resolvePath(`ARes-${milliS}-${part}`, true);
     const buffer = await workbook.xlsx.writeBuffer();
-    fs.writeFile(filePath + '.xlsx', buffer, (err) => {
+    fs.writeFile(filePath + ".xlsx", buffer, (err) => {
       if (err) throw err;
     });
-    return filePath;
+    return `ARes-${milliS}-${part}` + ".xlsx";
   }
 
 
