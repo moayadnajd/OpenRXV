@@ -18,9 +18,9 @@ import { ConfigModule } from '@nestjs/config';
         BullModule.registerQueue({
             name: 'fetch',
             settings: {
-                lockDuration: 10000,
+                lockDuration: 90000,
                 retryProcessDelay: 10000,
-                maxStalledCount: 0,
+                maxStalledCount: 2,
                 drainDelay: 10000
             },
             redis: {
@@ -32,10 +32,10 @@ import { ConfigModule } from '@nestjs/config';
             name: 'plugins',
 
             settings: {
-                lockDuration: 10000,
+                lockDuration: 90000,
                 retryProcessDelay: 5000,
                 drainDelay: 9000,
-                maxStalledCount: 0,
+                maxStalledCount: 2,
             },
             redis: {
                 host: process.env.REDIS_HOST,
