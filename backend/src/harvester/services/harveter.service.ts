@@ -19,7 +19,6 @@ export class HarvesterService {
     async getInfoById(id) {
 
         let job = await this.fetchQueue.getJob(id)
-        console.log(id,job);
         return job;
     }
     async getInfo() {
