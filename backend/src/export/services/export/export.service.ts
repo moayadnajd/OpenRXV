@@ -15,7 +15,7 @@ import * as fs from 'fs';
 import * as PizZip from 'pizzip';
 import * as Docxtemplater from 'docxtemplater';
 import * as word2pdf from 'word2pdf-promises';
-
+import * as libre from 'libreoffice-convert'
 const ExcelJS = require('exceljs');
 @Injectable()
 export class ExportService {
@@ -163,18 +163,16 @@ export class ExportService {
     response: object
   ): void {
     // const spinner = ora(`🔭 converting to PDF`).start();
-    word2pdf(filePath)
-      .then((data: Buffer) => {
-        fs.promises.writeFile(this.resolvePath(`${fileName}.${type}`, true), data).then(
-          () => {
-            // spinner.succeed(`☄️ Done writing  PDF FROM DOCX`).stop();
-            res.json(response);
-          }
-        );
-      })
-      .catch(() => {
-        res.status(500).json({ message: 'Something went wrong' });
-      });
+    // Read file
+    const file = fs.readFileSync(filePath);
+    // Convert it to pdf format with undefined filter (see Libreoffice doc about filter)
+    libre.convert(file, type, undefined, (err, done) => {
+      if (err) {
+        console.log(`Error converting file: ${err}`);
+      }
+      // Here in done you have pdf file which you can save or transfer in another stream
+      fs.writeFileSync(this.resolvePath(`${fileName}.${type}`, true), done);
+    });
   }
 
   private mapDataToDocxTemplate(
