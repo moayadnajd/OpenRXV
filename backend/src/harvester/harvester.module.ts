@@ -19,8 +19,6 @@ import { ConfigModule } from '@nestjs/config';
             name: 'fetch',
             defaultJobOptions: {
                 attempts: 10,
-                lifo: true,
-
             },
             settings: {
                 stalledInterval: 1000,
@@ -36,9 +34,7 @@ import { ConfigModule } from '@nestjs/config';
         BullModule.registerQueue({
             name: 'plugins',
             defaultJobOptions: {
-                delay: 1000,
-                attempts: 5,
-                lifo: true,
+                attempts: 5
             },
             settings: {
                 retryProcessDelay: 5000,
