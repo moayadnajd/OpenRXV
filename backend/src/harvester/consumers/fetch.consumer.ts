@@ -184,7 +184,7 @@ export class FetchConsumer {
         this.timeout = setTimeout(async () => {
             this.logger.log("OnGlobalQueueDrained");
             await this.harvesterService.pluginsStart();
-        }, 9999)
+        }, 12000)
     }
 
 
