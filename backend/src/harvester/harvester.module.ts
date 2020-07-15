@@ -18,14 +18,14 @@ import { ConfigModule } from '@nestjs/config';
         BullModule.registerQueue({
             name: 'fetch',
             defaultJobOptions: {
-                delay: 1000,
-                attempts: 5,
+                attempts: 10,
                 lifo: true,
+
             },
             settings: {
-                lockDuration: 90000,
-                retryProcessDelay: 10000,
-                maxStalledCount: 2,
+                stalledInterval: 1000,
+                maxStalledCount: 10,
+                retryProcessDelay: 1000,
                 drainDelay: 10000
             },
             redis: {
@@ -41,10 +41,8 @@ import { ConfigModule } from '@nestjs/config';
                 lifo: true,
             },
             settings: {
-                lockDuration: 90000,
                 retryProcessDelay: 5000,
                 drainDelay: 9000,
-                maxStalledCount: 2,
             },
             redis: {
                 host: process.env.REDIS_HOST,

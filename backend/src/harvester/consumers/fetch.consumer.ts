@@ -27,11 +27,11 @@ export class FetchConsumer {
         @InjectQueue('fetch') private fetchQueue: Queue,
     ) { }
 
-    @Process({ name: 'fetch' })
+    @Process({ name: 'fetch', concurrency: 1 })
     async transcode(job: Job<any>) {
         try {
             await job.progress(20);
-            let page = parseInt(job.data.page) + 1
+            let page = parseInt(job.data.page)
             let offset = (parseInt(job.data.page) - 1) * 100;
             let url = job.data.repo.itemsEndPoint + '/items?expand=metadata,parentCommunityList,parentCollectionList,bitstreams' + '&limit=100&offset=' + offset;
             let data: any = await this.http.get(url).pipe(map((data: any) => data.data)).toPromise();
@@ -42,7 +42,7 @@ export class FetchConsumer {
             }
             else {
                 job.progress(60);
-                let newjob = await this.fetchQueue.add('fetch', { page, pipe: job.data.pipe, repo: job.data.repo }, { attempts: 3 })
+                let newjob = await this.fetchQueue.add('fetch', { page: page + job.data.pipe, pipe: job.data.pipe, repo: job.data.repo })
                 if (newjob)
                     return this.index(job, data);
             }
@@ -175,11 +175,18 @@ export class FetchConsumer {
         else
             return values[0]
     }
+
+
     @OnGlobalQueueDrained()
     async onDrained(job: Job) {
-        this.logger.log("OnGlobalQueueDrained");
-        await this.harvesterService.pluginsStart();
+        if (this.timeout)
+            clearTimeout(this.timeout)
+        this.timeout = setTimeout(async () => {
+            this.logger.log("OnGlobalQueueDrained");
+            await this.harvesterService.pluginsStart();
+        }, 9999)
     }
+
 
     @OnGlobalQueueResumed()
     async onResumed(job: Job) {

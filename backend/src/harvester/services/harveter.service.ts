@@ -81,7 +81,10 @@ export class HarvesterService {
 
         let settings = await this.jsonFilesService.read('../../../data/dataToUse.json');
         settings.repositories.forEach(repo => {
-            this.fetchQueue.add('fetch', { page: parseInt(repo.startPage), repo }, { attempts: 3 })
+            for (let pipe = 0; pipe < 4; pipe++) {
+                this.fetchQueue.add('fetch', { page: parseInt(repo.startPage) + pipe, pipe: 4, repo })
+            }
+
         });
         return "started";
     }
@@ -98,7 +101,7 @@ export class HarvesterService {
         if (plugins.filter(plugin => plugin.value.length > 0).length > 0)
             for (let plugin of plugins) {
                 for (let param of plugin.value) {
-                    await this.pluginsQueue.add(plugin.name, { ...param, page: 1, index: process.env.OPENRXV_TEMP_INDEX }, { attempts: 10 })
+                    await this.pluginsQueue.add(plugin.name, { ...param, page: 1, index: process.env.OPENRXV_TEMP_INDEX })
                 }
             }
         else
