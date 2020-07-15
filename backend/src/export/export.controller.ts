@@ -9,8 +9,8 @@ export class ExportController {
     @Post('/')
     async ExportData(@Body() body: any, @Response() res: any) {
         try {
-            const { type, scrollId, query, part, fileName, file } = body;
-             query._source = []
+            const { type, scrollId, query, part, fileName, file, webSiteName } = body;
+            query._source = []
             const searchQuery: any = { ...query, size: 2000 };
             this.exportService.downloadFile(
                 res,
@@ -19,7 +19,8 @@ export class ExportController {
                 part,
                 fileName,
                 file,
-                query
+                query,
+                webSiteName
             );
         } catch (error) {
             res.status(500).json({ message: 'Something went wrong' });

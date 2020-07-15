@@ -12,7 +12,7 @@ import { environment } from 'src/environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
-
+import { SettingsService } from 'src/app/admin/services/settings.service';
 @Component({
   selector: 'app-export',
   templateUrl: './export.component.html',
@@ -30,9 +30,8 @@ export class ExportComponent implements OnInit {
   downloadPath: string;
   exportPoint: string;
   part: number;
-
+  webSiteName
   get finishedExporting(): boolean {
-    console.log(this.delegationArr)
     if (!this.delegationArr) {
       return false;
     }
@@ -45,7 +44,8 @@ export class ExportComponent implements OnInit {
   constructor(
     private exportService: ExportService,
     private readonly dialog: MatDialog,
-    private readonly snackBar: MatSnackBar
+    private readonly snackBar: MatSnackBar,
+    private settingsService: SettingsService
   ) {
     this.installing = false;
     this.indexToToggleLoaded = 0;
@@ -54,7 +54,10 @@ export class ExportComponent implements OnInit {
     this.part = 1;
   }
 
-  ngOnInit(): void { }
+  async ngOnInit() {
+    this.webSiteName = await this.settingsService.readAppearanceSettings();
+    this.webSiteName = this.webSiteName.website_name;
+  }
 
   prevent(e, efm: ExportFilesModal): void {
     if (!efm.loaded) {
@@ -104,11 +107,12 @@ export class ExportComponent implements OnInit {
           query: q,
           part: this.part,
           fileName: this.file.file,
-          file: this.file
+          file: this.file,
+          webSiteName: this.webSiteName
         })
       )
     );
-    
+
     exporter.subscribe(this.subscriber.bind(this), (err: HttpErrorResponse) => {
       this.dialog.closeAll();
       this.snackBar.open(
