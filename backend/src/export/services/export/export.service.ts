@@ -17,6 +17,7 @@ import * as Docxtemplater from 'docxtemplater';
 import * as word2pdf from 'word2pdf-promises';
 import * as libre from 'libreoffice-convert'
 import { async } from 'rxjs/internal/scheduler/async';
+import { type } from 'os';
 const ExcelJS = require('exceljs');
 @Injectable()
 export class ExportService {
@@ -51,11 +52,11 @@ export class ExportService {
       let filePath: string;
 
       if (type == 'docx') {
-        filePath = await this.createDocx(fileNameg, hits, query, part,websiteName);
+        filePath = await this.createDocx(fileNameg, hits, query, part, websiteName);
       } else if (type == 'xlsx') {
-        filePath = await this.createXlxs(hits, file, part,websiteName);
+        filePath = await this.createXlxs(hits, file, part, websiteName);
       } else if (type === 'pdf') {
-        filePath = await this.createPdf(await this.createDocx(fileNameg, hits, query, part,websiteName), fileName, type, res, response, part,websiteName) as string;
+        filePath = await this.createPdf(await this.createDocx(fileNameg, hits, query, part, websiteName), fileName, type, res, response, part, websiteName) as string;
       }
 
       if (filePath)
@@ -66,7 +67,7 @@ export class ExportService {
     }
   }
 
-  private async createDocx(fileName: string, hits: Hits, query: any, part,websiteName): Promise<string> {
+  private async createDocx(fileName: string, hits: Hits, query: any, part, websiteName): Promise<string> {
     let sort = query.sort[0]._score.order
     let select = '';
     let search = '';
@@ -101,13 +102,13 @@ export class ExportService {
       const doc = new Docxtemplater();
       doc.loadZip(zip);
       doc.setData({
-        publications: this.mapDataToDocxTemplate(hits.hits),
+        items: this.mapDataToDocxTemplate(hits.hits),
         date: currentDate,
         searchQuery: search ? "search term: " + search + "," : "",
         selectQuery: select ? select.replace(/:/g, '= ') : "",
         sortingType: sort,
         sortedBy: sortBy,
-        total: hits.total.value
+        total: hits.total.value,
       } as DocxData);
       doc.render();
       const buf = doc.getZip().generate({ type: 'nodebuffer' });
@@ -124,7 +125,7 @@ export class ExportService {
     }
   }
 
-  private async createXlxs(body, file, part,websiteName) {
+  private async createXlxs(body, file, part, websiteName) {
 
     var workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('sheet', {
@@ -191,21 +192,11 @@ export class ExportService {
 
   private mapDataToDocxTemplate(
     h: Array<InnterHits>
-  ): Array<Partial<Publication>> {
-    return h.map<Partial<Publication>>(({ _source, _id }: InnterHits) => ({
-      id: _id,
-      title: _source.title,
-      identifier_status: _source.status,
-      identifier_citation: _source.citation,
-      subject: Array.isArray(_source.subject)
-        ? _source.subject.join('; ')
-        : _source.subject || '',
-      date_issued: _source.date,
-      contributor_crp: _source.crp,
-      identifier_uri: _source.uri,
-      type: _source.type,
-      isMELSPACE: _source.repo === 'MELSPACE',
-      handle: _source.handle,
-    }));
+  ) {
+    let items = [];
+    h.forEach(element => {
+      items.push(element._source)
+    });
+    return items;
   }
 }

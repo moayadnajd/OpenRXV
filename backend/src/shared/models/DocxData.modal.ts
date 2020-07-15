@@ -1,5 +1,5 @@
 export interface DocxData {
-  publications: Array<Partial<Publication>>;
+  items: Array<Partial<Publication>>;
 }
 
 export interface Publication {
