@@ -17,6 +17,11 @@ import { ConfigModule } from '@nestjs/config';
         SharedModule,
         BullModule.registerQueue({
             name: 'fetch',
+            defaultJobOptions: {
+                delay: 1000,
+                attempts: 5,
+                lifo: true,
+            },
             settings: {
                 lockDuration: 90000,
                 retryProcessDelay: 10000,
@@ -30,7 +35,11 @@ import { ConfigModule } from '@nestjs/config';
         }),
         BullModule.registerQueue({
             name: 'plugins',
-
+            defaultJobOptions: {
+                delay: 1000,
+                attempts: 5,
+                lifo: true,
+            },
             settings: {
                 lockDuration: 90000,
                 retryProcessDelay: 5000,
