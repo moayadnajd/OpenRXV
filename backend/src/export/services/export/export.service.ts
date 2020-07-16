@@ -3,21 +3,16 @@ import { FileType } from 'src/shared/models/types.helpers';
 import {
   BodyResponse,
   Hits,
-  InnterHits,
   ExporterResponse
 } from 'src/shared/models/ResponseBody.modal';
-import { DocxData, Publication } from 'src/shared/models/DocxData.modal';
 import { ApiResponse } from '@elastic/elasticsearch';
 import { Response as ExpressRes } from 'express';
-import { v4 } from 'uuid';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as PizZip from 'pizzip';
 import * as Docxtemplater from 'docxtemplater';
-import * as word2pdf from 'word2pdf-promises';
 import * as libre from 'libreoffice-convert'
-import { async } from 'rxjs/internal/scheduler/async';
-import { type } from 'os';
+
 const ExcelJS = require('exceljs');
 @Injectable()
 export class ExportService {
@@ -102,14 +97,14 @@ export class ExportService {
       const doc = new Docxtemplater();
       doc.loadZip(zip);
       doc.setData({
-        items: this.mapDataToDocxTemplate(hits.hits),
+        items: hits.hits.map(items=>items._source),
         date: currentDate,
         searchQuery: search ? "search term: " + search + "," : "",
         selectQuery: select ? select.replace(/:/g, '= ') : "",
         sortingType: sort,
         sortedBy: sortBy,
         total: hits.total.value,
-      } as DocxData);
+      } );
       doc.render();
       const buf = doc.getZip().generate({ type: 'nodebuffer' });
       var d = new Date();
@@ -190,13 +185,4 @@ export class ExportService {
 
   }
 
-  private mapDataToDocxTemplate(
-    h: Array<InnterHits>
-  ) {
-    let items = [];
-    h.forEach(element => {
-      items.push(element._source)
-    });
-    return items;
-  }
 }

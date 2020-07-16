@@ -14,7 +14,6 @@ import { map, debounceTime } from 'rxjs/operators';
 import { BodyBuilderService } from '../services/bodyBuilder/body-builder.service';
 import { ParentComponent } from 'src/app/explorer/parent-component.class';
 import { ComponentLookup } from '../../dashboard/components/dynamic/lookup.registry';
-import { type } from 'os';
 @ComponentLookup('SearchComponent')
 @Component({
   selector: 'app-search',
@@ -95,7 +94,7 @@ export class SearchComponent extends ParentComponent implements OnInit {
             this.searchTerm = element[key];
       });
       if (!filters.filter(element => element[source]).length)
-        this.searchTerm = ''
+        this.searchTerm = this.searchTerm
     });
   }
   private checkTypeThenDelete() {
