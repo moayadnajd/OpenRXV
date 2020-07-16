@@ -37,7 +37,6 @@ export class FetchConsumer {
             let data: any = await this.http.get(url).pipe(map((data: any) => data.data)).toPromise();
             await job.progress(50);
             if (Array.isArray(data) && data.length == 0) {
-                await job.moveToCompleted("done", true);
                 return "done"
             }
             else {

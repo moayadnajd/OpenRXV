@@ -55,7 +55,7 @@ export class DSpaceAltmetrics {
                     return currentResult
                 }
             } else {
-                return new Error('No Data to add');
+                return 'No Data to add';
             }
         }
     }
