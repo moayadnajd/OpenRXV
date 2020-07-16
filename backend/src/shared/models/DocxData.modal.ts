@@ -1,18 +1,4 @@
 export interface DocxData {
-  items: Array<Partial<Publication>>;
+  items: Array<any>;
 }
 
-export interface Publication {
-  id: string;
-  title: string;
-  identifier_status: string;
-  identifier_citation: string;
-  type: string;
-  format: Array<string>;
-  subject: string;
-  date_issued: string;
-  contributor_crp: string;
-  altmetric: string;
-  identifier_uri: string;
-  isMELSPACE: boolean;
-}
