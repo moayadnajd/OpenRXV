@@ -83,9 +83,13 @@ export class ExportService {
         if (query.query.bool.hasOwnProperty('must'))
           search = query.query.bool.must.query_string.query
         if (query.query.bool.filter.hasOwnProperty('bool')) {
-          query.query.bool.filter.bool.must.map(a => { select = select + JSON.stringify(a.term).replace(/[^A-Za-z,: ]/g, "").replace("keyword", " ") + ", " })
-          if (query.query.bool.filter.bool.must.hasOwnProperty('query_string')) {
-            search = query.query.bool.must.query_string.query
+          if (query.query.bool.filter.bool.hasOwnProperty('must')) {
+            query.query.bool.filter.bool.must.map(a => { select = select + JSON.stringify(a.term).replace(/[^A-Za-z,: ]/g, "").replace("keyword", " ") + ", " })
+            select = '(And) ' + select
+          }
+          if (query.query.bool.filter.bool.hasOwnProperty('should')) {
+            query.query.bool.filter.bool.should.map(a => { select = select + JSON.stringify(a.term).replace(/[^A-Za-z,: ]/g, "").replace("keyword", " ") + ", " })
+            select = '(OR) ' + select
           }
         }
       }
@@ -97,14 +101,14 @@ export class ExportService {
       const doc = new Docxtemplater();
       doc.loadZip(zip);
       doc.setData({
-        items: hits.hits.map(items=>items._source),
+        items: hits.hits.map(items => items._source),
         date: currentDate,
         searchQuery: search ? "search term: " + search + "," : "",
         selectQuery: select ? select.replace(/:/g, '= ') : "",
         sortingType: sort,
         sortedBy: sortBy,
         total: hits.total.value,
-      } );
+      });
       doc.render();
       const buf = doc.getZip().generate({ type: 'nodebuffer' });
       var d = new Date();

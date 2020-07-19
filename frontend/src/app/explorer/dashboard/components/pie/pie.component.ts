@@ -9,6 +9,7 @@ import * as Highcharts from 'highcharts';
 import { ParentChart } from '../parent-chart';
 import { Bucket } from 'src/app/explorer/filters/services/interfaces';
 import { ComponentLookup } from '../dynamic/lookup.registry';
+import { SettingsService } from 'src/app/admin/services/settings.service';
 @ComponentLookup('PieComponent')
 @Component({
   selector: 'app-pie',
@@ -20,12 +21,16 @@ import { ComponentLookup } from '../dynamic/lookup.registry';
 export class PieComponent extends ParentChart implements OnInit {
   constructor(
     cms: ChartMathodsService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
+    private settingsService: SettingsService
   ) {
     super(cms);
   }
+  colors: string[];
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    let appearance = await this.settingsService.readAppearanceSettings()
+    this.colors = appearance.chartColors;
     this.init('pie');
     this.buildOptions.subscribe((buckets: Array<Bucket>) => {
       if (buckets) {
@@ -45,6 +50,7 @@ export class PieComponent extends ParentChart implements OnInit {
         enabled: true,
         useGPUTranslations: true,
       },
+      colors: this.colors,
       plotOptions: {
         pie: {
           cursor: 'pointer',
@@ -62,7 +68,7 @@ export class PieComponent extends ParentChart implements OnInit {
         {
           animation: true,
           type: 'pie',
-          data: buckets.map((b: Bucket) => ({ name: b.key.substr(0,50), y: b.doc_count })),
+          data: buckets.map((b: Bucket) => ({ name: b.key.substr(0, 50), y: b.doc_count })),
         },
       ],
       ...this.cms.commonProperties(),
