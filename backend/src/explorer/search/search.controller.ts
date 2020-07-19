@@ -11,7 +11,7 @@ export class SearchController {
     @HttpCode(200)
     @Post('/')
     search(@Body() query: any) {
-
+        query['track_total_hits'] = true;
         return this.elasticSearvice.search(query);
     }
 }

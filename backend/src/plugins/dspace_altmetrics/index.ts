@@ -55,7 +55,7 @@ export class DSpaceAltmetrics {
                     return currentResult
                 }
             } else {
-                return new Error('No Data to add');
+                return 'No Data to add';
             }
         }
     }
@@ -73,6 +73,7 @@ export class DSpaceAltmetrics {
                     body: {
                         size: 500,
                         _source: ["handle"],
+                        "track_total_hits": true,
                         query: {
 
                             "exists": { "field": "handle" }
