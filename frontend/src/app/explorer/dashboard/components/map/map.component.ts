@@ -7,7 +7,6 @@ import {
 import { ChartMathodsService } from '../services/chartCommonMethods/chart-mathods.service';
 const mapWorld = require('@highcharts/map-collection/custom/world-robinson-highres.geo.json');
 import * as Highcharts from 'highcharts';
-import { axisColorForMap, selectMapColors } from 'src/app/explorer/configs/chartColors';
 import { ParentChart } from '../parent-chart';
 import { Bucket } from 'src/app/explorer/filters/services/interfaces';
 import { getCountryCode } from '../services/countryList.helper';
@@ -55,12 +54,12 @@ export class MapComponent extends ParentChart implements OnInit {
       colorAxis: {
         min: 1,
         type: 'logarithmic',
-        minColor: axisColorForMap.minColor,
-        maxColor: axisColorForMap.maxColor,
+        minColor: '#acf992',
+        maxColor:  '#427730',
         stops: [
-          [0, axisColorForMap.minColor],
-          [0.67, axisColorForMap.midColor],
-          [1, axisColorForMap.maxColor]
+          [0,  '#acf992'],
+          [0.67,'#5c7753'],
+          [1, '#427730']
         ]
       },
       series: [
@@ -83,11 +82,11 @@ export class MapComponent extends ParentChart implements OnInit {
           },
           states: {
             hover: {
-              color: selectMapColors.hover
+              color: '#427730',
             },
             select: {
-              color: selectMapColors.select.color,
-              borderColor: selectMapColors.select.borderColor
+              color: '#427730',
+              borderColor: '#000000'
             }
           }
         }

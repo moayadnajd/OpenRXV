@@ -38,8 +38,8 @@
                             </div>
                             <div class="file w-100">
                                 <mat-label>Logo: </mat-label>
-                                <input *ngIf="!logo" type="file" (change)="logoChange($event)"
-                                    placeholder="Logo" required>
+                                <input *ngIf="!logo" type="file" (change)="logoChange($event)" placeholder="Logo"
+                                    required>
                                 <div *ngIf="logo" class="logo">
                                     <button (click)="logo = null" color="warn" mat-icon-button>
                                         <mat-icon>delete</mat-icon>
@@ -47,9 +47,24 @@
                                     <img [src]="src(logo)" alt="logo">
                                 </div>
                             </div>
-                            
                         </div>
                     </div>
+                    <div formArrayName="chartColors">
+                        <div *ngFor="let color of colors.controls; index as i" class='row'>
+                            <mat-form-field>
+                                <mat-label>colors</mat-label>
+                                <input matInput type="color" [formControlName]="i" placeholder="Color">
+                            </mat-form-field>
+                            <div *ngIf="i != 0">
+                                <button mat-button (click)="deleteColor(i)">
+                                    <mat-icon style="color: red;">delete</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <button mat-raised-button color="primary" (click)="addColor()">
+                        <mat-icon>add</mat-icon>Add color
+                    </button>
                 </form>
             </mat-card-content>
         </mat-card>
