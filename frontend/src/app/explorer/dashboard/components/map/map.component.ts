@@ -54,12 +54,12 @@ export class MapComponent extends ParentChart implements OnInit {
       colorAxis: {
         min: 1,
         type: 'logarithmic',
-        minColor: '#acf992',
-        maxColor:  '#427730',
+        minColor: localStorage.getItem('minColor'),
+        maxColor:  localStorage.getItem('primaryColor'),
         stops: [
-          [0,  '#acf992'],
-          [0.67,'#5c7753'],
-          [1, '#427730']
+          [0,  localStorage.getItem('minColor')],
+          [0.67, localStorage.getItem('midColor')],
+          [1, localStorage.getItem('primaryColor')]
         ]
       },
       series: [
