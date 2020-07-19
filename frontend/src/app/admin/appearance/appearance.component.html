@@ -50,16 +50,16 @@
                         </div>
                     </div>
                     <div formArrayName="chartColors">
-                        <div *ngFor="let color of colors.controls; index as i" class='row'>
+                        <div *ngFor="let color of colors.controls; index as i" class="colors">
                             <mat-form-field>
-                                <mat-label>colors</mat-label>
-                                <input matInput type="color" [formControlName]="i" placeholder="Color">
+                                <mat-label>{{color.value}}</mat-label>
+                                <input matInput type="color" [formControlName]="i">
+                                <div *ngIf="colors.length > 1">
+                                    <button mat-button (click)="deleteColor(i)">
+                                        <mat-icon style="color: red;">delete</mat-icon>
+                                    </button>
+                                </div>
                             </mat-form-field>
-                            <div *ngIf="i != 0">
-                                <button mat-button (click)="deleteColor(i)">
-                                    <mat-icon style="color: red;">delete</mat-icon>
-                                </button>
-                            </div>
                         </div>
                     </div>
                     <button mat-raised-button color="primary" (click)="addColor()">
