@@ -34,7 +34,7 @@
     <div *ngIf='profileForm.value.fileType =="xlsx"'>
         <div *ngFor='let source of labels;  let i = index' class="row" style="align-items: center;">
             <div class="col-md-4">
-                <ng-select [items]="metadata" [multiple]="false" [(ngModel)]='labels[i].metadata' placeholder="Source">
+                <ng-select [addTag]="true" [items]="metadata" [multiple]="false" [(ngModel)]='labels[i].metadata' placeholder="Source">
                 </ng-select>
             </div>
             <mat-form-field class="col-md-4">

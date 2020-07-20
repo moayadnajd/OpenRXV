@@ -3,6 +3,7 @@
     "display_name": "MEL Downloads and views",
     "description": "to get all MEL",
     "multiple": "false",
+    "source":["numbers.views", "numbers.downloads"],
     "params": [
         {
             "name": "repo",
