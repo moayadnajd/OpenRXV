@@ -137,6 +137,12 @@ export class ExportService {
     worksheet.columns = columns
     const sourcesMetadata =
       body.hits.map(({ _source }) => file.tags.map(tag => _source[tag.metadata]));
+    sourcesMetadata.map((a) => {
+      for (let index = 0; index < a.length; index++) {
+        if (Array.isArray(a[index]))
+          a[index] = a[index].join(', ')
+      }
+    })
     workbook.addWorksheet("My Sheet");
     for (let index = 0; index < sourcesMetadata.length; index++) {
       worksheet.getRow(index + 2).values = sourcesMetadata[index]

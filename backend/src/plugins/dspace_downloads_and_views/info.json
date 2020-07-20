@@ -3,6 +3,7 @@
     "display_name": "DSpace Downloads and views",
     "description": "To get all DSpace downloads and views",
     "multiple": "true",
+    "source":["numbers.views", "numbers.downloads"],
     "params": [
         {
             "name": "repo",
