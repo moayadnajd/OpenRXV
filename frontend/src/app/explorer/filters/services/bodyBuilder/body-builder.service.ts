@@ -60,10 +60,10 @@ export class BodyBuilderService {
   get orOperator(): Subject<boolean> {
     return this.mainBodyBuilderService.getOrOperator;
   }
-  yearsBuildquery(bq: BuildQueryObj) {
+  yearsBuildquery(bq: BuildQueryObj, excludeSource?: string) {
     bq.size = bq.size ? bq.size : 0;
     return this.addAggreigation(
-      this.buildMainQuery().size(0), // no need for the hits
+      this.buildMainQuery(0, excludeSource).size(0), // no need for the hits
       bq
     );
 
@@ -88,9 +88,9 @@ export class BodyBuilderService {
     );
   }
 
-  buildMainQuery(from: number = 10): bodybuilder.Bodybuilder {
+  buildMainQuery(from: number = 10, excludeSource?: string): bodybuilder.Bodybuilder {
     this.from = from === 10 ? this.from : from;
-    return this.mainBodyBuilderService.buildMainQuery(this.from);
+    return this.mainBodyBuilderService.buildMainQuery(this.from, undefined, excludeSource);
   }
 
   deleteFromMainQuery(fromSearchAll: boolean): string {
@@ -103,11 +103,12 @@ export class BodyBuilderService {
 
   public addAggreigation(
     query: bodybuilder.Bodybuilder,
-    qb: BuildQueryObj
+    qb: BuildQueryObj,
   ): bodybuilder.Bodybuilder {
     const { term, size, source } = qb;
     const termRules: AggsRules = this.buildTermRules(size, source);
     // null comes when the user clear the input
+
     // undefined comes when no term is passed ( from the range component )
     if (term === null || term === undefined) {
       delete termRules.include;

@@ -92,13 +92,14 @@ export class MainBodyBuilderService extends BuilderUtilities {
    */
   buildMainQuery(
     from: number,
-    everything: boolean = true
+    everything: boolean = true,
+    excludeSource?
   ): bodybuilder.Bodybuilder {
     const b: bodybuilder.Bodybuilder = bodybuilder();
     if (everything) {
       this.addCounterAgg(b);
     }
-    this.addQueryAttributes(b);
+    this.addQueryAttributes(b, excludeSource);
     this.sortHitsQuery(b, from);
     return b;
   }
@@ -122,10 +123,10 @@ export class MainBodyBuilderService extends BuilderUtilities {
     }
   }
 
-  addQueryAttributes(b: bodybuilder.Bodybuilder): bodybuilder.Bodybuilder {
-    // tslint:disable-next-line
+  addQueryAttributes(b: bodybuilder.Bodybuilder, excludeSource?): bodybuilder.Bodybuilder {
     for (const key in this.aggAttributes) {
-      this.addSpecificfield(key, b);
+      if (excludeSource != key)
+        this.addSpecificfield(key, b);
     }
     return b;
   }
