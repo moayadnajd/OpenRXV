@@ -170,16 +170,15 @@ export class SettingsController {
                 meta.push(mel_downloads_and_views.source)
             }
         }
-      let a =  [].concat(...meta)
-       let uniqueArray = a.filter(function(item, pos) {
-        return a.indexOf(item) == pos;
-    })
+        let a = [].concat(...meta)
+        let uniqueArray = a.filter(function (item, pos) {
+            return a.indexOf(item) == pos;
+        })
 
 
 
         var merged = [].concat.apply([], data.repositories.map(d => [...d.schema, ...d.metadata]));
-        console.log([...new Set(merged.map(d => d.disply_name)), ...data.repositories.filter(d => d.years).map(d => d.years),...uniqueArray])
-        return [...new Set(merged.map(d => d.disply_name)), ...data.repositories.filter(d => d.years).map(d => d.years),...uniqueArray];
+        return [...new Set(merged.map(d => d.disply_name)), ...data.repositories.filter(d => d.years).map(d => d.years), ...uniqueArray];
     }
 
     @UseGuards(AuthGuard('jwt'))
