@@ -9,6 +9,7 @@ import * as Highcharts from 'highcharts';
 import { ParentChart } from '../parent-chart';
 import { Bucket } from 'src/app/explorer/filters/services/interfaces';
 import { ComponentLookup } from '../dynamic/lookup.registry';
+import { SettingsService } from 'src/app/admin/services/settings.service';
 @ComponentLookup('PackedBubbleComponent')
 @Component({
   selector: 'app-packed-bubble',
@@ -20,12 +21,15 @@ import { ComponentLookup } from '../dynamic/lookup.registry';
 export class PackedBubbleComponent extends ParentChart implements OnInit {
   constructor(
     cms: ChartMathodsService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
+    private settingsService: SettingsService
   ) {
     super(cms);
   }
-
-  ngOnInit(): void {
+  colors: string[]
+  async ngOnInit(){
+    let appearance = await this.settingsService.readAppearanceSettings()
+    this.colors = appearance.chartColors;
     this.init('packed-bubble');
     this.buildOptions.subscribe((buckets: Array<Bucket>) => {
       if (buckets) {
@@ -64,6 +68,7 @@ export class PackedBubbleComponent extends ParentChart implements OnInit {
         useHTML: true,
         pointFormat: '<b>{point.name}:</b> {point.value}'
       },
+      colors: this.colors,
       plotOptions: {
         packedbubble: {
           minSize: '50%',

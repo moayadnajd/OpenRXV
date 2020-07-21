@@ -19,7 +19,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { environment } from 'src/environments/environment';
 import { InViewState } from './store/reducers/items.reducer';
 import { SetQuery } from './store';
-import { Router } from "@angular/router";
 
 @Component({
   selector: 'explorer-root',
@@ -39,8 +38,6 @@ export class ExplorerComponent implements OnInit {
   countersConfig = []
   dashboardConfig = []
   tourConfig = []
-  currenRoute: any;
-  currentUrl: string;
   readonly orAndToolTip: string;
   private prevenetMouseOnNav: boolean;
   options: any = {
@@ -49,7 +46,7 @@ export class ExplorerComponent implements OnInit {
     top: 0,
   };
   async share() {
-    this.openDialog(this.currentUrl + await this.itemsService.saveShare(this.mainBodyBuilderService.getAggAttributes));
+    this.openDialog(location.origin + await this.itemsService.saveShare(this.mainBodyBuilderService.getAggAttributes));
   }
   get isSmall(): boolean {
     return this.screenSizeService.isSmallScreen;
@@ -62,7 +59,6 @@ export class ExplorerComponent implements OnInit {
     private readonly screenSizeService: ScreenSizeService,
     private readonly itemsService: ItemsService,
     public dialog: MatDialog,
-    private readonly currentRouter: Router
   ) {
     this.orOperator = false;
     this.orAndToolTip = orAndToolTip;
@@ -73,7 +69,7 @@ export class ExplorerComponent implements OnInit {
     };
   }
 
-  openDialog(link): void {
+  openDialog(link): void { 
     const dialogRef = this.dialog.open(ShareComponent, {
       width: '600px',
       data: { link }
@@ -92,9 +88,7 @@ export class ExplorerComponent implements OnInit {
     localStorage.setItem('minColor', this.hexToHSL(localStorage.getItem('primaryColor'), "min"))
     localStorage.setItem('midColor', this.hexToHSL(localStorage.getItem('primaryColor'), "mid"))
     localStorage.setItem("colors", JSON.stringify(appearance.chartColors));
-    this.currenRoute = Object.getOwnPropertyDescriptors(this.currentRouter)
-    this.currentUrl = this.currenRoute.location.value._platformLocation.location.href
-    this.currentUrl = this.currentUrl.slice(0, this.currentUrl.length - 1)
+    console.log(localStorage.getItem('colors'))
 
     let inview = (() => {
       // creating the state dynamically
