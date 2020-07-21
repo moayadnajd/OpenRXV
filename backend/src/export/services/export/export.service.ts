@@ -63,7 +63,6 @@ export class ExportService {
   }
 
   private async createDocx(fileName: string, hits: Hits, query: any, part, websiteName): Promise<string> {
-    console.log(query.query)
     let sort = query.sort[0]._score.order
     let select = '';
     let search = '';
@@ -113,7 +112,6 @@ export class ExportService {
       }
     }
     try {
-      console.log(select)
       const zip = new PizZip(
         await fs.promises.readFile(this.resolvePath(fileName + "", false), 'binary')
       );
