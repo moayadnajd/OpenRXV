@@ -24,7 +24,7 @@
                                     <mat-label>Primary Color</mat-label>
                                     <input (colorPickerClose)="colorPickerClose($event)" [(colorPicker)]="color"
                                         [value]="color" matInput formControlName="primary_color"
-                                        placeholder="Publications" required>
+                                        placeholder="#CCCCC" required>
                                     <button [style.background]="color" mat-icon-button matSuffix>
                                         <mat-icon>brush</mat-icon>
                                     </button>
