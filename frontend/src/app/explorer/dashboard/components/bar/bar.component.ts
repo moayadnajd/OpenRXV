@@ -28,8 +28,8 @@ export class BarComponent extends ParentChart implements OnInit {
   ) {
     super(cms);
   }
-  colors : string[]
- async ngOnInit() {
+  colors: string[]
+  async ngOnInit() {
     let appearance = await this.settingsService.readAppearanceSettings()
     this.colors = appearance.chartColors;
     this.init('column');
@@ -38,7 +38,7 @@ export class BarComponent extends ParentChart implements OnInit {
         this.chartOptions = this.setOptions(buckets);
       }
       this.cdr.detectChanges();
-    }); 
+    });
   }
 
   private setOptions(
@@ -52,7 +52,7 @@ export class BarComponent extends ParentChart implements OnInit {
       })
     })
 
-    let data = buckets.map((b: Bucket) => {
+    let data: any = buckets.map((b: Bucket) => {
       let data = []
       categories.forEach((e, i) => {
         let found: Array<any> = b.related.buckets.filter(d => d.key.substr(0, 50) == e)
