@@ -73,25 +73,42 @@ export class ExportService {
       sortBy = Object.getOwnPropertyNames(query.sort[1])[0].replace('.keyword', "")
       sort = query.sort[1][`${Object.getOwnPropertyNames(query.sort[1])[0]}`].order
     }
-
     if (query.query != undefined) {
       if (query.query.hasOwnProperty('query_string'))
         search = query.query.query_string.query;
+      if (query.query.hasOwnProperty('range'))
+        select = JSON.stringify(query.query.range).replace(/[^A-Za-z 0-9 -_,: ]/g, "").replace("keyword", "")
       if (query.query.hasOwnProperty('bool')) {
-        if (query.query.bool.filter.hasOwnProperty('term'))
-          select = JSON.stringify(query.query.bool.filter.term).replace(/[^A-Za-z,: ]/g, "").replace("keyword", "")
-        if (query.query.bool.hasOwnProperty('must'))
-          search = query.query.bool.must.query_string.query
-        if (query.query.bool.filter.hasOwnProperty('bool')) {
-          if (query.query.bool.filter.bool.hasOwnProperty('must')) {
-            query.query.bool.filter.bool.must.map(a => { select = select + JSON.stringify(a.term).replace(/[^A-Za-z,: ]/g, "").replace("keyword", " ") + ", " })
-            select = '(And) ' + select
-          }
-          if (query.query.bool.filter.bool.hasOwnProperty('should')) {
-            query.query.bool.filter.bool.should.map(a => { select = select + JSON.stringify(a.term).replace(/[^A-Za-z,: ]/g, "").replace("keyword", " ") + ", " })
-            select = '(OR) ' + select
+        if (query.query.bool.hasOwnProperty('filter'))
+          if (query.query.bool.filter.hasOwnProperty('term'))
+            select = JSON.stringify(query.query.bool.filter.term).replace(/[^A-Za-z,: ]/g, "").replace("keyword", "")
+        if (query.query.bool.hasOwnProperty('must')) {
+          if (query.query.bool.must.hasOwnProperty('query_string'))
+            search = query.query.bool.must.query_string.query
+          if (query.query.bool.must.hasOwnProperty('filter'))
+            select = ',' + select + JSON.stringify(query.query.bool.filter.term).replace(/[^A-Za-z,: ]/g, "").replace("keyword", "") + ","
+          if (query.query.bool.must.hasOwnProperty('range'))
+            select = "_" + select + JSON.stringify(query.query.bool.must.range).replace(/[^A-Za-z 0-9 _,: ]/g, "").replace("keyword", "") + "_"
+          if (Array.isArray(query.query.bool.must)) {
+            query.query.bool.must.map(a => {
+              if (a.hasOwnProperty('query_string'))
+                search = search + a.query_string.query
+              if (a.hasOwnProperty('range'))
+                select = "," + select + JSON.stringify(a.range).replace(/[^A-Za-z 0-9 -_,: ]/g, "").replace("keyword", "") + ","
+            })
           }
         }
+        if (query.query.bool.hasOwnProperty('filter'))
+          if (query.query.bool.filter.hasOwnProperty('bool')) {
+            if (query.query.bool.filter.bool.hasOwnProperty('must')) {
+              query.query.bool.filter.bool.must.map(a => { select = select + JSON.stringify(a.term).replace(/[^A-Za-z,: ]/g, "").replace("keyword", " ") + ", " })
+              select = '(And) ' + select
+            }
+            if (query.query.bool.filter.bool.hasOwnProperty('should')) {
+              query.query.bool.filter.bool.should.map(a => { select = select + JSON.stringify(a.term).replace(/[^A-Za-z,: ]/g, "").replace("keyword", " ") + ", " })
+              select = '(OR) ' + select
+            }
+          }
       }
     }
     try {

@@ -3,6 +3,7 @@ import { ChartMathodsService } from '../services/chartCommonMethods/chart-mathod
 import * as Highcharts from 'highcharts';
 import { ParentChart } from '../parent-chart';
 import { ComponentLookup } from '../dynamic/lookup.registry';
+import { SettingsService } from 'src/app/admin/services/settings.service';
 
 @ComponentLookup('SimiCircleComponent')
 @Component({
@@ -12,11 +13,15 @@ import { ComponentLookup } from '../dynamic/lookup.registry';
   providers: [ChartMathodsService],
 })
 export class SimiCircleComponent extends ParentChart implements OnInit {
-  constructor(cms: ChartMathodsService) {
+  colors: string[];
+  constructor(cms: ChartMathodsService,
+    private settingsService: SettingsService) {
     super(cms);
   }
 
-  ngOnInit(): void {
+ async ngOnInit() {
+    let appearance = await this.settingsService.readAppearanceSettings()
+    this.colors = appearance.chartColors;
     this.init('pie');
     this.buildOptions.subscribe(() => (this.chartOptions = this.setOptions()));
   }
@@ -32,6 +37,7 @@ export class SimiCircleComponent extends ParentChart implements OnInit {
         align: 'center',
         verticalAlign: 'middle',
       },
+      colors: this.colors,
       tooltip: {
         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
       },

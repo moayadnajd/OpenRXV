@@ -10,6 +10,8 @@ import { ComponentLookup } from '../dynamic/lookup.registry';
 import { Bucket } from 'src/app/explorer/filters/services/interfaces';
 import { RangeService } from 'src/app/explorer/filters/services/range/range.service';
 import { BarService } from './../bar/services/bar/bar.service';
+import { SettingsService } from 'src/app/admin/services/settings.service';
+
 @ComponentLookup('LineComponent')
 @Component({
   selector: 'app-line',
@@ -21,11 +23,16 @@ import { BarService } from './../bar/services/bar/bar.service';
 export class LineComponent extends ParentChart implements OnInit {
   constructor(
     cms: ChartMathodsService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
+    private settingsService: SettingsService
+
   ) {
     super(cms);
   }
-  ngOnInit(): void {
+  colors : string[]
+  async ngOnInit(){
+    let appearance = await this.settingsService.readAppearanceSettings()
+    this.colors = appearance.chartColors;
     this.init('line');
     this.buildOptions.subscribe((buckets: Array<Bucket>) => {
       if (buckets) {
@@ -76,6 +83,7 @@ export class LineComponent extends ParentChart implements OnInit {
           borderRadius: 2.5
         }
       },
+      colors: this.colors,
       tooltip: {
         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
         pointFormat:
