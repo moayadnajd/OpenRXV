@@ -31,8 +31,8 @@
             </div>
         </div>
     </form>
-    <div *ngIf='profileForm.value.fileType =="xlsx"'>
-        <div *ngFor='let source of labels;  let i = index' class="row" style="align-items: center;">
+    <div *ngIf='profileForm.value.fileType =="xlsx"' cdkDropList (cdkDropListDropped)="drop($event)">
+        <div *ngFor='let source of labels;  let i = index' class="row" style="align-items: center;" cdkDrag >
             <div class="col-md-4">
                 <ng-select [addTag]="true" [items]="metadata" [multiple]="false" [(ngModel)]='labels[i].metadata' placeholder="Source">
                 </ng-select>
@@ -40,8 +40,11 @@
             <mat-form-field class="col-md-4">
                 <mat-label>Data Source Label</mat-label>
                 <input matInput [(ngModel)]='labels[i].label' placeholder="{{labels[i].metadata}} label">
-
             </mat-form-field>
+            <svg width="24px" viewBox="0 0 24 24">
+                <path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"></path>
+                <path d="M0 0h24v24H0z" fill="none"></path>
+              </svg>
             <div>
                 <button mat-button (click)="deleteSource(i)">
                     <mat-icon style="color: red;">delete</mat-icon>
