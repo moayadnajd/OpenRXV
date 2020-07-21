@@ -68,7 +68,7 @@ export class BarComponent extends ParentChart implements OnInit {
         enabled: true,
         useGPUTranslations: true
       },
-      yAxis: { min: 0, title: { text: 'Publications' } },
+      yAxis: { min: 0, title: { text: 'Information Products' } },
       plotOptions: {
         column: {
           pointPadding: 0.2,
