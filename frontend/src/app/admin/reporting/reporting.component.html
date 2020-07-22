@@ -38,11 +38,10 @@
                         <button mat-button (click)='edit(i)'>
                             <mat-icon>edit</mat-icon>
                         </button>
-                        <a href="http://localhost:3000/settings{{report.file}}" *ngIf='report.fileType != "xlsx"'>
-                            <button mat-button (click)='getFile(i)'>
+                        <a [href]="envireoment + '/settings'+ report.file" download>
+                            <button mat-button>
                                 <mat-icon>save_alt</mat-icon>
                             </button></a>
-
                     </mat-card-actions>
                 </mat-card>
             </span>

@@ -5,6 +5,7 @@ import { DialogComponent } from "./dialog/dialog.component";
 import { SettingsService } from '../services/settings.service';
 import { MetadataService } from '../services/metadata.service';
 import { DocComponent } from "./doc/doc.component";
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-reporting',
   templateUrl: './reporting.component.html',
@@ -16,7 +17,7 @@ export class ReportingComponent implements OnInit {
   dataSource: any;
   confirmation = false
   dialogRef: MatDialogRef<any>
-
+  envireoment = environment.api
   metadata: any;
   constructor(
     private settingsService: SettingsService,
@@ -50,9 +51,6 @@ export class ReportingComponent implements OnInit {
     })
   }
 
-  getFile(index) {
-    this.settingsService.getFile(this.reports[index].file.substring(6, this.reports[index].file.length))
-  }
 
   edit(index) {
     this.dialogRef = this.dialog.open(ReprotingFormComponent, {
@@ -73,6 +71,9 @@ export class ReportingComponent implements OnInit {
 
   showDoc(){
     let dialogRef = this.dialog.open(DocComponent,{width:'1300px'})
+  }
+  downloadfile(file){
+    this.settingsService.getFile(file)
   }
 
 }
