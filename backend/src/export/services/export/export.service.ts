@@ -152,6 +152,7 @@ export class ExportService {
       columns.push({ header: `${file.tags[index].label}` })
     }
     worksheet.columns = columns
+    //TODO make it general for any object
     const sourcesMetadata =
       body.hits.map(({ _source }) => file.tags.map(tag => {
         let splited = tag.metadata.split('.')
