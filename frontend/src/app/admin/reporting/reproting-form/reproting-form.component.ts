@@ -4,7 +4,7 @@ import { SettingsService } from "../../../admin/services/settings.service";
 import { FormDialogComponent } from '../../design/components/form-dialog/form-dialog.component';
 import { MetadataService } from '../../services/metadata.service';
 import { FormGroup, FormControl } from '@angular/forms';
-import { title } from 'process';
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-reproting-form',
@@ -81,5 +81,9 @@ export class ReprotingFormComponent implements OnInit {
   }
   deleteSource(index) {
     this.labels.splice(index, 1)
+  }
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.labels, event.previousIndex, event.currentIndex);
   }
 }

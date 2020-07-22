@@ -149,7 +149,7 @@ export class ExportService {
     });
     let columns = new Array();
     for (let index = 0; index < file.tags.length; index++) {
-      columns.push({ header: `${file.tags[index].label}`, width: 10000 })
+      columns.push({ header: `${file.tags[index].label}` })
     }
     worksheet.columns = columns
     const sourcesMetadata =

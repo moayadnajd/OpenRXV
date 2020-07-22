@@ -5,13 +5,12 @@ import {
   ChangeDetectorRef
 } from '@angular/core';
 import { ParentChart } from '../../parent-chart';
-import * as Highcharts from 'highcharts';
 import { ChartMathodsService } from '../../services/chartCommonMethods/chart-mathods.service';
 import { Bucket } from 'src/app/explorer/filters/services/interfaces';
 import { RangeService } from 'src/app/explorer/filters/services/range/range.service';
 import { BarService } from './../services/bar/bar.service';
 import { ComponentLookup } from '../../dynamic/lookup.registry';
-import { stringify } from 'querystring';
+import { SettingsService } from 'src/app/admin/services/settings.service';
 
 @ComponentLookup('SingleBarComponent')
 @Component({
@@ -22,15 +21,18 @@ import { stringify } from 'querystring';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RotatedLablesComponent extends ParentChart implements OnInit {
-  Highcharts = Highcharts;
+  colors: string[]
   constructor(
     cms: ChartMathodsService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
+    private settingsService: SettingsService
   ) {
     super(cms);
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    let appearance = await this.settingsService.readAppearanceSettings()
+    this.colors = appearance.chartColors;
     this.init('column');
     this.buildOptions.subscribe((buckets: Array<Bucket>) => {
       if (buckets) {
@@ -57,6 +59,7 @@ export class RotatedLablesComponent extends ParentChart implements OnInit {
           }
         }
       },
+      colors: this.colors,
       yAxis: {
         min: 0
       },

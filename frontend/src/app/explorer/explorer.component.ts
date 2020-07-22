@@ -88,8 +88,6 @@ export class ExplorerComponent implements OnInit {
     localStorage.setItem('minColor', this.hexToHSL(localStorage.getItem('primaryColor'), "min"))
     localStorage.setItem('midColor', this.hexToHSL(localStorage.getItem('primaryColor'), "mid"))
     localStorage.setItem("colors", JSON.stringify(appearance.chartColors));
-    console.log(localStorage.getItem('colors'))
-
     let inview = (() => {
       // creating the state dynamically
       const obj = Object.create(null);
