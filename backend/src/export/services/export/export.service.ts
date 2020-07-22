@@ -153,7 +153,13 @@ export class ExportService {
     }
     worksheet.columns = columns
     const sourcesMetadata =
-      body.hits.map(({ _source }) => file.tags.map(tag => _source[tag.metadata]));
+      body.hits.map(({ _source }) => file.tags.map(tag => {
+        let splited = tag.metadata.split('.')
+        if (!splited[1] && splited[0])
+          return _source[splited[0]]
+        else
+          return _source[splited[0]][splited[1]]
+      }));
     sourcesMetadata.map((a) => {
       for (let index = 0; index < a.length; index++) {
         if (Array.isArray(a[index]))
