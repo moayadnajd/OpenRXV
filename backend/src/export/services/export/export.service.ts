@@ -158,7 +158,7 @@ export class ExportService {
         if (!splited[1] && splited[0])
           return _source[splited[0]] ? _source[splited[0]] : ''
         else
-          return _source[splited[0]][splited[1]] ? _source[splited[0]][splited[1]] : ''
+          return _source[splited[0]]? _source[splited[0]][splited[1]] ? _source[splited[0]][splited[1]] : '' : ''
       }));
     sourcesMetadata.map((a) => {
       for (let index = 0; index < a.length; index++) {
