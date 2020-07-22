@@ -4,14 +4,15 @@
             <mat-card-title>
                 OpenRXV Reports
             </mat-card-title>
-            <div align='end'  > 
-                 <button mat-raised-button color='primary' (click)="showDoc()">how to construct my Docx file?</button>
-                <button mat-raised-button [matMenuTriggerFor]="menu" color="primary" style="margin-left: 10px;">Show metadata</button>
+            <div align='end'>
+                <button mat-raised-button color='primary' (click)="showDoc()">how to construct my Docx file?</button>
+                <button mat-raised-button [matMenuTriggerFor]="menu" color="primary" style="margin-left: 10px;">Show
+                    metadata</button>
                 <mat-menu #menu="matMenu">
-                  
-               <ng-container *ngFor='items of metadata; let i = index' >
-                   <button mat-menu-item  matTooltip="copy" (click)="copyMessage(metadata[i])" class="copy" >{{metadata[i]}}</button>
-               </ng-container>
+                    <ng-container *ngFor='items of metadata; let i = index'>
+                        <button mat-menu-item matTooltip="copy" (click)="copyMessage(metadata[i])"
+                            class="copy">{{metadata[i]}}</button>
+                    </ng-container>
                 </mat-menu>
             </div>
         </mat-card>
