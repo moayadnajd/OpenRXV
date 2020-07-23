@@ -16,10 +16,7 @@ function isEmpty(obj) {
 @Controller('users')
 export class UsersController {
 
-    constructor(private elastic: ElasticService) {
-
-        this.elastic.index = 'users';
-    }
+    constructor(private elastic: ElasticService) { }
     @UseGuards(AuthGuard('jwt'))
     @Post('')
     NewUser(@Body() body: any) {
@@ -32,7 +29,7 @@ export class UsersController {
     }
 
     @Get(':id')
-    async  GetOneUser(@Param('id') id: string) {
+    async GetOneUser(@Param('id') id: string) {
         try {
             let user: any = await this.elastic.findOne(id);
 
@@ -44,7 +41,7 @@ export class UsersController {
         }
 
     }
-    update
+
     @Delete(':id')
     DeleteOneUser(@Param('id') id: string) {
         return this.elastic.delete(id);
@@ -74,7 +71,7 @@ export class UsersController {
             })
             return users;
         } catch (e) {
-            return e.statusCode == 404 ? {hits:[]} : e;
+            return e.statusCode == 404 ? { hits: [] } : e;
         }
     }
 
