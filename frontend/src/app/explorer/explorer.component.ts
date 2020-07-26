@@ -19,6 +19,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { environment } from 'src/environments/environment';
 import { InViewState } from './store/reducers/items.reducer';
 import { SetQuery } from './store';
+import { FooterComponent } from './dashboard/components/footer/footer.component';
 
 @Component({
   selector: 'explorer-root',
@@ -228,7 +229,9 @@ export class ExplorerComponent implements OnInit {
       })
       .filter((iso: IStepOption) => Object.keys(iso).length >= 1);
   }
-
+  seeAbout(){
+    this.dialog.open(FooterComponent,{width:'2000px', maxHeight:"90vh"})
+  }
   private checkIfApplicableForTour(
     id: string,
     content: string,

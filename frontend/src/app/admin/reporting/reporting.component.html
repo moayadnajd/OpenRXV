@@ -38,7 +38,7 @@
                         <button mat-button (click)='edit(i)'>
                             <mat-icon>edit</mat-icon>
                         </button>
-                        <a [href]="envireoment + '/settings'+ report.file" download>
+                        <a [href]="envireoment + '/settings'+ report.file" download *ngIf="report.fileType != 'xlsx'">
                             <button mat-button>
                                 <mat-icon>save_alt</mat-icon>
                             </button></a>
