@@ -13,7 +13,10 @@
       aria-label="refresh page button">
       <mat-icon>contact_support</mat-icon>
     </button>
-
+    <button matTooltip="About Us" mat-icon-button (click)="seeAbout()"
+    aria-label="About Us">
+    <mat-icon>info</mat-icon>
+  </button>
     <button [matTooltip]="'Share '+website_name+' and your search results with others'" *ngIf="!isSmall" mat-icon-button
       (click)="share()" aria-label="refresh page button">
       <mat-icon>share</mat-icon>
@@ -76,6 +79,5 @@
 
   <mat-sidenav-content class="mb-0 pb-0">
     <app-dashboard></app-dashboard>
-    <app-footer></app-footer>
   </mat-sidenav-content>
 </mat-sidenav-container>

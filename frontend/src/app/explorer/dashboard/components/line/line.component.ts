@@ -29,8 +29,8 @@ export class LineComponent extends ParentChart implements OnInit {
   ) {
     super(cms);
   }
-  colors : string[]
-  async ngOnInit(){
+  colors: string[]
+  async ngOnInit() {
     let appearance = await this.settingsService.readAppearanceSettings()
     this.colors = appearance.chartColors;
     this.init('line');
@@ -54,7 +54,7 @@ export class LineComponent extends ParentChart implements OnInit {
       })
     })
 
-    let data = buckets.map((b: Bucket) => {
+    let data: any = buckets.map((b: Bucket) => {
       let data = []
       categories.forEach((e, i) => {
         let found: Array<any> = b.related.buckets.filter(d => d.key.substr(0, 50) == e)
@@ -67,33 +67,38 @@ export class LineComponent extends ParentChart implements OnInit {
         name: b.key, data
       }
     }).flat(1)
-
+    data.map((a, i) => { a.name = categories[i], a.data = [] })
+    buckets.forEach(element => {
+      element.related.buckets.forEach((element, index) => {
+        data[index].data.push(element.doc_count)
+      });
+    });
     return {
-      chart: { type: 'line' },
-      xAxis: { categories, crosshair: true },
-      boost: {
-        enabled: true,
-        useGPUTranslations: true
+      title: {
+        text: undefined
       },
-      yAxis: { min: 0, title: { text: 'Information Products' } },
+      chart: {
+        type: 'line'
+      },
       plotOptions: {
-        column: {
-          pointPadding: 0.2,
-          borderWidth: 0,
-          borderRadius: 2.5
+        line: {
+          dataLabels: {
+            enabled: true
+          },
+          enableMouseTracking: true
         }
       },
-      colors: this.colors,
-      tooltip: {
-        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-        pointFormat:
-          '<tr><td style="color:{series.color};padding:0">{series.name}: </td><td style="padding:0"><b>{point.y}</b></td></tr>',
-        footerFormat: '</table>',
-        shared: true,
-        useHTML: true
+      xAxis: {
+        title: {
+          text: 'Date'
+        },
+        accessibility: {
+          description: 'Time from December 2010 to September 2019'
+        },
+        categories: buckets.map(a => a.key)
       },
       series: data,
-      ...this.cms.commonProperties()
+
     };
   }
 }
