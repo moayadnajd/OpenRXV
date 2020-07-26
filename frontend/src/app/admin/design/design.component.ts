@@ -223,7 +223,7 @@ export class DesignComponent implements OnInit {
     if (obj.component == 'MainListComponent')
       temp['id'] = 'main_list' + '_' + index + '_' + index1
 
-    if (obj.component == 'WheelComponent' || obj.component == 'BarComponent' || obj.component == 'PackedBubbleComponent' || obj.component == 'PackedBubbleSplitComponent', obj.component == 'LineComponent')
+    if (obj.component == 'WheelComponent' || obj.component == 'BarComponent' || obj.component == 'PackedBubbleComponent' || obj.component == 'PackedBubbleSplitComponent' || obj.component == 'LineComponent')
       temp['related'] = true
 
     var class_name: null;
