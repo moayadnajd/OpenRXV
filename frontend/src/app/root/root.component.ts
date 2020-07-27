@@ -60,6 +60,7 @@ export class RootComponent implements OnInit {
       window.dataLayer = window.dataLayer || [];
       function gtag(param,param2,param3=null){dataLayer.push(arguments);}
       gtag('js', new Date());
+      
       gtag('config', tracking_code);
       this.router.events.subscribe(event => {
         if (event instanceof NavigationEnd) {
