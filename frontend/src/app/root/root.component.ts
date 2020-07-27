@@ -35,8 +35,8 @@ export class RootComponent implements OnInit {
 
   primaryColorPalette
   async ngOnInit() {
-    let settings = await this.settingsService.readExplorerSettings(); 
-    this.favIcon.href = environment.api+ '/' + settings.appearance.favIcon;
+    let settings = await this.settingsService.readExplorerSettings();
+    this.favIcon.href = environment.api + '/' + settings.appearance.favIcon;
     await localStorage.setItem('configs', JSON.stringify(settings))
     if (!settings.counters && !settings.dashboard || settings.dashboard.length == 0) {
       this.router.navigate(['/admin']);
@@ -45,7 +45,7 @@ export class RootComponent implements OnInit {
     if (settings.appearance.primary_color) {
       this.savePrimaryColor(settings.appearance.primary_color)
       this.titleService.setTitle(settings.appearance.website_name);
-      this.meta.updateTag({name:'og:description',content:settings.appearance.tracking_code})
+      this.meta.updateTag({ name: 'og:description', content: settings.appearance.tracking_code })
     }
 
     if (settings.appearance.tracking_code) {
@@ -58,16 +58,13 @@ export class RootComponent implements OnInit {
   setupGoogleAnalytics(tracking_code) {
     get(`https://www.googletagmanager.com/gtag/js?id=${tracking_code}`, () => {
       window.dataLayer = window.dataLayer || [];
-      function gtag(param,param2,param3=null){dataLayer.push(arguments);}
+      function gtag(param, param2, param3 = null) { dataLayer.push(arguments); }
       gtag('js', new Date());
-      
       gtag('config', tracking_code);
       this.router.events.subscribe(event => {
         if (event instanceof NavigationEnd) {
           gtag('config', tracking_code,
-            {
-              'page_path': event.urlAfterRedirects
-            }
+           { 'page_path': event.urlAfterRedirects }
           );
         }
       }
