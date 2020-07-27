@@ -12,11 +12,14 @@ export class AppearanceComponent implements OnInit {
   color
   appearance
   logo
+  favIcon
   form: FormGroup = new FormGroup({
     primary_color: new FormControl(this.color),
     website_name: new FormControl(''),
     logo: new FormControl(''),
+    favIcon: new FormControl(''),
     tracking_code: new FormControl(''),
+    description: new FormControl(''),
     chartColors: new FormArray([])
   })
   constructor(private settingsService: SettingsService) { }
@@ -29,6 +32,7 @@ export class AppearanceComponent implements OnInit {
     this.form.patchValue(appearance)
     this.color = appearance.primary_color;
     this.logo = appearance.logo;
+    this.favIcon = appearance.favIcon
     await appearance.chartColors.map(a => { this.colors.push(new FormControl(a)) })
 
   }
@@ -45,6 +49,7 @@ export class AppearanceComponent implements OnInit {
 
   async save() {
     this.form.controls.logo.setValue(this.logo);
+    this.form.controls.favIcon.setValue(this.favIcon)
     if (this.form.valid)
       await this.settingsService.saveAppearanceSettings(this.form.value);
   }
@@ -52,7 +57,13 @@ export class AppearanceComponent implements OnInit {
   logoChange(event) {
     this.upload(event.target.files[0])
   }
-
+  favIconChange(event) {
+    this.uploadFavIcon(event.target.files[0])
+  }
+  async uploadFavIcon(file: File) {
+    this.favIcon = await this.settingsService.upload(file)
+    this.form.controls.favIcon.setValue(this.favIcon)
+  }
   async upload(file: File) {
     this.logo = await this.settingsService.upload(file)
     this.form.controls.logo.setValue(this.logo);

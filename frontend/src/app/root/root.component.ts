@@ -1,21 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { SettingsService } from '../admin/services/settings.service';
-
 import * as tinycolor from 'tinycolor2'
 import { Router, NavigationEnd } from '@angular/router';
-import { Title } from '@angular/platform-browser';
+import { Title, Meta } from '@angular/platform-browser';
 
 import { get } from 'scriptjs';
-import { any } from 'ramda';
+import { environment } from 'src/environments/environment';
 export interface Color {
   name: string;
   hex: string;
   darkContrast: boolean;
 }
 
-declare let gtag: Function;
 declare let window: any;
-declare let dataLayer:any;
+declare let dataLayer: any;
 
 
 @Component({
@@ -24,19 +22,21 @@ declare let dataLayer:any;
   styleUrls: ['./root.component.scss']
 })
 export class RootComponent implements OnInit {
+  favIcon: HTMLLinkElement = document.querySelector('#appIcon');
   loadSettigs: boolean = false;
   constructor(
     private titleService: Title,
     private readonly settingsService: SettingsService,
-    private router: Router
+    private router: Router,
+    private meta: Meta,
   ) {
 
   }
 
   primaryColorPalette
   async ngOnInit() {
-    
-    let settings = await this.settingsService.readExplorerSettings();
+    let settings = await this.settingsService.readExplorerSettings(); 
+    this.favIcon.href = environment.api+ '/' + settings.appearance.favIcon;
     await localStorage.setItem('configs', JSON.stringify(settings))
     if (!settings.counters && !settings.dashboard || settings.dashboard.length == 0) {
       this.router.navigate(['/admin']);
@@ -45,6 +45,7 @@ export class RootComponent implements OnInit {
     if (settings.appearance.primary_color) {
       this.savePrimaryColor(settings.appearance.primary_color)
       this.titleService.setTitle(settings.appearance.website_name);
+      this.meta.updateTag({name:'og:description',content:settings.appearance.tracking_code})
     }
 
     if (settings.appearance.tracking_code) {
@@ -57,15 +58,12 @@ export class RootComponent implements OnInit {
   setupGoogleAnalytics(tracking_code) {
     get(`https://www.googletagmanager.com/gtag/js?id=${tracking_code}`, () => {
       window.dataLayer = window.dataLayer || [];
-      function gtag(param,param2,param3=null){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', tracking_code);
+      function gtag() { dataLayer.push(arguments); }
+      gtag();
+      gtag();
       this.router.events.subscribe(event => {
         if (event instanceof NavigationEnd) {
-          gtag('config', tracking_code,
-            {
-              'page_path': event.urlAfterRedirects
-            }
+          gtag(
           );
         }
       }
