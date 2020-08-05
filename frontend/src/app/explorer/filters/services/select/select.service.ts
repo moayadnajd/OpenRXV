@@ -42,10 +42,13 @@ export class SelectService {
   }
 
   paginateData(
-    query: ElasticsearchQuery | Partial<ElasticsearchQuery>
+    query
   ): Subscription {
+    let a  = localStorage.getItem('y')
+    let b = localStorage.getItem("minrange")
+    let c = localStorage.getItem('maxrange')
     return this.http
-      .post(this.api_end_point, query)
+      .post(this.api_end_point, {query, a, b, c})
       .subscribe((d: ElasticsearchResponse) => {
         this.subjetData.next(d.aggregations[this.source].buckets);
       });

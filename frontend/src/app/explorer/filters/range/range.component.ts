@@ -58,6 +58,8 @@ export class RangeComponent extends ParentComponent implements OnInit {
 
   onYearSliderChange(): void {
     const [min, max] = this.range;
+    localStorage.setItem('minrange',min.toLocaleString().replace(',',''))
+    localStorage.setItem('maxrange',max.toLocaleString().replace(',',''))
     const query: bodybuilder.Bodybuilder = this.rangeService.addAttributeToMainQuery(
       {
         gte: min,

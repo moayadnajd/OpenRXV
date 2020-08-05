@@ -117,8 +117,11 @@ export class RangeService {
     return this.store.select(fromStore.getBuckets, this.source).pipe(first());
   }
 
-  private httpGetYears(query: ElasticsearchQuery): Observable<number[]> {
-    return this.http.post(this.api_end_point, query).pipe(
+  private httpGetYears(query): Observable<number[]> {
+    let a = localStorage.getItem('y')
+    let b = localStorage.getItem("minrange")
+    let c = localStorage.getItem('maxrange')
+    return this.http.post(this.api_end_point, { query, a, b, c }).pipe(
       tap((res: ElasticsearchResponse) =>
         this.store.dispatch(new fromStore.GetDataSuccess(res, false))
       ),
@@ -128,8 +131,11 @@ export class RangeService {
     );
   }
 
-  private httpGetMinAndMax(query: ElasticsearchQuery) {
-    return this.http.post(this.api_end_point, query).pipe(
+  private httpGetMinAndMax(query) {
+    let a = localStorage.getItem('y')
+    let b = localStorage.getItem("minrange")
+    let c = localStorage.getItem('maxrange')
+    return this.http.post(this.api_end_point, { query, a, b , c }).pipe(
       tap((res: ElasticsearchResponse) =>
         this.store.dispatch(new fromStore.GetDataSuccess(res, false))
       ),

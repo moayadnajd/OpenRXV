@@ -55,11 +55,28 @@ export class ElasticService {
 
     }
     async search(query) {
+        let temp = []
+        if(query.c - query.b == 0)
+        temp = [`${query.c}`]
+        else
+        {
+            for (let index = query.b; index <=query.c; index++) {
+                temp.push(`${index}`)
+            }
+        }
+        if (query.query.aggs)
+            if (query.query.aggs.hasOwnProperty(`${query.a}`)) {
+                query.query.aggs[`${query.a}`].terms.order = { "_key": "desc" }
+                query.query.aggs[`${query.a}`].terms.include = temp
+
+         }
+         delete query.c;
+         delete query.b;
         try {
             const { body } = await this.elasticsearchService.search({
                 index: process.env.OPENRXV_ALIAS,
                 method: 'POST',
-                body: query
+                body: query.query
             });
             return body;
         } catch (e) {
@@ -108,6 +125,7 @@ export class ElasticService {
     }
 
     async findByTerm(term = '') {
+
         try {
             let obj
             if (term != '')

@@ -12,11 +12,14 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ItemsService {
-  private readonly api_end_point: string = environment.api+'/search';
+  private readonly api_end_point: string = environment.api + '/search';
   constructor(private http: HttpClient) { }
 
-  getItems(query: ElasticsearchQuery): Observable<ElasticsearchResponse> {
-    return this.http.post(this.api_end_point, query);
+  getItems(query): Observable<ElasticsearchResponse> {
+    let a = localStorage.getItem('y')
+    let b = localStorage.getItem("minrange")
+    let c = localStorage.getItem('maxrange')
+    return this.http.post(this.api_end_point, { query, a, b, c });
   }
 
 
@@ -26,7 +29,7 @@ export class ItemsService {
 
   async saveShare(attr: any) {
     if (Object.keys(attr).length)
-      return '/shared/'+ await this.http.post(environment.api + '/share', attr).pipe(map((data: any) => data._id)).toPromise();
+      return '/shared/' + await this.http.post(environment.api + '/share', attr).pipe(map((data: any) => data._id)).toPromise();
     else return ''
   }
 }

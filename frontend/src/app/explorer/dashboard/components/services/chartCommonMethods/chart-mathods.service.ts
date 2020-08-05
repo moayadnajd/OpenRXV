@@ -69,6 +69,7 @@ export class ChartMathodsService extends ChartHelper {
     if (Array.isArray(this.cc.source)) {
       this.processArraySorces();
     } else {
+     localStorage.setItem('y', this.cc.related ? this.cc.size ? this.cc.size + '_related_' + this.cc.source : '1000_related_' + this.cc.source : this.cc.size ? this.cc.size + '_' + this.cc.source : '10000_' + this.cc.source)
       this.store
         .select(fromStore.getBuckets, this.cc.related ? this.cc.size ? this.cc.size + '_related_' + this.cc.source : '1000_related_' + this.cc.source : this.cc.size ? this.cc.size + '_' + this.cc.source : '10000_' + this.cc.source)
         .subscribe((b: Bucket[]) => this.goBuildDataSeries.emit(b));
