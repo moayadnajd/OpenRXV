@@ -1,3 +1,4 @@
+<div *ngIf="enabled">
 <app-chart
   [title]="componentConfigs.title"
   [description]="componentConfigs.description"
@@ -9,3 +10,4 @@
   (expanded)="cms.disPatchSetInView($event)"
 >
 </app-chart>
+</div>

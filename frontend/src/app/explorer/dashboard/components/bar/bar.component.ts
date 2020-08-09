@@ -18,13 +18,14 @@ import { SettingsService } from 'src/app/admin/services/settings.service';
   templateUrl: './bar.component.html',
   styleUrls: ['./bar.component.scss'],
   providers: [ChartMathodsService, RangeService, BarService],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.Default
 })
 export class BarComponent extends ParentChart implements OnInit {
+  enabled: boolean;
   constructor(
     cms: ChartMathodsService,
     private readonly cdr: ChangeDetectorRef,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
   ) {
     super(cms);
   }
@@ -35,15 +36,14 @@ export class BarComponent extends ParentChart implements OnInit {
     this.init('column');
     this.buildOptions.subscribe((buckets: Array<Bucket>) => {
       if (buckets) {
-        this.chartOptions = this.setOptions(buckets);
+        this.setOptions(buckets);
       }
       this.cdr.detectChanges();
     });
   }
-
-  private setOptions(
+  setOptions(
     buckets: Array<Bucket>
-  ): Highcharts.Options {
+  ) {
     let categories = []
     buckets.forEach((b: Bucket) => {
       b.related.buckets.forEach(d => {
@@ -51,7 +51,6 @@ export class BarComponent extends ParentChart implements OnInit {
           categories.push(d.key.substr(0, 50))
       })
     })
-
     let data: any = buckets.map((b: Bucket) => {
       let data = []
       categories.forEach((e, i) => {
@@ -65,7 +64,7 @@ export class BarComponent extends ParentChart implements OnInit {
         name: b.key, data
       }
     }).flat(1)
-    return {
+    this.chartOptions = {
       chart: { type: 'column' },
       xAxis: { categories, crosshair: true },
       boost: {
@@ -91,6 +90,14 @@ export class BarComponent extends ParentChart implements OnInit {
       },
       series: data,
       ...this.cms.commonProperties()
+
     };
+    this.reloadComponent();
+  }
+  reloadComponent() {
+    this.enabled = false;
+    this.cdr.detectChanges();
+    this.enabled = true;
   }
 }
+

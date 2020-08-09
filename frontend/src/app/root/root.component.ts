@@ -45,7 +45,7 @@ export class RootComponent implements OnInit {
     if (settings.appearance.primary_color) {
       this.savePrimaryColor(settings.appearance.primary_color)
       this.titleService.setTitle(settings.appearance.website_name);
-      this.meta.updateTag({ name: 'og:description', content: settings.appearance.tracking_code })
+      this.meta.updateTag({ name: 'og:description', content: settings.appearance.description })
     }
 
     if (settings.appearance.tracking_code) {

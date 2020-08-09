@@ -18,7 +18,7 @@ import { SettingsService } from 'src/app/admin/services/settings.service';
   templateUrl: './line.component.html',
   styleUrls: ['./line.component.scss'],
   providers: [ChartMathodsService, RangeService, BarService],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.Default
 })
 export class LineComponent extends ParentChart implements OnInit {
   constructor(
@@ -29,6 +29,8 @@ export class LineComponent extends ParentChart implements OnInit {
   ) {
     super(cms);
   }
+  enabled: boolean;
+
   colors: string[]
   async ngOnInit() {
     let appearance = await this.settingsService.readAppearanceSettings()
@@ -36,16 +38,16 @@ export class LineComponent extends ParentChart implements OnInit {
     this.init('line');
     this.buildOptions.subscribe((buckets: Array<Bucket>) => {
       if (buckets) {
-        this.chartOptions = this.setOptions(buckets);
+        this.setOptions(buckets);
       }
       this.cdr.detectChanges();
     });
 
   }
 
-  private setOptions(
+  setOptions(
     buckets: Array<Bucket>
-  ): any {
+  ){
     let categories = []
     buckets.forEach((b: Bucket) => {
       b.related.buckets.forEach(d => {
@@ -73,7 +75,7 @@ export class LineComponent extends ParentChart implements OnInit {
         data[index].data.push(element.doc_count)
       });
     });
-    return {
+    this.chartOptions = {
       title: {
         text: undefined
       },
@@ -93,13 +95,19 @@ export class LineComponent extends ParentChart implements OnInit {
           text: 'Date'
         },
         accessibility: {
-          description: 'Time from December 2010 to September 2019'
+          description: undefined
         },
         categories: buckets.map(a => a.key)
       },
       series: data,
 
     };
+    this.reloadComponent();
+  }
+  reloadComponent() {
+    this.enabled = false;
+    this.cdr.detectChanges();
+    this.enabled = true;
+    
   }
 }
-
