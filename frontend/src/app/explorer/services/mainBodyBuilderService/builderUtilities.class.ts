@@ -115,9 +115,9 @@ export class BuilderUtilities {
         ...this.getSourcesFromConfigs(this.countersConfig),
       ])
     );
-    mainQuerySources.forEach(({ filter, type, source, is_related, size, agg_on }: any) =>
-      arr.push({ filter, type, size, is_related, source: `${source}.keyword`, agg_on: agg_on ? `${agg_on}.keyword` : undefined, buckets: source })
-    );
+    mainQuerySources.forEach(({ filter, type, source, is_related, size, agg_on, sort }: any) => {
+      arr.push({ filter, type, size, is_related, source: `${source}.keyword`, agg_on: agg_on ? `${agg_on}.keyword` : undefined, buckets: source, sort: sort ? sort : false })
+    });
 
     return arr;
   }
@@ -133,7 +133,8 @@ export class BuilderUtilities {
           is_related: (componentConfigs as any).related ? (componentConfigs as any).related : false,
           source: (componentConfigs as any).source ? (componentConfigs as any).source.replace('.keyword', '') : undefined,
           agg_on: (componentConfigs as any).agg_on ? (componentConfigs as any).agg_on.replace('.keyword', '') : undefined,
-          size: (componentConfigs as any).size ? parseInt((componentConfigs as any).size) : 10000
+          size: (componentConfigs as any).size ? parseInt((componentConfigs as any).size) : 10000,
+          sort: componentConfigs.sort
         }
       })]
   }
@@ -177,33 +178,47 @@ export class BuilderUtilities {
 
   private addAggregationsForCharts(b: bodybuilder.Bodybuilder): void {
     this.querySourceBucketsFilter.filter(d => !d.type).forEach((qb: QueryBlock) => {
-      const { size, buckets, source, is_related, agg_on, type } = qb;
+      const { size, buckets, source, is_related, agg_on, type, sort } = qb;
       if (is_related === true)
-        b.aggregation('terms', this.buildTermRules(size, source), `${size}_related_${buckets}`, (a) => {
-          return a.aggregation('terms', this.buildTermRules(size, agg_on ? agg_on : source), 'related')
+        b.aggregation('terms', this.buildTermRules(size, source, sort), `${size}_related_${buckets}`, (a) => {
+          return a.aggregation('terms', this.buildTermRules(size, agg_on ? agg_on : source, sort), 'related')
         })
       else
-        b.aggregation('terms', this.buildTermRules(size, source), `${size}_${buckets}`)
+        b.aggregation('terms', this.buildTermRules(size, source, sort), `${size}_${buckets}`)
     });
   }
 
 
-  private buildTermRules(size: number, source: string): object {
+  private buildTermRules(size: number, source: string, sort: boolean): object {
     let temp = []
     if (this.years) {
       for (let index = this.years.gte; index <= this.years.lte; index++) {
         temp.push(`${index}`)
       }
     }
-    if (source.includes('year'))
+    if (source.includes('year') && temp.length != 0 && sort == true)
       return {
         field: source,
         size,
         order: {
           "_key": "desc"
         },
-        include: temp ? temp : [1999, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2011, 2014, 2015, 2016, 2017, 2018, 2019, 2020]
+        include: temp
       };
+    else if (source.includes('year') && temp.length == 0 && sort == true)
+      return {
+        field: source,
+        size,
+        order: {
+          "_key": "desc"
+        },
+      }
+    else if (source.includes('year') && temp.length != 0 && sort == false)
+      return {
+        field: source,
+        size,
+        include: temp
+      }
     else
       return {
         field: source,

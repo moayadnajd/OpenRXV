@@ -196,8 +196,8 @@ export class DesignComponent implements OnInit {
       temp['description'] = obj.description
     if (obj.source)
       temp['source'] = obj.source == 'total' ? obj.source : obj.source
-
-
+    if (obj.sort!= undefined)
+      temp['sort'] = obj.sort
 
     if (obj.source)
       temp['id'] = temp['source'] + '_' + index + '_' + index1
@@ -213,6 +213,7 @@ export class DesignComponent implements OnInit {
       temp['source_y'] = obj.source_y;
       temp['source_x'] = obj.source_x;
       temp['id'] = obj.source_x + '_' + obj.source_y + '_' + index + '_' + index1
+      temp['sort'] = obj.sort
     }
 
     if (obj.content) {
@@ -237,7 +238,8 @@ export class DesignComponent implements OnInit {
       component: obj.component ? obj.component : null,
       componentConfigs: temp as ComponentFilterConfigs,
       scroll: obj.scroll ? obj.scroll : null,
-      tour: true
+      tour: true,
+      sort : obj.sort
     }
   }
   createFilter(obj) {

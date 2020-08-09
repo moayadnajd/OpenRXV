@@ -28,6 +28,10 @@ export class StructureComponent implements OnInit {
     { name: "Column with rotated labels", value: 'SingleBarComponent', icon: 'bar_chart' },
     { name: "Line", value: 'LineComponent', icon: 'bar_chart' }
   ]
+  sortoptions = [
+    {name: 'Alphabetical', value: true},
+    {name: 'Doc_count', value: false}
+  ]
   pre
   baseform = [
     {
@@ -164,13 +168,20 @@ export class StructureComponent implements OnInit {
               type: 'metadata',
               required: false,
             },
-
+            {
+              name: 'sort',
+              label: 'Order By',
+              type: 'select',
+              items: this.sortoptions,
+              required: true
+            },
             {
               name: 'description',
               label: 'Tour Desctiption',
               type: 'textarea',
               required: true,
-            }],
+            },
+          ],
         ]
         ]
         break;
@@ -265,15 +276,15 @@ export class StructureComponent implements OnInit {
  
       
       if (result) {
-        if(result.component == 'MainListComponent')
-      for (let index = 0; index < result.content.filterOptions.length; index++) {
-        if (result.content.filterOptions[index].textValue && !result.content.filterOptions[index].value.includes('.keyword')) {
-          result.content.filterOptions[index].value = result.content.filterOptions[index].value + ".keyword"
-        }
-        else if (!result.content.filterOptions[index].textValue) {
-          result.content.filterOptions[index].value = result.content.filterOptions[index].value.replace('.keyword', '')
-        }
-      }
+        if (result.component == 'MainListComponent')
+          for (let index = 0; index < result.content.filterOptions.length; index++) {
+            if (result.content.filterOptions[index].textValue && !result.content.filterOptions[index].value.includes('.keyword')) {
+              result.content.filterOptions[index].value = result.content.filterOptions[index].value + ".keyword"
+            }
+            else if (!result.content.filterOptions[index].textValue) {
+              result.content.filterOptions[index].value = result.content.filterOptions[index].value.replace('.keyword', '')
+            }
+          }
         if (this.grid[index].scroll)
           result['scroll'] = this.grid[index].scroll
         result.class = this.class_names[index];
