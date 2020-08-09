@@ -41,7 +41,7 @@ export class BarComponent extends ParentChart implements OnInit {
       this.cdr.detectChanges();
     });
   }
-   setOptions(
+  setOptions(
     buckets: Array<Bucket>
   ) {
     let categories = []
@@ -88,14 +88,16 @@ export class BarComponent extends ParentChart implements OnInit {
         shared: true,
         useHTML: true
       },
-      series:data,
-     
+      series: data,
+      ...this.cms.commonProperties()
+
     };
     this.reloadComponent();
   }
-  reloadComponent(){
+  reloadComponent() {
     this.enabled = false;
     this.cdr.detectChanges();
-    this.enabled = true; 
-}}
+    this.enabled = true;
+  }
+}
 
