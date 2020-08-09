@@ -195,15 +195,23 @@ export class BuilderUtilities {
         temp.push(`${index}`)
       }
     }
-    if (source.includes('year'))
+    if (source.includes('year') && temp.length != 0)
       return {
         field: source,
         size,
         order: {
           "_key": "desc"
         },
-        include: temp ? temp : [1999, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2011, 2014, 2015, 2016, 2017, 2018, 2019, 2020]
+        include: temp 
       };
+      else if(source.includes('year') && temp.length == 0)
+      return {
+        field: source,
+        size,
+        order: {
+          "_key": "desc"
+        },
+      }
     else
       return {
         field: source,
