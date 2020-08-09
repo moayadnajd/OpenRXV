@@ -16,6 +16,7 @@ export class BuilderUtilities {
   protected dashboardConfig = []
   protected countersConfig = []
   protected filtersConfig = []
+  years
   async configs() {
     let configs = await JSON.parse(localStorage.getItem('configs'));
     return configs;
@@ -75,6 +76,7 @@ export class BuilderUtilities {
         gte: this.aggAttributes[key].gte,
         lte: this.aggAttributes[key].lte,
       };
+      this.years = years
       // this.or ? b.orQuery('range', key, years) : b.query('range', key, years);
       b.query('range', key, years);
     } else if (key === '_all' || key === this.titleSource) {
@@ -187,9 +189,25 @@ export class BuilderUtilities {
 
 
   private buildTermRules(size: number, source: string): object {
-    return {
-      field: source,
-      size,
-    };
+    let temp = []
+    if (this.years) {
+      for (let index = this.years.gte; index <= this.years.lte; index++) {
+        temp.push(`${index}`)
+      }
+    }
+    if (source.includes('year'))
+      return {
+        field: source,
+        size,
+        order: {
+          "_key": "desc"
+        },
+        include: temp ? temp : [1999, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2011, 2014, 2015, 2016, 2017, 2018, 2019, 2020]
+      };
+    else
+      return {
+        field: source,
+        size,
+      };
   }
 }
