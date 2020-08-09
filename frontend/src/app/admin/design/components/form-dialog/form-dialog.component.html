@@ -10,6 +10,12 @@
                             [placeholder]="control.label" [formControlName]="control.name">
                     </mat-form-field>
                 </p>
+                <p *ngSwitchCase="'sort'">
+                    <ng-select [addTag]="false" [items]="control.items"
+                        [required]="control.required" bindLabel="name" [clearable]="false"
+                        [searchable]="true" [formControlName]="control.name" [placeholder]="control.label">
+                    </ng-select>
+                </p>
                 <p *ngSwitchCase="'textarea'">
                     <mat-form-field>
                         <mat-label>{{control.label}}</mat-label>

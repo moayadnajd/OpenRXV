@@ -225,6 +225,7 @@ export interface QueryBlock {
   size?: number;
   type?:string;
   agg_on?:string;
+  sort?: boolean;
 }
 
 /**
