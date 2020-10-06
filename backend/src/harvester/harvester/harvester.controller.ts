@@ -1,4 +1,4 @@
-import { Controller, UseGuards, Get, Query, Param } from '@nestjs/common';
+import { Controller, UseGuards, Get, Query, Param, Post, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { HarvesterService } from '../services/harveter.service';
 import { diskStorage } from 'multer'

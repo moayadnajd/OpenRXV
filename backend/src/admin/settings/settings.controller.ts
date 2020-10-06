@@ -1,4 +1,4 @@
-import { Controller, UseGuards, Post, Body, Get, HttpService, Query, UseInterceptors, UploadedFile, Logger, Request, Param, Res } from '@nestjs/common';
+import { Controller, UseGuards, Post, Body, Get, HttpService, Query, UseInterceptors, UploadedFile, Logger, Request, Param, Res, HttpException, HttpStatus } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { JsonFilesService } from '../json-files/json-files.service';
 import { map } from 'rxjs/operators';
@@ -8,7 +8,7 @@ import { readdirSync } from 'fs';
 import { diskStorage } from 'multer'
 import { extname } from 'path'
 import { ElasticsearchService } from '@nestjs/elasticsearch';
-
+import * as fs from 'fs';
 @Controller('settings')
 export class SettingsController {
 

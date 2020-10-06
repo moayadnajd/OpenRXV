@@ -26,7 +26,7 @@ export class ReportingComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    this.reports = await this.settingsService.readReports()
+    //this.reports = await this.settingsService.readReports()
     this.dataSource = await this.settingsService.retreiveMetadata
     this.metadata = await this.metadataService.get();
   }

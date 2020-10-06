@@ -42,7 +42,7 @@ export class FilterPaginatedListComponent implements OnInit {
     ];
     this.selectedFilter = this.filterOptions[0];
     this.reverseOption = this.selectedFilter.sort
-    this.files = await this.settingsService.readReports();
+   // this.files = await this.settingsService.readReports();
     this.filterChanged.emit(this.selectedFilter)
   }
 
