@@ -63,39 +63,43 @@
             <h5>Sort By Options:</h5>
             <hr>
             <ng-container formArrayName="filterOptions">
-                <form class="pl-2" *ngFor="let form of filterOptions; let i = index;" [formGroup]="form">
-                    <div class="row">
-
-                        <div class="col-md-3">
-                            <mat-form-field>
-                                <mat-label>Option Title</mat-label>
-                                <input type="text" matInput placeholder="Option Title" required
-                                    formControlName="display">
-                            </mat-form-field>
-                        </div>
-                        <div class="col-md-3">
-                            <ng-select [addTag]="true" [items]="metadata" required="true" bindValue="disply_name"
-                                bindLabel="disply_name" [clearable]="false" [searchable]="true" formControlName="value"
-                                placeholder="Data Source">
-                            </ng-select>
-                        </div>
-                        <div class="col-md-3">
-                            <mat-form-field>
-                                <mat-label>Sort</mat-label>
-                                <mat-select placeholder="Sort" required formControlName="sort">
-                                    <mat-option value="desc">Desc</mat-option>
-                                    <mat-option value="asc">Asc</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                        <div *ngIf="i > 0" class="col-md-3">
-                            <button class="pull-right" (click)="delete('filterOptions',i)" color="warn" mat-icon-button>
-                                <mat-icon aria-hidden="false" aria-label="delete">delete
-                                </mat-icon>
-                            </button>
+                <form *ngFor="let form of filterOptions; let i = index;" [formGroup]="form">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                <mat-form-field>
+                                    <mat-label>Option Title</mat-label>
+                                    <input type="text" matInput placeholder="Option Title" required
+                                        formControlName="display">
+                                </mat-form-field>
+                            </div>
+                            <div class="col">
+                                <ng-select [addTag]="true" [items]="metadata" required="true" bindValue="disply_name"
+                                    bindLabel="disply_name" [clearable]="false" [searchable]="true"
+                                    formControlName="value" placeholder="Data Source">
+                                </ng-select>
+                            </div>
+                            <div class="col">
+                                <mat-form-field>
+                                    <mat-label>Sort</mat-label>
+                                    <mat-select placeholder="Sort" required formControlName="sort">
+                                        <mat-option value="desc">Desc</mat-option>
+                                        <mat-option value="asc">Asc</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col">
+                                <mat-checkbox matInput formControlName="textValue">Text Value</mat-checkbox>
+                            </div>
+                            <div *ngIf="i > 0" class="col-sm-1">
+                                <button class="pull-right" (click)="delete('filterOptions',i)" color="warn"
+                                    mat-icon-button>
+                                    <mat-icon aria-hidden="false" aria-label="delete">delete
+                                    </mat-icon>
+                                </button>
+                            </div>
                         </div>
                     </div>
-
                 </form>
             </ng-container>
             <div class="col-md-12 text-center">

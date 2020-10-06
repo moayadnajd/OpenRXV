@@ -1,15 +1,20 @@
 <h1 mat-dialog-title>Settings</h1>
 <div mat-dialog-content>
-    <form class="formd" [formGroup]="form">
+    <form #f='ngForm' class="formd" [formGroup]="form">
         <ng-container *ngFor="let control of formControls">
             <ng-container [ngSwitch]="control.type">
-
                 <p *ngSwitchCase="'text'">
                     <mat-form-field>
                         <mat-label>{{control.label}}</mat-label>
                         <input [type]="control.type" matInput [required]="control.required"
                             [placeholder]="control.label" [formControlName]="control.name">
                     </mat-form-field>
+                </p>
+                <p *ngSwitchCase="'sort'">
+                    <ng-select [addTag]="false" [items]="control.items"
+                        [required]="control.required" bindLabel="name" [clearable]="false"
+                        [searchable]="true" [formControlName]="control.name" [placeholder]="control.label">
+                    </ng-select>
                 </p>
                 <p *ngSwitchCase="'textarea'">
                     <mat-form-field>
@@ -65,8 +70,8 @@
     </form>
 </div>
 <div mat-dialog-actions align="end">
-    <button type="button" mat-raised-button color="default" (click)="onNoClick()">Close <mat-icon>close</mat-icon>
+    <button type="button" mat-raised-button color="default" (click)="onNoClick(f.value)">Close<mat-icon>close</mat-icon>
     </button>
-    <button type="button" color="primary" (keyup.enter)="submit()" (click)="submit()" mat-raised-button>Save
+    <button type="button" color="primary" (keyup.enter)="submit(f.value)" (click)="submit(f.value)" mat-raised-button [disabled]='!f.valid'>Save
         <mat-icon>done</mat-icon></button>
 </div>

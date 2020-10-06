@@ -24,34 +24,28 @@ export class StructureComponent implements OnInit {
     { name: "Dependency Wheel", value: "WheelComponent", icon: "group_work" },
     { name: "Packed Bubble", value: "PackedBubbleComponent", icon: "bubble_chart" },
     { name: "Packed Bubble Split", value: "PackedBubbleSplitComponent", icon: "bubble_chart" },
-    { name: "Main Items list", value: "MainListComponent", icon: "view_list" }
+    { name: "Main Items list", value: "MainListComponent", icon: "view_list" },
+    { name: "Column with rotated labels", value: 'SingleBarComponent', icon: 'bar_chart' },
+    { name: "Line", value: 'LineComponent', icon: 'bar_chart' }
+  ]
+  sortoptions = [
+    {name: 'Alphabetical', value: true},
+    {name: 'Doc_count', value: false}
   ]
   pre
   baseform = [
     {
       name: 'component',
-      label: 'Compinent Type',
+      label: 'Component Type',
       type: 'select',
       items: this.options,
       onChange: (event) => {
         this.pre = event;
-        this.setFormDataOprions(event.value)
+        this.setFormDataOptions(event.value)
         this.dialogRef.close();
         this.openDialog(this.currentIndex);
       },
       required: true,
-    },
-    {
-      name: 'size',
-      label: 'Number of results',
-      type: 'number',
-      required: false,
-    },
-    {
-      name: 'agg_on',
-      label: 'Values from source leave empty for items count',
-      type: 'metadata',
-      required: false,
     },
 
 
@@ -79,10 +73,39 @@ export class StructureComponent implements OnInit {
       required: true,
     }
   ]
-
-  setFormDataOprions(value) {
-
+  setFormDataOptions(value) {
     switch (value) {
+      case 'PieComponent':
+      case 'WordcloudComponent':
+      case 'MapComponent':
+      case 'ListComponent':
+      case 'WheelComponent':
+        this.form_data = [...this.baseform, ...[{
+          name: 'title',
+          label: 'Title',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'source',
+          label: 'Data Source',
+          type: 'metadata',
+          required: true,
+        },
+        {
+          name: 'size',
+          label: 'Number of results',
+          type: 'number',
+          required: false,
+        },
+        {
+          name: 'description',
+          label: 'Tour Desctiption',
+          type: 'textarea',
+          required: true,
+        }]]
+        break;
+
       case 'MainListComponent':
         this.form_data = [...this.baseform, ...
           [
@@ -98,6 +121,12 @@ export class StructureComponent implements OnInit {
               label: 'Tour Desctiption',
               type: 'textarea',
               required: true,
+            },
+            {
+              name: 'size',
+              label: 'Number of results',
+              type: 'number',
+              required: false,
             },
             {
               name: 'content',
@@ -110,33 +139,10 @@ export class StructureComponent implements OnInit {
         ]
         break;
 
-      case 'MainListComponent':
-        this.form_data = [...this.baseform, ...
-          [
-
-            {
-              name: 'title',
-              label: 'Title',
-              type: 'text',
-              required: true,
-            },
-            {
-              name: 'source',
-              label: 'Data Source',
-              type: 'metadata',
-              required: true,
-            },
-            {
-              name: 'description',
-              label: 'Tour Desctiption',
-              type: 'textarea',
-              required: true,
-            }]
-        ]
-        break;
       default:
-        this.form_data = [...this.baseform, ...
-          [
+        this.form_data = [...this.baseform,
+        ...[
+          ...[
 
             {
               name: 'title',
@@ -151,26 +157,47 @@ export class StructureComponent implements OnInit {
               required: true,
             },
             {
+              name: 'size',
+              label: 'Number of results',
+              type: 'number',
+              required: true,
+            },
+            {
+              name: 'agg_on',
+              label: 'Values from source leave empty for items count',
+              type: 'metadata',
+              required: false,
+            },
+            {
+              name: 'sort',
+              label: 'Order By',
+              type: 'select',
+              items: this.sortoptions,
+              required: true
+            },
+            {
               name: 'description',
               label: 'Tour Desctiption',
               type: 'textarea',
               required: true,
-            }]
+            },
+          ],
+        ]
         ]
         break;
     }
   }
   constructor(public dialog: MatDialog) { }
 
+  oldcomponent = [];
+
   ngOnInit(): void {
 
     this.grid.forEach((element, index) => {
       this.class_names[index] = element.class
+      this.oldcomponent[index] = element.component
     });
     this.iconConfigs.componentConfigs.icon = this.grid[0]?.scroll?.icon || null
-
-
-
   }
 
   addComponent(event) {
@@ -225,7 +252,7 @@ export class StructureComponent implements OnInit {
           if (index == 0)
             element['scroll'] = { icon: result.icon }
           else
-            element['scroll'] = { linkedWith: this.grid[0].componentConfigs.id }
+            element['scroll'] = { icon: result.icon }
         });
 
       }
@@ -237,29 +264,37 @@ export class StructureComponent implements OnInit {
   openDialog(index): void {
     if (this.pre)
       this.grid[index].component = this.pre.value;
+
     this.currentIndex = index;
-    this.setFormDataOprions(this.grid[index].component)
+    this.setFormDataOptions(this.grid[index].component)
     this.dialogRef = this.dialog.open(FormDialogComponent, {
-      width: this.grid[index].component == 'MainListComponent' ? '800px' : '456px',
-      data: { form_data: this.form_data, configs: this.grid[index] }
+      width: this.grid[index].component == 'MainListComponent' ? '1100px' : '456px',
+      data: { form_data: Object.create(this.form_data), configs: Object.create(this.grid[index]) }
     });
 
-
     this.dialogRef.afterClosed().subscribe(result => {
-
+ 
+      
       if (result) {
+        if (result.component == 'MainListComponent')
+          for (let index = 0; index < result.content.filterOptions.length; index++) {
+            if (result.content.filterOptions[index].textValue && !result.content.filterOptions[index].value.includes('.keyword')) {
+              result.content.filterOptions[index].value = result.content.filterOptions[index].value + ".keyword"
+            }
+            else if (!result.content.filterOptions[index].textValue) {
+              result.content.filterOptions[index].value = result.content.filterOptions[index].value.replace('.keyword', '')
+            }
+          }
         if (this.grid[index].scroll)
           result['scroll'] = this.grid[index].scroll
         result.class = this.class_names[index];
+        this.oldcomponent[index] = result.component
         this.edited.emit({ result, index })
-
       }
       else if (result === false) {
-        this.edited.emit({ result: { class: this.class_names[index] }, index })
-        this.delete(index)
+        this.pre = null;
+        this.grid[index].component = this.oldcomponent[index];
       }
-
-
     });
   }
 }

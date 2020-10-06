@@ -9,6 +9,7 @@ import * as Highcharts from 'highcharts';
 import { ParentChart } from '../parent-chart';
 import { Bucket } from 'src/app/explorer/filters/services/interfaces';
 import { ComponentLookup } from '../dynamic/lookup.registry';
+import { SettingsService } from 'src/app/admin/services/settings.service';
 @ComponentLookup('WheelComponent')
 @Component({
   selector: 'app-wheel',
@@ -18,14 +19,19 @@ import { ComponentLookup } from '../dynamic/lookup.registry';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WheelComponent extends ParentChart implements OnInit {
+  colors: string[]
   constructor(
     cms: ChartMathodsService,
+    private settingsService: SettingsService,
     private readonly cdr: ChangeDetectorRef
   ) {
     super(cms);
   }
 
-  ngOnInit(): void {
+
+  async ngOnInit() {
+    let appearance = await this.settingsService.readAppearanceSettings()
+    this.colors = appearance.chartColors;
     this.init('dependencywheel');
     this.buildOptions.subscribe((buckets: Array<Bucket>) => {
       if (buckets) {
@@ -45,6 +51,7 @@ export class WheelComponent extends ParentChart implements OnInit {
           valueDescriptionFormat: '{index}. From {point.from} to {point.to}: {point.weight}.'
         }
       },
+      colors: this.colors,
       series: [{
         keys: ['from', 'to', 'weight'],
         data: data,

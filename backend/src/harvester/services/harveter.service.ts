@@ -20,7 +20,11 @@ export class HarvesterService {
         @InjectQueue('plugins') private pluginsQueue: Queue,
         @InjectQueue('fetch') private fetchQueue: Queue,
     ) { }
+    async getInfoById(id) {
 
+        let job = await this.fetchQueue.getJob(id)
+        return job;
+    }
     async getInfo() {
         let obj = {
             active_count: 0,
@@ -41,15 +45,15 @@ export class HarvesterService {
         obj.waiting_count = await this.fetchQueue.getWaitingCount()
         obj.completed_count = await this.fetchQueue.getCompletedCount()
         obj.failed_count = await this.fetchQueue.getFailedCount()
-        obj.completed = await this.fetchQueue.getCompleted()
-        obj.failed = await this.fetchQueue.getFailed()
+        obj.completed = await this.fetchQueue.getCompleted(0, 10)
+        obj.failed = await this.fetchQueue.getFailed(0, 10)
 
         obj.plugins_active_count = await this.pluginsQueue.getActiveCount()
         obj.plugins_waiting_count = await this.pluginsQueue.getWaitingCount()
         obj.plugins_completed_count = await this.pluginsQueue.getCompletedCount()
         obj.plugins_failed_count = await this.pluginsQueue.getFailedCount()
-        obj.plugins_completed = await this.pluginsQueue.getCompleted()
-        obj.plugins_failed = await this.pluginsQueue.getFailed()
+        obj.plugins_completed = await this.pluginsQueue.getCompleted(0, 10)
+        obj.plugins_failed = await this.pluginsQueue.getFailed(0, 10)
 
         return obj;
     }
@@ -81,7 +85,10 @@ export class HarvesterService {
 
         let settings = await this.jsonFilesService.read('../../../data/dataToUse.json');
         settings.repositories.forEach(repo => {
-            this.fetchQueue.add('fetch', { page: parseInt(repo.startPage), repo }, { attempts: 3 })
+            for (let pipe = 0; pipe < 4; pipe++) {
+                this.fetchQueue.add('fetch', { page: parseInt(repo.startPage) + pipe, pipe: 4, repo })
+            }
+
         });
         return "started";
     }
@@ -94,14 +101,12 @@ export class HarvesterService {
         await this.pluginsQueue.clean(0, 'delayed')
         await this.pluginsQueue.clean(0, 'completed')
         await this.pluginsQueue.resume();
-        let settings = await this.jsonFilesService.read('../../../data/dataToUse.json');
         let plugins: Array<any> = await this.jsonFilesService.read('../../../data/plugins.json');
         if (plugins.filter(plugin => plugin.value.length > 0).length > 0)
             for (let plugin of plugins) {
                 for (let param of plugin.value) {
-                    await this.pluginsQueue.add(plugin.name, { ...param, page: 1, index: settings.index_alias }, { attempts: 10 })
+                    await this.pluginsQueue.add(plugin.name, { ...param, page: 1, index: process.env.OPENRXV_TEMP_INDEX })
                 }
-
             }
         else
             this.Reindex()

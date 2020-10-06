@@ -14,7 +14,7 @@ import { JsonFilesService } from 'src/admin/json-files/json-files.service';
         ElasticsearchModule.register({
             node: process.env.ELASTICSEARCH_HOST,
         }),
-        HttpModule.register({ headers: { 'User-agent': 'OpenRXV' } })
+        HttpModule.register({ headers: { 'User-Agent': 'OpenRXV harvesting bot; https://github.com/ilri/OpenRXV' } })
     ],
     providers: [ElasticService, MetadataService, ValuesService, ShareService, StartupService, JsonFilesService],
 

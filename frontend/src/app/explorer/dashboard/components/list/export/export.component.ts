@@ -12,7 +12,7 @@ import { environment } from 'src/environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
-
+import { SettingsService } from 'src/app/admin/services/settings.service';
 @Component({
   selector: 'app-export',
   templateUrl: './export.component.html',
@@ -22,6 +22,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class ExportComponent implements OnInit {
   @Input() type: FileType;
   @Input() query: Observable<ElasticsearchQuery>;
+  @Input() file: any
   forceEnd: boolean;
   installing: boolean;
   delegationArr: Array<ExportFilesModal>;
@@ -29,7 +30,7 @@ export class ExportComponent implements OnInit {
   downloadPath: string;
   exportPoint: string;
   part: number;
-
+  webSiteName
   get finishedExporting(): boolean {
     if (!this.delegationArr) {
       return false;
@@ -41,18 +42,22 @@ export class ExportComponent implements OnInit {
   }
 
   constructor(
-    private readonly exportService: ExportService,
+    private exportService: ExportService,
     private readonly dialog: MatDialog,
-    private readonly snackBar: MatSnackBar
+    private readonly snackBar: MatSnackBar,
+    private settingsService: SettingsService
   ) {
     this.installing = false;
     this.indexToToggleLoaded = 0;
-    this.exportPoint = environment.api+'/export';
+    this.exportPoint = environment.api + '/export';
     this.forceEnd = false;
     this.part = 1;
   }
 
-  ngOnInit(): void {}
+  async ngOnInit() {
+    this.webSiteName = await this.settingsService.readAppearanceSettings();
+    this.webSiteName = this.webSiteName.website_name;
+  }
 
   prevent(e, efm: ExportFilesModal): void {
     if (!efm.loaded) {
@@ -60,7 +65,7 @@ export class ExportComponent implements OnInit {
     }
   }
 
-  markAsDownloaded({ name, fileName, loaded }: ExportFilesModal): void {
+  markAsDownloaded({ name, fileName, loaded }: any): void {
     let toDownload: ExportFilesModal;
     this.delegationArr = this.delegationArr.map((v: ExportFilesModal) => {
       if (name === v.name && v.loaded) {
@@ -69,13 +74,6 @@ export class ExportComponent implements OnInit {
       toDownload = { ...v };
       return v;
     });
-
-    if (this.type === 'xlsx' && loaded) {
-      this.exportService.downloadFile(
-        this.exportService.createXlsxFile(toDownload),
-        fileName
-      );
-    }
   }
 
   @HostListener('window:keyup.esc') onKeyUp(): void {
@@ -107,7 +105,10 @@ export class ExportComponent implements OnInit {
           type: this.type,
           scrollId: id,
           query: q,
-          part: this.part
+          part: this.part,
+          fileName: this.file.file,
+          file: this.file,
+          webSiteName: this.webSiteName
         })
       )
     );

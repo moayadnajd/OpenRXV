@@ -1,8 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { ComponentCounterConfigs } from 'src/app/explorer/configs/generalConfig.interface';
-import { FormGroup, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { FormDialogComponent } from '../form-dialog/form-dialog.component';
+import { isEmpty } from 'ramda';
 
 
 @Component({
@@ -31,7 +30,11 @@ export class CounterComponent implements OnInit {
       name: 'type',
       label: 'Type',
       type: 'select',
-      items: [{ name: "Count of distinct values", value: "cardinality" },{ name: "Sums up numeric values", value: "sum" },{ name: "Computes the average of numeric values", value: "avg" }],
+      items: [
+        { name: "Count of distinct values", value: "cardinality" },
+        { name: "Sums up numeric values", value: "sum" },
+        { name: "Computes the average of numeric values", value: "avg" }
+      ],
       required: true
     },
     {
@@ -80,6 +83,8 @@ export class CounterComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result)
         this.edited.emit(result)
+      if (!result && isEmpty(this.configs.componentConfigs))
+        this.onDelete.emit(!result)
     });
   }
 

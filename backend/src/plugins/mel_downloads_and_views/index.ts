@@ -29,7 +29,7 @@ export class MELDowbloadsAndViews {
             batch = await this.elasticsearchService.search({
                 index: process.env.OPENRXV_TEMP_INDEX,
                 scroll: '5m',
-                body: { size: 100, query: { match: { 'repo.keyword': job.data.repo } } }
+                body: { size: 100,"track_total_hits": true, query: { match: { 'repo.keyword': job.data.repo } } }
             })
             scrollId = batch.body._scroll_id
         }

@@ -16,33 +16,80 @@ export class DSpaceDowbloadsAndViews {
         let link = job.data.link;
         let page = job.data.page;
         job.progress(20);
-        const cgspacenumbersUrl = link;
-        const limit = 100;
         let toUpdateIndexes: Array<any> = [];
-        let stats = await this.http.get(`${cgspacenumbersUrl}?page=${page}&limit=${limit}`).pipe(map(d => d.data)).toPromise();
+        let stats = await this.http.get(`${link}?page=${page}&limit=100`).pipe(map(d => d.data)).toPromise();
         job.progress(50);
         if (stats.statistics && stats.statistics.length > 0) {
-            stats.statistics.forEach((stat: any) => {
-                const numbers = {
-                    views: parseInt(stat.views),
-                    downloads: parseInt(stat.downloads),
-                    score: parseInt(stat.views) + parseInt(stat.downloads)
-                };
-                //TODO: CGSPACE_ must change 
-                toUpdateIndexes.push({ update: { _index: process.env.OPENRXV_TEMP_INDEX, _id: job.data.repo + "_" + stat.id } });
-                toUpdateIndexes.push({ "doc": { numbers } })
-            });
+            let searchResult = await this.elasticsearchService.search({
+                index: process.env.OPENRXV_TEMP_INDEX,
+                body: {
+                    "_source": [
+                        "_id",
+                        "id"
+                    ],
+                    "track_total_hits": true,
+                    "query": {
+                        "bool": {
+                            "must": [
+                                {
+                                    "match": {
+                                        "repo.keyword": job.data.repo
+                                    }
+                                },
+                                {
+                                    "terms_set": {
+                                        "id": {
+                                            "terms": stats.statistics.map(d => d.id),
+                                            "minimum_should_match_script": {
+                                                "source": "0"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }).catch(d => d)
+
+            if (searchResult && searchResult.body && searchResult.body.hits.total.value > 0) {
+                let IDs = {}
+                searchResult.body.hits.hits.forEach(element => {
+                    IDs[element._source.id] = element._id;
+                })
+                stats.statistics.forEach((stat: any) => {
+                    if (IDs[stat.id]) {
+                        toUpdateIndexes.push({ update: { _index: process.env.OPENRXV_TEMP_INDEX, _id: IDs[stat.id] } });
+                        toUpdateIndexes.push({
+                            "doc": {
+                                numbers: {
+                                    views: parseInt(stat.views),
+                                    downloads: parseInt(stat.downloads),
+                                    score: parseInt(stat.views) + parseInt(stat.downloads)
+                                }
+                            }
+                        })
+                    }
+                });
+            }
             job.progress(70);
-            let newJob = await this.pluginQueue.add('dspace_downloads_and_views', { page: page + 1, link, repo: job.data.repo })
-            let currentResult = await await this.elasticsearchService.bulk({
-                refresh: 'wait_for',
-                body: toUpdateIndexes
-            })
-            job.progress(100);
-            if (newJob)
+
+            if (toUpdateIndexes.length > 0) {
+                await this.pluginQueue.add('dspace_downloads_and_views', { page: page + 1, link, repo: job.data.repo })
+                let currentResult = await await this.elasticsearchService.bulk({
+                    refresh: 'wait_for',
+                    body: toUpdateIndexes
+                })
+                job.progress(100);
                 return currentResult
+            } else {
+                job.progress(100);
+                await this.pluginQueue.add('dspace_downloads_and_views', { page: page + 1, link, repo: job.data.repo })
+                return "nothing to Update"
+            }
         }
         else {
+            job.progress(100);
             return "Done updating downloads and views";
         }
     }

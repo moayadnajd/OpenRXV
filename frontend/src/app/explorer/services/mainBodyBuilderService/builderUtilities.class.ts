@@ -16,6 +16,7 @@ export class BuilderUtilities {
   protected dashboardConfig = []
   protected countersConfig = []
   protected filtersConfig = []
+  years
   async configs() {
     let configs = await JSON.parse(localStorage.getItem('configs'));
     return configs;
@@ -66,6 +67,7 @@ export class BuilderUtilities {
     this.querySourceBucketsFilter.forEach((qb: QueryBlock) =>
       this.addCounterAttrToMainQuery(qb, b)
     );
+    this.addAggregationsForCharts(b);
   }
 
   protected addSpecificfield(key: string, b: bodybuilder.Bodybuilder): void {
@@ -74,6 +76,7 @@ export class BuilderUtilities {
         gte: this.aggAttributes[key].gte,
         lte: this.aggAttributes[key].lte,
       };
+      this.years = years
       // this.or ? b.orQuery('range', key, years) : b.query('range', key, years);
       b.query('range', key, years);
     } else if (key === '_all' || key === this.titleSource) {
@@ -112,9 +115,9 @@ export class BuilderUtilities {
         ...this.getSourcesFromConfigs(this.countersConfig),
       ])
     );
-    mainQuerySources.forEach(({ filter, type, source, is_related, size, agg_on }: any) =>
-      arr.push({ filter, type, size, is_related, source: `${source}.keyword`, agg_on: agg_on ? `${agg_on}.keyword` : undefined, buckets: source })
-    );
+    mainQuerySources.forEach(({ filter, type, source, is_related, size, agg_on, sort }: any) => {
+      arr.push({ filter, type, size, is_related, source: `${source}.keyword`, agg_on: agg_on ? `${agg_on}.keyword` : undefined, buckets: source, sort: sort ? sort : false })
+    });
 
     return arr;
   }
@@ -123,14 +126,15 @@ export class BuilderUtilities {
     configs: Array<GeneralConfigs>,
   ): Array<any> {
     return [...
-      configs.filter(({ componentConfigs }: GeneralConfigs) => !Array.isArray((componentConfigs as any).source)).map(({ componentConfigs }: GeneralConfigs) => {
+      configs.filter(({ componentConfigs }: GeneralConfigs) => !Array.isArray((componentConfigs as any).source || (componentConfigs as any).source)).map(({ componentConfigs }: GeneralConfigs) => {
         return {
           filter: (componentConfigs as any).filter ? (componentConfigs as any).filter : false,
-          type: (componentConfigs as any).type ? (componentConfigs as any).type : 'cardinality',
+          type: (componentConfigs as any).type,
           is_related: (componentConfigs as any).related ? (componentConfigs as any).related : false,
           source: (componentConfigs as any).source ? (componentConfigs as any).source.replace('.keyword', '') : undefined,
           agg_on: (componentConfigs as any).agg_on ? (componentConfigs as any).agg_on.replace('.keyword', '') : undefined,
-          size: (componentConfigs as any).size ? parseInt((componentConfigs as any).size) : 1000
+          size: (componentConfigs as any).size ? parseInt((componentConfigs as any).size) : 10000,
+          sort: componentConfigs.sort
         }
       })]
   }
@@ -140,7 +144,7 @@ export class BuilderUtilities {
     b: bodybuilder.Bodybuilder
   ): void {
     const { filter, source, type } = qb; // filter comes from this.convertEnumToQueryBlock
-    if (!filter && type == 'cardinality') {
+    if (!filter && type == 'cardinality' && source != 'total.keyword') {
       b.aggregation(
         'cardinality',
         {
@@ -149,7 +153,7 @@ export class BuilderUtilities {
         },
         source
       );
-    } else if (!filter && type != 'cardinality') {
+    } else if (!filter && type && type != 'cardinality' && source != 'total.keyword') {
       b.aggregation(
         type,
         {
@@ -158,7 +162,7 @@ export class BuilderUtilities {
         },
         source
       );
-    } else {
+    } else if (filter && type && source != 'total.keyword') {
       const obj = Object.create(null);
       obj[source] = filter;
       b.aggregation(
@@ -169,26 +173,56 @@ export class BuilderUtilities {
         `${source}_${filter}`
       );
     }
-    this.addAggregationsForCharts(b);
+
   }
 
   private addAggregationsForCharts(b: bodybuilder.Bodybuilder): void {
-    this.querySourceBucketsFilter.forEach((qb: QueryBlock) => {
-      const { size, buckets, source, is_related, agg_on } = qb;
+    this.querySourceBucketsFilter.filter(d => !d.type).forEach((qb: QueryBlock) => {
+      const { size, buckets, source, is_related, agg_on, type, sort } = qb;
       if (is_related === true)
-        b.aggregation('terms', this.buildTermRules(size, source), `${size}_related_${buckets}`, (a) => {
-          return a.aggregation('terms', this.buildTermRules(size, agg_on ? agg_on : source), 'related')
+        b.aggregation('terms', this.buildTermRules(size, source, sort), `${size}_related_${buckets}`, (a) => {
+          return a.aggregation('terms', this.buildTermRules(size, agg_on ? agg_on : source, sort), 'related')
         })
       else
-        b.aggregation('terms', this.buildTermRules(size, source), `${size}_${buckets}`)
+        b.aggregation('terms', this.buildTermRules(size, source, sort), `${size}_${buckets}`)
     });
   }
 
 
-  private buildTermRules(size: number, source: string): object {
-    return {
-      field: source,
-      size,
-    };
+  private buildTermRules(size: number, source: string, sort: boolean): object {
+    let temp = []
+    if (this.years) {
+      for (let index = this.years.gte; index <= this.years.lte; index++) {
+        temp.push(`${index}`)
+      }
+    }
+    if (source.includes('year') && temp.length != 0 && sort == true)
+      return {
+        field: source,
+        size,
+        order: {
+          "_key": "desc"
+        },
+        include: temp
+      };
+    else if (source.includes('year') && temp.length == 0 && sort == true)
+      return {
+        field: source,
+        size,
+        order: {
+          "_key": "desc"
+        },
+      }
+    else if (source.includes('year') && temp.length != 0 && sort == false)
+      return {
+        field: source,
+        size,
+        include: temp
+      }
+    else
+      return {
+        field: source,
+        size,
+      };
   }
 }

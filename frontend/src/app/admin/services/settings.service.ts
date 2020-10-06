@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 
@@ -9,37 +9,48 @@ import { map } from 'rxjs/operators';
 export class SettingsService {
 
   constructor(private http: HttpClient) { }
-  async  save(data) {
+  async save(data) {
     return await this.http.post(environment.api + '/settings', data).pipe(map((data: any) => {
       return data;
     })).toPromise();
   }
 
-  async  saveExplorerSettings(data) {
+  async saveExplorerSettings(data) {
     return await this.http.post(environment.api + '/settings/explorer', data).pipe(map((data: any) => {
       return data;
     })).toPromise();
   }
 
   
-  async  readAppearanceSettings() {
+  async readAppearanceSettings() {
     return await this.http.get(environment.api + '/settings/appearance').pipe(map((data: any) => {
       return data;
     })).toPromise();
   }
-  async  saveAppearanceSettings(data) {
+  async saveAppearanceSettings(data) {
     return await this.http.post(environment.api + '/settings/appearance', data).pipe(map((data: any) => {
       return data;
     })).toPromise();
   }
 
-  async  readExplorerSettings() {
+  async saveReportsSettings(data) {
+    return await this.http.post(environment.api + '/settings/reportings', data).pipe(map((data: any) => {
+      return data;
+    })).toPromise();
+  }
+  async readReports() {
+    return await this.http.get(environment.api + '/settings/reports').pipe(map((data: any) => {
+      return data;
+    })).toPromise();
+  }
+
+  async readExplorerSettings() {
     return await this.http.get(environment.api + '/settings/explorer').pipe(map((data: any) => {
       return data;
     })).toPromise();
   }
 
-  async  readPluginsSettings() {
+  async readPluginsSettings() {
     return await this.http.get(environment.api + '/settings/plugins').pipe(map((data: any) => {
       return data;
     })).toPromise();
@@ -50,7 +61,7 @@ export class SettingsService {
       return data;
     })).toPromise();
   }
-  async  read() {
+  async read() {
     return await this.http.get(environment.api + '/settings').pipe(map((data: any) => {
       return data;
     })).toPromise();
@@ -73,6 +84,18 @@ export class SettingsService {
     })).toPromise();
   }
 
+  async uploadFile(file: File) {
+    let formdata = new FormData()
+    formdata.append('file', file)
+    return await this.http.post(environment.api + '/settings/upload/file/', formdata).pipe(map((data: any) => {
+      return data.location;
+    })).toPromise();
+  }
+  async getFile(file) {
+    this.http.get(environment.api + '/settings/file' + file).subscribe(data => {
+      return data;
+    })
+  }
   async getHarvesterInfo() {
     return await this.http.get(environment.api + '/harvester/info').pipe(map((data: any) => {
       return data;

@@ -9,6 +9,8 @@ import * as Highcharts from 'highcharts';
 import { ParentChart } from '../parent-chart';
 import { Bucket } from 'src/app/explorer/filters/services/interfaces';
 import { ComponentLookup } from '../dynamic/lookup.registry';
+import { SettingsService } from 'src/app/admin/services/settings.service';
+
 @ComponentLookup('PackedBubbleSplitComponent')
 @Component({
   selector: 'app-packed-bubble-split',
@@ -20,12 +22,17 @@ import { ComponentLookup } from '../dynamic/lookup.registry';
 export class PackedBubbleSplitComponent extends ParentChart implements OnInit {
   constructor(
     cms: ChartMathodsService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
+    private settingsService: SettingsService
+
   ) {
     super(cms);
   }
+  colors : string[]
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    let appearance = await this.settingsService.readAppearanceSettings()
+    this.colors = appearance.chartColors;
     this.init('packed-bubble-split');
     this.buildOptions.subscribe((buckets: Array<Bucket>) => {
       if (buckets) {
@@ -65,6 +72,7 @@ export class PackedBubbleSplitComponent extends ParentChart implements OnInit {
         useHTML: true,
         pointFormat: '<b>{point.name}:</b> {point.value}'
       },
+      colors: this.colors,
       plotOptions: {
         packedbubble: {
           minSize: '30%',

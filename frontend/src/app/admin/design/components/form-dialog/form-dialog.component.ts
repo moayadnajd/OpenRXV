@@ -13,24 +13,28 @@ export class FormDialogComponent implements OnInit {
   form: FormGroup = new FormGroup({
     icon: new FormControl('')
   });
+  pre: any;
   formControls = [];
   metadata = []
+
   constructor(
     private metadataService: MetadataService,
     public dialogRef: MatDialogRef<FormDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
-  onNoClick(): void {
-    this.dialogRef.close(false);
+  onNoClick(value): void {
+    this.dialogRef.close(false)
+
+
   }
-  submit() {
+  submit(value) {
     let names_exist: Array<string> = this.data.form_data.map(d => d.name)
     Object.keys(this.form.controls).forEach(key => {
       if (names_exist.indexOf(key) == -1)
         this.form.removeControl(key)
     })
     if (this.form.valid)
-      this.dialogRef.close(this.form.value);
+      this.dialogRef.close(value);
   }
   async ngOnInit() {
     let FormGroupControls: any = {};
@@ -47,7 +51,7 @@ export class FormDialogComponent implements OnInit {
     this.form = new FormGroup(FormGroupControls);
     this.metadata = await this.metadataService.get()
     this.formControls = this.data.form_data;
-
+    this.pre = this.form.value
   }
 
 }

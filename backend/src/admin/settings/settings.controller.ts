@@ -1,4 +1,4 @@
-import { Controller, UseGuards, Post, Body, Get, HttpService, Query, UseInterceptors, UploadedFile, Logger, Request, Param, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, UseGuards, Post, Body, Get, HttpService, Query, UseInterceptors, UploadedFile, Logger, Request, Param, Res } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { JsonFilesService } from '../json-files/json-files.service';
 import { map } from 'rxjs/operators';
@@ -16,7 +16,7 @@ export class SettingsController {
     getDirectories = source => readdirSync(source, { withFileTypes: true }).filter(dirent => dirent.isDirectory()).map(dirent => dirent.name)
     @UseGuards(AuthGuard('jwt'))
     @Get('plugins')
-    async  plugins() {
+    async plugins() {
         let plugins = await this.getDirectories('./src/plugins');
         let plugins_values = await this.jsonfielServoce.read('../../../data/plugins.json')
         let info = []
@@ -95,7 +95,7 @@ export class SettingsController {
     }
     @UseGuards(AuthGuard('jwt'))
     @Post('')
-    async  Save(@Body() body: any) {
+    async Save(@Body() body: any) {
 
         await this.jsonfielServoce.save(body, '../../../data/data.json');
         await this.jsonfielServoce.save(this.format(body), '../../../data/dataToUse.json');
@@ -105,26 +105,26 @@ export class SettingsController {
 
     @UseGuards(AuthGuard('jwt'))
     @Post('explorer')
-    async  SaveExplorer(@Body() body: any) {
+    async SaveExplorer(@Body() body: any) {
         await this.jsonfielServoce.save(body, '../../../data/explorer.json');
         return { success: true }
     }
 
     @UseGuards(AuthGuard('jwt'))
     @Post('appearance')
-    async  SaveAppearance(@Body() body: any) {
+    async SaveAppearance(@Body() body: any) {
         await this.jsonfielServoce.save(body, '../../../data/appearance.json');
         return { success: true }
     }
 
     @Get('appearance')
-    async  ReadAppearance() {
+    async ReadAppearance() {
         return await this.jsonfielServoce.read('../../../data/appearance.json');
     }
 
 
     @Get('explorer')
-    async  ReadExplorer() {
+    async ReadExplorer() {
         let settings = await this.jsonfielServoce.read('../../../data/explorer.json');
         let configs = await this.jsonfielServoce.read('../../../data/data.json');
         let appearance = await this.jsonfielServoce.read('../../../data/appearance.json');
@@ -141,7 +141,7 @@ export class SettingsController {
     }
     @UseGuards(AuthGuard('jwt'))
     @Get('')
-    async  Read() {
+    async Read() {
         return await this.jsonfielServoce.read('../../../data/data.json');
     }
 
@@ -149,29 +149,41 @@ export class SettingsController {
 
     @UseGuards(AuthGuard('jwt'))
     @Get('metadata')
-    async  getMetadata() {
-
-        try {
-
-
-            let mappings = await this.elastic.indices.getMapping({
-                index: process.env.OPENRXV_FINAL_INDEX
-            })
-
-            return Object.keys(mappings.body[process.env.OPENRXV_FINAL_INDEX].mappings.properties)
-        } catch (e) {
-            let data = await this.jsonfielServoce.read('../../../data/data.json');
-            var merged = [].concat.apply([], data.repositories.map(d => [...d.schema, ...d.metadata]));
-            return [...new Set(merged.map(d => d.disply_name)), ...data.repositories.map(d => {
-                if (d.years) return d.years
-            })];
+    async getMetadata() {
+        let dspace_altmetrics: any;
+        let dspace_downloads_and_views: any;
+        let mel_downloads_and_views: any;
+        let data = await this.jsonfielServoce.read('../../../data/data.json');
+        let plugins = await this.jsonfielServoce.read('../../../data//plugins.json')
+        let meta = [];
+        for (var i = 0; i < plugins.length; i++) {
+            if (plugins[i].name == 'dspace_altmetrics') {
+                dspace_altmetrics = await this.jsonfielServoce.read('../../../src/plugins/dspace_altmetrics/info.json')
+                meta.push(dspace_altmetrics.source)
+            }
+            if (plugins[i].name == 'dspace_downloads_and_views') {
+                dspace_downloads_and_views = await this.jsonfielServoce.read('../../../src/plugins/dspace_downloads_and_views/info.json')
+                meta.push(dspace_downloads_and_views.source)
+            }
+            if (plugins[i].name == 'mel_downloads_and_views') {
+                mel_downloads_and_views = await this.jsonfielServoce.read('../../../src/plugins/mel_downloads_and_views/info.json')
+                meta.push(mel_downloads_and_views.source)
+            }
         }
+        let a = [].concat(...meta)
+        let uniqueArray = a.filter(function (item, pos) {
+            return a.indexOf(item) == pos;
+        })
 
+
+
+        var merged = [].concat.apply([], data.repositories.map(d => [...d.schema, ...d.metadata]));
+        return [...new Set(merged.map(d => d.disply_name)), ...data.repositories.filter(d => d.years).map(d => d.years), ...uniqueArray];
     }
 
     @UseGuards(AuthGuard('jwt'))
     @Get('autometa')
-    async  AutoMeta(@Query('link') link: string) {
+    async AutoMeta(@Query('link') link: string) {
         let data = await this.httpService.get(link + '/items?expand=metadata,parentCommunityList&limit=25').pipe(map((data: any) => {
             let merged = {
                 base: [],
@@ -213,5 +225,33 @@ export class SettingsController {
     async uploadFile(@UploadedFile() file) {
 
         return { location: `images/${file.filename}` };
+    }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Post('reportings')
+    async SaveReports(@Body() body: any) {
+        await this.jsonfielServoce.save(body, '../../../data/reports.json');
+        return { success: true }
+    }
+
+    @Get('reports')
+    async ReadReports() {
+        return await this.jsonfielServoce.read('../../../data/reports.json');
+    }
+    @Post('upload/file')
+    @UseInterceptors(FileInterceptor('file', {
+        preservePath: true, fileFilter: this.imageFileFilter, dest: join(__dirname, '../../../data/files/files')
+    }))
+    async uploadFile1(@UploadedFile() file) {
+        let splited = file.originalname.split('.');
+        let name = splited[0] + '-' + new Date().getTime();
+        let response = join(__dirname, '../../../data/files/files/') + name + '.' + splited[splited.length - 1];
+        await fs.renameSync(join(__dirname, '../../../data/files/files/') + file.filename, response)
+        return { location: response.slice(response.indexOf('files/') + 5) };
+    }
+
+    @Get('files/:fileName')
+    async downloadFile(@Param('fileName') fileName, @Res() res): Promise<any> {
+        return (res.sendFile(fileName, { root: 'data/files/files' }))
     }
 }

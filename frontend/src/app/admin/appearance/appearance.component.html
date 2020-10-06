@@ -24,7 +24,7 @@
                                     <mat-label>Primary Color</mat-label>
                                     <input (colorPickerClose)="colorPickerClose($event)" [(colorPicker)]="color"
                                         [value]="color" matInput formControlName="primary_color"
-                                        placeholder="Publications" required>
+                                        placeholder="#CCCCC" required>
                                     <button [style.background]="color" mat-icon-button matSuffix>
                                         <mat-icon>brush</mat-icon>
                                     </button>
@@ -36,10 +36,27 @@
                                     <input matInput formControlName="tracking_code" placeholder="Tracking Code">
                                 </mat-form-field>
                             </div>
+                            <div class="w-100">
+                                <mat-form-field>
+                                    <mat-label>Website Description</mat-label>
+                                    <textarea cols="30" matInput formControlName="description" ></textarea>
+                                </mat-form-field>
+                            </div>
+                            <div class="w-100">
+                                <mat-label>FavIcon: </mat-label>
+                                <input *ngIf="!favIcon" type="file" (change)="favIconChange($event)" placeholder="FavIcon"
+                                    required>
+                                <div *ngIf="favIcon" class="logo">
+                                    <button (click)="favIcon = null" color="warn" mat-icon-button>
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                    <img [src]="src(favIcon)" alt="favIcon">
+                                </div>
+                            </div>
                             <div class="file w-100">
                                 <mat-label>Logo: </mat-label>
-                                <input *ngIf="!logo" type="file" (change)="logoChange($event)"
-                                    placeholder="Logo" required>
+                                <input *ngIf="!logo" type="file" (change)="logoChange($event)" placeholder="Logo"
+                                    required>
                                 <div *ngIf="logo" class="logo">
                                     <button (click)="logo = null" color="warn" mat-icon-button>
                                         <mat-icon>delete</mat-icon>
@@ -47,9 +64,27 @@
                                     <img [src]="src(logo)" alt="logo">
                                 </div>
                             </div>
-                            
+                           
                         </div>
                     </div>
+                    <br>
+                    <h4>Charts Colors:</h4>
+                    <div formArrayName="chartColors">
+                        <div *ngFor="let color of colors.controls; index as i" class="colors">
+                            <mat-form-field>
+                                <mat-label>{{color.value}}</mat-label>
+                                <input matInput type="color" [formControlName]="i">
+                                <div *ngIf="colors.length > 1">
+                                    <button mat-button (click)="deleteColor(i)">
+                                        <mat-icon style="color: red;">delete</mat-icon>
+                                    </button>
+                                </div>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <button mat-raised-button color="primary" (click)="addColor()">
+                        <mat-icon>add</mat-icon>Add color
+                    </button>
                 </form>
             </mat-card-content>
         </mat-card>

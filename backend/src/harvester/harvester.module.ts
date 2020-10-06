@@ -17,10 +17,13 @@ import { ConfigModule } from '@nestjs/config';
         SharedModule,
         BullModule.registerQueue({
             name: 'fetch',
+            defaultJobOptions: {
+                attempts: 10,
+            },
             settings: {
-                lockDuration: 10000,
-                retryProcessDelay: 10000,
-                maxStalledCount: 0,
+                stalledInterval: 1000,
+                maxStalledCount: 10,
+                retryProcessDelay: 1000,
                 drainDelay: 10000
             },
             redis: {
@@ -30,12 +33,12 @@ import { ConfigModule } from '@nestjs/config';
         }),
         BullModule.registerQueue({
             name: 'plugins',
-
+            defaultJobOptions: {
+                attempts: 5
+            },
             settings: {
-                lockDuration: 10000,
                 retryProcessDelay: 5000,
                 drainDelay: 9000,
-                maxStalledCount: 0,
             },
             redis: {
                 host: process.env.REDIS_HOST,

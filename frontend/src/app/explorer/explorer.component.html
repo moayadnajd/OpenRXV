@@ -2,9 +2,13 @@
   <mat-toolbar-row>
     <img *ngIf="logo" [src]="logo" [attr.alt]="website_name" class="nab-bar-images" />
     <span class="website_name" *ngIf="!logo">{{website_name}}</span>
-    <button matTooltip="Open Filters drawer"  mat-icon-button  aria-label="refresh page button" class="end"
+    <button matTooltip="Open Filters drawer" mat-icon-button aria-label="refresh page button" class="end"
       (click)="openNavAndDisableIgnoreMouseEvent()">
       <mat-icon>search</mat-icon>
+    </button>
+    <button [matTooltip]="'Share '+website_name+' and your search results with others'" *ngIf="!isSmall" mat-icon-button
+      (click)="share()" aria-label="refresh page button">
+      <mat-icon>share</mat-icon>
     </button>
     <button matTooltip="Rest All Filters" mat-icon-button (click)="refresh()" aria-label="refresh page button">
       <mat-icon>loop</mat-icon>
@@ -13,15 +17,12 @@
       aria-label="refresh page button">
       <mat-icon>contact_support</mat-icon>
     </button>
-
-    <button [matTooltip]="'Share '+website_name+' and your search results with others'" *ngIf="!isSmall" mat-icon-button
-      (click)="share()" aria-label="refresh page button">
-      <mat-icon>share</mat-icon>
+    <button matTooltip="About Us" mat-icon-button (click)="seeAbout()" aria-label="About Us">
+      <mat-icon>info</mat-icon>
     </button>
   </mat-toolbar-row>
 </mat-toolbar>
 <tour-step-template></tour-step-template>
-
 <mat-sidenav-container (document:mousemove)="onMouseMove($event)" [hasBackdrop]="false" class="mb-0 pb-0 main-container"
   fullscreen>
   <mat-sidenav #drawer [mode]="isSmall ? 'over' : 'over'" [fixedInViewport]="options.fixed" [fixedTopGap]="options.top"
@@ -73,9 +74,7 @@
       </div>
     </mat-nav-list>
   </mat-sidenav>
-
   <mat-sidenav-content class="mb-0 pb-0">
     <app-dashboard></app-dashboard>
-    <app-footer></app-footer>
   </mat-sidenav-content>
 </mat-sidenav-container>

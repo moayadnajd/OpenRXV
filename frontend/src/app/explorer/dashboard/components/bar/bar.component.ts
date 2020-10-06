@@ -10,6 +10,7 @@ import { Bucket } from 'src/app/explorer/filters/services/interfaces';
 import { RangeService } from 'src/app/explorer/filters/services/range/range.service';
 import { BarService } from './services/bar/bar.service';
 import { ComponentLookup } from '../dynamic/lookup.registry';
+import { SettingsService } from 'src/app/admin/services/settings.service';
 
 @ComponentLookup('BarComponent')
 @Component({
@@ -17,29 +18,32 @@ import { ComponentLookup } from '../dynamic/lookup.registry';
   templateUrl: './bar.component.html',
   styleUrls: ['./bar.component.scss'],
   providers: [ChartMathodsService, RangeService, BarService],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.Default
 })
 export class BarComponent extends ParentChart implements OnInit {
+  enabled: boolean;
   constructor(
     cms: ChartMathodsService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
+    private settingsService: SettingsService,
   ) {
     super(cms);
   }
-
-  ngOnInit(): void {
+  colors: string[]
+  async ngOnInit() {
+    let appearance = await this.settingsService.readAppearanceSettings()
+    this.colors = appearance.chartColors;
     this.init('column');
     this.buildOptions.subscribe((buckets: Array<Bucket>) => {
       if (buckets) {
-        this.chartOptions = this.setOptions(buckets);
+        this.setOptions(buckets);
       }
       this.cdr.detectChanges();
     });
   }
-
-  private setOptions(
+  setOptions(
     buckets: Array<Bucket>
-  ): Highcharts.Options {
+  ) {
     let categories = []
     buckets.forEach((b: Bucket) => {
       b.related.buckets.forEach(d => {
@@ -47,8 +51,7 @@ export class BarComponent extends ParentChart implements OnInit {
           categories.push(d.key.substr(0, 50))
       })
     })
-
-    let data = buckets.map((b: Bucket) => {
+    let data: any = buckets.map((b: Bucket) => {
       let data = []
       categories.forEach((e, i) => {
         let found: Array<any> = b.related.buckets.filter(d => d.key.substr(0, 50) == e)
@@ -61,14 +64,15 @@ export class BarComponent extends ParentChart implements OnInit {
         name: b.key, data
       }
     }).flat(1)
-    return {
+    this.chartOptions = {
       chart: { type: 'column' },
       xAxis: { categories, crosshair: true },
       boost: {
         enabled: true,
         useGPUTranslations: true
       },
-      yAxis: { min: 0, title: { text: 'Publications' } },
+      yAxis: { min: 0, title: { text: 'Information Products' } },
+      colors: this.colors,
       plotOptions: {
         column: {
           pointPadding: 0.2,
@@ -86,6 +90,14 @@ export class BarComponent extends ParentChart implements OnInit {
       },
       series: data,
       ...this.cms.commonProperties()
+
     };
+    this.reloadComponent();
+  }
+  reloadComponent() {
+    this.enabled = false;
+    this.cdr.detectChanges();
+    this.enabled = true;
   }
 }
+

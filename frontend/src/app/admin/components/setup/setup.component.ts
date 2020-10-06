@@ -26,13 +26,17 @@ export class SetupComponent implements OnInit {
   }
 
   selectFormat(index, value) {
-    if (this.repositories.at(index).get('years').value == value)
+    if (this.repositories.at(index).get('years') && this.repositories.at(index).get('years').value == value)
       this.repositories.at(index).get('years').reset()
 
   }
 
   repositories: FormArray = new FormArray([
-    new FormGroup({
+    this.getNewForm()
+  ]);
+
+  getNewForm() {
+    return new FormGroup({
       years: new FormControl(),
       name: new FormControl(),
       icon: new FormControl(),
@@ -47,8 +51,7 @@ export class SetupComponent implements OnInit {
         new FormGroup(this.baseSchema())
       ])
     })
-  ]);
-
+  }
   constructor(private settingService: SettingsService, private toastr: ToastrService) { }
 
   async ngOnInit() {
@@ -80,7 +83,7 @@ export class SetupComponent implements OnInit {
     this.upload(event.target.files[0], index)
   }
   src(value) {
-   return environment.api +'/'+ value
+    return environment.api + '/' + value
   }
   async upload(file: File, index = null) {
     this.logo[index] = await this.settingService.upload(file)
@@ -117,25 +120,7 @@ export class SetupComponent implements OnInit {
   }
 
   AddNewRepo() {
-    this.repositories.push(
-      new FormGroup({
-        name: new FormControl(),
-        icon: new FormControl(),
-        startPage: new FormControl(),
-        itemsEndPoint: new FormControl(),
-        allCores: new FormControl(),
-        schema: new FormArray([
-          new FormGroup(
-            this.baseSchema(),
-          )
-        ]),
-        metadata: new FormArray([
-          new FormGroup(
-            this.baseSchema(),
-          )
-        ])
-      })
-    )
+    this.repositories.push(this.getNewForm())
   }
   delete(schema: FormArray, index: number) {
     schema.removeAt(index);

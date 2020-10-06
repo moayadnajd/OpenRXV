@@ -147,6 +147,7 @@ export class ElasticService {
                 from: 0,
                 size: 9999,
                 body: {
+                    "track_total_hits": true,
 
                     "query": obj,
                     "sort": [
@@ -178,6 +179,7 @@ export class ElasticService {
                 method: "POST",
                 size: 9999,
                 body: {
+                    "track_total_hits": true,
                     "query": obj,
                     "sort": {
                         "created_at": {

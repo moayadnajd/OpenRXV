@@ -4,7 +4,6 @@
 
 export const environment = {
   production: false,
-  domain_name: 'http://localhost:4200/explorer',
   api: 'http://localhost:3000',
 };
 

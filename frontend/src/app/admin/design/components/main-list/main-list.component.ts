@@ -1,5 +1,5 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { FormGroup, FormControl, FormArray } from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { MetadataService } from 'src/app/admin/services/metadata.service';
 
 @Component({
@@ -13,19 +13,22 @@ export class MainListComponent implements OnInit {
   tagsControls = [];
   filterOptions = [];
   metadata = [];
+  tmpfilterOptions: []
   listForm: FormGroup = new FormGroup({
     title: new FormControl(''),
     description: new FormControl(''),
     identifierUri: new FormControl(''),
     altmetric: new FormControl(''),
     tags: new FormArray([]),
-    filterOptions: new FormArray([])
+    filterOptions: new FormArray([]),
+
   });
   baseFilterOptions(element = null) {
     return {
       display: new FormControl(element ? element.display : ''),
       value: new FormControl(element ? element.value : ''),
-      sort: new FormControl(element ? element.sort : '')
+      sort: new FormControl(element ? element.sort : ''),
+      textValue: new FormControl('')
     }
   }
   baseTags(element = null) {

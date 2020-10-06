@@ -1,13 +1,6 @@
 import * as Highcharts from 'highcharts';
-import {
-  LegendNavigationColors,
-  legendTextColorForPie,
-  chartValuesColors
-} from 'src/app/explorer/configs/chartColors';
-
 export class ChartHelper {
   protected chartType: any;
-
   commonProperties(): Highcharts.Options {
     return {
       title: {
@@ -16,7 +9,6 @@ export class ChartHelper {
       responsive: {
         rules: this.responsiveRules()
       },
-      colors: chartValuesColors,
       credits: {
         enabled: false
       },
@@ -27,7 +19,7 @@ export class ChartHelper {
   private legendAttributes(): Highcharts.LegendOptions {
     return {
       itemStyle: {
-        color: legendTextColorForPie
+        color: '#000000'
       },
       enabled: true,
       layout: 'horizontal',
@@ -38,13 +30,13 @@ export class ChartHelper {
           ? 'bottom'
           : 'middle',
       navigation: {
-        activeColor: LegendNavigationColors.activeColor,
+        activeColor:'#3E576F',
         animation: true,
         arrowSize: 12,
-        inactiveColor: LegendNavigationColors.inactiveColor,
+        inactiveColor: '#CCCCCC',
         style: {
           fontWeight: 'bold',
-          color: LegendNavigationColors.style.color,
+          color: '#333333',
           fontSize: '12px'
         }
       } as Highcharts.LegendNavigationOptions

@@ -89,7 +89,7 @@ export class RangeService {
   buildquery(bq: BuildQueryObj): bodybuilder.Bodybuilder {
     bq.size = bq.size ? bq.size : 10;
     bq.source = this.source;
-    let q = this.bodyBuilderService.yearsBuildquery(bq);
+    let q = this.bodyBuilderService.yearsBuildquery(bq, this.source);
     return q;
   }
 

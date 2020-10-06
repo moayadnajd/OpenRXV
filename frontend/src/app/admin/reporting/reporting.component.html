@@ -1,0 +1,60 @@
+<div class="row">
+    <div class="col-md-12 p-2">
+        <mat-card>
+            <mat-card-title>
+                OpenRXV Reports
+            </mat-card-title>
+            <div align='end'>
+                <button mat-raised-button color='primary' (click)="showDoc()">how to construct my Docx file?</button>
+                <button mat-raised-button [matMenuTriggerFor]="menu" color="primary" style="margin-left: 10px;">Show
+                    metadata</button>
+                <mat-menu #menu="matMenu">
+                    <ng-container *ngFor='items of metadata; let i = index'>
+                        <button mat-menu-item matTooltip="copy" (click)="copyMessage(metadata[i])"
+                            class="copy">{{metadata[i]}}</button>
+                    </ng-container>
+                </mat-menu>
+            </div>
+        </mat-card>
+    </div>
+</div>
+
+<div>
+    <ul *ngFor="let report of reports;  let i = index" class='reports'>
+        <li>
+            <span>
+                <mat-card class="tp-card">
+                    <mat-card-header>
+
+                        <mat-card-title>{{report.title}} <mat-card-content>
+                                <h3>Type: {{report.fileType}}</h3>
+                            </mat-card-content>
+                        </mat-card-title>
+                    </mat-card-header>
+                    <mat-card-actions>
+                        <button mat-button (click)="delete(i)">
+                            <mat-icon style="color: red;">delete</mat-icon>
+                        </button>
+                        <button mat-button (click)='edit(i)'>
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <a [href]="envireoment + '/settings'+ report.file" download *ngIf="report.fileType != 'xlsx'">
+                            <button mat-button>
+                                <mat-icon>save_alt</mat-icon>
+                            </button></a>
+                    </mat-card-actions>
+                </mat-card>
+            </span>
+        </li>
+    </ul>
+</div>
+<div class="col-md-12 p-2">
+    <mat-card>
+        <mat-card-title>
+            <button (click)="newReport()" class="add-btn" color="primary" mat-raised-button>
+                Add new Report
+                <mat-icon>add</mat-icon>
+            </button>
+        </mat-card-title>
+    </mat-card>
+</div>

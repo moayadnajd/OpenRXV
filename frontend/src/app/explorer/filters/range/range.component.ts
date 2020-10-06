@@ -75,15 +75,16 @@ export class RangeComponent extends ParentComponent implements OnInit {
       if (this.timeout)
         clearTimeout(this.timeout)
       let filters = this.bodyBuilderService.getFiltersFromQuery();
-      filters.forEach((element) => {
+      filters.forEach(async (element) => {
         for (var key in element)
           if (key == source) {
+            await this.getYears('select', true);
             this.range = [element[key].gte, element[key].lte];
           }
       });
 
       if (!filters.filter(element => element[source]).length) {
-          this.getYears('select', true);
+        this.getYears('select', true);
       }
 
 
@@ -135,21 +136,29 @@ export class RangeComponent extends ParentComponent implements OnInit {
     });
   }
 
-  private getYears(caller?: ResetCaller, force: boolean = false): void {
-    const qb: BuildQueryObj = {
-      size: 100000
-    };
-    this.rangeService
-      .getYears(
-        this.rangeService.buildquery(qb).build() as ElasticsearchQuery,
-        force
-      )
-      .subscribe(
-        (n: number[]) =>
-          n.length
-            ? this.setMinMaxLogic(+n[n.length - 1], +n[0])
-            : this.noYearQuery() // some queries will return empty array
-      );
+  private async  getYears(caller?: ResetCaller, force: boolean = false) {
+    return await new Promise((resolve, reject) => {
+
+
+      const qb: BuildQueryObj = {
+        size: 100000
+      };
+      this.rangeService
+        .getYears(
+          this.rangeService.buildquery(qb).build() as ElasticsearchQuery,
+          force
+        )
+        .subscribe(
+          (n: number[]) => {
+            n.length
+              ? this.setMinMaxLogic(+n[n.length - 1], +n[0])
+              : this.noYearQuery() // some queries will return empty array
+
+
+            resolve();
+          }
+        );
+    })
   }
 
   private setMinMaxLogic(max: number, min: number): void {

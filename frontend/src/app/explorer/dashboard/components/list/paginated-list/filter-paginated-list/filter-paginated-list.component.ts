@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { SortOption } from 'src/app/explorer/configs/generalConfig.interface';
 import { FileType } from './types.interface';
+import { SettingsService } from 'src/app/admin/services/settings.service';
 
 @Component({
   selector: 'app-filter-paginated-list',
@@ -17,18 +18,18 @@ import { FileType } from './types.interface';
 })
 export class FilterPaginatedListComponent implements OnInit {
   @Output() filterChanged: EventEmitter<SortOption>;
-  @Output() startExporting: EventEmitter<FileType>;
+  @Output() startExporting: EventEmitter<any>;
   @Input() filterOptions: SortOption[];
   selectedFilter: SortOption;
   ascDesc: SortOption[];
   reverseOption: string;
-
-  constructor() {
+  files: [];
+  constructor(private settingsService: SettingsService) {
     this.filterChanged = new EventEmitter();
     this.startExporting = new EventEmitter();
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.ascDesc = [
       {
         display: 'Descending',
@@ -39,23 +40,26 @@ export class FilterPaginatedListComponent implements OnInit {
         value: 'asc'
       }
     ];
-    this.reverseOption = this.ascDesc[0].value;
     this.selectedFilter = this.filterOptions[0];
+    this.reverseOption = this.selectedFilter.sort
+    this.files = await this.settingsService.readReports();
+    this.filterChanged.emit(this.selectedFilter)
   }
 
   onFilterChanged(f: SortOption): void {
+    this.reverseOption = f.sort
     this.filterChanged.emit(f);
   }
 
   reverse(s: SortOption): void {
-    this.filterOptions = this.filterOptions.map((so: SortOption) => {
-      so.sort = s.value as 'asc' | 'desc';
-      return so;
+    this.filterOptions = this.filterOptions.map((sortOption: SortOption) => {
+      sortOption.sort = s.value as 'asc' | 'desc';
+      return sortOption;
     });
     this.onFilterChanged(this.selectedFilter);
   }
 
-  startExportingNow(type: FileType): void {
-    this.startExporting.emit(type);
+  startExportingNow(type: FileType, file): void {
+    this.startExporting.emit({ type, file });
   }
 }

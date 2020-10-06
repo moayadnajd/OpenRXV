@@ -42,6 +42,11 @@ import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 import { InfoTableComponent } from './dashboard/info-table/info-table.component';
 import { PluginsComponent } from './plugins/plugins.component';
 import { PluginComponent } from './plugins/plugin/plugin.component';
+import { MatDialog } from '@angular/material/dialog';
+import { ReportingComponent } from './reporting/reporting.component';
+import { ReprotingFormComponent } from './reporting/reproting-form/reproting-form.component';
+import { DialogComponent } from './reporting/dialog/dialog.component';
+import { DocComponent } from './reporting/doc/doc.component';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -66,6 +71,11 @@ import { PluginComponent } from './plugins/plugin/plugin.component';
     InfoTableComponent,
     PluginsComponent,
     PluginComponent,
+    ReportingComponent,
+    ReprotingFormComponent,
+    DialogComponent,
+    DocComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -79,7 +89,7 @@ import { PluginComponent } from './plugins/plugin/plugin.component';
     LoadingBarRouterModule,
     NgSelectModule,
     ColorPickerModule,
-    EditorModule
+    EditorModule,
 
 
   ],

@@ -1,4 +1,4 @@
-import { Controller, UseGuards, Get, UseInterceptors, HttpException, HttpStatus, UploadedFile, Post } from '@nestjs/common';
+import { Controller, UseGuards, Get, Query, Param } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { HarvesterService } from '../services/harveter.service';
 import { diskStorage } from 'multer'
@@ -14,29 +14,35 @@ export class HarvesterController {
     }
     @UseGuards(AuthGuard('jwt'))
     @Get('info')
-    async  Save() {
+    async getInfo() {
         return await this.harvestService.getInfo()
     }
 
     @UseGuards(AuthGuard('jwt'))
+    @Get('info/:id')
+    async getInfoByID(@Param('id') job_id: number) {
+        return await this.harvestService.getInfoById(job_id)
+    }
+
+    @UseGuards(AuthGuard('jwt'))
     @Get('startindex')
-    async  StartIndex() {
+    async StartIndex() {
         return { message: Date(), start: await this.harvestService.startHarvest() }
     }
     @UseGuards(AuthGuard('jwt'))
     @Get('stopindex')
-    async  StopIndex() {
+    async StopIndex() {
         return { message: Date(), start: await this.harvestService.stopHarvest() }
     }
    // @UseGuards(AuthGuard('jwt'))
     @Get('reindex')
-    async  reIndex() {
+    async reIndex() {
         return { message: Date(), start: await this.harvestService.Reindex() }
     }
 
     @UseGuards(AuthGuard('jwt'))
     @Get('plugins')
-    async  pluginsStart() {
+    async pluginsStart() {
         return { message: Date(), start: await this.harvestService.pluginsStart() }
     }
 

@@ -71,7 +71,7 @@
     "@types/highcharts": "^7.0.0",
     "@types/jasmine": "~3.5.10",
     "@types/jasminewd2": "~2.0.3",
-    "@types/node": "^12.11.1",
+    "@types/node": "^12.12.47",
     "@types/ramda": "^0.27.0",
     "codelyzer": "^5.1.2",
     "jasmine-core": "~3.5.0",
