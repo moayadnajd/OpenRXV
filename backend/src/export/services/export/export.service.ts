@@ -10,7 +10,7 @@ import { Response as ExpressRes } from 'express';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as PizZip from 'pizzip';
-import * as Docxtemplater from 'docxtemplater';
+import { Docxtemplater } from 'docxtemplater';
 import * as libre from 'libreoffice-convert'
 
 const ExcelJS = require('exceljs');
@@ -112,7 +112,7 @@ export class ExportService {
       }
     }
     try {
-    
+
       const zip = new PizZip(
         await fs.promises.readFile(this.resolvePath(fileName + "", false), 'binary')
       );
@@ -160,7 +160,7 @@ export class ExportService {
         if (!splited[1] && splited[0])
           return _source[splited[0]] ? _source[splited[0]] : ''
         else
-          return _source[splited[0]]? _source[splited[0]][splited[1]] ? _source[splited[0]][splited[1]] : '' : ''
+          return _source[splited[0]] ? _source[splited[0]][splited[1]] ? _source[splited[0]][splited[1]] : '' : ''
       }));
     sourcesMetadata.map((a) => {
       for (let index = 0; index < a.length; index++) {
