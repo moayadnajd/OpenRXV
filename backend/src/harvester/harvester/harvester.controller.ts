@@ -28,7 +28,7 @@ export class HarvesterController {
     async  StopIndex() {
         return { message: Date(), start: await this.harvestService.stopHarvest() }
     }
-    @UseGuards(AuthGuard('jwt'))
+   // @UseGuards(AuthGuard('jwt'))
     @Get('reindex')
     async  reIndex() {
         return { message: Date(), start: await this.harvestService.Reindex() }
@@ -40,7 +40,7 @@ export class HarvesterController {
         return { message: Date(), start: await this.harvestService.pluginsStart() }
     }
 
-    @UseGuards(AuthGuard('jwt'))
+   // @UseGuards(AuthGuard('jwt'))
     @Post('import')
     @UseInterceptors(FileInterceptor('file', {
         fileFilter: (req: any, file: any, cb: any) => {
