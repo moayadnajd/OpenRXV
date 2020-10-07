@@ -150,35 +150,52 @@ export class SettingsController {
     @UseGuards(AuthGuard('jwt'))
     @Get('metadata')
     async getMetadata() {
-        let dspace_altmetrics: any;
-        let dspace_downloads_and_views: any;
-        let mel_downloads_and_views: any;
-        let data = await this.jsonfielServoce.read('../../../data/data.json');
-        let plugins = await this.jsonfielServoce.read('../../../data//plugins.json')
-        let meta = [];
-        for (var i = 0; i < plugins.length; i++) {
-            if (plugins[i].name == 'dspace_altmetrics') {
-                dspace_altmetrics = await this.jsonfielServoce.read('../../../src/plugins/dspace_altmetrics/info.json')
-                meta.push(dspace_altmetrics.source)
-            }
-            if (plugins[i].name == 'dspace_downloads_and_views') {
-                dspace_downloads_and_views = await this.jsonfielServoce.read('../../../src/plugins/dspace_downloads_and_views/info.json')
-                meta.push(dspace_downloads_and_views.source)
-            }
-            if (plugins[i].name == 'mel_downloads_and_views') {
-                mel_downloads_and_views = await this.jsonfielServoce.read('../../../src/plugins/mel_downloads_and_views/info.json')
-                meta.push(mel_downloads_and_views.source)
-            }
+
+        try {
+
+
+            let mappings = await this.elastic.indices.getMapping({
+                index: process.env.OPENRXV_FINAL_INDEX
+            })
+
+            return Object.keys(mappings.body[process.env.OPENRXV_FINAL_INDEX].mappings.properties)
+        } catch (e) {
+            let data = await this.jsonfielServoce.read('../../../data/data.json');
+            var merged = [].concat.apply([], data.repositories.map(d => [...d.schema, ...d.metadata]));
+            return [...new Set(merged.map(d => d.disply_name)), ...data.repositories.map(d => {
+                if (d.years) return d.years
+            })];
         }
-        let a = [].concat(...meta)
-        let uniqueArray = a.filter(function (item, pos) {
-            return a.indexOf(item) == pos;
-        })
+        
+        // let dspace_altmetrics: any;
+        // let dspace_downloads_and_views: any;
+        // let mel_downloads_and_views: any;
+        // let data = await this.jsonfielServoce.read('../../../data/data.json');
+        // let plugins = await this.jsonfielServoce.read('../../../data//plugins.json')
+        // let meta = [];
+        // for (var i = 0; i < plugins.length; i++) {
+        //     if (plugins[i].name == 'dspace_altmetrics') {
+        //         dspace_altmetrics = await this.jsonfielServoce.read('../../../src/plugins/dspace_altmetrics/info.json')
+        //         meta.push(dspace_altmetrics.source)
+        //     }
+        //     if (plugins[i].name == 'dspace_downloads_and_views') {
+        //         dspace_downloads_and_views = await this.jsonfielServoce.read('../../../src/plugins/dspace_downloads_and_views/info.json')
+        //         meta.push(dspace_downloads_and_views.source)
+        //     }
+        //     if (plugins[i].name == 'mel_downloads_and_views') {
+        //         mel_downloads_and_views = await this.jsonfielServoce.read('../../../src/plugins/mel_downloads_and_views/info.json')
+        //         meta.push(mel_downloads_and_views.source)
+        //     }
+        // }
+        // let a = [].concat(...meta)
+        // let uniqueArray = a.filter(function (item, pos) {
+        //     return a.indexOf(item) == pos;
+        // })
 
 
 
-        var merged = [].concat.apply([], data.repositories.map(d => [...d.schema, ...d.metadata]));
-        return [...new Set(merged.map(d => d.disply_name)), ...data.repositories.filter(d => d.years).map(d => d.years), ...uniqueArray];
+        // var merged = [].concat.apply([], data.repositories.map(d => [...d.schema, ...d.metadata]));
+        // return [...new Set(merged.map(d => d.disply_name)), ...data.repositories.filter(d => d.years).map(d => d.years), ...uniqueArray];
     }
 
     @UseGuards(AuthGuard('jwt'))
