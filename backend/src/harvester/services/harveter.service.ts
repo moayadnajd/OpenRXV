@@ -190,7 +190,7 @@ export class HarvesterService {
         this.logger.debug("Index All Done ");
 
     }
-    async  getCRPS() {
+    async getCRPS() {
         let reg = new RegExp(/(?<=\/)10\..*/)
         const workbook = new ExcelJs.Workbook();
         let finalData = {};
@@ -344,12 +344,12 @@ export class HarvesterService {
         if (value && value.split) {
             let splited = value.split(';')
             if (splited.length > 1)
-                return splited.map(d => this.mapto[d] ? this.mapto[d] : d)
+                return splited.map(d => this.mapto[typeof d === 'string' ? d.trim() : d] ? this.mapto[typeof d === 'string' ? d.trim() : d] : typeof d === 'string' ? d.trim() : d)
             else
-                return this.mapto[splited[0]] ? this.mapto[splited[0]] : splited[0]
+                return this.mapto[splited[0]] ? this.mapto[typeof splited[0] === 'string' ? splited[0].trim() : splited[0]] : typeof splited[0] === 'string' ? splited[0].trim() : splited[0]
         }
         else
-            return this.mapto[value] ? this.mapto[value] : value;
+            return this.mapto[typeof value === 'string' ? value.trim() : value] ? this.mapto[typeof value === 'string' ? value.trim() : value] : typeof value === 'string' ? value.trim() : value;
     }
 
 }
