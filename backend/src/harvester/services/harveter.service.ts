@@ -313,7 +313,7 @@ export class HarvesterService {
                                 formated['CRP'] = ["SRF Related"]
                         }
 
-                        formated[schema[col_num]] = col_num != 22 ? this.extractValues(col.value) : col.value
+                        formated[schema[col_num]] = col_num != 22 ? this.extractValues(col.value) : typeof col.value === 'string' ? col.value.trim() : col.value
                     })
                     if (exist != null) {
                         let temp = finaldata[primaryTrack[exist]]
