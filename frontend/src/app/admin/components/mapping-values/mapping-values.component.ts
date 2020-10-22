@@ -34,7 +34,7 @@ export class MappingValuesComponent implements OnInit {
 
   async toDelete(id) {
     const dialogRef = this.dialog.open(ConfirmationComponent, {
-      data: { title: "Confirmation", subtitle: "Are you sure you want to delete this user ?" }
+      data: { title: "Confirmation", subtitle: "Are you sure you want to delete this mapping?" }
     });
 
     dialogRef.afterClosed().subscribe(async result => {

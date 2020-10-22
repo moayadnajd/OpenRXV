@@ -11,7 +11,7 @@
                     [formGroup]="repoform">
                     <mat-card class="col-12">
 
-                        <mat-card-title>Repostry ({{ repoindex+1 }}) <button class="pull-right"
+                        <mat-card-title>Repository ({{ repoindex+1 }}) <button class="pull-right"
                                 (click)="deleteRepo(repoindex)" color="warn" mat-icon-button>
                                 <mat-icon aria-hidden="false" aria-label="delete">delete
                                 </mat-icon>
@@ -21,26 +21,26 @@
                         <div class="row">
                             <div class="col-12">
                                 <mat-form-field class="w-100">
-                                    <mat-label>Repostry Name</mat-label>
+                                    <mat-label>Repository name</mat-label>
                                     <input matInput formControlName="name" placeholder="DSpace" required>
                                 </mat-form-field>
                             </div>
                             <div class="col-12">
                                 <mat-form-field class="w-100">
-                                    <mat-label>Start From Page number</mat-label>
+                                    <mat-label>Start from page number</mat-label>
                                     <input matInput type="number" formControlName="startPage" placeholder="1" required>
                                 </mat-form-field>
                             </div>
                             <div class="col-12">
                                 <mat-form-field class="w-100">
-                                    <mat-label>Rest Api EndPoint </mat-label>
+                                    <mat-label>REST API endpoint </mat-label>
                                     <input matInput formControlName="itemsEndPoint" placeholder="http://repo.org/rest"
                                         required>
                                 </mat-form-field>
                             </div>
                             <div class="col-12 pb-3">
                                 <div class="file">
-                                    <mat-label>Repo Icon: </mat-label>
+                                    <mat-label>Repository icon: </mat-label>
                                     <input *ngIf="!logo[repoindex]" type="file" (change)="IconChange($event,repoindex)"
                                         placeholder="Icon" required>
                                     <div *ngIf="logo[repoindex]" class="logo">
@@ -55,10 +55,10 @@
                                 <mat-card class="w-100">
 
                                     <mat-card-title>
-                                        Data Structure
+                                        Metadata structure
                                         <button class="pull-right" (click)="getMetadata(repoindex)" color="info"
                                             mat-button>
-                                            Auto import Data Structure
+                                            Auto import metadata structure
                                             <mat-icon aria-hidden="false" aria-label="delete">cloud_download
                                             </mat-icon>
                                         </button>
@@ -85,7 +85,7 @@
                                             </div>
                                             <div class="col-md-3">
                                                 <mat-form-field>
-                                                    <mat-label>Formater</mat-label>
+                                                    <mat-label>Formatter</mat-label>
                                                     <mat-select formControlName="addOn">
                                                         <mat-option value="thumbnil">thumbnil</mat-option>
                                                     </mat-select>
@@ -105,12 +105,12 @@
                                     <div class="col-md-12 text-center">
                                         <button class="float-left" (click)="AddNewMetadata(repoform.controls.schema)"
                                             mat-raised-button>
-                                            New Schema
+                                            New schema
                                             <mat-icon aria-hidden="false" aria-label="add">add
                                             </mat-icon>
                                         </button>
                                     </div>
-                                    <h4 class="pt-5">Metadata</h4>
+                                    <h4 class="pt-5">Metadata fields</h4>
                                     <form class="col-12 pb-3"
                                         *ngFor="let form of repoform.controls.metadata.controls; let i = index;"
                                         [formGroup]="form">
@@ -134,7 +134,7 @@
                                                 <div class="row">
                                                     <div class="col-4">
                                                         <mat-form-field>
-                                                            <mat-label>Formater</mat-label>
+                                                            <mat-label>Formatter</mat-label>
                                                             <mat-select
                                                                 (selectionChange)="selectFormat(repoindex,'years_'+form.controls.disply_name.value)"
                                                                 formControlName="addOn">
@@ -173,7 +173,7 @@
                                     <div class="col-md-12 text-center">
                                         <button class="float-left" (click)="AddNewMetadata(repoform.controls.metadata)"
                                             mat-raised-button>
-                                            New Metadata
+                                            New metadata field
                                             <mat-icon aria-hidden="false" aria-label="add">add
                                             </mat-icon>
                                         </button>
@@ -187,7 +187,7 @@
                 <div class="row">
                     <div class="col-12 pt-3">
                         <button class="float-left" (click)="AddNewRepo()" mat-raised-button>
-                            Add New Repostry <mat-icon aria-hidden="false" aria-label="add">add
+                            Add new repository <mat-icon aria-hidden="false" aria-label="add">add
                             </mat-icon>
                         </button>
                     </div>
