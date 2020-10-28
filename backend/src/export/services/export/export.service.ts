@@ -49,7 +49,7 @@ export class ExportService {
       if (type == 'docx') {
         filePath = await this.createDocx(fileNameg, hits, query, part, websiteName);
       } else if (type == 'xlsx') {
-        filePath = await this.createXlxs(hits, file, part, websiteName);
+        filePath = await this.createXlsx(hits, file, part, websiteName);
       } else if (type === 'pdf') {
         filePath = await this.createPdf(await this.createDocx(fileNameg, hits, query, part, websiteName), fileName, type, res, response, part, websiteName) as string;
       }
@@ -142,7 +142,7 @@ export class ExportService {
     }
   }
 
-  private async createXlxs(body, file, part, websiteName) {
+  private async createXlsx(body, file, part, websiteName) {
 
     var workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('sheet', {
