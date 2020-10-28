@@ -1,19 +1,19 @@
 {
     "name": "dspace_downloads_and_views",
-    "display_name": "DSpace Downloads and views",
-    "description": "To get all DSpace downloads and views",
+    "display_name": "DSpace downloads and views",
+    "description": "To get all downloads and views from a DSpace Statistics API.",
     "multiple": "true",
     "source":["numbers.views", "numbers.downloads"],
     "params": [
         {
             "name": "repo",
-            "label": "Repo Name",
+            "label": "Repository name",
             "type": "text",
             "required": true
         },
         {
             "name": "link",
-            "label": "Link to downloads and views endpoint",
+            "label": "Link to DSpace Statistics API 'items' endpoint",
             "type": "text",
             "required": true
         }
