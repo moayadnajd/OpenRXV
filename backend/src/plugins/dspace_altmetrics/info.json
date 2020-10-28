@@ -1,7 +1,7 @@
 {
     "name": "dspace_altmetrics",
     "display_name": "DSpace Altmetrics",
-    "description": "To get all Altmetrics data for specfic Handle prefix.",
+    "description": "To get all Altmetrics data for a specfic Handle prefix.",
     "multiple": "true",
     "source":["altmetric.score"],
     "params": [
