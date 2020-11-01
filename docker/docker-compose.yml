@@ -67,7 +67,7 @@ services:
     container_name: api
     working_dir: /backend
     restart: always
-    image: node
+    image: node:11
     command: "npm run install_and_run"
     ports: 
       - 127.0.0.1:3000:3000
