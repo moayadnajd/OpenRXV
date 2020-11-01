@@ -14,27 +14,9 @@ You can see an example of the project working on our [Agricultural Research e-Se
 
 ## Requirements
 
-  
-
-- Node.js v8+
-
-  
-
-- npm 5.6.0+
-
-  
-
-- Docker 17.12.0+
-
-  
-
-- docker-compose 1.18.0+
-
-  
-
--  [dspace-statistics-api](https://github.com/ilri/dspace-statistics-api) (optional, for item views and downloads)
-
-  
+- Docker 19.03.0+
+- docker-compose 1.21.0+
+- [dspace-statistics-api](https://github.com/ilri/dspace-statistics-api) (optional, for item views and downloads)
 
 ## Installation  
 
