@@ -1,8 +1,4 @@
-
 # Open Repository Explorer and Visualizer
-
-  
-  
 
 The Open Repository Explorer and Visualizer (OpenRXV) is a dashboard-like tool that was created to help people find and understand content in open access repositories like [DSpace](https://duraspace.org/dspace). It began as a proof of concept developed by [CodeObia](http://codeobia.com/) and [the Monitoring, Evaluation and Learning (MEL)](https://mel.cgiar.org) team at the [International Center for Agricultural Research in the Dry Areas (ICARDA)](https://www.icarda.org) to enable exploring and reporting on content in two key institutional repositories. Later, in partnership with the [International Livestock Research Institute (ILRI)](https://www.ilri.org), the scope was expanded with the idea of supporting more repository types and larger amounts of items. In the future we hope to be able to support any repository that uses Dublin Core metadata and has an API for harvesting.
 
@@ -10,7 +6,6 @@ This project contains a backend indexer powered by [Node.js](https://nodejs.org/
 
 You can see an example of the project working on our [Agricultural Research e-Seeker (AReS)](https://cgspace.cgiar.org/explorer/).
 
-  
 
 ## Requirements
 
@@ -18,100 +13,65 @@ You can see an example of the project working on our [Agricultural Research e-Se
 - docker-compose 1.21.0+
 - [dspace-statistics-api](https://github.com/ilri/dspace-statistics-api) (optional, for item views and downloads)
 
+
 ## Installation  
 
-#### After you have satisfied the requirements you can clone this repository:
+**After you have configured Docker you can clone this repository and build OpenRXV:**
+
 ```console
 $ cd docker
 $ sudo docker-compose up -d
 ```  
+
 *Note: the Elasticsearch component requires more virtual memory. You will most likely need to increase the host system's memory map limits by setting `vm.max_map_count = 262144` in /etc/sysctl.conf. See the [Elasticsearch docs for more information](https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html).*
 
-  
+
 ## Configuration
 
 Configuration of repositories and metadata to harvest is in `backend/config/index.json`. Mappings of equivalent metadata values — for example "Kenya" and "KENYA" — are in `backend/config/mapping.json`.
 
-  
-## Todo
+
+## TODO
 
 - Improve documentation (in progress...)
-
 - Add reporting functionality
+
 
 ## Documentation
 
-  
+The application is divided into four sections.
 
-The application is divided into four sections
+1. The navbar (yellow): which holds the logo on the left, and three buttons with icons on the right:
 
+- <img src="docs/images/icons/search.png" width="20" height="20" alt="Search icon"> opens the filters sidebar (the fourth section).
+- <img src="docs/images/icons/loop.png" width="20" height="20" alt="Loop icons"> clears the query.
+- <img src="docs/images/icons/support.png" width="20" height="20" alt="Support icon"> opens a tutorial (which is a series of popups over the elements in the dashboard).
 
+2. The chart and lists components (gray):
 
-1 - The navbar ( yellow ) : which holds the logo on the left, and three buttons with icons on the right,
+- Counters (<img src="docs/images/icons/counters.png" width="20" height="20" alt="counters icon">).
+- Pie (<img src="docs/images/icons/pie.png" width="20" height="20" alt="Pie Chart icon">), worldcould (<img src="docs/images/icons/worldcloud.png" width="20" height="20" alt="worldcloud Chart icon"> ), and map (<img src="docs/images/icons/map.png" width="20" height="20" alt="map icon">) charts.
+- Top countries (<img src="docs/images/icons/list.png" width="20" height="20" alt="List icon">), top contributors (<img src="docs/images/icons/list_alt.png" width="20" height="20" alt="list_alt icon">), Top author affiliations (<img src="docs/images/icons/list_alt.png" width="20" height="20" alt="list_alt icon">), CRPs and Platforms (<img src="docs/images/icons/star.png" width="20" height="20" alt="star icon">), and funders/investors/sponsors (<img src="docs/images/icons/star.png" width="20" height="20" alt="Star icon">).
+- Paginated list (<img src="docs/images/icons/view_list.png" width="20" height="20" alt="view_list icon">).
 
-  
+3. The side navigation buttons (red color). These buttons navigate the user to the corresponding components with the same icon(s).
 
--  <img  src="docs/images/icons/search.png"  width="20"  height="20"  alt="Search icon"> opens the side filters (the fourth section).
-
--  <img  src="docs/images/icons/loop.png"  width="20"  height="20"  alt="Loop icons"> clears the query.
-
--  <img  src="docs/images/icons/support.png"  width="20"  height="20"  alt="Support icon"> opens a tutorial ( which is a bunch of popups over the elements in the dashboard ).
-
-  
-
-2 - The components ( gray ): holds the charts and lists:
-
-  
-
-- counters ( <img  src="docs/images/icons/counters.png"  width="20"  height="20"  alt="counters icon"> ).
-
-- pie ( <img  src="docs/images/icons/pie.png"  width="20"  height="20"  alt="Pie Chart icon"> ) , worldcould ( <img  src="docs/images/icons/worldcloud.png"  width="20"  height="20"  alt="worldcloud Chart icon"> ), and map ( <img  src="docs/images/icons/map.png"  width="20"  height="20"  alt="map icon"> ) charts.
-
-  
-
-- top counties ( <img  src="docs/images/icons/list.png"  width="20"  height="20"  alt="List icon"> ), top contributors ( <img  src="docs/images/icons/list_alt.png"  width="20"  height="20"  alt="list_alt icon"> ), Top Affiliations ( <img  src="docs/images/icons/list_alt.png"  width="20"  height="20"  alt="list_alt icon"> ), CRPs and Platforms ( <img  src="docs/images/icons/star.png"  width="20"  height="20"  alt="star icon"> ), and Funders lists ( <img  src="docs/images/icons/star.png"  width="20"  height="20"  alt="Star icon"> ).
-
-  
-
-- paginated list ( <img  src="docs/images/icons/view_list.png"  width="20"  height="20"  alt="view_list icon"> ).
-
-  
-
-3 - The side navigation buttons ( red color ): these buttons navigate the user to the corresponding components with the same icon(s).
-
-  
-
-4 - The Filters ( blue color ): which are multiple inputs that allow you to search and filter the data, which reflects on the charts & lists.
-
-  
+4. The filters (blue color), which are multiple inputs that allow you to search and filter the data. Changes to these filters are immediately reflected in the charts and lists.
 
 <details>
 
 <summary>App structure image ( Click to expand )</summary>
 
-<img  src="docs/images/app-struct-2.png"  alt="App structure">
+<img src="docs/images/app-struct-2.png" alt="App structure">
 
 </details>
 
+<hr />
+
+Almost everything is configurable: colors, the position of charts, tooltip text, and the data being displayed in the charts themselves. To change these attributes you need to modify some TypeScript and SCSS files, which you can find in `/RES/src/configs`
   
 
-<hr  />
-
-  
-
-Almost everything is configurable, colors, the position of charts, tooltips text, and the data being displayed in the charts.
-
-  
-
-And to change these attributes you need to modify some TypeScript and SCSS files, which you can find in
-
-  
-
-`/RES/src/configs`
-
-  
-
--  `/counters.ts` { <img  src="docs/images/icons/counters.png"  width="20"  height="20"  alt="counters icon"> }
+- `/counters.ts` { <img  src="docs/images/icons/counters.png"  width="20"  height="20"  alt="counters icon"> }
     - Includes the configuration of the **upper section** that display the ‘_number of total items’_, ‘_number of open access documents’_, ‘_number of authors_’, etc.…
 
   
@@ -643,14 +603,9 @@ tour:  true,
 	
 	- for example in the previous example the pie chart is the parent of the two world cloud components and if you want to change the order of the component you need to keep the pie as the first one ( **but of course you can change the parent to a different chart type or even a list** ).
 
-  
 
 ## License
 
-  
-
 This work is licensed under the [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html). The license allows you to use and modify the work for personal and commercial purposes, but if you distribute the work you must provide users with a means to access the source code for the version you are distributing. Read more about the [GPLv3 at TL;DR Legal](<https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)>).
-
-  
 
 Read more about ILRI's commitment to openness click [here](https://www.ilri.org/open).
