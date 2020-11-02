@@ -28,6 +28,7 @@ export class DSpaceDowbloadsAndViews {
                         "id"
                     ],
                     "track_total_hits": true,
+                    "size": 100,
                     "query": {
                         "bool": {
                             "must": [
