@@ -47,7 +47,7 @@ export class ExplorerComponent implements OnInit {
     top: 0,
   };
   async share() {
-    this.openDialog(location.origin + await this.itemsService.saveShare(this.mainBodyBuilderService.getAggAttributes));
+    this.openDialog(location.href.match(/(.*)shared.*/)? location.href.match(/(.*)shared.*/)[1] :  location.origin + location.pathname  + await this.itemsService.saveShare(this.mainBodyBuilderService.getAggAttributes));
   }
   get isSmall(): boolean {
     return this.screenSizeService.isSmallScreen;
