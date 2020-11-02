@@ -7,8 +7,8 @@ import { HarvesterService } from "src/harvester/services/harveter.service";
 const melnumbersUrl = 'https://mel.cgiar.org/dspace/getdspaceitemsvisits/dspace_item_ids/'
 
 @Processor('plugins')
-export class MELDowbloadsAndViews {
-    private logger = new Logger(MELDowbloadsAndViews.name);
+export class MELDownloadsAndViews {
+    private logger = new Logger(MELDownloadsAndViews.name);
 
 
     constructor(

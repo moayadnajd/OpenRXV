@@ -5,7 +5,7 @@ import { Queue, Job } from "bull";
 import { map } from "rxjs/operators";
 
 @Processor('plugins')
-export class DSpaceDowbloadsAndViews {
+export class DSpaceDownloadsAndViews {
     constructor(
         private http: HttpService,
         public readonly elasticsearchService: ElasticsearchService,
