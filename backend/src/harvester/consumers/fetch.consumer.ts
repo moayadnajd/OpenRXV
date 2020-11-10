@@ -164,6 +164,8 @@ export class FetchConsumer {
                         value = null;
                     }
                 }
+                if (addOn == "lowercase")
+                    value = value.trim().toLowerCase();
             }
         }
         return mapto[value] ? mapto[value] : value
