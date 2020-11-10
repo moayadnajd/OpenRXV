@@ -4,8 +4,8 @@ import { HarvesterModule } from 'src/harvester/harvester.module';
 import { MELDownloadsAndViews } from './mel_downloads_and_views';
 import { DSpaceDownloadsAndViews } from './dspace_downloads_and_views';
 @Module({
-    providers: [DSpaceAltmetrics, MELDownloadsAndViews, DSpaceDowbloadsAndViews],
-    exports: [DSpaceAltmetrics, MELDownloadsAndViews, DSpaceDowbloadsAndViews],
+    providers: [DSpaceAltmetrics, MELDownloadsAndViews, DSpaceDownloadsAndViews],
+    exports: [DSpaceAltmetrics, MELDownloadsAndViews, DSpaceDownloadsAndViews],
     imports: [
         HarvesterModule,
 
