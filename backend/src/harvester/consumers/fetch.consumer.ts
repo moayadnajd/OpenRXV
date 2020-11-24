@@ -69,6 +69,7 @@ export class FetchConsumer {
                 }
 
             }
+            formated['id'] = item.uuid ? item.uuid : item.id;
             formated['repo'] = job.data.repo.name;
             finaldata.push({ index: { _index: process.env.OPENRXV_TEMP_INDEX } });
             finaldata.push(formated);
