@@ -21,6 +21,7 @@ export class DSpaceDownloadsAndViews {
         job.progress(50);
         if (stats.statistics && stats.statistics.length > 0) {
             let searchResult = await this.elasticsearchService.search({
+                
                 index: process.env.OPENRXV_TEMP_INDEX,
                 body: {
                     "_source": [
@@ -51,7 +52,7 @@ export class DSpaceDownloadsAndViews {
                         }
                     }
                 }
-            }).catch(d => d)
+            })
 
             if (searchResult && searchResult.body && searchResult.body.hits.total.value > 0) {
                 let IDs = {}
