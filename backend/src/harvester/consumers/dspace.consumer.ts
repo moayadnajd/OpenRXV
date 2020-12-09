@@ -18,8 +18,8 @@ let langISO = require('iso-639-1');
 let mapto: any = {};
 
 @Processor('fetch')
-export class FetchConsumer {
-    private logger = new Logger(FetchConsumer.name);
+export class DspaceFetchConsumer {
+    private logger = new Logger(DspaceFetchConsumer.name);
     timeout
     constructor(private http: HttpService,
         public readonly elasticsearchService: ElasticsearchService,

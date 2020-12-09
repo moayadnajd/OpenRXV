@@ -31,9 +31,7 @@ export function tokenGetter() {
     ToastrModule.forRoot(),
     JwtModule.forRoot({
       config: {
-        tokenGetter: tokenGetter,
-        whitelistedDomains: ["localhost:3000"],
-        blacklistedRoutes: ["example.com/examplebadroute/"]
+        tokenGetter: tokenGetter
       }
     })
   ],

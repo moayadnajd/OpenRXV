@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./appearance.component.scss']
 })
 export class AppearanceComponent implements OnInit {
-  color
+  color = null
   appearance
   logo
   favIcon
