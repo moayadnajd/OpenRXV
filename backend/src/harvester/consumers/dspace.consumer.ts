@@ -18,8 +18,8 @@ let langISO = require('iso-639-1');
 let mapto: any = {};
 
 @Processor('fetch')
-export class DspaceFetchConsumer {
-    private logger = new Logger(DspaceFetchConsumer.name);
+export class FetchConsumer {
+    private logger = new Logger(FetchConsumer.name);
     timeout
     constructor(private http: HttpService,
         public readonly elasticsearchService: ElasticsearchService,
@@ -27,7 +27,7 @@ export class DspaceFetchConsumer {
         @InjectQueue('fetch') private fetchQueue: Queue,
     ) { }
 
-    @Process({ name: 'fetch', concurrency: 1 })
+    @Process({ name: 'dspace', concurrency: 1 })
     async transcode(job: Job<any>) {
         try {
             await job.progress(20);
@@ -41,7 +41,7 @@ export class DspaceFetchConsumer {
             }
             else {
                 job.progress(60);
-                let newjob = await this.fetchQueue.add('fetch', { page: page + job.data.pipe, pipe: job.data.pipe, repo: job.data.repo })
+                let newjob = await this.fetchQueue.add('dspace', { page: page + job.data.pipe, pipe: job.data.pipe, repo: job.data.repo })
                 if (newjob)
                     return this.index(job, data);
             }

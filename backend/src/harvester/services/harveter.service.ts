@@ -82,7 +82,7 @@ export class HarvesterService {
         let settings = await this.jsonFilesService.read('../../../data/dataToUse.json');
         settings.repositories.forEach(repo => {
             for (let pipe = 0; pipe < 4; pipe++) {
-                this.fetchQueue.add('fetch', { page: parseInt(repo.startPage) + pipe, pipe: 4, repo })
+                this.fetchQueue.add(repo.type, { page: parseInt(repo.startPage) + pipe, pipe: 4, repo })
             }
 
         });

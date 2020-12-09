@@ -83,7 +83,7 @@ export class SettingsController {
             final['repositories'].push({
                 name: repo.name,
                 years: repo.years,
-                type: "Dspace",
+                type: repo.type,
                 startPage: repo.startPage,
                 itemsEndPoint: repo.itemsEndPoint,
                 allCores: repo.allCores,

@@ -41,6 +41,7 @@ export class SetupComponent implements OnInit {
       name: new FormControl(),
       icon: new FormControl(),
       startPage: new FormControl(),
+      type: new FormControl(),
       itemsEndPoint: new FormControl(),
       allCores: new FormControl(),
 
