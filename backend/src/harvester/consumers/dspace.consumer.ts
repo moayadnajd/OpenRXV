@@ -32,17 +32,15 @@ export class FetchConsumer {
     @Process({ name: 'eprints', concurrency: 1 })
     async eprint(job: Job<any>) {
         let page = parseInt(job.data.page)
-        let url = job.data.repo.itemsEndPoint + `?page=${page}&limit=2`
+        let url = job.data.repo.itemsEndPoint + `?page=${page}&limit=100`
         await job.progress(20);
         let data: any = await this.http.get(url).pipe(map((data: any) => data.data)).toPromise();
         await job.progress(50);
-        if (Array.isArray(data.items) && data.items.length == 0) {
+        if (data.meta.itemCount == 0) {
             return "done"
         }
-
         job.progress(60);
         await this.fetchQueue.add('eprints', { page: page + job.data.pipe, pipe: job.data.pipe, repo: job.data.repo })
-
         let finaldata: Array<any> = [];
         data.items.forEach((item: any) => {
             let formated = this.format(item, job.data.repo.schema);
