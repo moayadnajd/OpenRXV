@@ -183,24 +183,42 @@ export class SettingsController {
 
     @UseGuards(AuthGuard('jwt'))
     @Get('autometa')
-    async AutoMeta(@Query('link') link: string) {
-        let data = await this.httpService.get(link + '/items?expand=metadata,parentCommunityList&limit=25').pipe(map((data: any) => {
-            let merged = {
-                base: [],
-                metadata: [],
-            }
-            data = data.data.forEach(element => {
-                merged.base = Array.from(new Set([].concat.apply(merged.base, Object.keys(element).filter(d => ['metadata', 'bitstreams', 'expand'].indexOf(d) == -1))));;
-                merged.metadata = Array.from(new Set([].concat.apply(merged.metadata,
-                    element.metadata.map(item => {
-                        return item.key
-                    })
-                )));
-            });
-            return merged;
-        })).toPromise();
+    async AutoMeta(@Query('link') link: string, @Query('type') type: string) {
+        let data = [];
+        if (type == 'dspace') {
+            let data = await this.httpService.get(link + '/items?expand=metadata,parentCommunityList&limit=25').pipe(map((data: any) => {
+                let merged = {
+                    base: [],
+                    metadata: [],
+                }
+                data = data.data.forEach(element => {
+                    merged.base = Array.from(new Set([].concat.apply(merged.base, Object.keys(element).filter(d => ['metadata', 'bitstreams', 'expand'].indexOf(d) == -1))));;
+                    merged.metadata = Array.from(new Set([].concat.apply(merged.metadata,
+                        element.metadata.map(item => {
+                            return item.key
+                        })
+                    )));
+                });
+                return merged;
+            })).toPromise();
+            return data;
+        } else {
+            let data = await this.httpService.get(link + '?page=2&limit=2').pipe(map((data: any) => {
+                let merged = {
+                    base: [],
+                    metadata: [],
+                }
+                data = data.data.items.forEach(element => {
+                    merged.base = Array.from(new Set([].concat.apply(merged.base, Object.keys(element).filter(d => ['metadata', 'bitstreams', 'expand'].indexOf(d) == -1))));;
+                });
+                return merged;
+            })).toPromise();
+            return data;
 
-        return data;
+        }
+
+
+
     }
 
     @Post('upload/image')

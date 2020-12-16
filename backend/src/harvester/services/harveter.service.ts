@@ -5,6 +5,7 @@ import { async } from 'rxjs/internal/scheduler/async';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { JsonFilesService } from 'src/admin/json-files/json-files.service';
 import { ValuesService } from 'src/shared/services/values.service';
+import { FetchConsumer } from '../consumers/dspace.consumer';
 
 @Injectable()
 export class HarvesterService {
@@ -60,6 +61,11 @@ export class HarvesterService {
         let values = {}
         data.hits.map(d => values[d._source.find] = d._source.replace)
         return values;
+    }
+
+    async StartTest() {
+        this.fetchQueue.add('eprint', { page: parseInt("1"), pipe: 4, repo: { itemsEndPoint: 'http://oar.icrisat.org/api/eprint/' } })
+        return this.fetchQueue.add('eprint', { page: parseInt("1") + 1, pipe: 4, repo: { itemsEndPoint: 'http://oar.icrisat.org/api/eprint/' } })
     }
 
     async stopHarvest() {

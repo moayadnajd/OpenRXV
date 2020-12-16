@@ -106,7 +106,7 @@ export class SetupComponent implements OnInit {
     }
     let schema = <FormArray>repo.get('schema');
     let metadata = <FormArray>repo.get('metadata');
-    let data = await this.settingService.retreiveMetadata(repo.get('itemsEndPoint').value);
+    let data = await this.settingService.retreiveMetadata(repo.get('itemsEndPoint').value, repo.get('type').value);
     schema.clear();
     metadata.clear();
     data.base.forEach(element => {

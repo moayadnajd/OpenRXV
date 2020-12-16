@@ -27,8 +27,56 @@ export class FetchConsumer {
         @InjectQueue('fetch') private fetchQueue: Queue,
     ) { }
 
+
+
+    @Process({ name: 'eprints', concurrency: 1 })
+    async eprint(job: Job<any>) {
+        let page = parseInt(job.data.page)
+        let url = job.data.repo.itemsEndPoint + `?page=${page}&limit=2`
+        await job.progress(20);
+        let data: any = await this.http.get(url).pipe(map((data: any) => data.data)).toPromise();
+        await job.progress(50);
+        if (Array.isArray(data.items) && data.items.length == 0) {
+            return "done"
+        }
+
+        job.progress(60);
+        await this.fetchQueue.add('eprints', { page: page + job.data.pipe, pipe: job.data.pipe, repo: job.data.repo })
+
+        let finaldata: Array<any> = [];
+        data.items.forEach((item: any) => {
+            let formated = this.format(item, job.data.repo.schema);
+            formated['id'] = item.uuid ? item.uuid : item.id;
+            formated['repo'] = 'oar';
+            finaldata.push({ index: { _index: process.env.OPENRXV_TEMP_INDEX } });
+            finaldata.push(formated);
+        });
+        await job.progress(70);
+
+        let resp: ApiResponse = await this.elasticsearchService.bulk({
+            refresh: 'wait_for',
+            body: finaldata
+        });
+
+        job.progress(90);
+        resp.body.items.forEach((item: any, index: number) => {
+            //item.index.status
+            if (item.index.status != 200 && item.index.status != 201) {
+                let error = new Error('error update or create item ' + finaldata[index].id);
+                error.stack = JSON.stringify(item);
+                job.moveToFailed(error, true);
+                return error
+            }
+        })
+
+        job.progress(100);
+
+        return resp;
+    }
+
+
     @Process({ name: 'dspace', concurrency: 1 })
-    async transcode(job: Job<any>) {
+    async dspace(job: Job<any>) {
         try {
             await job.progress(20);
             let page = parseInt(job.data.page)
@@ -121,7 +169,7 @@ export class FetchConsumer {
                     }
                 }
                 else
-                    finalValues[index] = this.mapIt(json[index])
+                    finalValues[item] = this.mapIt(json[index])
             }
         })
         return finalValues;

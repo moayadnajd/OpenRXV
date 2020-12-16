@@ -21,7 +21,7 @@ export class SettingsService {
     })).toPromise();
   }
 
-  
+
   async readAppearanceSettings() {
     return await this.http.get(environment.api + '/settings/appearance').pipe(map((data: any) => {
       return data;
@@ -68,11 +68,11 @@ export class SettingsService {
   }
 
 
-  async retreiveMetadata(linlk) {
+  async retreiveMetadata(linlk, type) {
 
-    return await this.http.get(environment.api + '/settings/autometa?link=' + linlk).pipe(map((data: any) => {
-      return data;
-    })).toPromise();
+      return await this.http.get(environment.api + '/settings/autometa?link=' + linlk +'&type='+type).pipe(map((data: any) => {
+        return data;
+      })).toPromise();
 
   }
 

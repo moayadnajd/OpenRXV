@@ -43,5 +43,11 @@ export class HarvesterController {
         return { message: Date(), start: await this.harvestService.pluginsStart() }
     }
 
+    
+    @Get('test')
+    async testStart() {
+        return { message: Date(), start: await this.harvestService.StartTest() }
+    }
+
 
 }
