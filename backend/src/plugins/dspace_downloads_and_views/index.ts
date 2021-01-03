@@ -14,8 +14,7 @@ export class DSpaceDownloadsAndViews {
     @Process({ name: 'dspace_downloads_and_views', concurrency: 1 })
     async transcode(job: Job<any>) {
         let link = job.data.link;
-        // the DSpace Statistics API starts at page 0
-        let page = 0;
+        let page = job.data.page;
         job.progress(20);
         let toUpdateIndexes: Array<any> = [];
         let stats = await this.http.get(`${link}?page=${page}&limit=100`).pipe(map(d => d.data)).toPromise();
