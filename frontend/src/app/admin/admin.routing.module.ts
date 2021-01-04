@@ -28,7 +28,7 @@ const routes: Routes = [
       { path: 'mapping-values', component: MappingValuesComponent, canActivate: [AdminGuard] },
       { path: 'setup', component: SetupComponent, canActivate: [AdminGuard] },
       { path: 'plugins', component: PluginsComponent, canActivate: [AdminGuard] },
-      { path: 'desgin', component: DesignComponent, canActivate: [AdminGuard] },
+      { path: 'design', component: DesignComponent, canActivate: [AdminGuard] },
       { path: 'reporting', component: ReportingComponent, canActivate: [AdminGuard] },
 
     ]
