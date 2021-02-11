@@ -145,7 +145,6 @@ export class ExportService {
       }
       }
       const doc = new Docxtemplater(zip, { parser: angularParser });
-      doc.loadZip(zip);
       doc.setData({
         items: hits.hits.map(items => items._source),
         date: currentDate,
