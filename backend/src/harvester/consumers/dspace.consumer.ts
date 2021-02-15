@@ -27,7 +27,59 @@ export class FetchConsumer {
         @InjectQueue('fetch') private fetchQueue: Queue,
     ) { }
 
+    @Process({ name: 'openrxv', concurrency: 1 })
+    async openrxv(job: Job<any>) {
+        let scroll = job.data.scroll
+        let url = job.data.repo.itemsEndPoint
+        await job.progress(20);
+        let result: any = []
 
+        if (scroll) {
+            url = job.data.repo.itemsEndPoint + '/scroll/' + scroll
+            result = await this.http.post(url).pipe(map((data: any) => data.data)).toPromise();
+        } else {
+            url = job.data.repo.itemsEndPoint + '/100'
+            result = await this.http.post(url).pipe(map((data: any) => data.data)).toPromise();
+            scroll = result._scroll_id
+        }
+
+        let data: any = result.hits.hits.map(d => d._source)
+        await job.progress(50);
+        if (Array.isArray(data) && data.length == 0) {
+            return "done"
+        }
+        job.progress(60);
+        await this.fetchQueue.add('openrxv', { scroll: scroll, repo: job.data.repo })
+        let finaldata: Array<any> = [];
+        data.forEach((item: any) => {
+            let formated = this.format(item, job.data.repo.schema);
+            formated['id'] = item.uuid ? item.uuid : item.id;
+            formated['repo'] = job.data.repo.name;
+            finaldata.push({ index: { _index: process.env.OPENRXV_TEMP_INDEX } });
+            finaldata.push(formated);
+        });
+        await job.progress(70);
+
+        let resp: ApiResponse = await this.elasticsearchService.bulk({
+            refresh: 'wait_for',
+            body: finaldata
+        });
+
+        job.progress(90);
+        resp.body.items.forEach((item: any, index: number) => {
+            //item.index.status
+            if (item.index.status != 200 && item.index.status != 201) {
+                let error = new Error('error update or create item ' + finaldata[index].id);
+                error.stack = JSON.stringify(item);
+                job.moveToFailed(error, true);
+                return error
+            }
+        })
+
+        job.progress(100);
+
+        return resp;
+    }
 
     @Process({ name: 'eprints', concurrency: 1 })
     async eprint(job: Job<any>) {
@@ -45,7 +97,7 @@ export class FetchConsumer {
         data.items.forEach((item: any) => {
             let formated = this.format(item, job.data.repo.schema);
             formated['id'] = item.uuid ? item.uuid : item.id;
-            formated['repo'] = 'oar';
+            formated['repo'] = job.data.repo.name;
             finaldata.push({ index: { _index: process.env.OPENRXV_TEMP_INDEX } });
             finaldata.push(formated);
         });
@@ -213,6 +265,8 @@ export class FetchConsumer {
                 }
                 if (addOn == "lowercase")
                     value = value.trim().toLowerCase();
+                if (addOn == "commaseparated")
+                    value = value.split(',').map(d => d.trim);
             }
         }
         return mapto[value] ? mapto[value] : value

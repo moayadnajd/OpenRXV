@@ -98,7 +98,14 @@
                                                 <mat-form-field>
                                                     <mat-label>Formatter</mat-label>
                                                     <mat-select formControlName="addOn">
+                                                        <mat-option [value]="null">None</mat-option>
+                                                        <mat-option value="language">Language</mat-option>
+                                                        <mat-option value="country">Country</mat-option>
+                                                        <mat-option value="date">Date</mat-option>
+                                                        <mat-option value="lowercase">Lowercase</mat-option>
                                                         <mat-option value="thumbnil">thumbnil</mat-option>
+                                                        <mat-option value="commaseparated">Comma separated</mat-option>
+                                                        
                                                     </mat-select>
 
                                                 </mat-form-field>
@@ -154,6 +161,8 @@
                                                                 <mat-option value="country">Country</mat-option>
                                                                 <mat-option value="date">Date</mat-option>
                                                                 <mat-option value="lowercase">Lowercase</mat-option>
+                                                                <mat-option value="thumbnil">thumbnil</mat-option>
+                                                                <mat-option value="commaseparated">Comma separated</mat-option>
                                                             </mat-select>
                                                         </mat-form-field>
                                                     </div>

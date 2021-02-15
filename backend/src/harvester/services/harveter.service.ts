@@ -87,9 +87,12 @@ export class HarvesterService {
 
         let settings = await this.jsonFilesService.read('../../../data/dataToUse.json');
         settings.repositories.forEach(repo => {
-            for (let pipe = 0; pipe < 4; pipe++) {
-                this.fetchQueue.add(repo.type, { page: parseInt(repo.startPage) + pipe, pipe: 4, repo })
-            }
+            if (repo.type != 'openrxv')
+                for (let pipe = 0; pipe < 4; pipe++) {
+                    this.fetchQueue.add(repo.type, { page: parseInt(repo.startPage) + pipe, pipe: 4, repo })
+                }
+            else
+                this.fetchQueue.add(repo.type, { repo })
 
         });
         return "started";

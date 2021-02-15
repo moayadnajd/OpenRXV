@@ -202,6 +202,18 @@ export class SettingsController {
                 return merged;
             })).toPromise();
             return data;
+        } else if (type == 'openrxv') {
+            let data = await this.httpService.post(link).pipe(map((data: any) => {
+                let merged = {
+                    base: [],
+                    metadata: [],
+                }
+                data = data.data.hits.hits.map(d=>d._source).forEach(element => {
+                    merged.base = Array.from(new Set([].concat.apply(merged.base, Object.keys(element).filter(d => ['metadata', 'bitstreams', 'expand'].indexOf(d) == -1))));;
+                });
+                return merged;
+            })).toPromise();
+            return data;
         } else {
             let data = await this.httpService.get(link + '?page=2&limit=2').pipe(map((data: any) => {
                 let merged = {
