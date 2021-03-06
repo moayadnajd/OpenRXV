@@ -27,7 +27,7 @@ services:
        - elasticsearch_7
   redis:
       container_name: redis
-      image: redis
+      image: redis:5
       restart: always
       volumes:
         - redisData:/data
