@@ -10,7 +10,7 @@ services:
       environment:
         - discovery.type=single-node 
       volumes:
-        - ./esData_7:/usr/share/elasticsearch/data:rw            
+        - esData_7:/usr/share/elasticsearch/data:rw
   angular_nginx:
     container_name: angular_nginx 
     image: angular_nginx
@@ -30,7 +30,7 @@ services:
       image: redis
       restart: always
       volumes:
-        - ./redisData:/data
+        - redisData:/data
       ports:
         - 127.0.0.1:6379:6379
   kibana:
@@ -61,3 +61,6 @@ services:
     links:
       - elasticsearch_7   
       - angular_nginx
+volumes:
+  esData_7:
+  redisData:
