@@ -380,6 +380,25 @@ tour: true,
  - **BUT** keep in mind the parent object which is the one with `scroll : {icon: 'name'}` should appear as the first one to its children in the array. ( the child has `scroll: {linkedWith: 'parent_id'}` ). - for example in the previous example the pie chart is the parent of the two world cloud components and if you want to change the order of the component you need to keep the pie as the first one ( **but of course you can change the parent to a different chart type or even a list** ).
  - for example in the previous example the pie chart is the parent of the two world cloud components and if you want to change the order of the component you need to keep the pie as the first one ( **but of course you can change the parent to a different chart type or even a list** ).
 
+## Authors
+The following people have made significant contributions to the technical development of OpenRXV:
+
+- Moayad Al-Najdawi (CodeObia)
+- Mohammed Al-Rowad (CodeObia)
+- Alan Orth (International Livestock Research Institute)
+- Abdullah Mahmoud (CodeObia)
+- Abdullah Foqha (CodeObia)
+- Yosef Rahahleh (CodeObia)
+
+The following people have made significant contributions to the design and overall function of OpenRXV:
+
+- Peter Ballantyne (International Livestock Research Institute)
+- Enrico Bonaiuti (International Center for Agricultural Research in the Dry Areas)
+- Abenet Yabowork (International Livestock Research Institute)
+- Jane Poole (International Livestock Research Institute)
+- Valerio Graziano (International Center for Agricultural Research in the Dry Areas)
+- Mohammed Salem (CodeObia)
+
 ## License
 
 This work is licensed under the [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html). The license allows you to use and modify the work for personal and commercial purposes, but if you distribute the work you must provide users with a means to access the source code for the version you are distributing. Read more about the [GPLv3 at TL;DR Legal](<https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)>).
