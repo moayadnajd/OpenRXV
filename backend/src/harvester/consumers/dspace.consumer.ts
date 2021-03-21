@@ -38,7 +38,7 @@ export class FetchConsumer {
             url = job.data.repo.itemsEndPoint + '/scroll/' + scroll
             result = await this.http.post(url).pipe(map((data: any) => data.data)).toPromise();
         } else {
-            url = job.data.repo.itemsEndPoint + '/100'
+            url = job.data.repo.itemsEndPoint + '?scroll=10m'
             result = await this.http.post(url).pipe(map((data: any) => data.data)).toPromise();
             scroll = result._scroll_id
         }
