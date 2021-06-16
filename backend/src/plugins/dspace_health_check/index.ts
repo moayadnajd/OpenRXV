@@ -13,7 +13,7 @@ export class DSpaceHealthCheck {
     constructor(
         public readonly elasticsearchService: ElasticsearchService,
         public readonly jsonFilesService: JsonFilesService,
-        @InjectQueue('plugins') private pluginQueue: Queue,
+        @InjectQueue('plugins') private pluginsQueue: Queue,
     ) { }
     @Process({ name: 'dspace_health_check', concurrency: 1 })
     async transcode(job: Job<any>) {
@@ -32,17 +32,7 @@ export class DSpaceHealthCheck {
 
             let indexedHandles = await this.getnotMissing();
             let missingHandles = this.sitemapHandles.filter(e => !indexedHandles.includes(e));
-
-            async function addjob_missing_items(repo, job, i) {
-                if (missingHandles[i]) {
-                    let handle = missingHandles[i];
-                    await this.pluginQueue.add('dspace_add_missing_items', { repo, handle, itemEndPoint: job.data.itemEndPoint })
-                    addjob_missing_items(repo, job, i++)
-                }
-            }
-
-            addjob_missing_items(repo, job, 0);
-
+            this.addjob_missing_items(missingHandles, repo, job, 0);
             await this.deleteDuplicates();
             job.progress(100);
             return 'done';
@@ -51,8 +41,13 @@ export class DSpaceHealthCheck {
         }
 
     }
-
-
+    async addjob_missing_items(missingHandles, repo, job, i) {
+        if (missingHandles[i]) {
+            let handle = missingHandles[i];
+            await this.pluginsQueue.add('dspace_add_missing_items', { repo, handle, itemEndPoint: job.data.itemEndPoint })
+            this.addjob_missing_items(missingHandles, repo, job, i++)
+        }
+    }
     async deleteDuplicates() {
         let elastic_data = {
             index: process.env.OPENRXV_TEMP_INDEX,
