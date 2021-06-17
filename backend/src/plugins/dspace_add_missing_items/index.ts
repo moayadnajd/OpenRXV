@@ -23,7 +23,6 @@ export class AddMissingItems {
     async transcode(job: Job<any>) {
         let url = job.data.itemEndPoint + `/${job.data.handle}?expand=metadata,parentCommunityList,parentCollectionList,bitstreams`;
         let result = await this.http.get(url).pipe(map(d => d.data)).toPromise().catch(d => {
-            job.moveToFailed(new Error(d), true)
             return null;
         });
         job.progress(50);
