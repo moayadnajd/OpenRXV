@@ -78,14 +78,15 @@ export class DSpaceHealthCheck {
         };
         let response: any = await this.elasticsearchService.search(elastic_data).catch(e => this.logger.error(e));
         let dublicates = [];
-        response.body.aggregations.duplicateCount.buckets.forEach(async (item) => {
-            item.duplicateDocuments.hits.hits.forEach(async (element, index) => {
-                if (item.duplicateDocuments.hits.hits.length - 1 > index) {
-                    await this.elasticsearchService.delete({ id: element._id, index: process.env.OPENRXV_TEMP_INDEX });
-                    dublicates.push(element._id);
-                }
-            });
-        })
+        if (response)
+            response.body.aggregations.duplicateCount.buckets.forEach(async (item) => {
+                item.duplicateDocuments.hits.hits.forEach(async (element, index) => {
+                    if (item.duplicateDocuments.hits.hits.length - 1 > index) {
+                        await this.elasticsearchService.delete({ id: element._id, index: process.env.OPENRXV_TEMP_INDEX });
+                        dublicates.push(element._id);
+                    }
+                });
+            })
         setTimeout(() => {
             this.logger.log(dublicates.length + ' dublicates deleted')
         }, 2000);
