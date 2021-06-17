@@ -1,4 +1,4 @@
-import { InjectQueue, Processor, Process } from "@nestjs/bull";
+import { InjectQueue, Processor, Process, JOB_REF } from "@nestjs/bull";
 import { Logger, HttpService } from "@nestjs/common";
 import { ElasticsearchService } from "@nestjs/elasticsearch";
 import { Queue, Job } from "bull";
@@ -30,10 +30,10 @@ export class DSpaceHealthCheck {
             job.progress(50);
             this.sitemapHandles = sites.map(d => d.split('/handle/')[1])
 
-            let indexedHandles = await this.getnotMissing();
+            let indexedHandles = await this.getnotMissing(job);
             let missingHandles = this.sitemapHandles.filter(e => !indexedHandles.includes(e));
             this.addjob_missing_items(missingHandles, repo, job, 0);
-            await this.deleteDuplicates();
+            await this.deleteDuplicates(job);
             job.progress(100);
             return 'done';
         } catch (error) {
@@ -45,10 +45,10 @@ export class DSpaceHealthCheck {
         if (missingHandles[i]) {
             let handle = missingHandles[i];
             await this.pluginsQueue.add('dspace_add_missing_items', { repo, handle, itemEndPoint: job.data.itemEndPoint })
-            this.addjob_missing_items(missingHandles, repo, job, i+1)
+            this.addjob_missing_items(missingHandles, repo, job, i + 1)
         }
     }
-    async deleteDuplicates() {
+    async deleteDuplicates(job: Job) {
         let elastic_data = {
             index: process.env.OPENRXV_TEMP_INDEX,
             body: {
@@ -56,7 +56,18 @@ export class DSpaceHealthCheck {
                 _source: ["handle"],
                 "track_total_hits": true,
                 query: {
-                    "exists": { "field": "handle" }
+                    "bool": {
+                        "must": [
+                            {
+                                "match": {
+                                    "repo.keyword": job.data.repo
+                                }
+                            },
+                            {
+                                "exists": { "field": "handle" }
+                            }
+                        ]
+                    }
                 },
                 aggs: {
                     "duplicateCount": {
@@ -76,7 +87,11 @@ export class DSpaceHealthCheck {
                 }
             }
         };
-        let response: any = await this.elasticsearchService.search(elastic_data).catch(e => this.logger.error(e));
+        let response: any = await this.elasticsearchService.search(elastic_data).catch((e) => {
+            this.logger.error(e)
+            job.moveToFailed(e, true);
+            return null;
+        });
         let dublicates = [];
         if (response)
             response.body.aggregations.duplicateCount.buckets.forEach(async (item) => {
@@ -92,7 +107,7 @@ export class DSpaceHealthCheck {
         }, 2000);
     }
 
-    async getnotMissing(): Promise<Array<any>> {
+    async getnotMissing(job: Job): Promise<Array<any>> {
         return new Promise(async (resolve, reject) => {
             this.logger.log('Health Check Started');
             try {
@@ -108,7 +123,19 @@ export class DSpaceHealthCheck {
                         _source: ["handle"],
                         "track_total_hits": true,
                         query: {
-                            "exists": { "field": "handle" }
+                            "bool": {
+                                "must": [
+                                    {
+                                        "match": {
+                                            "repo.keyword": job.data.repo
+                                        }
+                                    },
+                                    {
+                                        "exists": { "field": "handle" }
+                                    }
+                                ]
+                            },
+
                         }
                     },
                     scroll: '10m'

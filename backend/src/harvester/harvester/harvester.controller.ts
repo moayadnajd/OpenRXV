@@ -33,7 +33,7 @@ export class HarvesterController {
     }
    
     @UseGuards(AuthGuard('jwt'))
-    @Get('plugins')
+    @Get('start-plugins')
     async pluginsStart() {
         return { message: Date(), start: await this.harvestService.pluginsStart() }
     }

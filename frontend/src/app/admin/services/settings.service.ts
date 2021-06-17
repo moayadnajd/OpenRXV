@@ -102,7 +102,12 @@ export class SettingsService {
     })).toPromise();
   }
   
-
+  
+  async startPlugins() {
+    return await this.http.get(environment.api + '/harvester/start-plugins').pipe(map((data: any) => {
+      return data;
+    })).toPromise();
+  }
   async startReIndex() {
     return await this.http.get(environment.api + '/harvester/start-reindex').pipe(map((data: any) => {
       return data;

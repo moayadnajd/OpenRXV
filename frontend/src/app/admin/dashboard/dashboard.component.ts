@@ -62,6 +62,15 @@ export class DashboardComponent implements OnInit {
 
   }
 
+  async startPlugins() {
+    await this.setttingService.startPlugins();
+    this.refreshCounter = 0
+    this.Init()
+
+  }
+
+  
+
   
 
   async stopIndex() {
