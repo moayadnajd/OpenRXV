@@ -45,7 +45,7 @@ export class DSpaceHealthCheck {
         if (missingHandles[i]) {
             let handle = missingHandles[i];
             await this.pluginsQueue.add('dspace_add_missing_items', { repo, handle, itemEndPoint: job.data.itemEndPoint })
-            this.addjob_missing_items(missingHandles, repo, job, i++)
+            this.addjob_missing_items(missingHandles, repo, job, i+1)
         }
     }
     async deleteDuplicates() {
