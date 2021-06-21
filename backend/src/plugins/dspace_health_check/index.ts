@@ -17,6 +17,7 @@ export class DSpaceHealthCheck {
     ) { }
     @Process({ name: 'dspace_health_check', concurrency: 1 })
     async transcode(job: Job<any>) {
+        this.logger.log('Health Check Started');
         let settings = await this.jsonFilesService.read('../../../data/dataToUse.json');
 
         let repo = settings.repositories.filter(d => d.name = job.data.repo)[0]
@@ -25,26 +26,35 @@ export class DSpaceHealthCheck {
             url: repo.siteMap,
             timeout: 15000, // 15 seconds
         });
-        try {
-            const { sites } = await Sitemap.fetch();
-            job.progress(50);
-            this.sitemapHandles = sites.map(d => d.split('/handle/')[1])
 
-            let indexedHandles = await this.getnotMissing(job);
+        const { sites } = await Sitemap.fetch();
+        job.progress(50);
+        this.sitemapHandles = sites.map(d => d.split('/handle/')[1])
+
+        let indexedHandles = await this.getnotMissing(job).catch(e => {
+            job.moveToFailed(e, true)
+            return null;
+        });
+
+        if (indexedHandles) {
             let missingHandles = this.sitemapHandles.filter(e => !indexedHandles.includes(e));
+            this.logger.log('missing handles founded ' + missingHandles.length);
             this.addjob_missing_items(missingHandles, repo, job, 0);
             await this.deleteDuplicates(job);
+            this.logger.log('Duplicates Done');
             job.progress(100);
+            job.moveToCompleted('done', true);
             return 'done';
-        } catch (error) {
-            console.log(error);
         }
+        job.progress(100);
+        return 'done';
+
 
     }
     async addjob_missing_items(missingHandles, repo, job, i) {
         if (missingHandles[i]) {
             let handle = missingHandles[i];
-            await this.pluginsQueue.add('dspace_add_missing_items', { repo, handle, itemEndPoint: job.data.itemEndPoint })
+            await this.pluginsQueue.add('dspace_add_missing_items', { repo, handle, itemEndPoint: job.data.itemEndPoint },{attempts:0})
             this.addjob_missing_items(missingHandles, repo, job, i + 1)
         }
     }
@@ -69,17 +79,20 @@ export class DSpaceHealthCheck {
                         ]
                     }
                 },
-                aggs: {
+                "aggs": {
                     "duplicateCount": {
                         "terms": {
                             "field": "handle.keyword",
                             "min_doc_count": 2,
-                            "size": 99999
+                            "size": 999
                         },
                         "aggs": {
                             "duplicateDocuments": {
                                 "top_hits": {
-                                    "size": 5
+                                    "size": 100,
+                                    "_source": [
+                                        "handle"
+                                    ]
                                 }
                             }
                         }
@@ -92,24 +105,27 @@ export class DSpaceHealthCheck {
             job.moveToFailed(e, true);
             return null;
         });
-        let dublicates = [];
-        if (response)
+
+        let duplicates = [];
+        if (response) {
+            this.logger.log('searching for duplicates')
             response.body.aggregations.duplicateCount.buckets.forEach(async (item) => {
                 item.duplicateDocuments.hits.hits.forEach(async (element, index) => {
                     if (item.duplicateDocuments.hits.hits.length - 1 > index) {
-                        await this.elasticsearchService.delete({ id: element._id, index: process.env.OPENRXV_TEMP_INDEX });
-                        dublicates.push(element._id);
+                        await this.elasticsearchService.delete({ id: element._id, index: process.env.OPENRXV_TEMP_INDEX }).catch(e => this.logger.error(e));
+                        duplicates.push(element._id);
                     }
                 });
             })
+        }
         setTimeout(() => {
-            this.logger.log(dublicates.length + ' dublicates deleted')
+            this.logger.log(duplicates.length + ' duplicates deleted')
         }, 2000);
     }
 
     async getnotMissing(job: Job): Promise<Array<any>> {
         return new Promise(async (resolve, reject) => {
-            this.logger.log('Health Check Started');
+
             try {
                 if (this.missingIds != null) {
                     resolve(this.missingIds)
@@ -119,7 +135,7 @@ export class DSpaceHealthCheck {
                 let elastic_data = {
                     index: process.env.OPENRXV_TEMP_INDEX,
                     body: {
-                        size: 100,
+                        size: 9999,
                         _source: ["handle"],
                         "track_total_hits": true,
                         query: {
@@ -142,6 +158,7 @@ export class DSpaceHealthCheck {
                 };
                 let response3 = await this.elasticsearchService.search(elastic_data).catch(e => this.logger.error(e));
                 let getMoreUntilDone = async (response) => {
+                    this.logger.log(allRecords.length + ' handles count')
                     let handleIDs = response.body.hits.hits.filter((d) => {
                         if (d._source.handle && this.sitemapHandles.indexOf(d._source.handle) >= 0)
                             return true;

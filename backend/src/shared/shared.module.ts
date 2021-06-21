@@ -37,7 +37,8 @@ import { BullModule } from '@nestjs/bull';
         BullModule.registerQueue({
             name: 'plugins',
             defaultJobOptions: {
-                attempts: 5
+                attempts: 5,
+                timeout: 900000
             },
             settings: {
                 retryProcessDelay: 9000,
