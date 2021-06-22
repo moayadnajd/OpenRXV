@@ -1,4 +1,4 @@
-import { InjectQueue, Processor, Process, JOB_REF } from "@nestjs/bull";
+import { InjectQueue, Processor, Process, JOB_REF, OnQueueStalled } from "@nestjs/bull";
 import { Logger, HttpService } from "@nestjs/common";
 import { ElasticsearchService } from "@nestjs/elasticsearch";
 import { Queue, Job } from "bull";
@@ -8,8 +8,6 @@ import { JsonFilesService } from "src/admin/json-files/json-files.service";
 @Processor('plugins')
 export class DSpaceHealthCheck {
     private logger = new Logger(DSpaceHealthCheck.name);
-    missingIds: any = null;
-    sitemapHandles: string[];
     constructor(
         public readonly elasticsearchService: ElasticsearchService,
         public readonly jsonFilesService: JsonFilesService,
@@ -17,44 +15,42 @@ export class DSpaceHealthCheck {
     ) { }
     @Process({ name: 'dspace_health_check', concurrency: 1 })
     async transcode(job: Job<any>) {
-        this.logger.log('Health Check Started');
-        let settings = await this.jsonFilesService.read('../../../data/dataToUse.json');
+        try {
+            await job.takeLock()
+            this.logger.log('Health Check Started');
+            let settings = await this.jsonFilesService.read('../../../data/dataToUse.json');
+            let repo = settings.repositories.filter(d => d.name = job.data.repo)[0]
+            await job.progress(30);
+            const Sitemap = new Sitemapper({
+                url: repo.siteMap,
+                timeout: 15000, // 15 seconds
+            });
 
-        let repo = settings.repositories.filter(d => d.name = job.data.repo)[0]
-        job.progress(30);
-        const Sitemap = new Sitemapper({
-            url: repo.siteMap,
-            timeout: 15000, // 15 seconds
-        });
+            const { sites } = await Sitemap.fetch();
+            await job.progress(50);
+            let sitemapHandles = sites.map(d => d.split('/handle/')[1])
 
-        const { sites } = await Sitemap.fetch();
-        job.progress(50);
-        this.sitemapHandles = sites.map(d => d.split('/handle/')[1])
-
-        let indexedHandles = await this.getnotMissing(job).catch(e => {
-            job.moveToFailed(e, true)
-            return null;
-        });
-
-        if (indexedHandles) {
-            let missingHandles = this.sitemapHandles.filter(e => !indexedHandles.includes(e));
-            this.logger.log('missing handles founded ' + missingHandles.length);
-            this.addjob_missing_items(missingHandles, repo, job, 0);
+            let indexedHandles = await this.getHandles(job.data.repo).catch(e => {
+                job.moveToFailed(e, true)
+                return null;
+            });
+            await job.progress(80);
             await this.deleteDuplicates(job);
-            this.logger.log('Duplicates Done');
-            job.progress(100);
-            job.moveToCompleted('done', true);
-            return 'done';
-        }
-        job.progress(100);
-        return 'done';
+            await this.addjob_missing_items(sitemapHandles.filter(e => !indexedHandles.includes(e)), repo, job, 0);
 
+            this.logger.log('Duplicates Done');
+            await job.progress(100);
+            return { success: true };
+        } catch (e) {
+            job.moveToFailed(e, true);
+            return { success: false };
+        }
 
     }
     async addjob_missing_items(missingHandles, repo, job, i) {
         if (missingHandles[i]) {
             let handle = missingHandles[i];
-            await this.pluginsQueue.add('dspace_add_missing_items', { repo, handle, itemEndPoint: job.data.itemEndPoint },{attempts:0})
+            await this.pluginsQueue.add('dspace_add_missing_items', { repo, handle, itemEndPoint: job.data.itemEndPoint }, { attempts: 0 })
             this.addjob_missing_items(missingHandles, repo, job, i + 1)
         }
     }
@@ -112,25 +108,27 @@ export class DSpaceHealthCheck {
             response.body.aggregations.duplicateCount.buckets.forEach(async (item) => {
                 item.duplicateDocuments.hits.hits.forEach(async (element, index) => {
                     if (item.duplicateDocuments.hits.hits.length - 1 > index) {
-                        await this.elasticsearchService.delete({ id: element._id, index: process.env.OPENRXV_TEMP_INDEX }).catch(e => this.logger.error(e));
                         duplicates.push(element._id);
+                        await this.elasticsearchService.delete({ id: element._id, index: process.env.OPENRXV_TEMP_INDEX }).catch(e => this.logger.error(e));
+
                     }
                 });
             })
+            if (duplicates.length > 0) {
+                setTimeout(() => {
+                    this.logger.log(duplicates.length + ' duplicates deleted')
+                }, 2000);
+                return true
+            }
         }
-        setTimeout(() => {
-            this.logger.log(duplicates.length + ' duplicates deleted')
-        }, 2000);
+
+        return false;
     }
 
-    async getnotMissing(job: Job): Promise<Array<any>> {
+    async getHandles(repo): Promise<Array<any>> {
+        this.logger.log('getHandles')
         return new Promise(async (resolve, reject) => {
-
             try {
-                if (this.missingIds != null) {
-                    resolve(this.missingIds)
-                    return;
-                }
                 let allRecords: any = [];
                 let elastic_data = {
                     index: process.env.OPENRXV_TEMP_INDEX,
@@ -143,7 +141,7 @@ export class DSpaceHealthCheck {
                                 "must": [
                                     {
                                         "match": {
-                                            "repo.keyword": job.data.repo
+                                            "repo.keyword": repo
                                         }
                                     },
                                     {
@@ -156,11 +154,11 @@ export class DSpaceHealthCheck {
                     },
                     scroll: '10m'
                 };
-                let response3 = await this.elasticsearchService.search(elastic_data).catch(e => this.logger.error(e));
+
                 let getMoreUntilDone = async (response) => {
                     this.logger.log(allRecords.length + ' handles count')
                     let handleIDs = response.body.hits.hits.filter((d) => {
-                        if (d._source.handle && this.sitemapHandles.indexOf(d._source.handle) >= 0)
+                        if (d._source.handle)
                             return true;
                         return false;
                     }).map(d => d._source.handle)
@@ -175,11 +173,27 @@ export class DSpaceHealthCheck {
                         resolve(allRecords)
                     }
                 }
-                getMoreUntilDone(response3)
+
+                let response3 = await this.elasticsearchService.search(elastic_data).catch(e => {
+                    this.logger.error(e)
+                    return null;
+                });
+                if (response3)
+                    getMoreUntilDone(response3)
+                else
+                    resolve(allRecords)
+
             } catch (e) {
                 this.logger.error(e)
                 reject(e);
             }
         });
+    }
+
+    @OnQueueStalled()
+    OnStalled(job: Job) {
+        this.logger.log(
+            `Processing job ${job.id} of type ${job.name} with data ${job.data}...`,
+        );
     }
 }

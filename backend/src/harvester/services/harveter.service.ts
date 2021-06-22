@@ -138,7 +138,7 @@ export class HarvesterService {
         if (plugins.filter(plugin => plugin.value.length > 0).length > 0)
             for (let plugin of plugins) {
                 for (let param of plugin.value) {
-                    await this.pluginsQueue.add(plugin.name, { ...param, page: 1, index: process.env.OPENRXV_TEMP_INDEX, attempts: plugin.name == 'dspace_health_check' ? 0 : 2 })
+                    await this.pluginsQueue.add(plugin.name, { ...param, page: 1, index: process.env.OPENRXV_TEMP_INDEX })
                 }
             }
     }

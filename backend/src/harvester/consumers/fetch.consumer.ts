@@ -19,6 +19,7 @@ export class FetchConsumer {
     @Process({ name: 'fetch', concurrency: 5 })
     async transcode(job: Job<any>) {
         try {
+            await  job.takeLock()
             await job.progress(20);
             this.formatService.Init()
             let offset = parseInt(job.data.page) * 10;

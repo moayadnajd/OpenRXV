@@ -41,6 +41,8 @@ import { BullModule } from '@nestjs/bull';
                 timeout: 900000
             },
             settings: {
+                lockDuration:900000,
+                maxStalledCount:0,
                 retryProcessDelay: 9000,
                 drainDelay: 9000,
             },

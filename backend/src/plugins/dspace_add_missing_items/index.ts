@@ -21,10 +21,9 @@ export class AddMissingItems {
     ) { }
     @Process({ name: 'dspace_add_missing_items', concurrency: 5 })
     async transcode(job: Job<any>) {
+        await  job.takeLock()
         let url = job.data.itemEndPoint + `/${job.data.handle}?expand=metadata,parentCommunityList,parentCollectionList,bitstreams`;
-        let result = await this.http.get(url).pipe(map(d => d.data)).toPromise().catch(d => {
-            return null;
-        });
+        let result = await this.http.get(url).pipe(map(d => d.data)).toPromise().catch(d => null);
         job.progress(50);
         if (result && result.type == 'item') {
             this.formatService.Init()
