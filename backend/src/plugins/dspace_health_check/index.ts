@@ -24,6 +24,9 @@ export class DSpaceHealthCheck {
             const Sitemap = new Sitemapper({
                 url: repo.siteMap,
                 timeout: 15000, // 15 seconds
+                requestHeaders: {
+                  'User-Agent': 'OpenRXV harvesting bot; https://github.com/ilri/OpenRXV'
+                }
             });
 
             const { sites } = await Sitemap.fetch();
