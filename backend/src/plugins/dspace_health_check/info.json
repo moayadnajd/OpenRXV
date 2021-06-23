@@ -15,7 +15,7 @@
         },
         {
             "name": "itemEndPoint",
-            "label": "Link to DSpace item By Handle REST API ",
+            "label": "Link to DSpace REST API 'handle' endpoint",
             "type": "text",
             "required": true
         }
