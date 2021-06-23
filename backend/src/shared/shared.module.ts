@@ -17,7 +17,7 @@ import { BullModule } from '@nestjs/bull';
         ElasticsearchModule.register({
             node: process.env.ELASTICSEARCH_HOST,
         }),
-        HttpModule.register({ headers: { 'User-Agent': 'ARES harvesting bot; https://github.com/ilri/OpenRXV' } }),
+        HttpModule.register({ headers: { 'User-Agent': 'OpenRXV harvesting bot; https://github.com/ilri/OpenRXV' } }),
         BullModule.registerQueue({
             name: 'fetch',
             defaultJobOptions: {
