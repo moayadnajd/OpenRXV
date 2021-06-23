@@ -17,7 +17,7 @@ export class DSpaceHealthCheck {
     async transcode(job: Job<any>) {
         try {
             await job.takeLock()
-            this.logger.log('Health Check Started');
+            this.logger.log('Started DSpace health check');
             let settings = await this.jsonFilesService.read('../../../data/dataToUse.json');
             let repo = settings.repositories.filter(d => d.name = job.data.repo)[0]
             await job.progress(30);
@@ -38,7 +38,7 @@ export class DSpaceHealthCheck {
             await this.deleteDuplicates(job);
             await this.addjob_missing_items(sitemapHandles.filter(e => !indexedHandles.includes(e)), repo, job, 0);
 
-            this.logger.log('Duplicates Done');
+            this.logger.log('Finished DSpace health check');
             await job.progress(100);
             return { success: true };
         } catch (e) {
@@ -104,7 +104,7 @@ export class DSpaceHealthCheck {
 
         let duplicates = [];
         if (response) {
-            this.logger.log('searching for duplicates')
+            this.logger.log('Searching for duplicate handles')
             response.body.aggregations.duplicateCount.buckets.forEach(async (item) => {
                 item.duplicateDocuments.hits.hits.forEach(async (element, index) => {
                     if (item.duplicateDocuments.hits.hits.length - 1 > index) {
@@ -116,7 +116,7 @@ export class DSpaceHealthCheck {
             })
             if (duplicates.length > 0) {
                 setTimeout(() => {
-                    this.logger.log(duplicates.length + ' duplicates deleted')
+                    this.logger.log(duplicates.length + ' duplicate handles deleted')
                 }, 2000);
                 return true
             }
@@ -156,7 +156,7 @@ export class DSpaceHealthCheck {
                 };
 
                 let getMoreUntilDone = async (response) => {
-                    this.logger.log(allRecords.length + ' handles count')
+                    this.logger.log(allRecords.length + ' handles found')
                     let handleIDs = response.body.hits.hits.filter((d) => {
                         if (d._source.handle)
                             return true;
