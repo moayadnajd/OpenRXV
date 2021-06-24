@@ -19,7 +19,7 @@ export class FetchConsumer {
     @Process({ name: 'fetch', concurrency: 5 })
     async transcode(job: Job<any>) {
         try {
-            await  job.takeLock()
+            await job.takeLock()
             await job.progress(20);
             this.formatService.Init()
             let offset = parseInt(job.data.page) * 10;
@@ -63,7 +63,7 @@ export class FetchConsumer {
                 }
 
             }
-            formated['id'] = item.uuid ? item.uuid : item.id;
+            formated['id'] = item.uuid ? item.uuid.toString() : item.id.toString();
             formated['repo'] = job.data.repo.name;
             finaldata.push({ index: { _index: process.env.OPENRXV_TEMP_INDEX } });
             finaldata.push(formated);
