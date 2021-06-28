@@ -36,7 +36,6 @@ lerna-debug.log*
 /data/*
 !/data/templates
 /data/files/
-package-lock.json 
 
 
 
