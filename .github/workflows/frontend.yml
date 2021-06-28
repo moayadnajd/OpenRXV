@@ -1,5 +1,5 @@
 # Name that shows up in the badge
-name: Build frontend
+name: Frontend
 
 # Trigger workflow on pushes and pull requests to all branches
 on: [push, pull_request]
