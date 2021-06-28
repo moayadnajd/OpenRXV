@@ -15,5 +15,5 @@
   );
 })(
   'altmetric-embed-js',
-  'https://d1bxh8uas1mnw7.cloudfront.net/assets/altmetric_badges-6b74dfff5c7f701b334f3e44e411f88f.js'
+  'https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js'
 );
