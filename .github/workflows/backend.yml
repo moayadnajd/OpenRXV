@@ -7,18 +7,13 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-20.04
-    strategy:
-      matrix:
-        # Run on current "active" and "maintenance" releases of Node.js
-        # See: https://nodejs.org/en/about/releases/
-        node: [ '12', '14' ]
-    name: Node.js ${{ matrix.node }}
+    name: Build
     steps:
       - uses: actions/checkout@v2
       - name: Setup node
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node }}
+          node-version: '12'
       - run: cd backend; npm install
   format:
     runs-on: ubuntu-20.04
