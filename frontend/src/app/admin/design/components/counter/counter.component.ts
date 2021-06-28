@@ -32,8 +32,8 @@ export class CounterComponent implements OnInit {
       type: 'select',
       items: [
         { name: "Count of distinct values", value: "cardinality" },
-        { name: "Sums up numeric values", value: "sum" },
-        { name: "Computes the average of numeric values", value: "avg" }
+        { name: "Sum of numeric values", value: "sum" },
+        { name: "Average of numeric values", value: "avg" }
       ],
       required: true
     },
@@ -51,7 +51,7 @@ export class CounterComponent implements OnInit {
     },
     {
       name: 'percentageFromTotal',
-      label: 'Show Percentage From Total',
+      label: 'Show percentage of total',
       type: 'check',
       required: false
     },

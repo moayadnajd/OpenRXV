@@ -94,7 +94,7 @@ export class StructureComponent implements OnInit {
         },
         {
           name: 'allowFilterOnClick',
-          label: 'allow filter on click',
+          label: 'Allow Filter on click',
           type: 'check',
           required: true,
         },
@@ -106,7 +106,7 @@ export class StructureComponent implements OnInit {
         },
         {
           name: 'description',
-          label: 'Tour Desctiption',
+          label: 'Tour Description',
           type: 'textarea',
           required: true,
         }]]
@@ -124,7 +124,7 @@ export class StructureComponent implements OnInit {
             },
             {
               name: 'description',
-              label: 'Tour Desctiption',
+              label: 'Tour Description',
               type: 'textarea',
               required: true,
             },
@@ -170,20 +170,20 @@ export class StructureComponent implements OnInit {
             },
             {
               name: 'agg_on',
-              label: 'Values from source leave empty for items count',
+              label: 'Values from source (leave empty for items count)',
               type: 'metadata',
               required: false,
             },
             {
               name: 'sort',
-              label: 'Order By',
+              label: 'Order by',
               type: 'select',
               items: this.sortoptions,
               required: true
             },
             {
               name: 'description',
-              label: 'Tour Desctiption',
+              label: 'Tour Description',
               type: 'textarea',
               required: true,
             },
