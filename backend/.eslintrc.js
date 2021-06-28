@@ -5,11 +5,7 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['@typescript-eslint/eslint-plugin'],
-  // extends: [
-  //   'plugin:@typescript-eslint/recommended',
-  //   'prettier/@typescript-eslint',
-  //   'plugin:prettier/recommended',
-  // ],
+  extends: ['plugin:prettier/recommended']
   root: true,
   env: {
     node: true,
@@ -17,8 +13,6 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
-    'no-multi-spaces':1,
-    'no-trailing-spaces': 1,
     'no-unused-vars':1
   },
 };
