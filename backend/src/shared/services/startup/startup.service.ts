@@ -4,10 +4,11 @@ import { JsonFilesService } from 'src/admin/json-files/json-files.service';
 
 @Injectable()
 export class StartupService {
-    constructor(private elsticsearch: ElasticService,
-        private jsonfileservice: JsonFilesService
-    ) {
-        this.elsticsearch.startup();
-        this.jsonfileservice.startup();
-    }
+  constructor(
+    private elsticsearch: ElasticService,
+    private jsonfileservice: JsonFilesService,
+  ) {
+    this.elsticsearch.startup();
+    this.jsonfileservice.startup();
+  }
 }

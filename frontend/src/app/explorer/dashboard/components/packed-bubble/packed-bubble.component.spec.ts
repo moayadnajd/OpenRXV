@@ -8,9 +8,8 @@ describe('PackedBubbleComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PackedBubbleComponent ]
-    })
-    .compileComponents();
+      declarations: [PackedBubbleComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

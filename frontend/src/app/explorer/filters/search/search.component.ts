@@ -26,7 +26,7 @@ export class SearchComponent extends ParentComponent implements OnInit {
 
   constructor(
     private readonly bodyBuilderService: BodyBuilderService,
-    private readonly store: Store<fromStore.AppState>
+    private readonly store: Store<fromStore.AppState>,
   ) {
     super();
   }
@@ -35,10 +35,12 @@ export class SearchComponent extends ParentComponent implements OnInit {
     let { counters, dashboard } = JSON.parse(localStorage.getItem('configs'));
     let sorcue =
       (() => {
-        const [conf] = dashboard.flat(1).filter(
-          ({ componentConfigs }: GeneralConfigs) =>
-            (componentConfigs as ComponentDashboardConfigs).content
-        );
+        const [conf] = dashboard
+          .flat(1)
+          .filter(
+            ({ componentConfigs }: GeneralConfigs) =>
+              (componentConfigs as ComponentDashboardConfigs).content,
+          );
         return (conf.componentConfigs as ComponentDashboardConfigs).content
           .title;
       })() || 'dc_title';
@@ -48,21 +50,25 @@ export class SearchComponent extends ParentComponent implements OnInit {
   }
 
   onClick() {
-
     // if (this.checkIfInputIsEmpty()) {
     //   this.checkTypeThenDelete();
     //   return;
     // }
     this.applySearchTerm();
-
   }
 
   private deleteFromMainQuery(allSearch: boolean): string {
     return this.bodyBuilderService.deleteFromMainQuery(allSearch);
   }
   prepareQueryString(string: string) {
-    string = string.replace(new RegExp('\\&|\\||\\!|\\(|\\)|\\{|\\}|\\[|\\]|\\^|\\"|\\~|\\*|\\?|\\:|\\-|\\\\|\\/|\\=|\\+|\\%|\\,|\\@', 'gm'), ' ');//remove special characters
-    string = string.trim().replace(new RegExp('\\s{2,}', 'gm'), ' ');//remove extra whitespaces
+    string = string.replace(
+      new RegExp(
+        '\\&|\\||\\!|\\(|\\)|\\{|\\}|\\[|\\]|\\^|\\"|\\~|\\*|\\?|\\:|\\-|\\\\|\\/|\\=|\\+|\\%|\\,|\\@',
+        'gm',
+      ),
+      ' ',
+    ); //remove special characters
+    string = string.trim().replace(new RegExp('\\s{2,}', 'gm'), ' '); //remove extra whitespaces
     return string;
   }
   private applySearchTerm(): void {
@@ -70,13 +76,13 @@ export class SearchComponent extends ParentComponent implements OnInit {
     if (type === searchOptions.allSearch) {
       this.bodyBuilderService.setAggAttributes = <QuerySearchAttribute>{
         query: {
-          "query_string": {
-            "type": "best_fields",
-            "minimum_should_match": 2,
-            "query": this.prepareQueryString(this.searchTerm)
-          }
-        }
-      }
+          query_string: {
+            type: 'best_fields',
+            minimum_should_match: 2,
+            query: this.prepareQueryString(this.searchTerm),
+          },
+        },
+      };
     } else {
       this.bodyBuilderService.setAggAttributes = this.searchTerm;
     }
@@ -88,15 +94,12 @@ export class SearchComponent extends ParentComponent implements OnInit {
       let filters = this.bodyBuilderService.getFiltersFromQuery();
       filters.forEach((element) => {
         for (var key in element)
-          if (key == 'query')
-            this.searchTerm = element[key];
-          else if (key == source && type == 0)
-            this.searchTerm = element[key];
+          if (key == 'query') this.searchTerm = element[key];
+          else if (key == source && type == 0) this.searchTerm = element[key];
       });
-      if (!filters.filter(element => element[source]).length)
-        this.searchTerm = this.searchTerm
-        if(filters.length == 0)
-        this.searchTerm = ''
+      if (!filters.filter((element) => element[source]).length)
+        this.searchTerm = this.searchTerm;
+      if (filters.length == 0) this.searchTerm = '';
     });
   }
   private checkTypeThenDelete() {
@@ -116,7 +119,7 @@ export class SearchComponent extends ParentComponent implements OnInit {
   private dispatchActions() {
     this.bodyBuilderService.resetOtherComponent({ caller: 'search' });
     this.store.dispatch(
-      new fromStore.SetQuery(this.bodyBuilderService.buildMainQuery().build())
+      new fromStore.SetQuery(this.bodyBuilderService.buildMainQuery().build()),
     );
   }
 
@@ -134,7 +137,7 @@ export class SearchComponent extends ParentComponent implements OnInit {
             if (this.checkIfInputIsEmpty()) {
               this.checkTypeThenDelete();
             }
-          })
+          }),
         )
         .subscribe();
   }

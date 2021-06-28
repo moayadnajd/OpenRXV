@@ -3,7 +3,7 @@ import {
   Input,
   ViewChild,
   OnInit,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { hits } from 'src/app/explorer/filters/services/interfaces';
 import { MatDialog } from '@angular/material/dialog';
@@ -13,12 +13,12 @@ import * as fromStore from '../../../../store';
 import { MainBodyBuilderService } from 'src/app/explorer/services/mainBodyBuilderService/main-body-builder.service';
 import {
   SortPaginationOptions,
-  FileType
+  FileType,
 } from './filter-paginated-list/types.interface';
 import { QueryState } from 'src/app/explorer/store/reducers/query.reducer';
 import {
   SortOption,
-  PaginatedListConfigs
+  PaginatedListConfigs,
 } from 'src/app/explorer/configs/generalConfig.interface';
 import { skip } from 'rxjs/operators';
 import { ExportComponent } from '../export/export.component';
@@ -27,7 +27,7 @@ import { ExportComponent } from '../export/export.component';
   selector: 'app-paginated-list',
   templateUrl: './paginated-list.component.html',
   styleUrls: ['./paginated-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PaginatedListComponent implements OnInit {
   @Input() hits: hits[];
@@ -49,7 +49,7 @@ export class PaginatedListComponent implements OnInit {
   constructor(
     private readonly store: Store<fromStore.AppState>,
     private readonly mainBodyBuilderService: MainBodyBuilderService,
-    private readonly dialog: MatDialog
+    private readonly dialog: MatDialog,
   ) {
     this.flag = true;
   }
@@ -66,7 +66,7 @@ export class PaginatedListComponent implements OnInit {
       this.dispatchAction({
         reset: false,
         pageEvent: e,
-        sortOption: this.sortOption
+        sortOption: this.sortOption,
       });
     } else {
       this.flag = true;
@@ -79,14 +79,14 @@ export class PaginatedListComponent implements OnInit {
     this.dispatchAction({
       reset: true,
       pageEvent: this.paginationAtt,
-      sortOption: e
+      sortOption: e,
     });
   }
 
   exportFile(file): void {
     const dialogRef = this.dialog.open(ExportComponent, {
       width: '400px',
-      disableClose: true
+      disableClose: true,
     });
     dialogRef.componentInstance.type = file.type;
     dialogRef.componentInstance.file = file.file;
@@ -98,8 +98,8 @@ export class PaginatedListComponent implements OnInit {
       new fromStore.SetQuery(
         this.mainBodyBuilderService
           .buildMainQuery(spo.reset ? 0 : spo.pageEvent.pageIndex * 10, false)
-          .build()
-      )
+          .build(),
+      ),
     );
   }
 
@@ -122,7 +122,7 @@ export class PaginatedListComponent implements OnInit {
         (b: QueryState) =>
           b.body.from === 0 &&
           this.paginationAtt.pageIndex !== 0 &&
-          this.resetPagination()
+          this.resetPagination(),
       );
   }
 

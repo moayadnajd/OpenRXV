@@ -22,60 +22,46 @@ export const reducers: ActionReducerMap<AppState> = {
 };
 
 // FeatureSelectors
-export const getItemsState = createFeatureSelector<fromItems.ItemsState>(
-  'items'
-);
-export const getQueryState = createFeatureSelector<fromQueries.QueryState>(
-  'query'
-);
+export const getItemsState =
+  createFeatureSelector<fromItems.ItemsState>('items');
+export const getQueryState =
+  createFeatureSelector<fromQueries.QueryState>('query');
 
 // items Selectors
 export const getLoadingStatus = createSelector(
   getItemsState,
-  fromItems.loadingStatus
+  fromItems.loadingStatus,
 );
 
 export const getLoadingOnlyHits = createSelector(
   getItemsState,
-  fromItems.loadingOnlyHits
+  fromItems.loadingOnlyHits,
 );
 
 // get counters selector
 export const getCounters = createSelector(
   getItemsState,
-  fromItems.countersState
+  fromItems.countersState,
 );
 // get Inview Selector
-export const getInView = createSelector(
-  getItemsState,
-  fromItems.inViewState
-);
+export const getInView = createSelector(getItemsState, fromItems.inViewState);
 
-export const getErrors = createSelector(
-  getItemsState,
-  fromItems.getErrors
-);
+export const getErrors = createSelector(getItemsState, fromItems.getErrors);
 
 export const getInViewById = createSelector(
   getInView,
-  (items: fromItems.InViewState, id: string) => items[id]
+  (items: fromItems.InViewState, id: string) => items[id],
 );
 
 export const getInViewFirstOne = createSelector(
   getItemsState,
-  fromItems.inViewFirstOne
+  fromItems.inViewFirstOne,
 );
 
-export const getTotal = createSelector(
-  getItemsState,
-  fromItems.totalState
-);
+export const getTotal = createSelector(getItemsState, fromItems.totalState);
 
 // getting the data feild from the state
-export const getItems = createSelector(
-  getItemsState,
-  fromItems.getData
-);
+export const getItems = createSelector(getItemsState, fromItems.getData);
 
 // getting the bucket from
 // itemState.data.aggregations[KEY].buckets
@@ -86,19 +72,16 @@ export const getBuckets = createSelector(
       const aggs = items.aggregations;
       return aggs[key] && aggs[key].buckets;
     }
-  }
+  },
 );
 
-export const getHits = createSelector(
-  getItems,
-  fromItems.getHits
-);
+export const getHits = createSelector(getItems, fromItems.getHits);
 
 export const getAggregation = createSelector(
   getItems,
   (
     items: ElasticsearchResponse,
-    sourceFilter: { source: string; filter: string }
+    sourceFilter: { source: string; filter: string },
   ) => {
     // just a safe check, so no errors will be logged to the console
     // undefined won't come when the page loads for the first time
@@ -109,23 +92,18 @@ export const getAggregation = createSelector(
     if (items.aggregations !== undefined) {
       return (
         items.aggregations[
-        sourceFilter.source.concat(`_${sourceFilter.filter}`) // limited & open access !
-        ]
-        ||
-        items.aggregations[sourceFilter.source]
+          sourceFilter.source.concat(`_${sourceFilter.filter}`) // limited & open access !
+        ] || items.aggregations[sourceFilter.source]
       );
     }
-  }
+  },
 );
 
 // query selectors
 
-export const getQuery = createSelector(
-  getQueryState,
-  fromQueries.getQueryBody
-);
+export const getQuery = createSelector(getQueryState, fromQueries.getQueryBody);
 
 export const getQueryFromBody = createSelector(
   getQuery,
-  fromQueries.getQueryFromBody
+  fromQueries.getQueryFromBody,
 );

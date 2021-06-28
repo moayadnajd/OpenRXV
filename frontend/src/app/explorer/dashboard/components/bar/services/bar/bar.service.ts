@@ -34,7 +34,7 @@ export class BarService extends BarServiceComposer {
     rangeService: RangeService,
     isThereIsQueryInTheMainQuery$: Observable<boolean>,
     firstSourceKey: string,
-    secondSourceKey: string
+    secondSourceKey: string,
   ): void {
     this.firstSourceKey = firstSourceKey;
     this.secondSourceKey = secondSourceKey;
@@ -56,13 +56,13 @@ export class BarService extends BarServiceComposer {
     this.barLoading = true;
     this.itemsService
       .getItems(
-        this.buildQuery(this.rangeService.buildquery({ size: 12 }), changeBy)
+        this.buildQuery(this.rangeService.buildquery({ size: 12 }), changeBy),
       )
       .pipe(
         map((value: ElasticsearchResponse) =>
-          this.mapDataToColmns(value, changeBy)
+          this.mapDataToColmns(value, changeBy),
         ),
-        first()
+        first(),
       )
       .subscribe(
         (series: Array<Highcharts.SeriesColumnOptions>) => {
@@ -72,7 +72,7 @@ export class BarService extends BarServiceComposer {
         (error: ESHttpError) => {
           this.barLoading = false;
           this.setChartOptinos.emit();
-        }
+        },
       );
   }
 

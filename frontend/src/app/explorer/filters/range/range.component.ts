@@ -6,7 +6,7 @@ import {
   QueryYearAttribute,
   BuildQueryObj,
   ResetOptions,
-  ResetCaller
+  ResetCaller,
 } from '../services/interfaces';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../store';
@@ -20,17 +20,13 @@ import { query } from '@angular/animations';
   selector: 'app-range',
   templateUrl: './range.component.html',
   styleUrls: ['./range.component.scss'],
-  providers: [RangeService]
+  providers: [RangeService],
 })
-
-
 export class RangeComponent extends ParentComponent implements OnInit {
   range: number[];
   max: number;
   min: number;
-  config = {
-
-  }
+  config = {};
   loading$: Observable<boolean>;
   disabled: boolean;
   private firstMax: number;
@@ -40,7 +36,7 @@ export class RangeComponent extends ParentComponent implements OnInit {
   constructor(
     private readonly rangeService: RangeService,
     private readonly store: Store<fromStore.AppState>,
-    private readonly bodyBuilderService: BodyBuilderService
+    private readonly bodyBuilderService: BodyBuilderService,
   ) {
     super();
     this.disabled = false;
@@ -55,27 +51,23 @@ export class RangeComponent extends ParentComponent implements OnInit {
     this.subToOrOperator();
     this.subtoToQuery(source);
   }
-  slidermin
-  slidermax
+  slidermin;
+  slidermax;
   onYearSliderChange(): void {
     const [min, max] = this.range;
-    [this.slidermin, this.slidermax] = [min, max]
-    const query: bodybuilder.Bodybuilder = this.rangeService.addAttributeToMainQuery(
-      {
+    [this.slidermin, this.slidermax] = [min, max];
+    const query: bodybuilder.Bodybuilder =
+      this.rangeService.addAttributeToMainQuery({
         gte: min,
-        lte: max
-      }
-    );
+        lte: max,
+      });
     this.rangeService.resetNotification({ min, max });
     this.store.dispatch(new fromStore.SetQuery(query.build()));
   }
-  timeout = null
+  timeout = null;
   private subtoToQuery(source): void {
-
-
     this.store.select(fromStore.getQuery).subscribe((query) => {
-      if (this.timeout)
-        clearTimeout(this.timeout)
+      if (this.timeout) clearTimeout(this.timeout);
       let filters = this.bodyBuilderService.getFiltersFromQuery();
       filters.forEach(async (element) => {
         for (var key in element)
@@ -85,11 +77,9 @@ export class RangeComponent extends ParentComponent implements OnInit {
           }
       });
 
-      if (!filters.filter(element => element[source]).length) {
+      if (!filters.filter((element) => element[source]).length) {
         this.getYears('select', true);
       }
-
-
     });
   }
 
@@ -127,9 +117,9 @@ export class RangeComponent extends ParentComponent implements OnInit {
             new fromStore.UpdateYears(
               Array.from(
                 { length: this.max + 1 - this.min },
-                (_, i) => this.min + i
-              )
-            )
+                (_, i) => this.min + i,
+              ),
+            ),
           );
         } else {
           this.getYears(ro.caller, true);
@@ -140,28 +130,24 @@ export class RangeComponent extends ParentComponent implements OnInit {
 
   private async getYears(caller?: ResetCaller, force: boolean = false) {
     return await new Promise((resolve, reject) => {
-
-
       const qb: BuildQueryObj = {
-        size: 100000
+        size: 100000,
       };
       this.rangeService
         .getYears(
           this.rangeService.buildquery(qb).build() as ElasticsearchQuery,
-          force
+          force,
         )
-        .subscribe(
-          (n: number[]) => {
+        .subscribe((n: number[]) => {
+          // some queries will return empty array
 
-            // some queries will return empty array
-
-
-            resolve(n.length
+          resolve(
+            n.length
               ? this.setMinMaxLogic(+n[n.length - 1], +n[0])
-              : this.noYearQuery());
-          }
-        );
-    })
+              : this.noYearQuery(),
+          );
+        });
+    });
   }
 
   private setMinMaxLogic(max: number, min: number): void {
@@ -179,11 +165,12 @@ export class RangeComponent extends ParentComponent implements OnInit {
     }
     this.max = max;
     this.setFirstMinMax(max, min);
-    if(min != this.firstMin && max != this.firstMax)
-    this.range = [this.slidermin >= min? this.slidermin : min, this.slidermax <= max? this.slidermax : max];
-    else
-    this.range = [min, max]
-
+    if (min != this.firstMin && max != this.firstMax)
+      this.range = [
+        this.slidermin >= min ? this.slidermin : min,
+        this.slidermax <= max ? this.slidermax : max,
+      ];
+    else this.range = [min, max];
   }
 
   private setFirstMinMax(max: number, min: number): void {

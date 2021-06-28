@@ -2,7 +2,7 @@ import * as actions from 'src/app/explorer/store/actions/items.actions';
 import { mapObjIndexed } from 'ramda';
 import {
   ElasticsearchResponse,
-  Bucket
+  Bucket,
 } from 'src/app/explorer/filters/services/interfaces';
 import { InView } from '../actions/actions.interfaces';
 
@@ -33,12 +33,12 @@ const initialState: ItemsState = {
   loaded: false,
   loading: true,
   loadingOnlyHits: false,
-  error: null
+  error: null,
 };
 
 export function reducer(
   state = initialState,
-  action: actions.itemsActions
+  action: actions.itemsActions,
 ): ItemsState {
   switch (action.type) {
     case actions.ActionTypes.getDataSuccess: {
@@ -48,29 +48,29 @@ export function reducer(
         data: {
           hits: {
             ...state.data.hits,
-            ...(addHits ? payload.hits : {})
+            ...(addHits ? payload.hits : {}),
           },
           aggregations: {
             ...state.data.aggregations,
-            ...payload.aggregations
-          }
+            ...payload.aggregations,
+          },
         },
         loadingOnlyHits: false,
         loading: false,
-        loaded: true
+        loaded: true,
       };
     }
     case actions.ActionTypes.GetCounters: {
       const counters = action.payload;
       return {
         ...state,
-        counters
+        counters,
       };
     }
     case actions.ActionTypes.SetInView: {
       const {
         id,
-        viewState: { collapsed, linkedWith, userSeesMe }
+        viewState: { collapsed, linkedWith, userSeesMe },
       } = action.payload;
       const comp: ViewState = state.inView[id];
       const origianlCollapsed = comp && comp.collapsed;
@@ -81,9 +81,9 @@ export function reducer(
           [id]: {
             userSeesMe,
             collapsed: collapsed === undefined ? origianlCollapsed : collapsed,
-            linkedWith
-          }
-        }
+            linkedWith,
+          },
+        },
       };
     }
     case actions.ActionTypes.getDataError: {
@@ -93,7 +93,7 @@ export function reducer(
         error,
         loading: false,
         loaded: true,
-        loadingOnlyHits: false
+        loadingOnlyHits: false,
       };
     }
     case actions.ActionTypes.getData: {
@@ -101,7 +101,7 @@ export function reducer(
         ...state,
         loadingOnlyHits: !action.payload.aggs,
         loading: true,
-        loaded: false
+        loaded: false,
       };
     }
     case actions.ActionTypes.updateYears: {
@@ -114,11 +114,11 @@ export function reducer(
             'year.keyword': {
               ...state.data.aggregations['year.keyword'],
               buckets: action.payload.map(
-                (n: number) => ({ doc_count: null, key: `${n}` } as Bucket)
-              )
-            }
-          }
-        }
+                (n: number) => ({ doc_count: null, key: `${n}` } as Bucket),
+              ),
+            },
+          },
+        },
       };
     }
     default: {
@@ -148,10 +148,10 @@ export const inViewFirstOne = (state: ItemsState) =>
     mapObjIndexed(
       (viewState: ViewState, id: string, obj: object): InView => ({
         id,
-        viewState
+        viewState,
       }),
-      state.inView
-    )
+      state.inView,
+    ),
   ).filter(({ viewState }: InView) => viewState.userSeesMe)[0] || [];
 
 export const totalState = (state: ItemsState) =>

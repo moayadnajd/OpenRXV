@@ -17,15 +17,17 @@ import * as fromStore from '../../../store';
 })
 export class SimiCircleComponent extends ParentChart implements OnInit {
   colors: string[];
-  constructor(cms: ChartMathodsService,
+  constructor(
+    cms: ChartMathodsService,
     private settingsService: SettingsService,
     public readonly selectService: SelectService,
-    public readonly store: Store<fromStore.AppState>,) {
+    public readonly store: Store<fromStore.AppState>,
+  ) {
     super(cms, selectService, store);
   }
 
   async ngOnInit() {
-    let appearance = await this.settingsService.readAppearanceSettings()
+    let appearance = await this.settingsService.readAppearanceSettings();
     this.colors = appearance.chartColors;
     this.init('pie');
     this.buildOptions.subscribe(() => (this.chartOptions = this.setOptions()));

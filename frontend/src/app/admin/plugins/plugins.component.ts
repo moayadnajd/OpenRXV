@@ -5,12 +5,12 @@ import { FormArray } from '@angular/forms';
 @Component({
   selector: 'app-plugins',
   templateUrl: './plugins.component.html',
-  styleUrls: ['./plugins.component.scss']
+  styleUrls: ['./plugins.component.scss'],
 })
 export class PluginsComponent implements OnInit {
-  plugins = []
+  plugins = [];
   pluginsForms = {};
-  constructor(private settingsService: SettingsService) { }
+  constructor(private settingsService: SettingsService) {}
 
   async ngOnInit() {
     this.plugins = await this.settingsService.readPluginsSettings();
@@ -21,13 +21,16 @@ export class PluginsComponent implements OnInit {
   }
 
   async save() {
-    let final = Object.values(this.pluginsForms).filter((data: any) => data.active).filter((data: any) => data.form.valid)
+    let final = Object.values(this.pluginsForms)
+      .filter((data: any) => data.active)
+      .filter((data: any) => data.form.valid);
     await this.settingsService.writePluginsSettings(
-      final.map(
-        (data: any) => {
-          let obj = {}; obj['name'] = data.name; obj['value'] = data.form.value; return obj
-        })
+      final.map((data: any) => {
+        let obj = {};
+        obj['name'] = data.name;
+        obj['value'] = data.form.value;
+        return obj;
+      }),
     );
   }
-
 }

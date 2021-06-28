@@ -3,25 +3,24 @@ import * as bodybuilder from 'bodybuilder';
 import {
   QuerySearchAttribute,
   QueryYearAttribute,
-  QueryFilterAttribute
+  QueryFilterAttribute,
 } from 'src/app/explorer/filters/services/interfaces';
 import { BuilderUtilities } from './builderUtilities.class';
 import { Subject } from 'rxjs';
 import {
   SortOption,
   GeneralConfigs,
-  ComponentDashboardConfigs
+  ComponentDashboardConfigs,
 } from 'src/app/explorer/configs/generalConfig.interface';
 import { SettingsService } from 'src/app/admin/services/settings.service';
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MainBodyBuilderService extends BuilderUtilities {
   private rawOptions: string[];
 
   constructor(private settings: SettingsService) {
     super();
-
   }
   async start() {
     await this.init();
@@ -31,11 +30,10 @@ export class MainBodyBuilderService extends BuilderUtilities {
     this.filtersConfig = filters;
     this.rawOptions = this.buildRawOptions();
     this.orOperator.next(false);
-
   }
 
   aggAttributesDeirect(q) {
-    this.aggAttributes = q
+    this.aggAttributes = q;
   }
   get getAggAttributes():
     | string
@@ -50,7 +48,7 @@ export class MainBodyBuilderService extends BuilderUtilities {
       | string
       | QuerySearchAttribute
       | QueryYearAttribute
-      | QueryFilterAttribute
+      | QueryFilterAttribute,
   ) {
     if (typeof queryAttribute === 'string') {
       // title search
@@ -93,7 +91,7 @@ export class MainBodyBuilderService extends BuilderUtilities {
   buildMainQuery(
     from: number,
     everything: boolean = true,
-    excludeSource?
+    excludeSource?,
   ): bodybuilder.Bodybuilder {
     const b: bodybuilder.Bodybuilder = bodybuilder();
     if (everything) {
@@ -123,10 +121,12 @@ export class MainBodyBuilderService extends BuilderUtilities {
     }
   }
 
-  addQueryAttributes(b: bodybuilder.Bodybuilder, excludeSource?): bodybuilder.Bodybuilder {
+  addQueryAttributes(
+    b: bodybuilder.Bodybuilder,
+    excludeSource?,
+  ): bodybuilder.Bodybuilder {
     for (const key in this.aggAttributes) {
-      if (excludeSource != key)
-        this.addSpecificfield(key, b);
+      if (excludeSource != key) this.addSpecificfield(key, b);
     }
     return b;
   }
@@ -135,7 +135,7 @@ export class MainBodyBuilderService extends BuilderUtilities {
     let rows: Array<string> = [];
     const { content } = this.dashboardConfig.find(
       (curr: GeneralConfigs) =>
-        !!(curr.componentConfigs as ComponentDashboardConfigs).content
+        !!(curr.componentConfigs as ComponentDashboardConfigs).content,
     ).componentConfigs as ComponentDashboardConfigs;
 
     for (const key in content) {
@@ -149,10 +149,14 @@ export class MainBodyBuilderService extends BuilderUtilities {
           rows = [...rows, ...(Object.values(content[key]) as Array<string>)];
         } else if (Array.isArray(content[key])) {
           if (key == 'tags')
-            rows = [...rows, ...(content[key] as Array<any>).map(d => d.metadata)]
+            rows = [
+              ...rows,
+              ...(content[key] as Array<any>).map((d) => d.metadata),
+            ];
           if (key == 'filterOptions')
-            (content[key] as Array<SortOption>).forEach(({ value }: SortOption) =>
-              rows.push(value.replace('.keyword', '').replace('.score', ''))
+            (content[key] as Array<SortOption>).forEach(
+              ({ value }: SortOption) =>
+                rows.push(value.replace('.keyword', '').replace('.score', '')),
             );
         }
         // else is boolean
@@ -160,20 +164,29 @@ export class MainBodyBuilderService extends BuilderUtilities {
     }
     // bitstreams needed for the images
     // handle needed for the altmetric
-    rows.push('thumbnail', 'handle', 'bitstreams', 'contributor', 'affiliation', 'language', 'country', 'region');
+    rows.push(
+      'thumbnail',
+      'handle',
+      'bitstreams',
+      'contributor',
+      'affiliation',
+      'language',
+      'country',
+      'region',
+    );
     return rows;
   }
 
   private sortHitsQuery(b: bodybuilder.Bodybuilder, from: number): void {
     const { sort, value } = this.hitsAttributes;
     b.sort('_score', {
-      "order": "desc"
+      order: 'desc',
     }).from(from);
     if (sort && value)
       b.sort(value, {
         mode: 'max',
-        order: sort
-      })
+        order: sort,
+      });
 
     this.addRawOptions(b);
   }

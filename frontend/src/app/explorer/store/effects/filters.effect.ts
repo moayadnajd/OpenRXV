@@ -13,6 +13,6 @@ export class FiltersEffects {
     ofType(filtersActions.FiltersActionTypes.setFilters),
     switchMap((action: filtersActions.SetFilters) => {
       return of(new itemsActions.GetData(action.payload));
-    })
+    }),
   );
 }

@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
   form: FormGroup = new FormGroup({
@@ -14,32 +14,24 @@ export class LoginComponent implements OnInit {
     password: new FormControl(''),
     submit: new FormControl(''),
   });
-  constructor(private auth: AuthService,private router:Router ) { }
+  constructor(private auth: AuthService, private router: Router) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   async submit() {
     if (this.form.valid) {
       try {
-        const access_token = await this.auth.login(this.form.value)
+        const access_token = await this.auth.login(this.form.value);
 
-        if (access_token)
-        this.router.navigate(['admin'])
-        else
-          this.error = 'Username or password is wrong';
-
+        if (access_token) this.router.navigate(['admin']);
+        else this.error = 'Username or password is wrong';
       } catch (e) {
-        if (e.status == 401)
-          this.error = 'Username or password is wrong';
-        else
-          this.error = e.statusText;
+        if (e.status == 401) this.error = 'Username or password is wrong';
+        else this.error = e.statusText;
       }
 
       //this.submitEM.emit(this.form.value);
     }
   }
   @Input() error: string | null;
-
-
 }

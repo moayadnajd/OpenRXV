@@ -15,12 +15,12 @@ import { BodyBuilderService } from '../bodyBuilder/body-builder.service';
 @Injectable()
 export class SelectService {
   private source: string;
-  private readonly api_end_point: string = environment.api+'/search';
+  private readonly api_end_point: string = environment.api + '/search';
   total: number;
   subjetData: Subject<Bucket[]>;
   constructor(
     private readonly http: HttpClient,
-    private readonly bodyBuilderService: BodyBuilderService
+    private readonly bodyBuilderService: BodyBuilderService,
   ) {
     this.subjetData = new Subject();
   }
@@ -42,7 +42,7 @@ export class SelectService {
   }
 
   paginateData(
-    query: ElasticsearchQuery | Partial<ElasticsearchQuery>
+    query: ElasticsearchQuery | Partial<ElasticsearchQuery>,
   ): Subscription {
     return this.http
       .post(this.api_end_point, query)
@@ -61,24 +61,31 @@ export class SelectService {
   }
 
   addAttributeToMainQuery(
-    keyVal: QueryFilterAttribute
+    keyVal: QueryFilterAttribute,
   ): bodybuilder.Bodybuilder {
     this.bodyBuilderService.setAggAttributes = keyVal;
     return this.bodyBuilderService.buildMainQuery();
   }
   resetValueAttributetoMainQuery(source: string) {
     return this.addAttributeToMainQuery({
-      [source + '.keyword']: []
+      [source + '.keyword']: [],
     } as QueryFilterAttribute);
   }
   addNewValueAttributetoMainQuery(source: string, value) {
-    const filteredArray = this.bodyBuilderService.getFiltersFromQuery().filter(element => Object.keys(element).indexOf(source + '.keyword') != -1)
-    let filterdValues: Array<any> = [value]
-    filterdValues = [...filterdValues,...filteredArray.map(element => Object.values(element)[0])]
-    filterdValues.filter((v, i, a) => a.indexOf(v) === i); 
-   
+    const filteredArray = this.bodyBuilderService
+      .getFiltersFromQuery()
+      .filter(
+        (element) => Object.keys(element).indexOf(source + '.keyword') != -1,
+      );
+    let filterdValues: Array<any> = [value];
+    filterdValues = [
+      ...filterdValues,
+      ...filteredArray.map((element) => Object.values(element)[0]),
+    ];
+    filterdValues.filter((v, i, a) => a.indexOf(v) === i);
+
     return this.addAttributeToMainQuery({
-      [source + '.keyword']: filterdValues.length ? filterdValues : []
+      [source + '.keyword']: filterdValues.length ? filterdValues : [],
     } as QueryFilterAttribute);
   }
 }

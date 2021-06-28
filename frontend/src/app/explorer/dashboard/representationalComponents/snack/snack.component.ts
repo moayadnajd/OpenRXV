@@ -25,7 +25,7 @@ export class SnackComponent {
     if (status === 400 || status === 404) {
       this.buildMessage(
         'We can not reach the server now',
-        'settings_input_antenna'
+        'settings_input_antenna',
       );
     } else if (status === 500) {
       this.buildMessage('Something went wrong', 'error_outline');

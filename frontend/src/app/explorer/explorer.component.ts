@@ -34,11 +34,11 @@ export class ExplorerComponent implements OnInit {
   logo: string;
   website_name: string;
   orOperator: boolean;
-  primaryColorPalette
-  primaryColor
-  countersConfig = []
-  dashboardConfig = []
-  tourConfig = []
+  primaryColorPalette;
+  primaryColor;
+  countersConfig = [];
+  dashboardConfig = [];
+  tourConfig = [];
   readonly orAndToolTip: string;
   private prevenetMouseOnNav: boolean;
   options: any = {
@@ -47,7 +47,15 @@ export class ExplorerComponent implements OnInit {
     top: 0,
   };
   async share() {
-    this.openDialog(location.href.match(/(.*)shared.*/)? location.href.match(/(.*)shared.*/)[1] :  location.origin + location.pathname  + await this.itemsService.saveShare(this.mainBodyBuilderService.getAggAttributes));
+    this.openDialog(
+      location.href.match(/(.*)shared.*/)
+        ? location.href.match(/(.*)shared.*/)[1]
+        : location.origin +
+            location.pathname +
+            (await this.itemsService.saveShare(
+              this.mainBodyBuilderService.getAggAttributes,
+            )),
+    );
   }
   get isSmall(): boolean {
     return this.screenSizeService.isSmallScreen;
@@ -70,25 +78,29 @@ export class ExplorerComponent implements OnInit {
     };
   }
 
-  openDialog(link): void { 
+  openDialog(link): void {
     const dialogRef = this.dialog.open(ShareComponent, {
       width: '600px',
-      data: { link }
+      data: { link },
     });
   }
 
-
-
-
   async ngOnInit() {
-    let { counters, dashboard, appearance, welcome } = await JSON.parse(localStorage.getItem('configs'));
-    if (appearance.logo)
-      this.logo = environment.api + '/' + appearance.logo;
+    let { counters, dashboard, appearance, welcome } = await JSON.parse(
+      localStorage.getItem('configs'),
+    );
+    if (appearance.logo) this.logo = environment.api + '/' + appearance.logo;
     this.website_name = appearance.website_name;
-    localStorage.setItem('primaryColor', appearance.primary_color)
-    localStorage.setItem('minColor', this.hexToHSL(localStorage.getItem('primaryColor'), "min"))
-    localStorage.setItem('midColor', this.hexToHSL(localStorage.getItem('primaryColor'), "mid"))
-    localStorage.setItem("colors", JSON.stringify(appearance.chartColors));
+    localStorage.setItem('primaryColor', appearance.primary_color);
+    localStorage.setItem(
+      'minColor',
+      this.hexToHSL(localStorage.getItem('primaryColor'), 'min'),
+    );
+    localStorage.setItem(
+      'midColor',
+      this.hexToHSL(localStorage.getItem('primaryColor'), 'mid'),
+    );
+    localStorage.setItem('colors', JSON.stringify(appearance.chartColors));
     let inview = (() => {
       // creating the state dynamically
       const obj = Object.create(null);
@@ -96,17 +108,17 @@ export class ExplorerComponent implements OnInit {
         ({ componentConfigs }: GeneralConfigs) =>
           (obj[(componentConfigs as ComponentDashboardConfigs).id] = {
             collapsed: false,
-            userSeesMe: false
-          })
+            userSeesMe: false,
+          }),
       );
       return obj;
-    })() as InViewState
-    Object.keys(inview).forEach(id => {
+    })() as InViewState;
+    Object.keys(inview).forEach((id) => {
       this.store.dispatch(
         new fromStore.SetInView({
           id,
-          viewState: inview[id]
-        })
+          viewState: inview[id],
+        }),
       );
     });
 
@@ -117,15 +129,17 @@ export class ExplorerComponent implements OnInit {
   }
   hexToHSL(H, term) {
     // Convert hex to RGB first
-    let r: any = 0, g: any = 0, b: any = 0;
+    let r: any = 0,
+      g: any = 0,
+      b: any = 0;
     if (H.length == 4) {
-      r = "0x" + H[1] + H[1];
-      g = "0x" + H[2] + H[2];
-      b = "0x" + H[3] + H[3];
+      r = '0x' + H[1] + H[1];
+      g = '0x' + H[2] + H[2];
+      b = '0x' + H[3] + H[3];
     } else if (H.length == 7) {
-      r = "0x" + H[1] + H[2];
-      g = "0x" + H[3] + H[4];
-      b = "0x" + H[5] + H[6];
+      r = '0x' + H[1] + H[2];
+      g = '0x' + H[3] + H[4];
+      b = '0x' + H[5] + H[6];
     }
     // Then to HSL
     r /= 255;
@@ -138,29 +152,22 @@ export class ExplorerComponent implements OnInit {
       s = 0,
       l = 0;
 
-    if (delta == 0)
-      h = 0;
-    else if (cmax == r)
-      h = ((g - b) / delta) % 6;
-    else if (cmax == g)
-      h = (b - r) / delta + 2;
-    else
-      h = (r - g) / delta + 4;
+    if (delta == 0) h = 0;
+    else if (cmax == r) h = ((g - b) / delta) % 6;
+    else if (cmax == g) h = (b - r) / delta + 2;
+    else h = (r - g) / delta + 4;
 
     h = Math.round(h * 60);
 
-    if (h < 0)
-      h += 360;
+    if (h < 0) h += 360;
 
     l = (cmax + cmin) / 2;
     s = delta == 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
     s = +(s * 100).toFixed(1);
-    if (term == 'min')
-      l = +(l * 310).toFixed(1);
-    else
-      l = + (l * 155).toFixed(1)
+    if (term == 'min') l = +(l * 310).toFixed(1);
+    else l = +(l * 155).toFixed(1);
 
-    return "hsl(" + h + "," + s + "%," + l + "%)";
+    return 'hsl(' + h + ',' + s + '%,' + l + '%)';
   }
 
   onMouseMove(event: MouseEvent): void {
@@ -186,14 +193,12 @@ export class ExplorerComponent implements OnInit {
   }
 
   refresh(): void {
-    this.mainBodyBuilderService.resetAttributes()
+    this.mainBodyBuilderService.resetAttributes();
     setTimeout(() => {
-
       this.store.dispatch(
-        new SetQuery(this.mainBodyBuilderService.buildMainQuery(0).build())
+        new SetQuery(this.mainBodyBuilderService.buildMainQuery(0).build()),
       );
     }, 300);
-
   }
 
   startTour(): void {
@@ -208,7 +213,6 @@ export class ExplorerComponent implements OnInit {
   }
 
   private mapConfigsToTour(): IStepOption[] {
-
     return [...this.tourConfig, ...this.countersConfig, ...this.dashboardConfig]
       .filter(({ show }: GeneralConfigs) => show)
       .map(({ componentConfigs, tour }: GeneralConfigs) => {
@@ -229,13 +233,13 @@ export class ExplorerComponent implements OnInit {
       })
       .filter((iso: IStepOption) => Object.keys(iso).length >= 1);
   }
-  seeAbout(){
-    this.dialog.open(FooterComponent,{width:'2000px', maxHeight:"90vh"})
+  seeAbout() {
+    this.dialog.open(FooterComponent, { width: '2000px', maxHeight: '90vh' });
   }
   private checkIfApplicableForTour(
     id: string,
     content: string,
-    title: string
+    title: string,
   ): boolean {
     return !!(id && content && title);
   }

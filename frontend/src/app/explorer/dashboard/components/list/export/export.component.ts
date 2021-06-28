@@ -2,7 +2,7 @@ import { Component, OnInit, Input, HostListener } from '@angular/core';
 import {
   FileType,
   ExporterResponse,
-  ExportFilesModal
+  ExportFilesModal,
 } from '../paginated-list/filter-paginated-list/types.interface';
 import { ExportService } from '../services/export/export.service';
 import { switchMap, first } from 'rxjs/operators';
@@ -17,12 +17,12 @@ import { SettingsService } from 'src/app/admin/services/settings.service';
   selector: 'app-export',
   templateUrl: './export.component.html',
   styleUrls: ['./export.component.scss'],
-  providers: [ExportService]
+  providers: [ExportService],
 })
 export class ExportComponent implements OnInit {
   @Input() type: FileType;
   @Input() query: Observable<ElasticsearchQuery>;
-  @Input() file: any
+  @Input() file: any;
   forceEnd: boolean;
   installing: boolean;
   delegationArr: Array<ExportFilesModal>;
@@ -30,7 +30,7 @@ export class ExportComponent implements OnInit {
   downloadPath: string;
   exportPoint: string;
   part: number;
-  webSiteName
+  webSiteName;
   get finishedExporting(): boolean {
     if (!this.delegationArr) {
       return false;
@@ -45,7 +45,7 @@ export class ExportComponent implements OnInit {
     private exportService: ExportService,
     private readonly dialog: MatDialog,
     private readonly snackBar: MatSnackBar,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
   ) {
     this.installing = false;
     this.indexToToggleLoaded = 0;
@@ -89,7 +89,7 @@ export class ExportComponent implements OnInit {
   }
 
   @HostListener('window:beforeunload', ['$event']) unloadHandler(
-    event: Event
+    event: Event,
   ): void {
     if (this.installing) {
       event.returnValue = false;
@@ -108,9 +108,9 @@ export class ExportComponent implements OnInit {
           part: this.part,
           fileName: this.file.file,
           file: this.file,
-          webSiteName: this.webSiteName
-        })
-      )
+          webSiteName: this.webSiteName,
+        }),
+      ),
     );
 
     exporter.subscribe(this.subscriber.bind(this), (err: HttpErrorResponse) => {
@@ -118,7 +118,7 @@ export class ExportComponent implements OnInit {
       this.snackBar.open(
         'Something went wrong, please try exporting again',
         'Dismiss',
-        { duration: 15000 }
+        { duration: 15000 },
       );
     });
   }
@@ -132,8 +132,8 @@ export class ExportComponent implements OnInit {
           downloaded: false,
           loaded: i === this.indexToToggleLoaded,
           fileName: er.fileName,
-          hits: er.hits
-        })
+          hits: er.hits,
+        }),
       );
     } else {
       this.delegationArr = this.delegationArr.map(
@@ -142,7 +142,7 @@ export class ExportComponent implements OnInit {
             efm.fileName = er.fileName;
           }
           return efm;
-        }
+        },
       );
     }
   }
@@ -160,7 +160,7 @@ export class ExportComponent implements OnInit {
             efm.loaded = true;
           }
           return efm;
-        }
+        },
       );
       this.indexToToggleLoaded++;
 

@@ -10,7 +10,7 @@ const initialState: QueryState = {
 
 export function reducer(
   state = initialState,
-  action: actions.QueryActions
+  action: actions.QueryActions,
 ): QueryState {
   switch (action.type) {
     case actions.QueryActionTypes.setQuery: {
@@ -29,4 +29,4 @@ export function reducer(
 export const getQueryBody = (state: QueryState): ElasticsearchQuery =>
   state.body;
 export const getQueryFromBody = (body: ElasticsearchQuery): object =>
-body ? body.query : null;
+  body ? body.query : null;

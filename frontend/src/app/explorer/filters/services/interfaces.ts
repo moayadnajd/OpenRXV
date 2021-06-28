@@ -36,7 +36,7 @@ export interface Hits {
   hits: hits[];
   max_score: number;
   total: {
-    value: number
+    value: number;
   };
 }
 
@@ -132,7 +132,7 @@ export interface Shards {
 export interface Bucket {
   key: string;
   doc_count: number;
-  related?:any;
+  related?: any;
 }
 
 export type BucketWithInnerBuckts = Bucket & {
@@ -208,7 +208,7 @@ export interface QueryYearAttribute {
   range: {
     gte: number;
     lte: number;
-  }
+  };
 }
 
 /**
@@ -219,12 +219,12 @@ export interface QueryYearAttribute {
  */
 export interface QueryBlock {
   source: string;
-  is_related?:boolean;
+  is_related?: boolean;
   buckets: string;
   filter?: string;
   size?: number;
-  type?:string;
-  agg_on?:string;
+  type?: string;
+  agg_on?: string;
   sort?: boolean;
 }
 

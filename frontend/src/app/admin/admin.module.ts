@@ -17,7 +17,7 @@ import { UsersComponent } from './components/users/users.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { DemoMaterialModule } from 'src/app/material/material.module';
-import { FormComponent } from './components/users/form/form.component'
+import { FormComponent } from './components/users/form/form.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './auth/token.interceptor';
 import { ConfirmationComponent } from './components/confirmation/confirmation.component';
@@ -75,7 +75,6 @@ import { DocComponent } from './reporting/doc/doc.component';
     ReprotingFormComponent,
     DialogComponent,
     DocComponent,
-    
   ],
   imports: [
     BrowserModule,
@@ -90,16 +89,20 @@ import { DocComponent } from './reporting/doc/doc.component';
     NgSelectModule,
     ColorPickerModule,
     EditorModule,
-
-
   ],
-  providers: [{
-    provide: HTTP_INTERCEPTORS,
-    useClass: TokenInterceptor,
-    multi: true
-  },
-  { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true,
+    },
+    { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' },
   ],
-  entryComponents: [FormComponent, ConfirmationComponent, ValuesForm, FormDialogComponent]
+  entryComponents: [
+    FormComponent,
+    ConfirmationComponent,
+    ValuesForm,
+    FormDialogComponent,
+  ],
 })
-export class AdminModule { }
+export class AdminModule {}

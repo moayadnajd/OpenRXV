@@ -3,7 +3,7 @@ import { Bucket } from 'src/app/explorer/filters/services/interfaces';
 export interface Tour {
   id: string;
   description: string;
-  text:string;
+  text: string;
   title: string;
 }
 
@@ -28,8 +28,8 @@ export interface ComponentDashboardConfigs {
   description: string;
   source: string | Array<string>;
   content?: PaginatedListConfigs;
-  related?:boolean;
-  size?:number;
+  related?: boolean;
+  size?: number;
 }
 
 export interface ComponentCounterConfigs {
@@ -82,7 +82,7 @@ export interface PaginatedListConfigs {
 
 export enum searchOptions {
   titleSearch,
-  allSearch
+  allSearch,
 }
 
 export interface MergedSelect {

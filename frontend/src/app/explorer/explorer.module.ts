@@ -82,9 +82,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RotatedLablesComponent } from './dashboard/components/bar/rotated-lables/rotated-lables.component';
 
-
-
-
 @NgModule({
   declarations: [
     ExplorerComponent,
@@ -125,7 +122,7 @@ import { RotatedLablesComponent } from './dashboard/components/bar/rotated-lable
     ExportComponent,
     ShareComponent,
     MainListComponent,
-    RotatedLablesComponent
+    RotatedLablesComponent,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -148,7 +145,7 @@ import { RotatedLablesComponent } from './dashboard/components/bar/rotated-lable
     EffectsModule.forRoot(efficts),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
-      logOnly: environment.production // Restrict extension to log-only mode,
+      logOnly: environment.production, // Restrict extension to log-only mode,
     }),
     MatInputModule,
     MatButtonModule,
@@ -192,7 +189,7 @@ import { RotatedLablesComponent } from './dashboard/components/bar/rotated-lable
     LineComponent,
     SimiCircleComponent,
     BarComponent,
-    ExportComponent
-  ]
+    ExportComponent,
+  ],
 })
-export class ExplorerModule { }
+export class ExplorerModule {}

@@ -29,14 +29,13 @@ export class PackedBubbleSplitComponent extends ParentChart implements OnInit {
     private settingsService: SettingsService,
     public readonly selectService: SelectService,
     public readonly store: Store<fromStore.AppState>,
-
   ) {
-    super(cms,null,null);
+    super(cms, null, null);
   }
-  colors : string[]
+  colors: string[];
 
   async ngOnInit() {
-    let appearance = await this.settingsService.readAppearanceSettings()
+    let appearance = await this.settingsService.readAppearanceSettings();
     this.colors = appearance.chartColors;
     this.init('packed-bubble-split');
     this.buildOptions.subscribe((buckets: Array<Bucket>) => {
@@ -48,18 +47,25 @@ export class PackedBubbleSplitComponent extends ParentChart implements OnInit {
   }
 
   private setOptions(buckets: Array<Bucket>): any {
+    let data = buckets
+      .map((b: Bucket) => {
+        return {
+          name: b.key,
+          data: b.related.buckets
+            .filter((d) => b.key != d.key)
+            .map((d) => {
+              return { name: d.key.substr(0, 50), value: d.doc_count };
+            }),
+        };
+      })
+      .flat(1);
 
-    let data = buckets.map((b: Bucket) => {
-      return {
-        name: b.key, data: b.related.buckets.filter(d => b.key != d.key).map(d => {
-          return { name: d.key.substr(0, 50), value: d.doc_count }
-        })
-      }
-    }).flat(1)
-
-    let sorted = data.map(d => d.data.map(b => b.value)).flat(1).sort((a, b) => {
-      return a - b
-    })
+    let sorted = data
+      .map((d) => d.data.map((b) => b.value))
+      .flat(1)
+      .sort((a, b) => {
+        return a - b;
+      });
 
     let min = sorted[0];
     let max = sorted.reduce((a, b) => a + b) / sorted.length;
@@ -75,7 +81,7 @@ export class PackedBubbleSplitComponent extends ParentChart implements OnInit {
       },
       tooltip: {
         useHTML: true,
-        pointFormat: '<b>{point.name}:</b> {point.value}'
+        pointFormat: '<b>{point.name}:</b> {point.value}',
       },
       colors: this.colors,
       plotOptions: {
@@ -89,7 +95,7 @@ export class PackedBubbleSplitComponent extends ParentChart implements OnInit {
             splitSeries: true,
             seriesInteraction: false,
             dragBetweenSeries: true,
-            parentNodeLimit: true
+            parentNodeLimit: true,
           },
           dataLabels: {
             enabled: true,
@@ -97,15 +103,15 @@ export class PackedBubbleSplitComponent extends ParentChart implements OnInit {
             filter: {
               property: 'y',
               operator: '>',
-              value: max
+              value: max,
             },
             style: {
               color: 'black',
               textOutline: 'none',
-              fontWeight: 'normal'
-            }
-          }
-        }
+              fontWeight: 'normal',
+            },
+          },
+        },
       },
       series: data,
       ...this.cms.commonProperties(),

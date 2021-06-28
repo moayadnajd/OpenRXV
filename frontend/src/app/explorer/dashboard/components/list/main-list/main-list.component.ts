@@ -14,12 +14,12 @@ import { BodyBuilderService } from 'src/app/explorer/filters/services/bodyBuilde
   providers: [ScrollHelperService, SelectService],
 })
 export class MainListComponent extends ListComponent {
-
-  constructor(public readonly store: Store<fromStore.AppState>,
+  constructor(
+    public readonly store: Store<fromStore.AppState>,
     public readonly scrollHelperService: ScrollHelperService,
     public readonly cdr: ChangeDetectorRef,
     selectService: SelectService,
-    bodyBuilderService: BodyBuilderService
+    bodyBuilderService: BodyBuilderService,
   ) {
     super(store, scrollHelperService, cdr, selectService, bodyBuilderService);
   }

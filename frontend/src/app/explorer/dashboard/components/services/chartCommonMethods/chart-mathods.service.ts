@@ -1,7 +1,7 @@
 import { Injectable, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import {
   ComponentDashboardConfigs,
-  MergedSelect
+  MergedSelect,
 } from 'src/app/explorer/configs/generalConfig.interface';
 import { Observable, combineLatest } from 'rxjs';
 import * as fromStore from '../../../../store';
@@ -41,7 +41,7 @@ export class ChartMathodsService extends ChartHelper {
 
   constructor(
     private readonly store: Store<fromStore.ItemsState>,
-    cdr: ChangeDetectorRef
+    cdr: ChangeDetectorRef,
   ) {
     super();
     this.shs = new ScrollHelperService(cdr);
@@ -70,7 +70,16 @@ export class ChartMathodsService extends ChartHelper {
       this.processArraySorces();
     } else {
       this.store
-        .select(fromStore.getBuckets, this.cc.related ? this.cc.size ? this.cc.size + '_related_' + this.cc.source : '1000_related_' + this.cc.source : this.cc.size ? this.cc.size + '_' + this.cc.source : '10000_' + this.cc.source)
+        .select(
+          fromStore.getBuckets,
+          this.cc.related
+            ? this.cc.size
+              ? this.cc.size + '_related_' + this.cc.source
+              : '1000_related_' + this.cc.source
+            : this.cc.size
+            ? this.cc.size + '_' + this.cc.source
+            : '10000_' + this.cc.source,
+        )
         .subscribe((b: Bucket[]) => this.goBuildDataSeries.emit(b));
     }
     this.loadingHits$ = this.store.select(fromStore.getLoadingOnlyHits);
@@ -82,14 +91,14 @@ export class ChartMathodsService extends ChartHelper {
       observableArr.push(
         this.store
           .select(fromStore.getBuckets, s)
-          .pipe(map((buckets: Bucket[]) => ({ [s]: buckets })))
+          .pipe(map((buckets: Bucket[]) => ({ [s]: buckets }))),
       );
     });
     this.zipObservablesAndOmit(observableArr);
   }
 
   private zipObservablesAndOmit(
-    observableArr: Array<Observable<MergedSelect>>
+    observableArr: Array<Observable<MergedSelect>>,
   ) {
     combineLatest(...observableArr)
       .pipe(
@@ -100,7 +109,7 @@ export class ChartMathodsService extends ChartHelper {
             obj[key] = ms[key];
           });
           return obj;
-        })
+        }),
       )
       .subscribe((ms: MergedSelect) => this.goBuildDataSeries.emit(ms));
   }

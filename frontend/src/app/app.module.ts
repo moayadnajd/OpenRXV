@@ -13,7 +13,7 @@ import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 // for Router import:
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
 export function tokenGetter() {
-  return localStorage.getItem("access_token");
+  return localStorage.getItem('access_token');
 }
 @NgModule({
   declarations: [RootComponent, NotfoundComponent],
@@ -32,12 +32,12 @@ export function tokenGetter() {
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        whitelistedDomains: ["localhost:3000"],
-        blacklistedRoutes: ["example.com/examplebadroute/"]
-      }
-    })
+        whitelistedDomains: ['localhost:3000'],
+        blacklistedRoutes: ['example.com/examplebadroute/'],
+      },
+    }),
   ],
   providers: [],
-  bootstrap: [RootComponent]
+  bootstrap: [RootComponent],
 })
-export class AppModule { }
+export class AppModule {}

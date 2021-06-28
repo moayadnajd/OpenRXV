@@ -3,17 +3,14 @@ import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-doc',
   templateUrl: './doc.component.html',
-  styleUrls: ['./doc.component.scss']
+  styleUrls: ['./doc.component.scss'],
 })
 export class DocComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
+  ngOnInit(): void {}
 
-  ngOnInit(): void {
+  image(image) {
+    return environment.api + '/images/' + image;
   }
-  
-  image(image){
-    return environment.api+ '/images/' + image;
-  }
-
 }

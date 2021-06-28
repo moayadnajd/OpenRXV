@@ -9,65 +9,65 @@ import { ConfirmationComponent } from '../confirmation/confirmation.component';
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
-  styleUrls: ['./users.component.scss']
+  styleUrls: ['./users.component.scss'],
 })
 export class UsersComponent implements OnInit {
-
-  constructor(private usersService: UsersService, public dialog: MatDialog) { }
-
-
+  constructor(private usersService: UsersService, public dialog: MatDialog) {}
 
   openDialog(): void {
-
     const dialogRef = this.dialog.open(FormComponent, {
       width: '30%',
-      data: null
+      data: null,
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result)
-        this.ngOnInit();
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) this.ngOnInit();
     });
   }
 
   async toDelete(id) {
     const dialogRef = this.dialog.open(ConfirmationComponent, {
-      data: { title: "Confirmation", subtitle: "Are you sure you want to delete this user?" }
+      data: {
+        title: 'Confirmation',
+        subtitle: 'Are you sure you want to delete this user?',
+      },
     });
 
-    dialogRef.afterClosed().subscribe(async result => {
+    dialogRef.afterClosed().subscribe(async (result) => {
       if (result) {
         await this.usersService.deleteUser(id);
         this.ngOnInit();
       }
-    })
+    });
   }
   async toEdit(id) {
     let user = await this.usersService.getUser(id);
 
     const dialogRef = this.dialog.open(FormComponent, {
       width: '30%',
-      data: user
+      data: user,
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result)
-        this.ngOnInit();
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) this.ngOnInit();
     });
   }
 
-  displayedColumns: string[] = ['id', 'name', 'email', 'role', 'created_at', 'actions'];
+  displayedColumns: string[] = [
+    'id',
+    'name',
+    'email',
+    'role',
+    'created_at',
+    'actions',
+  ];
   dataSource = new MatTableDataSource<any>([]);
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   async ngOnInit() {
-
     let users = await this.usersService.getUsers();
     this.dataSource = new MatTableDataSource<any>(users.hits);
     this.dataSource.paginator = this.paginator;
   }
 }
-
-
-

@@ -33,58 +33,48 @@ export class DashboardComponent implements OnInit {
     private readonly itemsService: ItemsService,
     private activeRoute: ActivatedRoute,
     private settingsService: SettingsService,
-    private route: Router
+    private route: Router,
   ) {
     this.oldViewState = new Map<string, boolean>();
-
   }
   async getCounters() {
     let settings = await this.settingsService.readExplorerSettings();
-    this.dashboardConfig = settings.dashboard.flat(1)
-    this.tourConfig = [settings.welcome]
-  
-    await localStorage.setItem('configs', JSON.stringify(settings))
+    this.dashboardConfig = settings.dashboard.flat(1);
+    this.tourConfig = [settings.welcome];
+
+    await localStorage.setItem('configs', JSON.stringify(settings));
     this.countersConfig = settings.counters;
     [this.countersConfig[0], ...this.dashboardConfig].forEach(
       ({ componentConfigs }: GeneralConfigs) =>
         this.oldViewState.set(
           (componentConfigs as ComponentDashboardConfigs).id,
-          false
-        )
+          false,
+        ),
     );
   }
   async ngOnInit() {
+    await this.getCounters();
 
-
-    await this.getCounters()
-
-
-    let shareID = this.activeRoute.snapshot.paramMap.get("id");
+    let shareID = this.activeRoute.snapshot.paramMap.get('id');
     if (shareID) {
       try {
         let shareitem: any = await this.itemsService.getShare(shareID);
         if (shareitem) {
           let sprateObjects = Object.keys(shareitem.attr).map(function (key) {
-            let obj = {}
+            let obj = {};
             obj[key] = shareitem.attr[key];
             return obj;
           });
           sprateObjects.forEach((item: any) => {
             this.bodyBuilderService.setAggAttributes = item;
-          })
-
-        }
-
-
-
-        else
-          this.route.navigate(['notfound'])
+          });
+        } else this.route.navigate(['notfound']);
       } catch (e) {
-        this.route.navigate(['notfound'])
+        this.route.navigate(['notfound']);
       }
     }
     this.store.dispatch(
-      new SetQuery(this.bodyBuilderService.buildMainQuery().build())
+      new SetQuery(this.bodyBuilderService.buildMainQuery().build()),
     );
 
     this.store.select(fromStore.getErrors).subscribe((e: ESHttpError) => {
@@ -109,7 +99,7 @@ export class DashboardComponent implements OnInit {
             linkedWith: linkedWith === 'undefined' ? realId : linkedWith,
           },
           id: realId,
-        })
+        }),
       );
     }
   }

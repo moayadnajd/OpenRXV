@@ -25,7 +25,7 @@ export class ScrollToComponent implements OnInit {
 
   constructor(
     private readonly store: Store<fromStore.AppState>,
-    private readonly scrollHelperService: ScrollHelperService
+    private readonly scrollHelperService: ScrollHelperService,
   ) {
     this.dashboardConfig = this.scrollHelperService.getNotSiblings();
     this.idsToHide = new Set<string>();
@@ -37,7 +37,7 @@ export class ScrollToComponent implements OnInit {
     this.store
       .select(fromStore.getInViewFirstOne)
       .subscribe((inView: InView) =>
-        inView.id ? (this.id = inView.id) : undefined
+        inView.id ? (this.id = inView.id) : undefined,
       );
     this.getViewState();
     this.buildLinkedComponentMap();
@@ -68,7 +68,7 @@ export class ScrollToComponent implements OnInit {
   }
 
   private filterScrollToButtons(
-    arrcomponentIdWitSate: Array<componentIdWitSate>
+    arrcomponentIdWitSate: Array<componentIdWitSate>,
   ): void {
     arrcomponentIdWitSate.forEach((ciws: componentIdWitSate) => {
       const [id, inView] = ciws;
@@ -105,7 +105,7 @@ export class ScrollToComponent implements OnInit {
               ...this.scrollHelperService
                 .getChildren()
                 .map(({ linkedId, compId }: ViewChild) =>
-                  linkedId === id ? compId : undefined
+                  linkedId === id ? compId : undefined,
                 )
                 .filter((s: string | undefined) => !!s),
             ]);
@@ -116,10 +116,10 @@ export class ScrollToComponent implements OnInit {
               linkedWith,
             ]);
           }
-        }
+        },
       );
     this.linking.forEach(
-      (value, key) => !value.length && this.linking.set(key, [key])
+      (value, key) => !value.length && this.linking.set(key, [key]),
     );
   }
 }

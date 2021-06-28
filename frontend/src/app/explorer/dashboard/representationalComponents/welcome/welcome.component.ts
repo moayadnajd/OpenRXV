@@ -11,11 +11,11 @@ import { ComponentLookup } from '../../components/dynamic/lookup.registry';
 export class WelcomeComponent implements OnInit {
   tourStarted: boolean;
   @Input() componentConfigs: any;
-  constructor(private readonly tourService: TourService) { }
+  constructor(private readonly tourService: TourService) {}
 
   ngOnInit(): void {
     this.tourService.start$.subscribe(
-      (inso: INgxmStepOption) => (this.tourStarted = true)
+      (inso: INgxmStepOption) => (this.tourStarted = true),
     );
   }
 

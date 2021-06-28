@@ -13,7 +13,7 @@ import * as Highcharts from 'highcharts';
 import wordCloudModule from 'highcharts/modules/wordcloud';
 import ExportingModule from 'highcharts/modules/exporting';
 import DependencyWheelModule from 'highcharts/modules/dependency-wheel';
-import HighchartsMore from "highcharts/highcharts-more";
+import HighchartsMore from 'highcharts/highcharts-more';
 
 import HC_sankey from 'highcharts/modules/sankey';
 import BoostModule from 'highcharts/modules/boost';

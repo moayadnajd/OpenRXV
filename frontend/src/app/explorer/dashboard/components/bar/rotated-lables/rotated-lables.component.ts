@@ -2,7 +2,7 @@ import {
   Component,
   OnInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from '@angular/core';
 import { ParentChart } from '../../parent-chart';
 import { ChartMathodsService } from '../../services/chartCommonMethods/chart-mathods.service';
@@ -21,22 +21,22 @@ import * as fromStore from '../../../../store';
   templateUrl: './rotated-lables.component.html',
   styleUrls: ['./rotated-lables.component.scss'],
   providers: [ChartMathodsService, RangeService, BarService, SelectService],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RotatedLablesComponent extends ParentChart implements OnInit {
-  colors: string[]
+  colors: string[];
   constructor(
     cms: ChartMathodsService,
     private readonly cdr: ChangeDetectorRef,
     private settingsService: SettingsService,
     public readonly selectService: SelectService,
-    public readonly store: Store<fromStore.AppState>
+    public readonly store: Store<fromStore.AppState>,
   ) {
     super(cms, selectService, store);
   }
 
   async ngOnInit() {
-    let appearance = await this.settingsService.readAppearanceSettings()
+    let appearance = await this.settingsService.readAppearanceSettings();
     this.colors = appearance.chartColors;
     this.init('column');
     this.buildOptions.subscribe((buckets: Array<Bucket>) => {
@@ -47,12 +47,13 @@ export class RotatedLablesComponent extends ParentChart implements OnInit {
     });
   }
 
-
   private setOptions(buckets: Array<Bucket>): any {
-    let data = buckets.map(function (values) { return [values.key, values.doc_count] })
+    let data = buckets.map(function (values) {
+      return [values.key, values.doc_count];
+    });
     return {
       chart: {
-        type: 'column'
+        type: 'column',
       },
       xAxis: {
         type: 'category',
@@ -60,21 +61,23 @@ export class RotatedLablesComponent extends ParentChart implements OnInit {
           rotation: -45,
           style: {
             fontSize: '13px',
-            fontFamily: 'Verdana, sans-serif'
-          }
-        }
+            fontFamily: 'Verdana, sans-serif',
+          },
+        },
       },
       colors: this.colors,
       yAxis: {
-        min: 0
+        min: 0,
       },
       legend: {
-        enabled: false
+        enabled: false,
       },
-      series: [{
-        data: data,
-        ...this.cms.commonProperties()
-      }]
+      series: [
+        {
+          data: data,
+          ...this.cms.commonProperties(),
+        },
+      ],
     };
   }
 }

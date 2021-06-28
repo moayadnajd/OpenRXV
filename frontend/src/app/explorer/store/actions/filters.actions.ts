@@ -2,7 +2,7 @@ import { Action } from '@ngrx/store';
 
 export enum FiltersActionTypes {
   setFilters = '[items] SetFilters',
-  getFilters = '[items] GetFilters'
+  getFilters = '[items] GetFilters',
 }
 
 export class GetFilters implements Action {

@@ -9,9 +9,13 @@ import { MulterModule } from '@nestjs/platform-express';
 import { join } from 'path';
 @Module({
   controllers: [MetadataController, ValuesController, SettingsController],
-  imports: [SharedModule, HarvesterModule, MulterModule.register({
-    dest: join(__dirname, '../../data/files'),
-  })],
-  providers: [JsonFilesService]
+  imports: [
+    SharedModule,
+    HarvesterModule,
+    MulterModule.register({
+      dest: join(__dirname, '../../data/files'),
+    }),
+  ],
+  providers: [JsonFilesService],
 })
-export class AdminModule { }
+export class AdminModule {}

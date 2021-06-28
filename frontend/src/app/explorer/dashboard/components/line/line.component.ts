@@ -2,7 +2,7 @@ import {
   Component,
   OnInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from '@angular/core';
 import { ChartMathodsService } from '../services/chartCommonMethods/chart-mathods.service';
 import { ParentChart } from '../parent-chart';
@@ -21,7 +21,7 @@ import * as fromStore from '../../../store';
   templateUrl: './line.component.html',
   styleUrls: ['./line.component.scss'],
   providers: [ChartMathodsService, RangeService, BarService, SelectService],
-  changeDetection: ChangeDetectionStrategy.Default
+  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class LineComponent extends ParentChart implements OnInit {
   constructor(
@@ -29,15 +29,15 @@ export class LineComponent extends ParentChart implements OnInit {
     private readonly cdr: ChangeDetectorRef,
     private settingsService: SettingsService,
     public readonly selectService: SelectService,
-    public readonly store: Store<fromStore.AppState>
+    public readonly store: Store<fromStore.AppState>,
   ) {
     super(cms, selectService, store);
   }
   enabled: boolean;
 
-  colors: string[]
+  colors: string[];
   async ngOnInit() {
-    let appearance = await this.settingsService.readAppearanceSettings()
+    let appearance = await this.settingsService.readAppearanceSettings();
     this.colors = appearance.chartColors;
     this.init('line');
     this.buildOptions.subscribe((buckets: Array<Bucket>) => {
@@ -46,65 +46,66 @@ export class LineComponent extends ParentChart implements OnInit {
       }
       this.cdr.detectChanges();
     });
-
   }
 
-  setOptions(
-    buckets: Array<Bucket>
-  ){
-    let categories = []
+  setOptions(buckets: Array<Bucket>) {
+    let categories = [];
     buckets.forEach((b: Bucket) => {
-      b.related.buckets.forEach(d => {
+      b.related.buckets.forEach((d) => {
         if (categories.indexOf(d.key.substr(0, 50)) == -1)
-          categories.push(d.key.substr(0, 50))
-      })
-    })
+          categories.push(d.key.substr(0, 50));
+      });
+    });
 
-    let data: any = buckets.map((b: Bucket) => {
-      let data = []
-      categories.forEach((e, i) => {
-        let found: Array<any> = b.related.buckets.filter(d => d.key.substr(0, 50) == e)
-        if (found.length)
-          data[i] = found[0].doc_count
-        else
-          data[i] = 0
+    let data: any = buckets
+      .map((b: Bucket) => {
+        let data = [];
+        categories.forEach((e, i) => {
+          let found: Array<any> = b.related.buckets.filter(
+            (d) => d.key.substr(0, 50) == e,
+          );
+          if (found.length) data[i] = found[0].doc_count;
+          else data[i] = 0;
+        });
+        return {
+          name: b.key,
+          data,
+        };
       })
-      return {
-        name: b.key, data
-      }
-    }).flat(1)
-    data.map((a, i) => { a.name = categories[i], a.data = [] })
-    buckets.forEach(element => {
+      .flat(1);
+    data.map((a, i) => {
+      (a.name = categories[i]), (a.data = []);
+    });
+    buckets.forEach((element) => {
       element.related.buckets.forEach((element, index) => {
-        data[index].data.push(element.doc_count)
+        data[index].data.push(element.doc_count);
       });
     });
     this.chartOptions = {
       title: {
-        text: undefined
+        text: undefined,
       },
       chart: {
-        type: 'line'
+        type: 'line',
       },
       plotOptions: {
         line: {
           dataLabels: {
-            enabled: true
+            enabled: true,
           },
-          enableMouseTracking: true
-        }
+          enableMouseTracking: true,
+        },
       },
       xAxis: {
         title: {
-          text: 'Date'
+          text: 'Date',
         },
         accessibility: {
-          description: undefined
+          description: undefined,
         },
-        categories: buckets.map(a => a.key)
+        categories: buckets.map((a) => a.key),
       },
       series: data,
-
     };
     this.reloadComponent();
   }
@@ -112,6 +113,5 @@ export class LineComponent extends ParentChart implements OnInit {
     this.enabled = false;
     this.cdr.detectChanges();
     this.enabled = true;
-    
   }
 }

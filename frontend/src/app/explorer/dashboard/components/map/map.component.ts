@@ -2,7 +2,7 @@ import {
   Component,
   OnInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from '@angular/core';
 import { ChartMathodsService } from '../services/chartCommonMethods/chart-mathods.service';
 const mapWorld = require('@highcharts/map-collection/custom/world-robinson-highres.geo.json');
@@ -22,7 +22,7 @@ import { ComponentFilterConfigs } from 'src/app/explorer/configs/generalConfig.i
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
   providers: [ChartMathodsService, SelectService],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MapComponent extends ParentChart implements OnInit {
   constructor(
@@ -30,7 +30,7 @@ export class MapComponent extends ParentChart implements OnInit {
     private readonly cdr: ChangeDetectorRef,
     public readonly selectService: SelectService,
     public readonly store: Store<fromStore.AppState>,
-    private readonly bodyBuilderService: BodyBuilderService
+    private readonly bodyBuilderService: BodyBuilderService,
   ) {
     super(cms, selectService, store);
   }
@@ -39,11 +39,13 @@ export class MapComponent extends ParentChart implements OnInit {
     this.init('map');
     const { source } = this.componentConfigs as ComponentFilterConfigs;
     this.buildOptions.subscribe((buckets: Array<Bucket>) => {
-      let filters = this.bodyBuilderService.getFiltersFromQuery().filter(element => Object.keys(element).indexOf(source + '.keyword') != -1)
-      if (filters.length)
-        this.filterd = true;
-      else
-        this.filterd = false;
+      let filters = this.bodyBuilderService
+        .getFiltersFromQuery()
+        .filter(
+          (element) => Object.keys(element).indexOf(source + '.keyword') != -1,
+        );
+      if (filters.length) this.filterd = true;
+      else this.filterd = false;
       if (buckets) {
         this.chartOptions = this.setOptions(buckets);
       }
@@ -51,20 +53,20 @@ export class MapComponent extends ParentChart implements OnInit {
     });
   }
   resetFilter(value: boolean = false) {
-    this.resetQ()
+    this.resetQ();
   }
   private setOptions(buckets: Array<Bucket>): Highcharts.Options {
     return {
       chart: {
-        map: mapWorld
+        map: mapWorld,
       },
       mapNavigation: {
         enabled: true,
         enableMouseWheelZoom: true,
         buttonOptions: {
           alignTo: 'spacingBox',
-          verticalAlign: 'bottom'
-        }
+          verticalAlign: 'bottom',
+        },
       },
       colorAxis: {
         min: 1,
@@ -74,23 +76,26 @@ export class MapComponent extends ParentChart implements OnInit {
         stops: [
           [0, localStorage.getItem('minColor')],
           [0.67, localStorage.getItem('midColor')],
-          [1, localStorage.getItem('primaryColor')]
-        ]
+          [1, localStorage.getItem('primaryColor')],
+        ],
       },
       plotOptions: {
         series: {
           point: {
             events: {
-              click: this.componentConfigs.allowFilterOnClick == true? this.setQ() : null,
-            }
-          }
-        }
+              click:
+                this.componentConfigs.allowFilterOnClick == true
+                  ? this.setQ()
+                  : null,
+            },
+          },
+        },
       },
       series: [
         {
           data: buckets.map((b: Bucket) => [
             getCountryCode(b.key),
-            b.doc_count
+            b.doc_count,
           ]),
           mapData: mapWorld,
           showInLegend: false,
@@ -98,11 +103,12 @@ export class MapComponent extends ParentChart implements OnInit {
           enableMouseTracking: true,
           allowPointSelect: true,
           tooltip: {
-            pointFormat: '{point.name}: <b>{point.value} Information Products</b><br/>',
-            headerFormat: undefined
+            pointFormat:
+              '{point.name}: <b>{point.value} Information Products</b><br/>',
+            headerFormat: undefined,
           },
           animation: {
-            duration: 0
+            duration: 0,
           },
           states: {
             hover: {
@@ -110,12 +116,12 @@ export class MapComponent extends ParentChart implements OnInit {
             },
             select: {
               color: '#427730',
-              borderColor: '#000000'
-            }
-          }
-        }
+              borderColor: '#000000',
+            },
+          },
+        },
       ],
-      ...this.cms.commonProperties()
+      ...this.cms.commonProperties(),
     } as Highcharts.Options;
   }
 }

@@ -7,6 +7,6 @@ import { ShareController } from './share/share.controller';
 @Module({
   controllers: [SearchController, ShareController],
   imports: [SharedModule],
-  providers: []
+  providers: [],
 })
-export class ExplorerModule { }
+export class ExplorerModule {}

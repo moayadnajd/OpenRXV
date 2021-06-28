@@ -30,23 +30,25 @@ export class PieComponent extends ParentChart implements OnInit {
     private settingsService: SettingsService,
     public readonly selectService: SelectService,
     public readonly store: Store<fromStore.AppState>,
-    private readonly bodyBuilderService: BodyBuilderService
+    private readonly bodyBuilderService: BodyBuilderService,
   ) {
     super(cms, selectService, store);
   }
   colors: string[];
   filterd = false;
   async ngOnInit() {
-        const { source } = this.componentConfigs as ComponentFilterConfigs;
-    let appearance = await this.settingsService.readAppearanceSettings()
+    const { source } = this.componentConfigs as ComponentFilterConfigs;
+    let appearance = await this.settingsService.readAppearanceSettings();
     this.colors = appearance.chartColors;
     this.init('pie');
     this.buildOptions.subscribe((buckets: Array<Bucket>) => {
-      let filters = this.bodyBuilderService.getFiltersFromQuery().filter(element => Object.keys(element).indexOf(source + '.keyword') != -1)
-      if (filters.length)
-        this.filterd = true;
-      else
-        this.filterd = false;
+      let filters = this.bodyBuilderService
+        .getFiltersFromQuery()
+        .filter(
+          (element) => Object.keys(element).indexOf(source + '.keyword') != -1,
+        );
+      if (filters.length) this.filterd = true;
+      else this.filterd = false;
       if (buckets) {
         this.chartOptions = this.setOptions(buckets);
       }
@@ -54,7 +56,7 @@ export class PieComponent extends ParentChart implements OnInit {
     });
   }
   resetFilter(value: boolean = false) {
-    this.resetQ()
+    this.resetQ();
   }
   private setOptions(buckets: Array<Bucket>): Highcharts.Options {
     return {
@@ -82,16 +84,22 @@ export class PieComponent extends ParentChart implements OnInit {
         series: {
           point: {
             events: {
-              click: this.componentConfigs.allowFilterOnClick == true? this.setQ() : null,
-            }
-          }
-        }
+              click:
+                this.componentConfigs.allowFilterOnClick == true
+                  ? this.setQ()
+                  : null,
+            },
+          },
+        },
       },
       series: [
         {
           animation: true,
           type: 'pie',
-          data: buckets.map((b: Bucket) => ({ name: b.key.substr(0, 50), y: b.doc_count })),
+          data: buckets.map((b: Bucket) => ({
+            name: b.key.substr(0, 50),
+            y: b.doc_count,
+          })),
         },
       ],
       ...this.cms.commonProperties(),

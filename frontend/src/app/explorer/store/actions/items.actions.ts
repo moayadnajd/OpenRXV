@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
 import {
   ElasticsearchResponse,
-  ElasticsearchQuery
+  ElasticsearchQuery,
 } from 'src/app/explorer/filters/services/interfaces';
 import { InView, ESHttpError } from './actions.interfaces';
 
@@ -12,7 +12,7 @@ export enum ActionTypes {
   SetCounters = '[items] SetCounters',
   GetCounters = '[items] GetCounters',
   SetInView = '[items] SetInView',
-  updateYears = '[items] UpdateYears'
+  updateYears = '[items] UpdateYears',
 }
 
 export class GetData implements Action {
@@ -30,7 +30,7 @@ export class GetDataSuccess implements Action {
   readonly type = ActionTypes.getDataSuccess;
   constructor(
     public payload: ElasticsearchResponse = null,
-    public addHits: boolean = true
+    public addHits: boolean = true,
   ) {}
 }
 

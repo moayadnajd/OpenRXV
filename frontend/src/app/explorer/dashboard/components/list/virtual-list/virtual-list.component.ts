@@ -40,9 +40,13 @@ export class VirtualListComponent extends ParentComponent implements OnInit {
       .subscribe((total: number) => (this.totalItems = total));
   }
   itemClicked(value) {
-    if (this.componentConfigs.allowFilterOnClick != undefined && this.componentConfigs.allowFilterOnClick != false) {
+    if (
+      this.componentConfigs.allowFilterOnClick != undefined &&
+      this.componentConfigs.allowFilterOnClick != false
+    ) {
       const { source } = this.componentConfigs as ComponentFilterConfigs;
-      const query: bodybuilder.Bodybuilder = this.selectService.addNewValueAttributetoMainQuery(source, value);
+      const query: bodybuilder.Bodybuilder =
+        this.selectService.addNewValueAttributetoMainQuery(source, value);
       this.store.dispatch(new fromStore.SetQuery(query.build()));
       this.selectService.resetNotification();
     }

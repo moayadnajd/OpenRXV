@@ -4,7 +4,7 @@ import {
   Output,
   Input,
   OnInit,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { SortOption } from 'src/app/explorer/configs/generalConfig.interface';
 import { FileType } from './types.interface';
@@ -14,7 +14,7 @@ import { SettingsService } from 'src/app/admin/services/settings.service';
   selector: 'app-filter-paginated-list',
   templateUrl: './filter-paginated-list.component.html',
   styleUrls: ['./filter-paginated-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterPaginatedListComponent implements OnInit {
   @Output() filterChanged: EventEmitter<SortOption>;
@@ -33,21 +33,21 @@ export class FilterPaginatedListComponent implements OnInit {
     this.ascDesc = [
       {
         display: 'Descending',
-        value: 'desc'
+        value: 'desc',
       },
       {
         display: 'Ascending',
-        value: 'asc'
-      }
+        value: 'asc',
+      },
     ];
     this.selectedFilter = this.filterOptions[0];
-    this.reverseOption = this.selectedFilter.sort
+    this.reverseOption = this.selectedFilter.sort;
     this.files = await this.settingsService.readReports();
-    this.filterChanged.emit(this.selectedFilter)
+    this.filterChanged.emit(this.selectedFilter);
   }
 
   onFilterChanged(f: SortOption): void {
-    this.reverseOption = f.sort
+    this.reverseOption = f.sort;
     this.filterChanged.emit(f);
   }
 

@@ -3,15 +3,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { FormDialogComponent } from '../form-dialog/form-dialog.component';
 import { isEmpty } from 'ramda';
 
-
 @Component({
   selector: 'app-counter',
   templateUrl: './counter.component.html',
-  styleUrls: ['./counter.component.scss']
+  styleUrls: ['./counter.component.scss'],
 })
 export class CounterComponent implements OnInit {
-  @Output() edited: EventEmitter<any> = new EventEmitter()
-  @Output() onDelete: EventEmitter<boolean> = new EventEmitter()
+  @Output() edited: EventEmitter<any> = new EventEmitter();
+  @Output() onDelete: EventEmitter<boolean> = new EventEmitter();
 
   form_data = [
     {
@@ -24,68 +23,62 @@ export class CounterComponent implements OnInit {
       name: 'source',
       label: 'Data Source',
       type: 'metadata',
-      required: true
+      required: true,
     },
     {
       name: 'type',
       label: 'Type',
       type: 'select',
       items: [
-        { name: "Count of distinct values", value: "cardinality" },
-        { name: "Sum of numeric values", value: "sum" },
-        { name: "Average of numeric values", value: "avg" }
+        { name: 'Count of distinct values', value: 'cardinality' },
+        { name: 'Sum of numeric values', value: 'sum' },
+        { name: 'Average of numeric values', value: 'avg' },
       ],
-      required: true
+      required: true,
     },
     {
       name: 'description',
       label: 'Tour Description',
       type: 'textarea',
-      required: true
+      required: true,
     },
     {
       name: 'filter',
       label: 'Value to filter the counter on',
       type: 'text',
-      required: false
+      required: false,
     },
     {
       name: 'percentageFromTotal',
       label: 'Show percentage of total',
       type: 'check',
-      required: false
+      required: false,
     },
   ];
 
   @Input() configs;
 
   delete() {
-    this.onDelete.emit(true)
+    this.onDelete.emit(true);
   }
 
   controls = [];
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog) {}
 
   ngOnInit(): void {
-
-    if (!this.configs.componentConfigs.source)
-      this.openDialog();
-
+    if (!this.configs.componentConfigs.source) this.openDialog();
   }
 
   openDialog(): void {
-
     const dialogRef = this.dialog.open(FormDialogComponent, {
       width: '456px',
-      data: { form_data: this.form_data, configs: this.configs }
+      data: { form_data: this.form_data, configs: this.configs },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result)
-        this.edited.emit(result)
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) this.edited.emit(result);
       if (!result && isEmpty(this.configs.componentConfigs))
-        this.onDelete.emit(!result)
+        this.onDelete.emit(!result);
     });
   }
-
 }

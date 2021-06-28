@@ -7,7 +7,7 @@ import {
   BuildQueryObj,
   ResetOptions,
   QuerySearchAttribute,
-  QueryFilterAttribute
+  QueryFilterAttribute,
 } from '../interfaces';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
@@ -24,8 +24,8 @@ export class RangeService {
   private readonly api_end_point: string = environment.api + '/search';
   constructor(
     private readonly http: HttpClient,
-    private readonly bodyBuilderService: BodyBuilderService
-  ) { }
+    private readonly bodyBuilderService: BodyBuilderService,
+  ) {}
 
   set sourceVal(s: string) {
     this.source = s;
@@ -69,21 +69,18 @@ export class RangeService {
    */
   getYears(
     query: ElasticsearchQuery,
-    force: boolean = false
+    force: boolean = false,
   ): Observable<number[]> {
     return this.getYearsFromStore().pipe(
       switchMap((buckets: Array<Bucket>) =>
         buckets && buckets.length && !force
           ? of(buckets.map(({ key }) => +key))
-          : this.httpGetYears(query)
-      )
+          : this.httpGetYears(query),
+      ),
     );
   }
-  getMaxAndMin(
-    query: ElasticsearchQuery,
-    force: boolean = false
-  ): any {
-    return this.httpGetMinAndMax(query)
+  getMaxAndMin(query: ElasticsearchQuery, force: boolean = false): any {
+    return this.httpGetMinAndMax(query);
   }
 
   buildquery(bq: BuildQueryObj): bodybuilder.Bodybuilder {
@@ -99,8 +96,6 @@ export class RangeService {
     let q = this.bodyBuilderService.buildMinMaxQuery(bq);
     return q;
   }
-
-
 
   addAttributeToMainQuery(range): bodybuilder.Bodybuilder {
     let obj = {};
@@ -120,26 +115,25 @@ export class RangeService {
   private httpGetYears(query: ElasticsearchQuery): Observable<number[]> {
     return this.http.post(this.api_end_point, query).pipe(
       tap((res: ElasticsearchResponse) =>
-        this.store.dispatch(new fromStore.GetDataSuccess(res, false))
+        this.store.dispatch(new fromStore.GetDataSuccess(res, false)),
       ),
       map((d: ElasticsearchResponse) =>
-        d.aggregations[this.source].buckets.map((year: Bucket) => +year.key)
-      )
+        d.aggregations[this.source].buckets.map((year: Bucket) => +year.key),
+      ),
     );
   }
 
   private httpGetMinAndMax(query: ElasticsearchQuery) {
     return this.http.post(this.api_end_point, query).pipe(
       tap((res: ElasticsearchResponse) =>
-        this.store.dispatch(new fromStore.GetDataSuccess(res, false))
+        this.store.dispatch(new fromStore.GetDataSuccess(res, false)),
       ),
       map((d: ElasticsearchResponse) => {
         let obj = {};
-        obj[`min_${this.source}`] = d.aggregations[`min_${this.source}`]
-        obj[`max_${this.source}`] = d.aggregations[`max_${this.source}`]
+        obj[`min_${this.source}`] = d.aggregations[`min_${this.source}`];
+        obj[`max_${this.source}`] = d.aggregations[`max_${this.source}`];
         return obj;
-      }
-      )
+      }),
     );
   }
 }

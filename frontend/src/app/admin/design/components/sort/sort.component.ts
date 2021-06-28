@@ -5,18 +5,18 @@ import { moveItemInArray, CdkDragDrop } from '@angular/cdk/drag-drop';
 @Component({
   selector: 'app-sort',
   templateUrl: './sort.component.html',
-  styleUrls: ['./sort.component.scss']
+  styleUrls: ['./sort.component.scss'],
 })
 export class SortComponent implements OnInit {
-sortedItems=[]
+  sortedItems = [];
   constructor(
     public dialogRef: MatDialogRef<SortComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { }
+    @Inject(MAT_DIALOG_DATA) public data: any,
+  ) {}
 
   ngOnInit(): void {
     this.sortedItems = [].concat(this.data);
   }
-
 
   submit() {
     this.dialogRef.close(this.sortedItems);

@@ -6,6 +6,6 @@ import { ExportController } from './export.controller';
 @Module({
   imports: [SharedModule],
   providers: [ExportService],
-  controllers: [ExportController]
+  controllers: [ExportController],
 })
-export class ExportModule { }
+export class ExportModule {}

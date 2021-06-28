@@ -3,19 +3,19 @@ export interface FiltersState {
   body: any;
 }
 const initialState: FiltersState = {
-  body: null
+  body: null,
 };
 
 export function reducer(
   state = initialState,
-  action: actions.FiltersActions
+  action: actions.FiltersActions,
 ): FiltersState {
   switch (action.type) {
     case actions.FiltersActionTypes.setFilters: {
       const body = action.payload;
       return {
         ...state,
-        body
+        body,
       };
     }
     default: {

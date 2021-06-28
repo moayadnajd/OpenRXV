@@ -24,72 +24,87 @@ import { ComponentFilterConfigs } from 'src/app/explorer/configs/generalConfig.i
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WheelComponent extends ParentChart implements OnInit {
-  colors: string[]
+  colors: string[];
   constructor(
     cms: ChartMathodsService,
     private settingsService: SettingsService,
     private readonly cdr: ChangeDetectorRef,
     public readonly selectService: SelectService,
     public readonly store: Store<fromStore.AppState>,
-    private readonly bodyBuilderService: BodyBuilderService
+    private readonly bodyBuilderService: BodyBuilderService,
   ) {
     super(cms, selectService, store);
   }
   filterd = false;
   resetFilter(value: boolean = false) {
-    this.resetQ()
+    this.resetQ();
   }
   async ngOnInit() {
     const { source } = this.componentConfigs as ComponentFilterConfigs;
-    let appearance = await this.settingsService.readAppearanceSettings()
+    let appearance = await this.settingsService.readAppearanceSettings();
     this.colors = appearance.chartColors;
     this.init('dependencywheel');
     this.buildOptions.subscribe((buckets: Array<Bucket>) => {
       if (buckets) {
-        let filters = this.bodyBuilderService.getFiltersFromQuery().filter(element => Object.keys(element).indexOf(source + '.keyword') != -1)
-        if (filters.length)
-          this.filterd = true;
-        else
-          this.filterd = false;
+        let filters = this.bodyBuilderService
+          .getFiltersFromQuery()
+          .filter(
+            (element) =>
+              Object.keys(element).indexOf(source + '.keyword') != -1,
+          );
+        if (filters.length) this.filterd = true;
+        else this.filterd = false;
         this.chartOptions = this.setOptions(buckets);
       }
       this.cdr.detectChanges();
     });
   }
   private setOptions(buckets: Array<Bucket>): any {
-    let data = buckets.map((b: Bucket) => (b.related.buckets.filter(d => b.key != d.key).map(d => [b.key.substr(0, 50), d.key.substr(0, 50), d.doc_count]))).flat(1)
+    let data = buckets
+      .map((b: Bucket) =>
+        b.related.buckets
+          .filter((d) => b.key != d.key)
+          .map((d) => [b.key.substr(0, 50), d.key.substr(0, 50), d.doc_count]),
+      )
+      .flat(1);
     return {
       accessibility: {
         point: {
-          valueDescriptionFormat: '{index}. From {point.from} to {point.to}: {point.weight}.'
-        }
+          valueDescriptionFormat:
+            '{index}. From {point.from} to {point.to}: {point.weight}.',
+        },
       },
       plotOptions: {
         series: {
           point: {
             events: {
-              click: this.componentConfigs.allowFilterOnClick == true ? this.setQ() : null,
-            }
-          }
-        }
+              click:
+                this.componentConfigs.allowFilterOnClick == true
+                  ? this.setQ()
+                  : null,
+            },
+          },
+        },
       },
       colors: this.colors,
-      series: [{
-        keys: ['from', 'to', 'weight'],
-        data: data,
-        type: 'dependencywheel',
-        dataLabels: {
-          color: '#333',
-          textPath: {
-            enabled: true,
-            attributes: {
-              dy: 5
-            }
+      series: [
+        {
+          keys: ['from', 'to', 'weight'],
+          data: data,
+          type: 'dependencywheel',
+          dataLabels: {
+            color: '#333',
+            textPath: {
+              enabled: true,
+              attributes: {
+                dy: 5,
+              },
+            },
+            distance: 10,
           },
-          distance: 10
+          size: '95%',
         },
-        size: '95%'
-      }],
+      ],
       ...this.cms.commonProperties(),
     };
   }

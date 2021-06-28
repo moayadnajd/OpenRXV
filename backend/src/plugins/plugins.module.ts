@@ -7,10 +7,20 @@ import { DSpaceHealthCheck } from './dspace_health_check';
 import { AddMissingItems } from './dspace_add_missing_items';
 import { SharedModule } from 'src/shared/shared.module';
 @Module({
-    providers: [DSpaceAltmetrics, MELDownloadsAndViews, DSpaceDownloadsAndViews,DSpaceHealthCheck,AddMissingItems],
-    exports: [DSpaceAltmetrics, MELDownloadsAndViews, DSpaceDownloadsAndViews,DSpaceHealthCheck,AddMissingItems],
-    imports: [
-        SharedModule,
-    ],
+  providers: [
+    DSpaceAltmetrics,
+    MELDownloadsAndViews,
+    DSpaceDownloadsAndViews,
+    DSpaceHealthCheck,
+    AddMissingItems,
+  ],
+  exports: [
+    DSpaceAltmetrics,
+    MELDownloadsAndViews,
+    DSpaceDownloadsAndViews,
+    DSpaceHealthCheck,
+    AddMissingItems,
+  ],
+  imports: [SharedModule],
 })
-export class PluginsModule { }
+export class PluginsModule {}

@@ -17,18 +17,18 @@ export class ItemsEffects {
       return this.itemsService.getItems(action.payload).pipe(
         map(
           (items: ElasticsearchResponse) =>
-            new itemsactions.GetDataSuccess(items)
+            new itemsactions.GetDataSuccess(items),
         ),
         catchError((error: HttpErrorResponse) =>
           of(
             new itemsactions.GetDataError({
               type: itemsactions.ActionTypes.getData,
-              error
-            })
-          )
-        )
+              error,
+            }),
+          ),
+        ),
       );
-    })
+    }),
   );
 
   @Effect()
@@ -37,17 +37,17 @@ export class ItemsEffects {
     switchMap((action: itemsactions.SetCounters) => {
       return this.itemsService.getItems(action.payload).pipe(
         map(
-          (items: ElasticsearchResponse) => new itemsactions.GetCounters(items)
+          (items: ElasticsearchResponse) => new itemsactions.GetCounters(items),
         ),
         catchError((error: HttpErrorResponse) =>
           of(
             new itemsactions.GetDataError({
               type: itemsactions.ActionTypes.SetCounters,
-              error
-            })
-          )
-        )
+              error,
+            }),
+          ),
+        ),
       );
-    })
+    }),
   );
 }

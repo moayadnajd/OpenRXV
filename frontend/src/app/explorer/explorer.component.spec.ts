@@ -4,9 +4,7 @@ import { ExplorerComponent } from './explorer.component';
 describe('ExplorerComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        ExplorerComponent
-      ],
+      declarations: [ExplorerComponent],
     }).compileComponents();
   }));
 
@@ -26,6 +24,8 @@ describe('ExplorerComponent', () => {
     const fixture = TestBed.createComponent(ExplorerComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to RES!');
+    expect(compiled.querySelector('h1').textContent).toContain(
+      'Welcome to RES!',
+    );
   });
 });

@@ -8,11 +8,10 @@ import { SettingsService } from 'src/app/admin/services/settings.service';
 })
 export class FiltersComponent implements OnInit {
   filters: GeneralConfigs[];
-  constructor(private settings: SettingsService) { }
+  constructor(private settings: SettingsService) {}
 
   async ngOnInit() {
     let { filters } = await this.settings.readExplorerSettings();
     this.filters = filters;
   }
-
 }

@@ -8,9 +8,8 @@ describe('RotatedLablesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RotatedLablesComponent ]
-    })
-    .compileComponents();
+      declarations: [RotatedLablesComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

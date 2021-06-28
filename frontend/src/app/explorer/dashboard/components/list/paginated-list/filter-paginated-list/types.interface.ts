@@ -1,6 +1,9 @@
 import { PageEvent } from '@angular/material/paginator';
 import { SortOption } from 'src/app/explorer/configs/generalConfig.interface';
-import { hits, ElasticsearchQuery } from 'src/app/explorer/filters/services/interfaces';
+import {
+  hits,
+  ElasticsearchQuery,
+} from 'src/app/explorer/filters/services/interfaces';
 export interface SortPaginationOptions {
   reset: boolean;
   pageEvent: PageEvent;
@@ -14,7 +17,7 @@ export interface ViewChild {
 
 export enum UpdateCallerBarChart {
   BarChartNgSelect,
-  SideFilters
+  SideFilters,
 }
 
 export interface BarComposerHelper {
@@ -45,9 +48,9 @@ export interface DataForExporter {
   type: FileType;
   query: ElasticsearchQuery;
   part: number;
-  fileName: string,
-  file:any,
-  webSiteName:string
+  fileName: string;
+  file: any;
+  webSiteName: string;
 }
 
 export interface ExportFilesModal {

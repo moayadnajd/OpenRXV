@@ -8,9 +8,8 @@ describe('InfoTableComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ InfoTableComponent ]
-    })
-    .compileComponents();
+      declarations: [InfoTableComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

@@ -8,9 +8,8 @@ describe('PubImageComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PubImageComponent ]
-    })
-    .compileComponents();
+      declarations: [PubImageComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

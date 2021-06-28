@@ -8,9 +8,8 @@ describe('ReprotingFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ReprotingFormComponent ]
-    })
-    .compileComponents();
+      declarations: [ReprotingFormComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

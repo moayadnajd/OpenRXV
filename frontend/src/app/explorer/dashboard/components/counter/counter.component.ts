@@ -41,7 +41,7 @@ export class CounterComponent implements OnInit {
     this.store
       .select(fromStore.getTotal)
       .subscribe(
-        (total: number) => (this.percentage = (this.count / total) * 100)
+        (total: number) => (this.percentage = (this.count / total) * 100),
       );
   }
 
@@ -63,8 +63,8 @@ export class CounterComponent implements OnInit {
         })
         .pipe(
           map((ag: AggregationsValue) =>
-            ag ? ag.value || ag.doc_count : undefined
-          )
+            ag ? ag.value || ag.doc_count : undefined,
+          ),
         )
         .subscribe((n: number) => this.initCounterLogic(n));
     } else {

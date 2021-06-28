@@ -13,6 +13,6 @@ export class QueryEffects {
     ofType(queryActions.QueryActionTypes.setQuery),
     switchMap((action: queryActions.SetQuery) => {
       return of(new itemsActions.GetData(action.payload));
-    })
+    }),
   );
 }

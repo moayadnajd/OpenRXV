@@ -64,12 +64,12 @@ export class ScrollHelperService {
     } else {
       const children: Array<ViewChild> = [];
       this.dashboardConfig.forEach(
-        d =>
+        (d) =>
           d.scroll.linkedWith &&
           children.push({
             linkedId: d.scroll.linkedWith,
             compId: d.componentConfigs.id,
-          })
+          }),
       );
       this.children = [...children];
       return children;
@@ -84,7 +84,7 @@ export class ScrollHelperService {
     return [
       this.countersConfig[0],
       ...this.dashboardConfig.filter(
-        (gc: GeneralConfigs) => gc.scroll.icon && gc.show
+        (gc: GeneralConfigs) => gc.scroll.icon && gc.show,
       ),
     ];
   }
@@ -117,13 +117,12 @@ export class ScrollHelperService {
 
   disPatchSetInView(id: string, collapsed: boolean): void {
     this.store.dispatch(
-      new fromStore.SetInView(this.changeViewState(id, collapsed))
+      new fromStore.SetInView(this.changeViewState(id, collapsed)),
     );
   }
 
   private changeCollapsed(collapsed: boolean): void {
-
-    this.viewState = { ... this.viewState, collapsed };
+    this.viewState = { ...this.viewState, collapsed };
   }
 }
 

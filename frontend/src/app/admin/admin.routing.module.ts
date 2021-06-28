@@ -14,29 +14,48 @@ import { AppearanceComponent } from './appearance/appearance.component';
 import { PluginsComponent } from './plugins/plugins.component';
 import { ReportingComponent } from './reporting/reporting.component';
 
-
-
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   {
-    path: 'admin', component: RootComponent, children: [
+    path: 'admin',
+    component: RootComponent,
+    children: [
       { path: '', component: DashboardComponent, canActivate: [AdminGuard] },
-      { path: 'dashboard', component: DashboardComponent, canActivate: [AdminGuard] },
-      { path: 'appearance', component: AppearanceComponent, canActivate: [AdminGuard] },
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
+        canActivate: [AdminGuard],
+      },
+      {
+        path: 'appearance',
+        component: AppearanceComponent,
+        canActivate: [AdminGuard],
+      },
       { path: 'users', component: UsersComponent, canActivate: [AdminGuard] },
       { path: 'shared', component: SharedComponent, canActivate: [AdminGuard] },
-      { path: 'mapping-values', component: MappingValuesComponent, canActivate: [AdminGuard] },
+      {
+        path: 'mapping-values',
+        component: MappingValuesComponent,
+        canActivate: [AdminGuard],
+      },
       { path: 'setup', component: SetupComponent, canActivate: [AdminGuard] },
-      { path: 'plugins', component: PluginsComponent, canActivate: [AdminGuard] },
+      {
+        path: 'plugins',
+        component: PluginsComponent,
+        canActivate: [AdminGuard],
+      },
       { path: 'design', component: DesignComponent, canActivate: [AdminGuard] },
-      { path: 'reporting', component: ReportingComponent, canActivate: [AdminGuard] },
-
-    ]
+      {
+        path: 'reporting',
+        component: ReportingComponent,
+        canActivate: [AdminGuard],
+      },
+    ],
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AdminRoutingModule { }
+export class AdminRoutingModule {}

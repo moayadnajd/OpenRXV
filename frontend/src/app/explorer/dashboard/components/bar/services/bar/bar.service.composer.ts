@@ -1,13 +1,13 @@
 import {
   UpdateCallerBarChart,
-  BarComposerHelper
+  BarComposerHelper,
 } from '../../../list/paginated-list/filter-paginated-list/types.interface';
 import {
   ElasticsearchQuery,
   BucketWithInnerBuckts,
   ElasticsearchResponse,
   Bucket,
-  ResetOptions
+  ResetOptions,
 } from 'src/app/explorer/filters/services/interfaces';
 import { MergedSelect } from 'src/app/explorer/configs/generalConfig.interface';
 import { RangeService } from 'src/app/explorer/filters/services/range/range.service';
@@ -53,7 +53,7 @@ export class BarServiceComposer {
 
   protected buildQuery(
     queryToMerge?: bodybuilder.Bodybuilder,
-    changeBy?: UpdateCallerBarChart
+    changeBy?: UpdateCallerBarChart,
   ): ElasticsearchQuery {
     const [yearsLen, typeLen] = this.yearAndLenSize();
     const q = bodybuilder()
@@ -63,16 +63,16 @@ export class BarServiceComposer {
         this.secondFilterKeyWord,
         { size: yearsLen },
         'y',
-        query =>
+        (query) =>
           query.aggregation(
             'terms',
             '',
             {
               field: this.firstFilterKeyWord,
-              size: typeLen
+              size: typeLen,
             },
-            'x'
-          )
+            'x',
+          ),
       );
 
     if (changeBy === UpdateCallerBarChart.BarChartNgSelect) {
@@ -81,7 +81,7 @@ export class BarServiceComposer {
 
     const finalQuery: ElasticsearchQuery = {
       ...(q.build() as ElasticsearchQuery),
-      query: { ...(queryToMerge.build() as ElasticsearchQuery).query }
+      query: { ...(queryToMerge.build() as ElasticsearchQuery).query },
     };
     if (!Object.keys(finalQuery.query).length) {
       delete finalQuery.query;
@@ -104,27 +104,27 @@ export class BarServiceComposer {
           : this.doWeHaveQueryInTheMainQuery
           ? 5
           : this.selectedCategories.length
-        : 5
+        : 5,
     ];
   }
 
   protected addYearsAndTypesToQuery(
     queryToMerge: bodybuilder.Bodybuilder,
-    changeBy: UpdateCallerBarChart
+    changeBy: UpdateCallerBarChart,
   ): void {
     if (changeBy === UpdateCallerBarChart.BarChartNgSelect) {
       if (this.selectedYears.length) {
         queryToMerge.query(
           'terms',
           this.secondFilterKeyWord,
-          this.selectedYears
+          this.selectedYears,
         );
       }
       if (this.selectedCategories.length) {
         queryToMerge.query(
           'terms',
           this.firstFilterKeyWord,
-          this.selectedCategories
+          this.selectedCategories,
         );
       }
     }
@@ -133,13 +133,13 @@ export class BarServiceComposer {
   protected updateNgSelectOptions(): void {
     if (this.buckets[this.firstSourceKey]) {
       this.barTypes = this.buckets[this.firstSourceKey].map(
-        ({ key }: Bucket) => key
+        ({ key }: Bucket) => key,
       );
     }
     if (this.buckets[this.secondSourceKey]) {
       // number when the year range filter changes !
       this.barYears = this.buckets[this.secondSourceKey].map(
-        (b: Bucket | number) => (typeof b !== 'number' ? b.key : `${b}`)
+        (b: Bucket | number) => (typeof b !== 'number' ? b.key : `${b}`),
       );
     }
   }
@@ -155,41 +155,40 @@ export class BarServiceComposer {
           }
           this.buckets = {
             ...this.buckets,
-            [source]: filterdYearsRange
+            [source]: filterdYearsRange,
           };
           composer.forgetYearsFromStore = true;
         }
         this.getDataNow.emit(UpdateCallerBarChart.SideFilters);
-      }
+      },
     );
   }
 
   protected mapDataToColmns(
     res: ElasticsearchResponse,
-    changeBy: UpdateCallerBarChart
+    changeBy: UpdateCallerBarChart,
   ): Array<Highcharts.SeriesColumnOptions> {
-    const series: Array<
-      Highcharts.SeriesColumnOptions
-    > = res.aggregations.y.buckets.map(
-      (yBucket: BucketWithInnerBuckts) =>
-        ({
-          type: 'column',
-          name: yBucket.key,
-          value: yBucket.doc_count,
-          data: yBucket.x.buckets.map(xBucket => ({
-            name: xBucket.key,
-            y: xBucket.doc_count
-          })),
-          animation: true
-        } as Highcharts.SeriesColumnOptions)
-    );
+    const series: Array<Highcharts.SeriesColumnOptions> =
+      res.aggregations.y.buckets.map(
+        (yBucket: BucketWithInnerBuckts) =>
+          ({
+            type: 'column',
+            name: yBucket.key,
+            value: yBucket.doc_count,
+            data: yBucket.x.buckets.map((xBucket) => ({
+              name: xBucket.key,
+              y: xBucket.doc_count,
+            })),
+            animation: true,
+          } as Highcharts.SeriesColumnOptions),
+      );
     this.selectDefaultOptions(series, changeBy);
     return series;
   }
 
   protected selectDefaultOptions(
     series: Array<Highcharts.SeriesColumnOptions>,
-    changeBy: UpdateCallerBarChart
+    changeBy: UpdateCallerBarChart,
   ): void {
     // binding the default selected values only the first time first two conditions.
     // replace the selected options when the SideFilters update the data.
@@ -206,7 +205,7 @@ export class BarServiceComposer {
       .forEach(({ name }: { y: number; name: string }) => catSet.add(name));
     this.selectedCategories = Array.from(catSet);
     this.selectedYears = series.map(
-      ({ name }: Highcharts.SeriesColumnOptions) => name
+      ({ name }: Highcharts.SeriesColumnOptions) => name,
     );
   }
 }

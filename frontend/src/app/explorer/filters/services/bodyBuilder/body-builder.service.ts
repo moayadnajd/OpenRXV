@@ -44,18 +44,17 @@ export class BodyBuilderService {
   }
   set setAggAttributes(
     queryAttribute:
-      any
+      | any
       | string
       | QueryYearAttribute
       | QuerySearchAttribute
-      | QueryFilterAttribute
+      | QueryFilterAttribute,
   ) {
     this.mainBodyBuilderService.setAggAttributes = queryAttribute;
   }
   set setAggAttributesDirect(queryAttribute) {
     this.mainBodyBuilderService.aggAttributesDeirect = queryAttribute;
   }
-
 
   get orOperator(): Subject<boolean> {
     return this.mainBodyBuilderService.getOrOperator;
@@ -64,17 +63,16 @@ export class BodyBuilderService {
     bq.size = bq.size ? bq.size : 0;
     return this.addAggreigation(
       this.buildMainQuery(0, excludeSource).size(0), // no need for the hits
-      bq
+      bq,
     );
-
   }
   buildquery(bq: BuildQueryObj): bodybuilder.Bodybuilder {
     bq.size = bq.size ? bq.size : 10;
     return this.addQueryAttributes(
       this.addAggreigation(
         bodybuilder().size(0), // no need for the hits
-        bq
-      )
+        bq,
+      ),
     );
   }
 
@@ -83,14 +81,21 @@ export class BodyBuilderService {
     return this.addQueryAttributes(
       this.addMinMaxAggreigation(
         bodybuilder().size(0), // no need for the hits
-        bq
-      )
+        bq,
+      ),
     );
   }
 
-  buildMainQuery(from: number = 10, excludeSource?: string): bodybuilder.Bodybuilder {
+  buildMainQuery(
+    from: number = 10,
+    excludeSource?: string,
+  ): bodybuilder.Bodybuilder {
     this.from = from === 10 ? this.from : from;
-    return this.mainBodyBuilderService.buildMainQuery(this.from, undefined, excludeSource);
+    return this.mainBodyBuilderService.buildMainQuery(
+      this.from,
+      undefined,
+      excludeSource,
+    );
   }
 
   deleteFromMainQuery(fromSearchAll: boolean): string {
@@ -120,13 +125,12 @@ export class BodyBuilderService {
 
   public addMinMaxAggreigation(
     query: bodybuilder.Bodybuilder,
-    qb: BuildQueryObj
+    qb: BuildQueryObj,
   ): bodybuilder.Bodybuilder {
     const { source } = qb;
 
     const termRules: any = {
       field: source,
-
     };
     query.aggregation('min', termRules, `min_${source}`);
     query.aggregation('max', termRules, `max_${source}`);
@@ -137,10 +141,10 @@ export class BodyBuilderService {
     // replace each character with "(LowerCase|UpperCase)" //regex format
     term = term
       .split('')
-      .map(character =>
+      .map((character) =>
         character !== ' '
           ? '(' + character.toLowerCase() + '|' + character.toUpperCase() + ')'
-          : character
+          : character,
       )
       .join('');
     // build a regex to match any item that has (full or partial) all the words
@@ -159,24 +163,22 @@ export class BodyBuilderService {
   }
 
   public addQueryAttributes(
-    q: bodybuilder.Bodybuilder
+    q: bodybuilder.Bodybuilder,
   ): bodybuilder.Bodybuilder {
     return this.mainBodyBuilderService.addQueryAttributes(q);
   }
 
   getFiltersFromQuery() {
     const query = this.buildMainQuery().build();
-    let finalObj = []
+    let finalObj = [];
     this.traverse(query, (obj: any, key: any, val: any) => {
-      if (key == 'term' && val instanceof Object)
-        finalObj.push(val)
-      if (key == 'range' && val instanceof Object)
-        finalObj.push(val)
+      if (key == 'term' && val instanceof Object) finalObj.push(val);
+      if (key == 'range' && val instanceof Object) finalObj.push(val);
       if (key == 'match' && val instanceof Object) {
-        finalObj.push(val)
+        finalObj.push(val);
       }
       if (key == 'query_string' && val instanceof Object) {
-        finalObj.push(val)
+        finalObj.push(val);
       }
     });
     return finalObj;
@@ -185,10 +187,9 @@ export class BodyBuilderService {
   async traverse(o: any, fn: (obj: any, prop: string, value: any) => void) {
     for (const i in o) {
       fn.apply(this, [o, i, o[i]]);
-      if (o[i] !== null && typeof (o[i]) === 'object') {
+      if (o[i] !== null && typeof o[i] === 'object') {
         this.traverse(o[i], fn);
       }
     }
   }
-
 }

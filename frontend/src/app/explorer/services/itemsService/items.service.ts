@@ -4,29 +4,37 @@ import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import {
   ElasticsearchResponse,
-  ElasticsearchQuery
+  ElasticsearchQuery,
 } from 'src/app/explorer/filters/services/interfaces';
 import { map } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ItemsService {
   private readonly api_end_point: string = environment.api + '/search';
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getItems(query: ElasticsearchQuery): Observable<ElasticsearchResponse> {
     return this.http.post(this.api_end_point, query);
   }
 
-
   async getShare(id: string) {
-    return await this.http.get(environment.api + '/share/' + id).pipe(map(data => data)).toPromise();
+    return await this.http
+      .get(environment.api + '/share/' + id)
+      .pipe(map((data) => data))
+      .toPromise();
   }
 
   async saveShare(attr: any) {
     if (Object.keys(attr).length)
-      return '/shared/' + await this.http.post(environment.api + '/share', attr).pipe(map((data: any) => data._id)).toPromise();
-    else return ''
+      return (
+        '/shared/' +
+        (await this.http
+          .post(environment.api + '/share', attr)
+          .pipe(map((data: any) => data._id))
+          .toPromise())
+      );
+    else return '';
   }
 }

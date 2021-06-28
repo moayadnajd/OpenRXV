@@ -1,6 +1,6 @@
 export const getCountryCode = (countryName: string): string | undefined => {
   const code = countrylist.find(
-    country => country.name.toLowerCase() === countryName.toLowerCase()
+    (country) => country.name.toLowerCase() === countryName.toLowerCase(),
   );
   return code ? code.code.toLowerCase() : undefined;
 };
@@ -249,5 +249,5 @@ export const countrylist = [
   { name: 'Western Sahara', code: 'EH' },
   { name: 'Yemen', code: 'YE' },
   { name: 'Zambia', code: 'ZM' },
-  { name: 'Zimbabwe', code: 'ZW' }
+  { name: 'Zimbabwe', code: 'ZW' },
 ];

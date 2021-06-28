@@ -2,7 +2,7 @@ import { Action } from '@ngrx/store';
 
 export enum QueryActionTypes {
   setQuery = '[items] SetQuery',
-  getQuery = '[items] GetQuery'
+  getQuery = '[items] GetQuery',
 }
 
 export class GetQuery implements Action {

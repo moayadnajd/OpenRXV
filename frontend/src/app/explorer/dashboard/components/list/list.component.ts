@@ -5,12 +5,16 @@ import {
   ElementRef,
   HostListener,
   ChangeDetectionStrategy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../../store';
 import { ComponentDashboardConfigs } from 'src/app/explorer/configs/generalConfig.interface';
-import { Bucket, Hits, hits } from 'src/app/explorer/filters/services/interfaces';
+import {
+  Bucket,
+  Hits,
+  hits,
+} from 'src/app/explorer/filters/services/interfaces';
 import { PageEvent } from '@angular/material/paginator';
 import { ScrollHelperService } from '../services/scrollTo/scroll-helper.service';
 import { first } from 'rxjs/operators';
@@ -32,7 +36,7 @@ declare function _altmetric_embed_init(): any;
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss'],
   providers: [ScrollHelperService, SelectService],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListComponent extends ParentComponent implements OnInit {
   @ViewChild('clickToEnable') clickToEnable: ElementRef;
@@ -46,14 +50,15 @@ export class ListComponent extends ParentComponent implements OnInit {
     public readonly scrollHelperService: ScrollHelperService,
     public readonly cdr: ChangeDetectorRef,
     private readonly selectService: SelectService,
-    private readonly bodyBuilderService:BodyBuilderService
+    private readonly bodyBuilderService: BodyBuilderService,
   ) {
     super();
   }
   resetQ() {
     const { source } = this.componentConfigs as ComponentDashboardConfigs;
     this.filterd = false;
-    const query: bodybuilder.Bodybuilder = this.selectService.resetValueAttributetoMainQuery(source as string);
+    const query: bodybuilder.Bodybuilder =
+      this.selectService.resetValueAttributetoMainQuery(source as string);
     this.store.dispatch(new fromStore.SetQuery(query.build()));
     this.selectService.resetNotification();
   }
@@ -90,23 +95,30 @@ export class ListComponent extends ParentComponent implements OnInit {
     const { source, size } = this.componentConfigs as ComponentDashboardConfigs;
     this.shouldWePaginate(source as string)
       ? this.store.select(fromStore.getHits).subscribe((h: Hits) => {
-        this.initPagination(source as string, h);
-        this.cdr.detectChanges();
-        this.expandOrStay(this.safeCheckLength(h && h.hits));
-      })
-      : this.store
-        .select(fromStore.getBuckets, size ? size + '_' + source : '10000_' + source)
-        .subscribe((b: Bucket[]) => {
-          const { source } = this.componentConfigs as ComponentDashboardConfigs;
-          let filters = this.bodyBuilderService.getFiltersFromQuery().filter(element => Object.keys(element).indexOf(source +'.keyword') != -1)
-          if (filters.length)
-            this.filterd = true;
-          else
-            this.filterd = false;
-          this.listData = b;
+          this.initPagination(source as string, h);
           this.cdr.detectChanges();
-          this.expandOrStay(this.safeCheckLength(b));
-        });
+          this.expandOrStay(this.safeCheckLength(h && h.hits));
+        })
+      : this.store
+          .select(
+            fromStore.getBuckets,
+            size ? size + '_' + source : '10000_' + source,
+          )
+          .subscribe((b: Bucket[]) => {
+            const { source } = this
+              .componentConfigs as ComponentDashboardConfigs;
+            let filters = this.bodyBuilderService
+              .getFiltersFromQuery()
+              .filter(
+                (element) =>
+                  Object.keys(element).indexOf(source + '.keyword') != -1,
+              );
+            if (filters.length) this.filterd = true;
+            else this.filterd = false;
+            this.listData = b;
+            this.cdr.detectChanges();
+            this.expandOrStay(this.safeCheckLength(b));
+          });
     this.store.select(fromStore.getLoadingOnlyHits).subscribe((b: boolean) => {
       this.loadingHits = b;
       this.cdr.detectChanges();
@@ -114,7 +126,10 @@ export class ListComponent extends ParentComponent implements OnInit {
   }
 
   private initPagination(source: string, h: Hits): void {
-    if (h && h.total.value !== (this.paginationAtt && this.paginationAtt.length)) {
+    if (
+      h &&
+      h.total.value !== (this.paginationAtt && this.paginationAtt.length)
+    ) {
       this.createPageEvent(h.total.value);
     }
     this.isPaginatedList = this.shouldWePaginate(source);

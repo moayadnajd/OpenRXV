@@ -10,14 +10,9 @@ import { HarvesterController } from './harvester/harvester.controller';
 import { PluginsConsumer } from './consumers/plugins.consumer';
 import { ConfigModule } from '@nestjs/config';
 @Module({
-    providers: [TasksService, FetchConsumer, JsonFilesService, PluginsConsumer],
-    exports: [],
-    imports: [
-        ConfigModule.forRoot(),
-        SharedModule,
-    ],
-    controllers: [HarvesterController]
+  providers: [TasksService, FetchConsumer, JsonFilesService, PluginsConsumer],
+  exports: [],
+  imports: [ConfigModule.forRoot(), SharedModule],
+  controllers: [HarvesterController],
 })
-export class HarvesterModule {
-
-}
+export class HarvesterModule {}

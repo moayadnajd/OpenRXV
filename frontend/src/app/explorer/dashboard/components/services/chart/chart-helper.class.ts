@@ -4,42 +4,45 @@ export class ChartHelper {
   commonProperties(): Highcharts.Options {
     return {
       title: {
-        text: undefined
+        text: undefined,
       },
       responsive: {
-        rules: this.responsiveRules()
+        rules: this.responsiveRules(),
       },
       credits: {
-        enabled: false
+        enabled: false,
       },
-      legend: this.legendAttributes()
+      legend: this.legendAttributes(),
     };
   }
 
   private legendAttributes(): Highcharts.LegendOptions {
     return {
       itemStyle: {
-        color: '#000000'
+        color: '#000000',
       },
       enabled: true,
       layout: 'horizontal',
       floating: this.chartType === 'map',
       align: this.chartType === 'pie' ? 'right' : 'center',
       verticalAlign:
-        this.chartType === 'map' || this.chartType === 'packed-bubble' || this.chartType === 'packed-bubble-split' || this.chartType === 'column'
+        this.chartType === 'map' ||
+        this.chartType === 'packed-bubble' ||
+        this.chartType === 'packed-bubble-split' ||
+        this.chartType === 'column'
           ? 'bottom'
           : 'middle',
       navigation: {
-        activeColor:'#3E576F',
+        activeColor: '#3E576F',
         animation: true,
         arrowSize: 12,
         inactiveColor: '#CCCCCC',
         style: {
           fontWeight: 'bold',
           color: '#333333',
-          fontSize: '12px'
-        }
-      } as Highcharts.LegendNavigationOptions
+          fontSize: '12px',
+        },
+      } as Highcharts.LegendNavigationOptions,
     };
   }
 
@@ -47,14 +50,14 @@ export class ChartHelper {
     return [
       {
         condition: {
-          maxWidth: 500
+          maxWidth: 500,
         },
         chartOptions: {
           legend: {
-            enabled: false
-          }
-        }
-      } as Highcharts.ResponsiveRulesOptions
+            enabled: false,
+          },
+        },
+      } as Highcharts.ResponsiveRulesOptions,
     ];
   }
 }

@@ -17,11 +17,11 @@ export class DynamicComponent implements OnInit {
   @Input() componentConfigs: any;
   constructor(
     private resolver: ComponentFactoryResolver,
-    private vcRef: ViewContainerRef
+    private vcRef: ViewContainerRef,
   ) {}
 
   ngOnInit() {
-    const factoryClass =<Type<any>> ComponentLookupRegistry.get(this.comp); 
+    const factoryClass = <Type<any>>ComponentLookupRegistry.get(this.comp);
     if (factoryClass) {
       const factory = this.resolver.resolveComponentFactory(factoryClass);
       const compRef = this.vcRef.createComponent(factory);
