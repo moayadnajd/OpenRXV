@@ -19,7 +19,7 @@ export class DSpaceDownloadsAndViews {
     let toUpdateIndexes: Array<any> = [];
     let stats = await this.http
       .get(`${link}?page=${page}&limit=100`)
-      .pipe(map((d) => d.data))
+      .pipe(map(d => d.data))
       .toPromise();
     job.progress(50);
     if (stats.statistics && stats.statistics.length > 0) {
@@ -39,7 +39,7 @@ export class DSpaceDownloadsAndViews {
                 },
                 {
                   terms: {
-                    'id.keyword': stats.statistics.map((d) => d.id),
+                    'id.keyword': stats.statistics.map(d => d.id),
                   },
                 },
               ],
@@ -54,7 +54,7 @@ export class DSpaceDownloadsAndViews {
         searchResult.body.hits.total.value > 0
       ) {
         let IDs = {};
-        searchResult.body.hits.hits.forEach((element) => {
+        searchResult.body.hits.hits.forEach(element => {
           IDs[element._source.id] = element._id;
         });
         stats.statistics.forEach((stat: any) => {

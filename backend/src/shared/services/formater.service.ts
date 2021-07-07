@@ -42,11 +42,12 @@ export class FormatSearvice {
                     ),
               );
             if (values.length)
-              finalValues[subItem.value[Object.keys(subItem.value)[0]]] =
-                this.setValue(
-                  finalValues[subItem.value[Object.keys(subItem.value)[0]]],
-                  this.getArrayOrValue(values),
-                );
+              finalValues[
+                subItem.value[Object.keys(subItem.value)[0]]
+              ] = this.setValue(
+                finalValues[subItem.value[Object.keys(subItem.value)[0]]],
+                this.getArrayOrValue(values),
+              );
           });
         } else if (_.isObject(item)) {
           if (_.isArray(json[index])) {
@@ -96,11 +97,11 @@ export class FormatSearvice {
         if (addOn == 'country')
           value = value
             .split(',')
-            .map((d) => this.mapIsoToCountry(d.trim().toLowerCase()));
+            .map(d => this.mapIsoToCountry(d.trim().toLowerCase()));
         if (addOn == 'language')
           value = value
             .split(',')
-            .map((d) => this.mapIsoToLang(d.trim().toLowerCase()));
+            .map(d => this.mapIsoToLang(d.trim().toLowerCase()));
         if (addOn == 'date') {
           if (_.isArray(value)) value = value[0];
           try {

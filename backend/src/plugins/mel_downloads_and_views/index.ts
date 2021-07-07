@@ -50,7 +50,7 @@ export class MELDownloadsAndViews {
             publicationsToUpdate.map((p: any) => p._source.id).join(','),
           { headers: { 'Content-Type': 'application/json' }, timeout: 120000 },
         )
-        .pipe(map((d) => d.data))
+        .pipe(map(d => d.data))
         .toPromise();
       job.progress(70);
       let finaldata: Array<any> = [];
@@ -92,7 +92,7 @@ export class MELDownloadsAndViews {
               .then(() => {
                 job.moveToFailed(err);
               })
-              .catch((e) => job.moveToFailed(e));
+              .catch(e => job.moveToFailed(e));
           });
         job.progress(100);
         let newJob = await this.pluginQueue.add('mel_downloads_and_views', {
@@ -107,7 +107,7 @@ export class MELDownloadsAndViews {
             repo: job.data.repo,
           })
           .then(() => {})
-          .catch((e) => job.moveToFailed(e));
+          .catch(e => job.moveToFailed(e));
       }
     } else {
       job.progress(100);

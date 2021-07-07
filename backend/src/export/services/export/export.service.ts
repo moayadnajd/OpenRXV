@@ -14,7 +14,7 @@ import * as Docxtemplater from 'docxtemplater';
 import * as libre from 'libreoffice-convert';
 var expressions = require('angular-expressions');
 var assign = require('lodash/assign');
-expressions.filters.lower = function (input) {
+expressions.filters.lower = function(input) {
   if (!input) return input;
   return input.toLowerCase();
 };
@@ -134,7 +134,7 @@ export class ExportService {
                 .replace('keyword', '') +
               '_';
           if (Array.isArray(query.query.bool.must)) {
-            query.query.bool.must.map((a) => {
+            query.query.bool.must.map(a => {
               if (a.hasOwnProperty('query_string'))
                 search = search + a.query_string.query;
               if (a.hasOwnProperty('range'))
@@ -151,7 +151,7 @@ export class ExportService {
         if (query.query.bool.hasOwnProperty('filter'))
           if (query.query.bool.filter.hasOwnProperty('bool')) {
             if (query.query.bool.filter.bool.hasOwnProperty('must')) {
-              query.query.bool.filter.bool.must.map((a) => {
+              query.query.bool.filter.bool.must.map(a => {
                 select =
                   select +
                   JSON.stringify(a.term)
@@ -162,7 +162,7 @@ export class ExportService {
               select = '(And) ' + select;
             }
             if (query.query.bool.filter.bool.hasOwnProperty('should')) {
-              query.query.bool.filter.bool.should.map((a) => {
+              query.query.bool.filter.bool.should.map(a => {
                 select =
                   select +
                   JSON.stringify(a.term)
@@ -186,7 +186,7 @@ export class ExportService {
         if (tag != undefined && tag != null) {
           if (tag === '.') {
             return {
-              get: function (s) {
+              get: function(s) {
                 return s;
               },
             };
@@ -195,7 +195,7 @@ export class ExportService {
             tag.replace(/(’|‘)/g, "'").replace(/(“|”)/g, '"'),
           );
           return {
-            get: function (scope, context) {
+            get: function(scope, context) {
               let obj = {};
               const scopeList = context.scopeList;
               const num = context.num;
@@ -209,7 +209,7 @@ export class ExportService {
       }
       const doc = new Docxtemplater(zip, { parser: angularParser });
       doc.setData({
-        items: hits.hits.map((items) => items._source),
+        items: hits.hits.map(items => items._source),
         date: currentDate,
         searchQuery: search ? 'search term: ' + search + ',' : '',
         selectQuery: select ? select.replace(/:/g, '= ') : '',
@@ -247,7 +247,7 @@ export class ExportService {
     worksheet.columns = columns;
     //TODO make it general for any object
     const sourcesMetadata = body.hits.map(({ _source }) =>
-      file.tags.map((tag) => {
+      file.tags.map(tag => {
         let splited = tag.metadata.split('.');
         if (!splited[1] && splited[0])
           return _source[splited[0]] ? _source[splited[0]] : '';
@@ -259,7 +259,7 @@ export class ExportService {
             : '';
       }),
     );
-    sourcesMetadata.map((a) => {
+    sourcesMetadata.map(a => {
       for (let index = 0; index < a.length; index++) {
         if (Array.isArray(a[index])) a[index] = a[index].join(', ');
       }
@@ -272,7 +272,7 @@ export class ExportService {
     var milliS = d.getTime();
     const filePath = this.resolvePath(`${websiteName}-${milliS}-${part}`, true);
     const buffer = await workbook.xlsx.writeBuffer();
-    fs.writeFile(filePath + '.xlsx', buffer, (err) => {
+    fs.writeFile(filePath + '.xlsx', buffer, err => {
       if (err) throw err;
     });
     return `${websiteName}-${milliS}-${part}` + '.xlsx';

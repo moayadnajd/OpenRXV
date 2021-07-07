@@ -96,8 +96,8 @@ export class DSpaceAltmetrics {
         };
         let response3 = await this.elasticsearchService
           .search(elastic_data)
-          .catch((e) => this.logger.error(e));
-        let getMoreUntilDone = async (response) => {
+          .catch(e => this.logger.error(e));
+        let getMoreUntilDone = async response => {
           let handleID = response.body.hits.hits.map((d: any) => {
             if (d._source.handle) {
               let obj: any = {};
@@ -113,7 +113,7 @@ export class DSpaceAltmetrics {
                 scroll_id: <string>response.body._scroll_id,
                 scroll: '10m',
               })
-              .catch((e) => this.logger.error(e));
+              .catch(e => this.logger.error(e));
             getMoreUntilDone(response2);
           } else {
             let finalobj: any = {};

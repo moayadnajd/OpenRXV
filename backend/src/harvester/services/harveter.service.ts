@@ -55,7 +55,7 @@ export class HarvesterService {
   async getMappingValues() {
     let data = await this.valuesServes.find();
     let values = {};
-    data.hits.map((d) => (values[d._source.find] = d._source.replace));
+    data.hits.map(d => (values[d._source.find] = d._source.replace));
     return values;
   }
 
@@ -88,7 +88,7 @@ export class HarvesterService {
       '../../../data/dataToUse.json',
     );
 
-    settings.repositories.forEach(async (repo) => {
+    settings.repositories.forEach(async repo => {
       const Sitemap = new Sitemapper({
         url: repo.siteMap,
         timeout: 15000, // 15 seconds
@@ -135,7 +135,7 @@ export class HarvesterService {
     let plugins: Array<any> = await this.jsonFilesService.read(
       '../../../data/plugins.json',
     );
-    if (plugins.filter((plugin) => plugin.value.length > 0).length > 0)
+    if (plugins.filter(plugin => plugin.value.length > 0).length > 0)
       for (let plugin of plugins) {
         for (let param of plugin.value) {
           await this.pluginsQueue.add(plugin.name, {
@@ -194,7 +194,7 @@ export class HarvesterService {
         },
         { requestTimeout: 2000000 },
       )
-      .catch((e) => this.logger.log(e));
+      .catch(e => this.logger.log(e));
     this.logger.debug('reindex to final');
 
     await this.elasticsearchService.indices.updateAliases({

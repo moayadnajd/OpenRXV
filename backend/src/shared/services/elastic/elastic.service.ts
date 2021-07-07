@@ -8,26 +8,31 @@ export class ElasticService {
   index: string = 'openrxv-users';
   constructor(public readonly elasticsearchService: ElasticsearchService) {}
   async startup() {
-    let values_exist: ApiResponse =
-      await this.elasticsearchService.indices.exists({
+    let values_exist: ApiResponse = await this.elasticsearchService.indices.exists(
+      {
         index: 'openrxv-values',
-      });
-    let users_exist: ApiResponse =
-      await this.elasticsearchService.indices.exists({
+      },
+    );
+    let users_exist: ApiResponse = await this.elasticsearchService.indices.exists(
+      {
         index: 'openrxv-users',
-      });
-    let shared_exist: ApiResponse =
-      await this.elasticsearchService.indices.exists({
+      },
+    );
+    let shared_exist: ApiResponse = await this.elasticsearchService.indices.exists(
+      {
         index: 'openrxv-shared',
-      });
-    let items_final_exist: ApiResponse =
-      await this.elasticsearchService.indices.exists({
+      },
+    );
+    let items_final_exist: ApiResponse = await this.elasticsearchService.indices.exists(
+      {
         index: process.env.OPENRXV_FINAL_INDEX,
-      });
-    let items_temp_exist: ApiResponse =
-      await this.elasticsearchService.indices.exists({
+      },
+    );
+    let items_temp_exist: ApiResponse = await this.elasticsearchService.indices.exists(
+      {
         index: process.env.OPENRXV_TEMP_INDEX,
-      });
+      },
+    );
 
     if (!items_final_exist.body)
       await this.elasticsearchService.indices.create({

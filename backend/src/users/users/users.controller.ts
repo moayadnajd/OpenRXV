@@ -66,7 +66,7 @@ export class UsersController {
 
       if (!isEmpty(query)) {
         filters = {};
-        Object.keys(query).forEach((key) => {
+        Object.keys(query).forEach(key => {
           filters[key + '.keyword'] = query[key];
         });
       }

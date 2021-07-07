@@ -39,7 +39,7 @@ export class FetchConsumer {
       let request = await this.http
         .get(url)
         .toPromise()
-        .catch((d) => {
+        .catch(d => {
           job.moveToFailed(new Error(d), true);
           return null;
         });
@@ -73,8 +73,9 @@ export class FetchConsumer {
             Array.isArray(formated[spleted[1]]) &&
             typeof formated[spleted[1]][0] === 'string'
           )
-            formated[job.data.repo.years] =
-              formated[spleted[1]][0].split('-')[0];
+            formated[job.data.repo.years] = formated[spleted[1]][0].split(
+              '-',
+            )[0];
         }
       }
       formated['id'] = item.uuid ? item.uuid.toString() : item.id.toString();

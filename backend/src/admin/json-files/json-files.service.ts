@@ -4,7 +4,7 @@ import { join } from 'path';
 import * as fs from 'fs';
 import { readdirSync, copyFileSync, existsSync, mkdirSync } from 'fs';
 function timeout(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 @Injectable()
 export class JsonFilesService {

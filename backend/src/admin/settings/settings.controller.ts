@@ -28,10 +28,10 @@ export class SettingsController {
     private jsonfielServoce: JsonFilesService,
     private httpService: HttpService,
   ) {}
-  getDirectories = (source) =>
+  getDirectories = source =>
     readdirSync(source, { withFileTypes: true })
-      .filter((dirent) => dirent.isDirectory())
-      .map((dirent) => dirent.name);
+      .filter(dirent => dirent.isDirectory())
+      .map(dirent => dirent.name);
   @UseGuards(AuthGuard('jwt'))
   @Get('plugins')
   async plugins() {
@@ -40,11 +40,11 @@ export class SettingsController {
       '../../../data/plugins.json',
     );
     let info = [];
-    plugins.forEach(async (plugin) => {
+    plugins.forEach(async plugin => {
       let infor = await this.jsonfielServoce.read(
         '../../../src/plugins/' + plugin + '/info.json',
       );
-      let values = plugins_values.filter((plug) => plug.name == plugin);
+      let values = plugins_values.filter(plug => plug.name == plugin);
       if (values[0]) infor['values'] = values[0].value;
       else infor['values'] = [];
       info.push(infor);
@@ -60,38 +60,38 @@ export class SettingsController {
   format(body: any) {
     let final = {};
     final['repositories'] = [];
-    body.repositories.forEach((repo) => {
+    body.repositories.forEach(repo => {
       let schema = {
         metadata: [],
       };
       repo.schema
         .filter(
-          (d) =>
+          d =>
             [
               'parentCollection',
               'parentCollectionList',
               'parentCommunityList',
             ].indexOf(d.metadata) >= 0,
         )
-        .forEach((item) => {
+        .forEach(item => {
           schema[item.metadata] = {
             name: item.disply_name,
           };
         });
       repo.schema
         .filter(
-          (d) =>
+          d =>
             [
               'parentCollection',
               'parentCollectionList',
               'parentCommunityList',
             ].indexOf(d.metadata) == -1,
         )
-        .forEach((item) => {
+        .forEach(item => {
           schema[item.metadata] = item.disply_name;
         });
 
-      repo.metadata.forEach((item) => {
+      repo.metadata.forEach(item => {
         let temp = {
           where: {
             key: item.metadata,
@@ -172,7 +172,7 @@ export class SettingsController {
     settings['appearance'] = appearance;
     let list_icons = {};
     if (configs.repositories) {
-      configs.repositories.map((d) => [(list_icons[d.name] = d.icon)]);
+      configs.repositories.map(d => [(list_icons[d.name] = d.icon)]);
       settings['appearance']['icons'] = list_icons;
       return settings;
     } else return {};
@@ -215,17 +215,17 @@ export class SettingsController {
       }
     }
     let a = [].concat(...meta);
-    let uniqueArray = a.filter(function (item, pos) {
+    let uniqueArray = a.filter(function(item, pos) {
       return a.indexOf(item) == pos;
     });
 
     var merged = [].concat.apply(
       [],
-      data.repositories.map((d) => [...d.schema, ...d.metadata]),
+      data.repositories.map(d => [...d.schema, ...d.metadata]),
     );
     return [
-      ...new Set(merged.map((d) => d.disply_name)),
-      ...data.repositories.filter((d) => d.years).map((d) => d.years),
+      ...new Set(merged.map(d => d.disply_name)),
+      ...data.repositories.filter(d => d.years).map(d => d.years),
       ...uniqueArray,
     ];
   }
@@ -247,13 +247,13 @@ export class SettingsController {
                       base: [],
                       metadata: [],
                     };
-                    data = data.data.forEach((element) => {
+                    data = data.data.forEach(element => {
                       merged.base = Array.from(
                         new Set(
                           [].concat.apply(
                             merged.base,
                             Object.keys(element).filter(
-                              (d) =>
+                              d =>
                                 ['metadata', 'bitstreams', 'expand'].indexOf(
                                   d,
                                 ) == -1,
@@ -265,7 +265,7 @@ export class SettingsController {
                         new Set(
                           [].concat.apply(
                             merged.metadata,
-                            element.metadata.map((item) => {
+                            element.metadata.map(item => {
                               return item.key;
                             }),
                           ),
@@ -274,7 +274,7 @@ export class SettingsController {
                     });
                     return merged;
                   },
-                  (error) => {},
+                  error => {},
                 ),
               )
               .toPromise();
@@ -290,13 +290,13 @@ export class SettingsController {
               .pipe(
                 map(
                   (data: any) => {
-                    data = data.data.forEach((element) => {
+                    data = data.data.forEach(element => {
                       merged.base = Array.from(
                         new Set(
                           [].concat.apply(
                             merged.base,
                             Object.keys(element).filter(
-                              (d) =>
+                              d =>
                                 ['metadata', 'bitstreams', 'expand'].indexOf(
                                   d,
                                 ) == -1,
@@ -307,7 +307,7 @@ export class SettingsController {
                     });
                     return merged;
                   },
-                  (error) => {},
+                  error => {},
                 ),
               )
               .toPromise();
@@ -322,7 +322,7 @@ export class SettingsController {
                         new Set(
                           [].concat.apply(
                             merged.metadata,
-                            element.fields.map((item) => {
+                            element.fields.map(item => {
                               return item.name;
                             }),
                           ),
@@ -331,7 +331,7 @@ export class SettingsController {
                     });
                     return merged;
                   },
-                  (error) => {},
+                  error => {},
                 ),
               )
               .toPromise();

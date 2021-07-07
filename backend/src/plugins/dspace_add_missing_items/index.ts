@@ -27,9 +27,9 @@ export class AddMissingItems {
       `/${job.data.handle}?expand=metadata,parentCommunityList,parentCollectionList,bitstreams`;
     let result = await this.http
       .get(url)
-      .pipe(map((d) => d.data))
+      .pipe(map(d => d.data))
       .toPromise()
-      .catch((d) => null);
+      .catch(d => null);
     job.progress(50);
     if (result && result.type == 'item') {
       this.formatService.Init();
@@ -44,8 +44,9 @@ export class AddMissingItems {
             Array.isArray(formated[spleted[1]]) &&
             typeof formated[spleted[1]][0] === 'string'
           )
-            formated[job.data.repo.years] =
-              formated[spleted[1]][0].split('-')[0];
+            formated[job.data.repo.years] = formated[spleted[1]][0].split(
+              '-',
+            )[0];
         }
       }
       formated['id'] = result.uuid ? result.uuid : result.id;
@@ -53,7 +54,7 @@ export class AddMissingItems {
       job.progress(70);
       await this.elasticsearchService
         .index({ index: process.env.OPENRXV_TEMP_INDEX, body: formated })
-        .catch((e) => job.moveToFailed(e, true));
+        .catch(e => job.moveToFailed(e, true));
       this.logger.log('dspace_add_missing_items => ' + job.data.handle);
       job.progress(100);
       return 'done';
