@@ -23,13 +23,11 @@ export class DSpaceHealthCheck {
   async transcode(job: Job<any>) {
     try {
       await job.takeLock();
-      this.logger.log('Started DSpace health check');
+      this.logger.log('Started DSpace health check for ' + job.data.repo);
       let settings = await this.jsonFilesService.read(
         '../../../data/dataToUse.json',
       );
-      let repo = settings.repositories.filter(
-        (d) => (d.name = job.data.repo),
-      )[0];
+      let repo = settings.repositories.filter(d => d.name == job.data.repo)[0];
       await job.progress(30);
       const Sitemap = new Sitemapper({
         url: repo.siteMap,
@@ -39,25 +37,25 @@ export class DSpaceHealthCheck {
             'OpenRXV harvesting bot; https://github.com/ilri/OpenRXV',
         },
       });
+      this.logger.log('Getting ' + job.data.repo + ' sitemap ' + repo.siteMap);
 
       const { sites } = await Sitemap.fetch();
       await job.progress(50);
-      let sitemapHandles = sites.map((d) => d.split('/handle/')[1]);
+      let sitemapHandles = sites.map(d => d.split('/handle/')[1]);
 
-      let indexedHandles = await this.getHandles(job.data.repo).catch((e) => {
+      let indexedHandles = await this.getHandles(job.data.repo).catch(e => {
         job.moveToFailed(e, true);
         return null;
       });
       await job.progress(80);
-      await this.deleteDuplicates(job);
-      await this.addjob_missing_items(
-        sitemapHandles.filter((e) => !indexedHandles.includes(e)),
-        repo,
-        job,
-        0,
+      // await this.deleteDuplicates(job);
+      const missingHandles = sitemapHandles.filter(
+        e => !indexedHandles.includes(e),
       );
-
-      this.logger.log('Finished DSpace health check');
+      this.logger.log('Missing handles found ' + missingHandles.length);
+      await this.addjob_missing_items(missingHandles, repo, job, 0);
+      this.logger.log('Missing handles for '+job.data.repo+' added to the Queue');
+      this.logger.log('Finished DSpace health check for ' + job.data.repo);
       await job.progress(100);
       return { success: true };
     } catch (e) {
@@ -118,7 +116,7 @@ export class DSpaceHealthCheck {
     };
     let response: any = await this.elasticsearchService
       .search(elastic_data)
-      .catch((e) => {
+      .catch(e => {
         this.logger.error(e);
         job.moveToFailed(e, true);
         return null;
@@ -126,25 +124,27 @@ export class DSpaceHealthCheck {
 
     let duplicates = [];
     if (response) {
-      this.logger.log('Searching for duplicate handles');
-      response.body.aggregations.duplicateCount.buckets.forEach(
-        async (item) => {
-          item.duplicateDocuments.hits.hits.forEach(async (element, index) => {
-            if (item.duplicateDocuments.hits.hits.length - 1 > index) {
-              duplicates.push(element._id);
-              await this.elasticsearchService
-                .delete({
-                  id: element._id,
-                  index: process.env.OPENRXV_TEMP_INDEX,
-                })
-                .catch((e) => this.logger.error(e));
-            }
-          });
-        },
-      );
+      this.logger.log('Searching for duplicate handles for ' + job.data.repo);
+      response.body.aggregations.duplicateCount.buckets.forEach(async item => {
+        item.duplicateDocuments.hits.hits.forEach(async (element, index) => {
+          if (item.duplicateDocuments.hits.hits.length - 1 > index) {
+            duplicates.push(element._id);
+            await this.elasticsearchService
+              .delete({
+                id: element._id,
+                index: process.env.OPENRXV_TEMP_INDEX,
+              })
+              .catch(e => this.logger.error(e));
+          }
+        });
+      });
       if (duplicates.length > 0) {
         setTimeout(() => {
-          this.logger.log(duplicates.length + ' duplicate handles deleted');
+          this.logger.log(
+            duplicates.length +
+              ' duplicate handles deleted in ' +
+              job.data.repo,
+          );
         }, 2000);
         return true;
       }
@@ -154,7 +154,6 @@ export class DSpaceHealthCheck {
   }
 
   async getHandles(repo): Promise<Array<any>> {
-    this.logger.log('getHandles');
     return new Promise(async (resolve, reject) => {
       try {
         let allRecords: any = [];
@@ -182,14 +181,13 @@ export class DSpaceHealthCheck {
           scroll: '10m',
         };
 
-        let getMoreUntilDone = async (response) => {
-          this.logger.log(allRecords.length + ' handles found');
+        let getMoreUntilDone = async response => {
           let handleIDs = response.body.hits.hits
-            .filter((d) => {
+            .filter(d => {
               if (d._source.handle) return true;
               return false;
             })
-            .map((d) => d._source.handle);
+            .map(d => d._source.handle);
           allRecords = [...allRecords, ...handleIDs];
           if (response.body.hits.hits.length != 0) {
             let response2 = await this.elasticsearchService
@@ -197,16 +195,17 @@ export class DSpaceHealthCheck {
                 scroll_id: <string>response.body._scroll_id,
                 scroll: '10m',
               })
-              .catch((e) => this.logger.error(e));
+              .catch(e => this.logger.error(e));
             getMoreUntilDone(response2);
           } else {
+            this.logger.log(allRecords.length + ' handles found in ' + repo);
             resolve(allRecords);
           }
         };
 
         let response3 = await this.elasticsearchService
           .search(elastic_data)
-          .catch((e) => {
+          .catch(e => {
             this.logger.error(e);
             return null;
           });
