@@ -54,7 +54,9 @@ export class DSpaceHealthCheck {
       );
       this.logger.log('Missing handles found ' + missingHandles.length);
       await this.addjob_missing_items(missingHandles, repo, job, 0);
-      this.logger.log('Missing handles for '+job.data.repo+' added to the Queue');
+      this.logger.log(
+        'Missing handles for ' + job.data.repo + ' added to the Queue',
+      );
       this.logger.log('Finished DSpace health check for ' + job.data.repo);
       await job.progress(100);
       return { success: true };
